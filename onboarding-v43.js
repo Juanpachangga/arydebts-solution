@@ -1,5 +1,7 @@
 (()=>{
-/* V47: restore the original financial discovery flow after account creation. */
+/* V53: preserve the restored financial discovery flow and localize its account validation. */
+const L={es:{required:'Completa tu nombre, correo y contraseña'},en:{required:'Complete your name, email, and password'},pt:{required:'Preencha seu nome, e-mail e senha'}};
+const tx=()=>L[(typeof s!=='undefined'&&s.locale==='en-US')?'en':(typeof s!=='undefined'&&s.locale==='pt-BR')?'pt':'es'];
 function hasFinanceData(){
   if(typeof s==='undefined')return false;
   return !!((s.debts&&s.debts.length)||(s.expenses&&s.expenses.length)||Number(s.income)>0||(s.goals&&s.goals.length));
@@ -25,7 +27,7 @@ function patchAuth(){
     const name=document.getElementById('an')?.value.trim();
     const email=document.getElementById('ae')?.value.trim();
     const pass=document.getElementById('ap')?.value||'';
-    if(!name||!email||!pass){if(typeof toast==='function')toast('Completa tu nombre, correo y contraseña');return;}
+    if(!name||!email||!pass){if(typeof toast==='function')toast(tx().required);return;}
     if(typeof s!=='undefined'){
       s.name=name;
       s.onboarded=false;
