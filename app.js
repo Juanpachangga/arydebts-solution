@@ -78,6 +78,8 @@ function expenseBlueprint(e){return '<button class="expenseItem" onclick="editEx
 function askPrompt(q){let i=$("#chatinput");if(i){i.value=q;chat()}}
 function moreAction(x){if(x==="theme")return toggleTheme();if(x==="language")return languageMenu();go(x)}
 
+const screens={welcome,signup:()=>auth("signup"),login:()=>auth("login"),intro,setupIncome,setupGoal,setupDebts,setupExpenses,setupFinish,home,debts,debtEditor,income,expenses,ants,plan,buy,assistant,calendar,progress,goals,notifications,profile:profilePage,more};
+
 function setupFinish(){let t=totals();return '<section class="blueprint onboarding finishSetup">'+simpleTop("Tu punto de partida")+'<div class="progressLine step5"><i></i></div><div class="stepLabel">Paso 5 de 5</div><div class="finishOrb">✓</div><h1>Ya tenemos lo necesario.</h1><p>Arydebts organizará tus próximos pasos con la información que acabas de registrar.</p><div class="summaryGrid"><div><span>Ingreso</span><b>'+money(s.income)+'</b></div><div><span>Deuda</span><b>'+money(t.debt)+'</b></div><div><span>Gastos</span><b>'+money(t.exp)+'</b></div><div><span>Disponible</span><b>'+money(t.free)+'</b></div></div><button class="gradientAction" onclick="finishOnboarding()">Crear mi plan ✦</button></section>'}
 function onboardingDebt(){window._editingDebt=null;window._returnAfterDebt="setupDebts";go("debtEditor")}
 ;
