@@ -1,0 +1,14 @@
+/* Arydebts V16 — responsive polish without touching V10 finance logic */
+/* Header: keep back, subtitle and title in their own rows */
+.hello{display:grid!important;grid-template-columns:auto 1fr;grid-template-areas:"back sub" "title title";align-items:center!important;gap:7px 10px!important;margin:10px 0 14px!important}.hello .back{grid-area:back;position:static!important;margin:0!important;white-space:nowrap;align-self:center}.hello>.muted{grid-area:sub;min-width:0;line-height:1.35}.hello>h1{grid-area:title;margin:2px 0 0!important;line-height:1.08;min-width:0;overflow-wrap:anywhere}
+/* Generic anti-overlap safeguards */
+.card,.row,.rowleft,.rowleft>div,.top,.brandWrap{min-width:0}.card{overflow:visible}.rowleft{flex:1 1 auto}.rowleft>div{min-width:0}.rowleft strong,.rowleft .muted{overflow-wrap:anywhere}.row>div:last-child{flex:0 0 auto;white-space:nowrap}.btn,.pill,.linkBtn{white-space:nowrap}
+/* Home upcoming-payments card: title and action never collide */
+.card.full>.linkBtn{float:right;position:static!important;margin:-3px 0 9px 12px;padding:7px 10px;border:1px solid #356d9d;border-radius:10px;background:#0a2143;color:#eef8ff;font-weight:800}.card.full>.linkBtn+.list{clear:both}
+/* Stable three-card metrics */
+.grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.card.third{min-width:0}.card.third .kpi{font-size:clamp(16px,5.2vw,24px);overflow-wrap:anywhere}
+/* More/tools: mode belongs in settings, so hide the old floating mode switch there. */
+.modeToggle{display:none!important}
+/* Light / lite modes can still be driven by existing state classes without affecting data */
+body.lite .aurora,body.lite .particles9,body.lite .flagMotion15,body.lite .planetMotion9:before,body.lite .planetMotion9:after{animation:none!important;filter:none!important}body.lite .card,body.lite .btn,body.lite nav{box-shadow:none!important;backdrop-filter:none!important}
+@media(max-width:360px){#app{padding-left:9px;padding-right:9px}.hello{grid-template-columns:auto minmax(0,1fr)}.hello>.muted{font-size:10px}.card{padding:11px}.row{padding:9px}.ico{width:36px;height:36px}.grid{gap:5px}.card.third{padding:9px 7px}.card.third .muted{font-size:9px}}
