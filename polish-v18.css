@@ -1,0 +1,19 @@
+/* Arydebts V18 — responsive polish, no V10 finance logic changed */
+.hello{display:grid!important;grid-template-columns:auto minmax(0,1fr);align-items:center!important;gap:8px 10px!important;margin:10px 0 14px!important}
+.hello .back{position:static!important;grid-column:1;grid-row:1;margin:0!important;width:max-content;max-width:100%;white-space:nowrap;z-index:auto!important}
+.hello>.muted{grid-column:2;grid-row:1;min-width:0;line-height:1.35;overflow-wrap:anywhere}
+.hello>h1{grid-column:1/-1;grid-row:2;margin:2px 0 0!important;min-width:0;overflow-wrap:anywhere}
+.card,.row,.rowleft,.rowleft>div,.progressBox>div{min-width:0}
+.rowleft{flex:1 1 auto}.rowleft>div{overflow:hidden}.rowleft strong,.rowleft .muted{display:block;overflow-wrap:anywhere}
+.row>div:last-child{flex:0 0 auto;text-align:right;max-width:42%;overflow-wrap:anywhere}
+.grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.card.third{min-width:0}.card.third .kpi{font-size:clamp(16px,5vw,24px);overflow-wrap:anywhere}
+/* Home: keep section action in normal flow so it can never cover the heading */
+.card.full>.linkBtn{position:static!important;float:none!important;display:block;margin:8px 0 10px auto!important;max-width:100%;white-space:nowrap}
+/* Old floating experience control is intentionally hidden; V18 places this in Configuración. */
+.modeToggle{display:none!important}
+.ary-lite .aurora,.ary-lite .particles9,.ary-lite .planetMotion9,.ary-lite .flagMotion15{display:none!important}
+.ary-lite *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+.ary-lite .card,.ary-lite .row,.ary-lite nav,.ary-lite .btn{box-shadow:none!important;text-shadow:none!important}
+.v18-settings{margin-top:10px}.v18-settingRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #ffffff14}.v18-settingRow:last-child{border-bottom:0}.v18-settingRow>div{min-width:0}.v18-settingRow b,.v18-settingRow span{display:block}.v18-settingRow .muted{margin-top:3px}.v18-seg{display:flex;gap:5px;flex:0 0 auto}.v18-seg button{padding:8px 9px;font-size:11px}.v18-seg button.on{border-color:#21dfff;background:linear-gradient(90deg,#604bff,#08cfe8);box-shadow:0 0 14px #13cfff44}
+@media(max-width:360px){.hello{grid-template-columns:1fr!important}.hello .back,.hello>.muted,.hello>h1{grid-column:1!important}.hello .back{grid-row:1}.hello>.muted{grid-row:2}.hello>h1{grid-row:3}.grid{gap:6px!important}.card.third{padding:10px 7px!important}.v18-settingRow{align-items:flex-start;flex-direction:column}.v18-seg{width:100%}.v18-seg button{flex:1}}
