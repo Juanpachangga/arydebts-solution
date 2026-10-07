@@ -1,0 +1,7 @@
+(()=>{
+const today=()=>new Date().toISOString().slice(0,10);
+const oldExpenseForm=window.expenseForm;
+window.expenseForm=function(id=null){let e=s.expenses.find(x=>x.id===id)||{};modal('<h2>'+(id?'Editar gasto':'Nuevo gasto')+'</h2><label>Nombre</label><input id="n" value="'+esc(e.name||'')+'" placeholder="Comida, gasolina, café..."><label>Monto</label><input id="b" type="text" inputmode="decimal" value="'+(e.amount??'')+'"><div class="amountPresets">'+[5,10,25,50].map(x=>'<button class="btn tiny" onclick="presetExpense('+x+')">+'+money(x)+'</button>').join('')+'</div><label>Categoría</label><select id="c"><option '+(e.cat==='Esencial'?'selected':'')+'>Esencial</option><option '+(e.cat==='Hormiga'?'selected':'')+'>Hormiga</option><option '+(e.cat==='Variable'?'selected':'')+'>Variable</option></select><label>Fecha</label><input id="edate" type="date" value="'+(e.date||today())+'"><button class="btn primary widebtn" onclick="saveExpense('+(id||'null')+')">Guardar</button><button class="btn widebtn" onclick="closeM()">Cancelar</button>')};
+window.saveExpense=function(id){let n=$('#n').value.trim(),b=parseNum($('#b').value),c=$('#c').value,date=$('#edate')?.value||today();if(!n||b<0)return toast('Completa nombre y monto');if(id){let e=s.expenses.find(x=>x.id===id);Object.assign(e,{name:n,amount:b,cat:c,date})}else s.expenses.push({id:Date.now(),name:n,amount:b,cat:c,date});closeM();save()};
+window.aryExpenseDate=today;
+})();
