@@ -104,7 +104,7 @@ function motivationalMessage(){let banks={morning:["Si las cosas en tu vida pare
 "Cierra los ojos, respira hondo y confía en que mañana será un día maravilloso.",
 "Que tus sueños te lleven al lugar donde tu corazón es más feliz.",
 "Descansa bien. El esfuerzo de hoy es el cimiento de tus logros de mañana."
-]};let p=dayPeriod(),list=banks[p],now=new Date(),key=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate(),slot=p==="morning"?1:p==="afternoon"?2:3;return list[(key+slot)%list.length]}
+]};let p=dayPeriod(),list=banks[p];window._motivationSession=window._motivationSession||{};if(!window._motivationSession[p])window._motivationSession[p]=list[Math.floor(Math.random()*list.length)];return window._motivationSession[p]}
 const screens={welcome,signup:()=>auth("signup"),login:()=>auth("login"),intro,setupIncome,setupGoal,setupDebts,setupExpenses,setupFinish,home,debts,debtEditor,income,expenses,ants,plan,buy,assistant,calendar,progress,goals,notifications,profile:profilePage,more};
 
 function setupFinish(){let t=totals();return '<section class="blueprint onboarding finishSetup">'+simpleTop("Tu punto de partida")+'<div class="progressLine step5"><i></i></div><div class="stepLabel">Paso 5 de 5</div><div class="finishOrb">✓</div><h1>Ya tenemos lo necesario.</h1><p>Arydebts organizará tus próximos pasos con la información que acabas de registrar.</p><div class="summaryGrid"><div><span>Ingreso</span><b>'+money(s.income)+'</b></div><div><span>Deuda</span><b>'+money(t.debt)+'</b></div><div><span>Gastos</span><b>'+money(t.exp)+'</b></div><div><span>Disponible</span><b>'+money(t.free)+'</b></div></div><button class="gradientAction" onclick="finishOnboarding()">Crear mi plan ✦</button></section>'}
