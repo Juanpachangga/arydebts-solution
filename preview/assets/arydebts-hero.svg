@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 760">
+<defs>
+ <radialGradient id="space"><stop stop-color="#153d7a"/><stop offset=".48" stop-color="#07162e"/><stop offset="1" stop-color="#020713"/></radialGradient>
+ <radialGradient id="sun"><stop stop-color="#fffbd0"/><stop offset=".24" stop-color="#ffc95a"/><stop offset=".65" stop-color="#ff713e" stop-opacity=".55"/><stop offset="1" stop-color="#ff713e" stop-opacity="0"/></radialGradient>
+ <linearGradient id="ocean" x2="1" y2="1"><stop stop-color="#15b8e8"/><stop offset=".45" stop-color="#0968ae"/><stop offset="1" stop-color="#063265"/></linearGradient>
+ <linearGradient id="land" x2="1" y2="1"><stop stop-color="#52dd79"/><stop offset=".45" stop-color="#0e8f68"/><stop offset="1" stop-color="#07534d"/></linearGradient>
+ <linearGradient id="road" x2="1"><stop stop-color="#faefbe"/><stop offset=".5" stop-color="#ffe68d"/><stop offset="1" stop-color="#ffc45e"/></linearGradient>
+ <linearGradient id="arrow" y2="1"><stop stop-color="#ffdb36"/><stop offset=".45" stop-color="#ff6d2e"/><stop offset="1" stop-color="#f32845"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="soft"><feGaussianBlur stdDeviation="22"/></filter>
+ <clipPath id="globe"><circle cx="450" cy="350" r="242"/></clipPath>
+</defs>
+<rect width="900" height="760" fill="url(#space)"/>
+<circle cx="650" cy="205" r="220" fill="url(#sun)"/>
+<g opacity=".8" fill="#fff"><circle cx="92" cy="82" r="2"/><circle cx="180" cy="160" r="1.5"/><circle cx="735" cy="96" r="2"/><circle cx="814" cy="224" r="1.5"/><circle cx="510" cy="62" r="1.2"/></g>
+<!-- storm mass -->
+<g fill="#14213a" opacity=".96" filter="url(#soft)"><ellipse cx="180" cy="215" rx="160" ry="75"/><ellipse cx="290" cy="160" rx="150" ry="78"/><ellipse cx="95" cy="330" rx="145" ry="90"/></g>
+<g stroke="#73d7ff" stroke-width="8" opacity=".9"><path d="M118 226l-26 54h30l-25 54"/><path d="M250 178l-30 62h34l-28 60"/></g>
+<!-- globe -->
+<circle cx="450" cy="350" r="252" fill="#071c39" stroke="#55cfff" stroke-opacity=".35" stroke-width="4" filter="url(#glow)"/>
+<g clip-path="url(#globe)">
+ <rect x="190" y="100" width="520" height="500" fill="url(#ocean)"/>
+ <path d="M250 225c48-69 128-82 180-44 34 25 48 70 26 105-22 35-64 43-83 83-21 45 7 103-26 131-48 40-113-3-128-59-13-49 22-78 6-120-12-32-1-66 25-96z" fill="url(#land)"/>
+ <path d="M470 153c71-34 166 3 190 72 16 46-4 84-44 105-41 22-48 55-40 94 11 56-38 114-96 101-47-10-63-55-48-92 15-38 4-66-22-94-37-40-23-126 60-186z" fill="#63df79"/>
+ <path d="M195 420c120-28 220 18 278 80 55 59 119 66 238 20v110H190z" fill="#07584b"/>
+ <!-- city -->
+ <g transform="translate(500 160)" fill="#fff2a2" stroke="#ffb95b" stroke-width="3" filter="url(#glow)">
+  <rect x="0" y="55" width="42" height="135"/><rect x="48" y="22" width="54" height="168"/><rect x="108" y="70" width="38" height="120"/><rect x="152" y="40" width="62" height="150"/>
+  <g fill="#fff"><path d="M10 76h22M10 95h22M10 114h22M60 45h28M60 68h28M60 91h28M164 63h38M164 87h38M164 111h38"/></g>
+ </g>
+ <!-- road -->
+ <path d="M664 540C596 486 567 450 548 398c-15-42-9-82 9-118l54 16c-15 38-14 72 2 105 23 48 62 78 104 109z" fill="url(#road)"/>
+ <path d="M631 510c-42-47-65-84-69-121" fill="none" stroke="#fff" stroke-width="8" stroke-dasharray="22 20"/>
+ <!-- house/car -->
+ <g transform="translate(565 430)"><path d="M0 44l48-39 50 39v64H0z" fill="#fff7da" stroke="#ffbd58" stroke-width="4"/><path d="M-7 45L48 0l58 45" fill="none" stroke="#ff4b45" stroke-width="12"/><rect x="18" y="65" width="26" height="43" fill="#d76b43"/><rect x="58" y="60" width="24" height="22" fill="#62caff"/></g>
+ <g transform="translate(625 530)"><path d="M0 22l18-21h52l19 21 12 7v29H-9V31z" fill="#f8fbff" stroke="#79dfff" stroke-width="3"/><circle cx="12" cy="59" r="11" fill="#18223b"/><circle cx="80" cy="59" r="11" fill="#18223b"/></g>
+</g>
+<!-- growth arrow -->
+<path d="M408 445c34-64 66-128 89-205 15-50 22-99 27-146l-35 26 55-79 29 91-30-29c-3 55-10 110-27 165-24 79-59 149-95 216z" fill="url(#arrow)" stroke="#ffdf4d" stroke-width="5" filter="url(#glow)"/>
+<!-- flag badges -->
+<g font-family="Arial" font-size="28" text-anchor="middle"><text x="170" y="590">🇺🇸</text><text x="275" y="635">🇨🇴</text><text x="390" y="650">🇲🇽</text><text x="510" y="650">🇬🇧</text><text x="625" y="625">🇪🇸</text><text x="735" y="580">🇧🇷</text></g>
+<ellipse cx="450" cy="610" rx="320" ry="70" fill="#020713" opacity=".52" filter="url(#soft)"/>
+</svg>
