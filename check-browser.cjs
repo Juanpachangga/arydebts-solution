@@ -30,12 +30,29 @@ async function check(engine, label, viewport) {
     await page.goto(origin, { waitUntil:'load' });
     assert.ok((await page.locator('#app').innerText()).includes('Arydebts'), 'Fresh startup renders');
     assert.equal(await page.evaluate(() => s.income), 0, 'Fresh startup has no invented income');
+    for(const theme of ['light','dark','light','dark']) {
+      await page.locator('[onclick="aryToggleDark()"]').click();
+      await page.waitForFunction(theme => document.documentElement.dataset.aryTheme===theme, theme);
+      const expected=theme==='dark'?'rgb(255, 255, 255)':'rgb(23, 35, 59)';
+      await page.waitForFunction(expected => getComputedStyle(document.querySelector('.tag21')).color===expected,expected);
+      for(const selector of ['.tag21','.brand21 b','.features21 b']) {
+        assert.equal(await page.locator(selector).first().evaluate(el=>getComputedStyle(el).getPropertyValue('-webkit-text-fill-color')), expected, 'Safari text fill follows landing theme');
+      }
+    }
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-landing-dark.png`),fullPage:true});
+    await page.locator('[onclick="aryToggleLangMenu(event)"]').click();
+    await page.locator('[onclick="arySetLandingLang(\'pt\')"]').click();
+    assert.equal(await page.locator('.cta21').innerText(), 'Começar hoje→');
     // Exercise the actual signup and questions, rather than injecting an onboarded profile.
     await page.locator('[onclick="aryStartOnboarding43()"]').click();
+    assert.ok((await page.locator('#app').innerText()).includes('Este espaço é seu'));
+    assert.ok((await page.locator('#app').innerText()).includes('Senha'));
+    assert.doesNotMatch(await page.locator('#app').innerText(), /Contraseña|Correo electrónico|Crear mi espacio/);
     await page.locator('#an').fill('Initial User');
     await page.locator('#ae').fill('initial@example.com');
     await page.locator('#ap').fill('synthetic-test-password');
     await page.locator('[onclick="localAuth(\'signup\')"]').click();
+    assert.ok((await page.locator('#app').innerText()).includes('Comece a mudar'));
     await page.locator('[onclick="go(\'setupIncome\')"]').click();
     await page.locator('#oi').fill('1000');
     await page.locator('#of').selectOption('monthly');
@@ -48,6 +65,8 @@ async function check(engine, label, viewport) {
     assert.ok((await page.locator('#app').innerText()).includes('Initial groceries'));
     await page.reload({waitUntil:'load'});
     assert.equal(await page.evaluate(() => screen), 'setupExpenses', 'Reload resumes the current question');
+    assert.equal(await page.evaluate(() => s.locale), 'pt-BR', 'Landing language survives signup and reload');
+    assert.ok((await page.locator('#app').innerText()).includes('Agora, seus gastos'));
     await page.locator('[onclick="go(\'setupDebts\')"]').click();
     await page.locator('[onclick="debtForm()"]').click();
     await page.locator('#n').fill('Initial credit card');
@@ -102,11 +121,22 @@ async function check(engine, label, viewport) {
     assert.equal(await page.evaluate(() => localStorage.getItem('arydebts-v3')), before, 'Analysis does not record a purchase');
 
     for (const locale of ['es-US','es-CO','es-ES','en-US','pt-BR']) {
-      await page.evaluate(locale => { s.locale=locale; save(); }, locale);
+      await page.evaluate(locale => setLocale(locale), locale);
+      const audit={};
       for (const route of ['home','income','debts','expenses','plan','progress','calendar','profile','buy','goals','setupIncome','setupGoal','setupDebts','setupExpenses']) {
         await navigate(route);
         assert.ok((await page.locator('#app').innerText()).trim().length > 10, `${locale}/${route} renders`);
+        audit[route]=await page.locator('#app').innerText();
       }
+      for(const route of ['signup','login','intro','more','assistant','notifications']) {
+        await navigate(route);audit[route]=await page.locator('#app').innerText();
+        if(locale==='pt-BR'||locale==='en-US')assert.doesNotMatch(audit[route],/Contraseña|Correo electrónico|Crear mi espacio|Pregúntame sobre|¿Puedo comprar|Notificaciones|Un gasto merece atención|Empieza a cambiar/,`${locale}/${route} contains translated UI`);
+      }
+      await page.evaluate(() => debtForm());
+      audit.debtForm=await page.locator('#modal').innerText();
+      if(locale==='pt-BR'||locale==='en-US')assert.doesNotMatch(audit.debtForm,/Nombre de la deuda|Fecha de vencimiento|Pago mínimo|Escribe el valor/,'Debt form is immediately localized');
+      await page.evaluate(()=>closeM());
+      await fs.writeFile(path.join(root,'browser-results',`${label}-${locale}-copy.json`),JSON.stringify(audit,null,2));
       await navigate('income');
       const heading = await page.locator('#app').innerText();
       assert.ok(heading.includes(locale==='en-US' ? 'My income' : locale==='pt-BR' ? 'Minha renda' : 'Mis ingresos'), `${locale} income is localized`);
@@ -132,6 +162,7 @@ async function check(engine, label, viewport) {
       }
     }
     await page.evaluate(() => { s.locale='es-US'; go('home'); });
+    await page.waitForFunction(()=>!document.documentElement.classList.contains('landing-bright-root'));
     const navigation = page.locator('#nav button');
     assert.equal(await navigation.count(), 5);
     assert.equal(await page.locator('#nav button[aria-current="page"]').count(), 1);
