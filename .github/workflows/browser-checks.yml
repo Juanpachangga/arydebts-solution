@@ -16,6 +16,8 @@ concurrency:
 jobs:
   checks:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
@@ -28,8 +30,6 @@ jobs:
         run: node check-integration.cjs
       - name: Install browser test dependency
         run: npm install --no-save --package-lock=false playwright@1.62.1
-      - name: Install Chromium and WebKit
-        run: npx playwright install --with-deps chromium webkit
       - name: Exercise application in real browsers
         run: node check-browser.cjs
       - uses: actions/upload-artifact@v5
