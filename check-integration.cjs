@@ -16,7 +16,7 @@ for(const existing of [false,true]){
  const b=boot(existing);
  for(const locale of ['es-US','es-CO','es-ES','en-US','pt-BR']){
   b.run(`s.locale=${JSON.stringify(locale)}`);
-  for(const route of ['home','income','debts','expenses','plan','progress','calendar','profile','setupIncome','setupGoal','setupDebts','setupExpenses']){
+  for(const route of ['home','income','debts','expenses','plan','progress','calendar','profile','buy','setupIncome','setupGoal','setupDebts','setupExpenses']){
    b.run(`go(${JSON.stringify(route)})`);assert.ok(b.nodes.app.innerHTML.length,route);
   }
   b.run("go('income');incomeForm()");assert.match(b.nodes.modal.innerHTML,/id="inc45"/);
@@ -58,6 +58,20 @@ for(const existing of [false,true]){
  b.nodes.b.value='0';b.run('saveExpense(null)');assert.equal(b.run('s.expenses.length'),1);
  b.run("s.expenses.push({id:2,name:'Old',amount:200,date:'2000-01-01',cat:'Variable'})");assert.equal(b.run('aryRealData54.snapshot().expenses'),100);
  for(const theme of ['light','dark']){b.run(`s.theme=${JSON.stringify(theme)};localStorage.setItem('ary-theme-v46',s.theme);render()`);assert.equal(b.context.document.documentElement.dataset.aryTheme,theme);}
+ b.run("s.locale='es-US';s.income=1000;s.incomeFrequency='weekly';s.debts=[{id:1,name:'Car',balance:1000,min:100}];s.expenses=[{id:1,name:'Food',amount:200,date:localDate(),cat:'Esencial'},{id:2,name:'Historical',amount:9999,date:'2000-01-01',cat:'Variable'}]");
+ b.run("go('buy')");assert.match(b.nodes.app.innerHTML,/id="buyName45"/);assert.match(b.nodes.app.innerHTML,/onclick="aryCheckBuy45\(\)"/);
+ const stateBefore=b.run('JSON.stringify(s)');const assessment=b.run('aryAssessPurchase45(100)');assert.equal(assessment.status,'ESTIMATE');assert.ok(Math.abs(assessment.before-(1000*52/12-200-100))<1e-8);assert.equal(assessment.after,assessment.before-100);assert.equal(b.run('JSON.stringify(s)'),stateBefore,'Analysis does not register an expense');
+ b.nodes.buyPrice={value:'100'};b.nodes.buyName45={value:"Family's clothes <new>"};b.nodes.buyResult={innerHTML:''};b.run('checkBuy()');assert.match(b.nodes.buyResult.innerHTML,/&lt;new&gt;/);assert.match(b.nodes.buyResult.innerHTML,/saldo bancario/);assert.equal(b.run('JSON.stringify(s)'),stateBefore);
+ b.run("s.income=0");assert.equal(b.run('aryAssessPurchase45(100).status'),'MISSING_INCOME');assert.equal(b.run('aryAssessPurchase45(100).before'),null);
+ b.run("s.income=200;s.incomeFrequency='monthly'");assert.equal(b.run('aryAssessPurchase45(100).status'),'SHORTFALL');
+ b.run("s.income=400");assert.equal(b.run('aryAssessPurchase45(100).status'),'ZERO_MARGIN');
+ b.run("s.income=1000;s.expenses.push({id:3,name:'Undated',amount:100,cat:'Variable'})");assert.equal(b.run('aryAssessPurchase45(100).status'),'INCOMPLETE');
+ for(const price of [0,-1,NaN,Infinity]){b.context.testPrice=price;assert.equal(b.run('aryAssessPurchase45(testPrice).status'),'INVALID');}
+ b.run("s.expenses=s.expenses.filter(e=>e.date);s.locale='es-CO'");b.nodes.buyPrice.value='1.000,50';b.run('aryCheckBuy45()');assert.match(b.nodes.buyResult.innerHTML,/1\.000,50/);
+ for(const [locale,heading,note] of [['en-US','Can I buy this?','bank balance'],['pt-BR','Posso comprar isto?','saldo bancário']]){b.run(`s.locale='${locale}';go('buy');aryCheckBuy45()`);assert.ok(b.nodes.app.innerHTML.includes(heading));assert.ok(b.nodes.buyResult.innerHTML.includes(note));}
+ b.run("s.locale='es-US';s.calendarEvents=[{id:1,name:'Reminder only',amount:9999,date:'2099-01-01',kind:'reminder'}];s.debts[0].due='invalid-date'");assert.equal(b.run('aryAssessPurchase45(100).due'),null,'Reminders and invalid dates are not treated as obligations');
+ b.run("s.debts[0].due='2099-01-01'");assert.equal(b.run('aryAssessPurchase45(100).due.name'),'Car');
+ const margin=b.run('aryAssessPurchase45(100).after');b.run("s.expenses.push({id:4,name:'New expense',amount:50,date:localDate(),cat:'Variable'})");assert.equal(b.run('aryAssessPurchase45(100).after'),margin-50,'Each analysis reads current finances');
  b.run("s.name='Gastos';s.debts=[{id:1,name:'Mis deudas',balance:500,min:20,apr:10}];s.expenses=[{id:1,name:'Ingreso semanal',amount:100,date:localDate(),cat:'Variable'}];s.goals=['Comprar casa'];s.locale='en-US'");
  for(const route of ['debts','expenses','plan','goals']){b.run(`go('${route}')`);assert.match(b.nodes.app.innerHTML,/data-ary-user translate="no"/);}
  assert.match(b.run('aryHumanGreeting41().title'),/data-ary-user translate="no">Gastos/);
@@ -74,8 +88,9 @@ for(const existing of [false,true]){
   assert.equal(textNodes[0].nodeValue,'Mis deudas');assert.equal(textNodes[2].nodeValue,'Mis deudas');assert.equal(option.textContent,'Mis deudas');assert.equal(textNodes[1].nodeValue,locale==='en-US'?'My debts':'Minhas dívidas');
  }
  assert.equal(b.run('s.debts[0].name'),'Mis deudas');assert.equal(b.run('s.expenses[0].name'),'Ingreso semanal');
- console.log('PASS complete script order, 12 routes x 5 locales, income edits, persistence, deficit, payments, dated expenses, theme state:',existing?'existing profile':'fresh storage');
+ console.log('PASS complete script order, 13 routes x 5 locales, income edits, persistence, deficit, payments, dated expenses, theme state:',existing?'existing profile':'fresh storage');
  console.log('PASS translated interface and protected user names, goals, messages, textarea contents and debt options.');
  console.log('PASS calendar payment display, edits, deletions, reload, future-date protection and unique payment IDs.');
+ console.log('PASS purchase assessment uses shared snapshot, exposes missing data, supports locales and leaves finances unchanged.');
 }
 console.log('DOM stubs: this verifies JavaScript integration, not browser layout or camera permissions.');
