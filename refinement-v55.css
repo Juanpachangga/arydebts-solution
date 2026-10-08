@@ -95,9 +95,9 @@ html[data-ary-theme="light"] .brandEcho56{color:#345a8b!important;-webkit-text-f
 /* V57: animate layers of the existing artwork, keeping every flag visible. */
 .landingVisual55{isolation:isolate;perspective:900px}
 .worldMotion57{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
-.worldCore57{transform-box:view-box;transform-origin:50% 53%;animation:worldTurn57 15s ease-in-out infinite}
-.worldDawn57{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 70% 24%,#ffe49470,transparent 48%);mix-blend-mode:screen;animation:worldDawn57 15s ease-in-out infinite}
-@keyframes worldTurn57{0%,100%{transform:translateX(-3px) rotate(-.65deg) scaleX(.992)}50%{transform:translateX(3px) rotate(.65deg) scaleX(1)}}
+.worldCore57{transform-box:view-box;transform-origin:50% 53%;animation:worldTurn57 8s ease-in-out infinite}
+.worldDawn57{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 70% 24%,#ffe49470,transparent 48%);mix-blend-mode:screen;animation:worldDawn57 8s ease-in-out infinite}
+@keyframes worldTurn57{0%,100%{transform:translateX(-6px) rotate(-1.6deg) scaleX(.984)}50%{transform:translateX(6px) rotate(1.6deg) scaleX(1)}}
 @keyframes worldDawn57{0%,100%{opacity:.03;transform:translateX(-12%)}50%{opacity:.65;transform:translateX(0)}}
 body.mode-lite .worldMotion57,body.mode-lite .worldDawn57{display:none}
 @media(prefers-reduced-motion:reduce){.worldMotion57,.worldDawn57{display:none}}
