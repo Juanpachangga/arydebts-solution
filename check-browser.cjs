@@ -6,7 +6,7 @@ const http = require('node:http');
 const { chromium, webkit } = require('playwright');
 
 const root = __dirname;
-const types = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.svg':'image/svg+xml', '.jpeg':'image/jpeg', '.webmanifest':'application/manifest+json' };
+const types = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.svg':'image/svg+xml', '.jpeg':'image/jpeg', '.webp':'image/webp', '.webmanifest':'application/manifest+json' };
 const server = http.createServer(async (req, res) => {
   try {
     const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
@@ -30,6 +30,11 @@ async function check(engine, label, viewport) {
     await page.goto(origin, { waitUntil:'load' });
     assert.ok((await page.locator('#app').innerText()).includes('Arydebts'), 'Fresh startup renders');
     assert.equal(await page.evaluate(() => s.income), 0, 'Fresh startup has no invented income');
+    await page.locator('.heroPhoto55').evaluate(img=>img.decode());
+    assert.ok(await page.locator('.heroPhoto55').evaluate(img=>img.naturalWidth>=1700),'Hero has a high resolution source');
+    assert.equal(await page.locator('.social55 svg').count(),5,'Recognizable vector social logos');
+    assert.doesNotMatch(await page.locator('#app').innerText(),/Solution/);
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Landing fits viewport');
     for(const theme of ['light','dark','light','dark']) {
       await page.locator('[onclick="aryToggleDark()"]').click();
       await page.waitForFunction(theme => document.documentElement.dataset.aryTheme===theme, theme);
@@ -200,7 +205,29 @@ async function check(engine, label, viewport) {
       await page.screenshot({ path:path.join(root,'browser-results', `${label}-${theme}.png`), fullPage:true });
     }
     await navigate('profile');
+    await navigate('more');
+    await page.locator('[onclick="go(\'profile\')"]').click();
+    await page.locator('[onclick="back()"]').click();
+    assert.equal(await page.evaluate(()=>screen),'more','Profile Back returns inside the app');
+    await navigate('expenses');
+    await page.locator('.antEntry55').click();
+    assert.equal(await page.evaluate(()=>screen),'ants','Expenses includes the original small-expenses screen');
+    const antState=await page.evaluate(()=>({expenses:s.expenses,income:s.income,incomeFrequency:s.incomeFrequency,mode:s.mode}));
+    await page.evaluate(()=>{s.mode='immersive';s.income=1000;s.incomeFrequency='monthly';s.expenses=[{id:999,name:'Coffee test',amount:200,cat:'Hormiga',date:localDate()}];render()});
+    assert.equal(await page.locator('.pig25').innerText(),'🐽','Pig reacts to spending level');
+    assert.equal(await page.locator('.pig25').evaluate(el=>getComputedStyle(el).animationName),'aryPig55');
+    await page.evaluate(()=>{s.expenses[0].amount=500;render()});
+    assert.equal(await page.locator('.pig25').innerText(),'😵‍💫');
+    await page.evaluate(()=>toggleMode());
+    assert.equal(await page.locator('.pig25').evaluate(el=>getComputedStyle(el).animationName),'none','Lite stops animated icons');
+    await page.evaluate(state=>{Object.assign(s,state);save()},antState);
+    await navigate('profile');
+    await page.locator('.profileAvatar46').waitFor({state:'visible'});
+    assert.ok((await page.locator('.profileAvatar46').boundingBox()).width>=88);
     await page.evaluate(() => aryProfile46());
+    for(const input of await page.locator('#modal input[type="file"]').all())assert.equal(await input.isVisible(),false,'Native file fields remain hidden');
+    if(viewport.width<700)assert.equal(await page.locator('#aryName46').evaluate(el=>getComputedStyle(el).fontSize),'16px','Inputs avoid automatic iPhone text zoom');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-profile-editor.png`),fullPage:true});
     await page.locator('#aryName46').fill('Draft stays');
     // A browser-created image exercises actual decoding, canvas and upload events.
     const png = await page.evaluate(() => { const c=document.createElement('canvas'); c.width=1200;c.height=900;c.getContext('2d').fillRect(0,0,1200,900);return c.toDataURL('image/png').split(',')[1]; });

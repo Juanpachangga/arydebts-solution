@@ -149,5 +149,8 @@ for(const mutate of [x=>x.debts[0].balance=2301,x=>x.income=900,x=>x.payments=[{
  const actual=JSON.parse(JSON.stringify(legacy));mutate(actual);const retained=boot(legacyStorage(actual),'#welcome');assert.equal(retained.run('s.debts.length'),5);assert.equal(retained.data['ary-v52-sample-backup-v54'],undefined);assert.equal(retained.run('screen'),'welcome');
 }
 const portal=boot(true,'#welcome');assert.equal(portal.run('screen'),'welcome');assert.equal(portal.run('s.income'),1000);assert.equal(portal.nodes.nav.innerHTML,'');
+portal.run("go('more');go('profile');back()");assert.equal(portal.run('screen'),'more');
+portal.run('back()');assert.equal(portal.run('screen'),'welcome');
+portal.run("go('expenses')");assert.match(portal.nodes.app.innerHTML,/antEntry55/);
 console.log('PASS exact V52 sample cleanup with existing profile, archived original, changed finances preserved, direct welcome route.');
 console.log('DOM stubs: this verifies JavaScript integration, not browser layout or camera permissions.');
