@@ -49,9 +49,11 @@ async function check(engine, label, viewport) {
     assert.ok(await page.locator('.worldMotion57').evaluate(el=>el.animationsPaused()),'Lite stops SVG animation clocks');
     await page.evaluate(()=>{s.mode='immersive';render()});
     await page.emulateMedia({reducedMotion:'reduce'});
+    await page.waitForFunction(()=>document.querySelector('.worldMotion57').animationsPaused());
     assert.equal(await page.locator('.worldMotion57').isVisible(),false,'Reduced motion keeps artwork still');
     assert.ok(await page.locator('.worldMotion57').evaluate(el=>el.animationsPaused()),'Reduced motion stops SVG clocks');
     await page.emulateMedia({reducedMotion:'no-preference'});
+    await page.waitForFunction(()=>!document.querySelector('.worldMotion57').animationsPaused());
     assert.ok(await page.locator('.worldMotion57').isVisible(),'Immersive restores artwork motion');
     assert.equal(await page.locator('.social55 svg').count(),5,'Recognizable vector social logos');
     assert.doesNotMatch(await page.locator('#app').innerText(),/Solution/);
