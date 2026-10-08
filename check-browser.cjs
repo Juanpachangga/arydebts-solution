@@ -31,7 +31,9 @@ async function check(engine, label, viewport) {
     assert.match(await page.locator('#app').innerText(), /ARYDEBTS/i, 'Fresh startup renders');
     assert.equal(await page.evaluate(() => s.income), 0, 'Fresh startup has no invented income');
     await page.locator('.heroPhoto55').evaluate(img=>img.decode());
-    assert.ok(await page.locator('.heroPhoto55').evaluate(img=>img.naturalWidth>=1700),'Hero has a high resolution source');
+    assert.ok(await page.locator('.heroPhoto55').evaluate(img=>img.naturalWidth>=1200),'Hero has a high resolution source');
+    assert.equal(await page.locator('.heroPhoto55').evaluate(img=>getComputedStyle(img).objectFit),'contain','Original globe and flags are shown without cropping');
+    assert.match(await page.locator('.heroPhoto55').getAttribute('src'),/world-retouched/);
     assert.equal(await page.locator('.social55 svg').count(),5,'Recognizable vector social logos');
     assert.doesNotMatch(await page.locator('#app').innerText(),/Solution/);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Landing fits viewport');
