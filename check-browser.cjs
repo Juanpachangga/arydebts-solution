@@ -216,7 +216,7 @@ async function check(engine, label, viewport) {
     // A customer with an existing profile can open the complete public cover.
     const portalBefore=await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')));
     await page.goto(origin+'/#welcome',{waitUntil:'load'});
-    assert.ok(await page.locator('.landing9').isVisible());
+    await page.locator('.landing9').waitFor({state:'visible'});
     assert.equal(await page.locator('#nav').innerText(),'');
     assert.equal(await page.evaluate(()=>s.income),portalBefore.income);
     assert.deepEqual(await page.evaluate(()=>s.debts),portalBefore.debts);
