@@ -1,0 +1,41 @@
+name: App integration and browser checks
+
+on:
+  push:
+    branches: [v54-real-data-foundation]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: browser-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Check application integration
+        run: node check-integration.cjs
+      - name: Install browser test dependency
+        run: npm install --no-save --package-lock=false playwright@1.62.1
+      - name: Exercise application in real browsers
+        run: node check-browser.cjs
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: browser-screenshots
+          path: browser-results/
+          retention-days: 7
+          if-no-files-found: ignore
