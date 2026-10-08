@@ -136,6 +136,10 @@ async function check(engine, label, viewport) {
       audit.debtForm=await page.locator('#modal').innerText();
       if(locale==='pt-BR'||locale==='en-US')assert.doesNotMatch(audit.debtForm,/Nombre de la deuda|Fecha de vencimiento|Pago mínimo|Escribe el valor/,'Debt form is immediately localized');
       await page.evaluate(()=>closeM());
+      await page.evaluate(()=>customizeHome());
+      audit.customizeHome=await page.locator('#modal').innerText();
+      assert.doesNotMatch(audit.customizeHome,/\bhome\b|\bdebts\b|\bexpenses\b|\bmore\b/,'Home customization uses translated labels rather than internal route names');
+      await page.evaluate(()=>closeM());
       await fs.writeFile(path.join(root,'browser-results',`${label}-${locale}-copy.json`),JSON.stringify(audit,null,2));
       await navigate('income');
       const heading = await page.locator('#app').innerText();
