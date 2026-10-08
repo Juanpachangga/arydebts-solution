@@ -109,6 +109,8 @@ async function check(engine, label, viewport) {
     await page.locator('#m').fill('100');
     await page.locator('[onclick="saveDebt(null)"]').click();
     assert.ok((await page.locator('#app').innerText()).includes('Initial credit card'));
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Initial debt actions fit mobile width');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-initial-debt-v59.png`),fullPage:true});
     await page.locator('[onclick^="deleteDebt("]').click();
     assert.equal(await page.evaluate(()=>s.debts.length),0,'Initial debt can be deleted');
     await page.reload({waitUntil:'load'});
@@ -286,6 +288,7 @@ async function check(engine, label, viewport) {
     await navigate('profile');
     await page.locator('.profileAvatar46').waitFor({state:'visible'});
     assert.ok((await page.locator('.profileAvatar46').boundingBox()).width>=88);
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-seasonal-v59.png`),fullPage:true});
     await page.evaluate(() => aryProfile46());
     for(const input of await page.locator('#modal input[type="file"]').all())assert.equal(await input.isVisible(),false,'Native file fields remain hidden');
     if(viewport.width<700)assert.equal(await page.locator('#aryName46').evaluate(el=>getComputedStyle(el).fontSize),'16px','Inputs avoid automatic iPhone text zoom');
