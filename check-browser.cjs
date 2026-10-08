@@ -72,6 +72,7 @@ async function check(engine, label, viewport) {
         await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         await Promise.all(document.getAnimations().filter(animation => animation.effect?.getComputedTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {})));
       });
+      await page.waitForFunction(expected => getComputedStyle(document.body).color === expected, theme==='light'?'rgb(17, 24, 39)':'rgb(244, 248, 255)');
       assert.equal(await page.locator('body').evaluate(el => getComputedStyle(el).color), theme==='light'?'rgb(17, 24, 39)':'rgb(244, 248, 255)', 'Theme sets readable foreground');
       await page.screenshot({ path:path.join(root,'browser-results', `${label}-${theme}.png`), fullPage:true });
     }
