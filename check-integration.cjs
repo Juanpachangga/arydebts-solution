@@ -14,6 +14,18 @@ function boot(existing=false){
 }
 for(const existing of [false,true]){
  const b=boot(existing);
+ const legacyState={currency:'USD',locale:'es-US',mode:'lite',name:'Test',income:1000,incomeFrequency:'monthly',goal:'Family emergency fund',goals:['Comprar casa','Family emergency fund','Comprar carro','Negocio propio'],theme:'dark',navOrder:['home','debts','expenses','plan','more'],onboarded:true,savings:0,debts:[],expenses:[],calendarEvents:[],payments:[]};
+ const migrated=boot({'arydebts-v3':JSON.stringify(legacyState),'arydebts-profile':JSON.stringify({name:'Test'})});
+ assert.equal(migrated.run('s.goal'),'Family emergency fund','Migration preserves chosen custom primary goal');assert.deepEqual(JSON.parse(migrated.run('JSON.stringify(s.goals)')),['home','Family emergency fund','car','Negocio propio']);
+ const goalsReload=boot(migrated.data);assert.equal(goalsReload.run('s.goal'),'Family emergency fund');assert.deepEqual(JSON.parse(goalsReload.run('JSON.stringify(s.goals)')),['home','Family emergency fund','car','Negocio propio']);
+ migrated.run("go('setupGoal')");assert.match(migrated.nodes.app.innerHTML,/Family emergency fund/);assert.match(migrated.nodes.app.innerHTML,/aryGoalForm54\(\)/);migrated.run("aryChooseGoal54('security')");assert.equal(migrated.run('s.goal'),'Family emergency fund','Selecting an additional preset does not replace custom primary');migrated.run("aryChooseGoal54('security')");
+ for(const [locale,label]of [['es-US','Comprar una casa'],['en-US','Buy a home'],['pt-BR','Comprar uma casa']]){migrated.run(`s.locale='${locale}';go('goals')`);assert.ok(migrated.nodes.app.innerHTML.includes(label));assert.match(migrated.nodes.app.innerHTML,/Family emergency fund/);assert.doesNotMatch(migrated.nodes.app.innerHTML,/>home<|>car</);}
+ migrated.run('arySetPrimaryGoal54(2)');assert.equal(migrated.run('s.goal'),'car');migrated.run('removeGoal(0)');assert.equal(migrated.run('s.goal'),'car','Removing another goal preserves primary');
+ migrated.nodes.newGoal={value:'My child’s future <school>'};migrated.run('saveGoal()');assert.equal(migrated.run('s.goals.length'),4);assert.match(migrated.nodes.app.innerHTML,/&lt;school&gt;/);
+ migrated.run('saveGoal()');assert.equal(migrated.run('s.goals.length'),4,'Duplicate goals are rejected');migrated.run('arySetPrimaryGoal54(3)');assert.equal(migrated.run('s.goal'),'My child’s future <school>');
+ const customReload=boot(migrated.data);assert.equal(customReload.run('s.goal'),'My child’s future <school>');assert.equal(customReload.run('s.goals.length'),4);
+ migrated.run('aryRemoveGoal54(3)');assert.equal(migrated.run('s.goal'),'Family emergency fund');const goalCount=migrated.run('s.goals.length');migrated.nodes.newGoal.value='';migrated.run('saveGoal()');assert.equal(migrated.run('s.goals.length'),goalCount);migrated.nodes.newGoal.value='X'.repeat(121);migrated.run('saveGoal()');assert.equal(migrated.run('s.goals.length'),goalCount);
+ migrated.run("s.locale='es-CO';s.savings=0");migrated.nodes.sv={value:'100,50'};migrated.run('saveSaving()');assert.equal(migrated.run('s.savings'),100.5);migrated.nodes.sv.value='-5';migrated.run('saveSaving()');assert.equal(migrated.run('s.savings'),100.5);
  for(const locale of ['es-US','es-CO','es-ES','en-US','pt-BR']){
   b.run(`s.locale=${JSON.stringify(locale)}`);
   for(const route of ['home','income','debts','expenses','plan','progress','calendar','profile','buy','setupIncome','setupGoal','setupDebts','setupExpenses']){
@@ -110,5 +122,6 @@ for(const existing of [false,true]){
  console.log('PASS calendar payment display, edits, deletions, reload, future-date protection and unique payment IDs.');
  console.log('PASS purchase assessment uses shared snapshot, exposes missing data, supports locales and leaves finances unchanged.');
  console.log('PASS photo compression, profile draft preservation, quota/decode failures, concurrent uploads, modal close and removal.');
+ console.log('PASS legacy/custom goal migration, primary selection, localized labels, duplicates, reload and savings inputs.');
 }
 console.log('DOM stubs: this verifies JavaScript integration, not browser layout or camera permissions.');
