@@ -64,6 +64,26 @@ async function check(engine, label, viewport) {
       assert.ok(heading.includes(locale==='en-US' ? 'My income' : locale==='pt-BR' ? 'Minha renda' : 'Mis ingresos'), `${locale} income is localized`);
     }
     await page.evaluate(() => { s.locale='es-US'; save(); go('home'); });
+    const navigation = page.locator('#nav button');
+    assert.equal(await navigation.count(), 5);
+    assert.equal(await page.locator('#nav button[aria-current="page"]').count(), 1);
+    for (const button of await navigation.all()) {
+      assert.ok((await button.boundingBox()).height >= 44, 'Navigation has comfortable touch targets');
+    }
+    await page.locator('.homeTap51').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.evaluate(() => screen), 'debts', 'Debt card works with keyboard');
+    await page.locator('#nav [onclick="go(\'home\')"]').click();
+    assert.equal(await page.evaluate(() => screen), 'home', 'Navigation returns home');
+    assert.equal(await page.locator('#nav [aria-current="page"]').innerText(), '⌂\nInicio');
+    for (const button of await page.locator('.homeSetup54 .btn, .linkBtn').all()) {
+      assert.ok((await button.boundingBox()).height >= 44, 'Home actions have comfortable touch targets');
+    }
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    const lastCard = await page.locator('#app .grid > .card').last().boundingBox();
+    const navigationBox = await page.locator('#nav').boundingBox();
+    assert.ok(lastCard.y+lastCard.height <= navigationBox.y, 'Bottom navigation leaves the final card accessible');
+    await page.evaluate(() => window.scrollTo(0, 0));
     for (const theme of ['light','dark']) {
       await page.evaluate(theme => { localStorage.setItem('ary-theme-v46', theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
       assert.equal(await page.locator('html').getAttribute('data-ary-theme'), theme);
