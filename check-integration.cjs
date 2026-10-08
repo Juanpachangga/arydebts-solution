@@ -154,3 +154,5 @@ portal.run('back()');assert.equal(portal.run('screen'),'welcome');
 portal.run("go('expenses')");assert.match(portal.nodes.app.innerHTML,/antEntry55/);
 console.log('PASS exact V52 sample cleanup with existing profile, archived original, changed finances preserved, direct welcome route.');
 console.log('DOM stubs: this verifies JavaScript integration, not browser layout or camera permissions.');
+
+const greeting58=boot(true);greeting58.run("const DeviceDate58=Date;Date=class extends DeviceDate58{getHours(){return 8}}");assert.match(greeting58.run('aryHumanGreeting41().title'),/^Buenos días/);greeting58.run("Date=class extends DeviceDate58{getHours(){return 14}}");assert.match(greeting58.run('aryHumanGreeting41().title'),/^Buenas tardes/);greeting58.run("Date=class extends DeviceDate58{getHours(){return 22}}");assert.match(greeting58.run('aryHumanGreeting41().title'),/^Buenas noches/);greeting58.run("go('home')");assert.doesNotMatch(greeting58.nodes.app.innerHTML,/onclick="back\(\)"/);console.log('PASS device-hour greetings and no Back on signed-in home');

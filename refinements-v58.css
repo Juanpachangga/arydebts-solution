@@ -1,0 +1,14 @@
+.experience58{display:grid;gap:12px;padding:18px 0;margin:16px 0;border-top:1px solid #7999bf55;border-bottom:1px solid #7999bf55}
+.experience58 p{margin:7px 0;line-height:1.5}.modeChoices58{display:flex;gap:10px;flex-wrap:wrap}.modeChoices58 .btn{min-height:44px}
+.profileOverview58{text-align:center}.profileOverview58 .profileAvatar46{width:116px;height:116px;margin:6px auto 18px;font-size:42px;box-shadow:0 0 26px #46cfff22}
+.profileOverview58 h2{font-size:22px;margin:0 0 22px}.profileOverview58 .menuGrid{text-align:left}.logout58{margin-top:24px}
+.profilePhoto46{width:144px;height:144px}
+.formHeading58{display:flex;align-items:center;gap:12px;margin-bottom:18px}.formHeading58 h2{margin:0;font-size:clamp(20px,5vw,28px)}.modalBack58{min-width:44px;min-height:44px;font-size:30px;padding:0;flex:none}
+.antHero25{position:relative}.antMood58{float:right;display:flex;align-items:center;gap:6px;margin:0 0 10px 12px}.antMood58 .pig25{position:static;float:none;font-size:56px}.antFace58{font-size:32px}
+.mode-immersive .antFace58{animation:aryPig55 3s ease-in-out infinite;animation-delay:-1s}
+.socialIcon55 svg{width:28px;height:28px}.social55 button{min-height:72px}
+.assistant58 .assistantIntro58{display:flex;gap:12px;align-items:flex-start;margin-bottom:18px}.assistantIntro58 p{margin:0;line-height:1.55}.assistant58 .assistantBadge58{font-size:28px;flex:none}
+.assistant58 .chatlog58{display:flex;flex-direction:column;gap:12px;max-height:50svh;overflow:auto;min-width:0;padding:4px 0;margin:16px 0}
+.assistant58 .message58{position:static;display:block;width:auto;height:auto;max-width:100%;padding:12px 14px;border-radius:15px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;background:#667fa31a}
+.assistant58 .message58.user58{align-self:flex-end;background:#6655e633}.assistant58 .chatForm58{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:10px}.assistant58 textarea{width:100%;min-height:86px;resize:vertical;font:inherit}.assistant58 .chatForm58 .btn{min-height:44px}.assistant58 .assistantStatus58{font-size:12px;line-height:1.5}
+@media(max-width:400px){.assistant58 .chatForm58{grid-template-columns:1fr}.antMood58 .pig25{font-size:44px}.antFace58{font-size:25px}}

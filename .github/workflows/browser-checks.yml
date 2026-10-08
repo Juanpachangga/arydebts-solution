@@ -28,6 +28,8 @@ jobs:
           node-version: '24'
       - name: Check application integration
         run: node check-integration.cjs
+      - name: Check assistant backend adapter with simulated transport
+        run: node server/check-assistant.mjs
       - name: Install browser test dependency
         run: npm install --no-save --package-lock=false playwright@1.62.1
       - name: Exercise application in real browsers
