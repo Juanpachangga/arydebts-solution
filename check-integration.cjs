@@ -2,7 +2,7 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
  const scripts=[...fs.readFileSync(__dirname+'/index.html','utf8').matchAll(/<script src="([^"?]+)/g)].map(m=>m[1]);
 function boot(existing=false){
  const nodes={},data={};
- const element=()=>({innerHTML:'',textContent:'',style:{setProperty(){}},dataset:{},classList:{add(){},remove(){},toggle(){}},querySelectorAll:()=>[],querySelector:()=>null,setAttribute(){},addEventListener(){},appendChild(){},remove(){}});
+ const element=()=>{const classes=new Set();return{innerHTML:'',textContent:'',style:{setProperty(){}},dataset:{},classList:{add:name=>classes.add(name),remove:name=>classes.delete(name),contains:name=>classes.has(name),toggle:(name,on)=>on===false?classes.delete(name):classes.add(name)},querySelectorAll:()=>[],querySelector:()=>null,setAttribute(){},addEventListener(){},appendChild(){},remove(){}}};
  for(const id of ['app','nav','modal','toast'])nodes[id]=element();
  const document={body:element(),documentElement:element(),getElementById:id=>nodes[id]||null,querySelector:sel=>sel.startsWith('#')?nodes[sel.slice(1)]||null:null,querySelectorAll:()=>[],createTreeWalker:()=>({nextNode:()=>null}),createElement:element,addEventListener(){}};
  if(existing&&typeof existing==='object')Object.assign(data,existing);
@@ -88,9 +88,27 @@ for(const existing of [false,true]){
   assert.equal(textNodes[0].nodeValue,'Mis deudas');assert.equal(textNodes[2].nodeValue,'Mis deudas');assert.equal(option.textContent,'Mis deudas');assert.equal(textNodes[1].nodeValue,locale==='en-US'?'My debts':'Minhas dívidas');
  }
  assert.equal(b.run('s.debts[0].name'),'Mis deudas');assert.equal(b.run('s.expenses[0].name'),'Ingreso semanal');
+ const originalCreate=b.context.document.createElement,images=[],revoked=[],encodes=[];let urlIndex=0,photoRefreshes=0;
+ b.context.URL={createObjectURL:()=>`blob:test-${++urlIndex}`,revokeObjectURL:url=>revoked.push(url)};
+ b.context.Image=class{constructor(){this.naturalWidth=4000;this.naturalHeight=3000;images.push(this)}set src(value){this.url=value}};
+ b.context.document.createElement=tag=>{if(tag!=='canvas')return originalCreate(tag);const canvas={width:0,height:0,getContext:()=>({fillRect(){},drawImage(){}}),toDataURL:(type,quality)=>{encodes.push({width:canvas.width,height:canvas.height,type,quality});return'data:image/jpeg;base64,'+'A'.repeat(100)}};return canvas};
+ const originalProfile=b.context.aryProfile46;b.context.aryProfile46=()=>{photoRefreshes++;originalProfile();for(const id of ['aryName46','aryEmail46','aryBio54'])b.nodes[id]={value:'RESET'}};
+ b.run("s.locale='es-US';go('profile');aryProfile46()");
+ const draft={aryName46:'Unsaved name',aryEmail46:'draft@example.com',aryBio54:'Unsaved biography'};for(const [id,value]of Object.entries(draft))b.nodes[id]={value};
+ const financialBeforePhoto=b.data['arydebts-v3'],input={files:[{type:'image/jpeg',size:10*1024*1024}],value:'selected'};
+ b.context.arySavePhoto46(input);assert.equal(input.value,'');images.at(-1).onload();assert.equal(encodes.at(-1).width,768);assert.equal(encodes.at(-1).height,576);assert.equal(encodes.at(-1).type,'image/jpeg');assert.ok(b.data['ary-profile-photo-v46'].length<512*1024);
+ for(const [id,value]of Object.entries(draft))assert.equal(b.nodes[id].value,value,'Photo refresh preserves unsaved profile fields');assert.equal(b.data['arydebts-v3'],financialBeforePhoto,'Photo does not modify finances');
+ const savedPhoto=b.data['ary-profile-photo-v46'],originalSet=b.context.localStorage.setItem;b.context.localStorage.setItem=(key,value)=>{if(key==='ary-profile-photo-v46')throw Error('Quota');originalSet(key,value)};
+ b.context.arySavePhoto46(input);images.at(-1).onload();assert.equal(b.data['ary-profile-photo-v46'],savedPhoto);assert.match(b.nodes.toast.textContent,/No pudimos guardar/);b.context.localStorage.setItem=originalSet;
+ const count=images.length;b.context.arySavePhoto46({files:[{type:'text/plain',size:100}],value:'selected'});b.context.arySavePhoto46({files:[{type:'image/jpeg',size:21*1024*1024}],value:'selected'});assert.equal(images.length,count);assert.equal(b.data['ary-profile-photo-v46'],savedPhoto);
+ b.context.arySavePhoto46(input);images.at(-1).onerror();assert.match(b.nodes.toast.textContent,/No pudimos abrir/);assert.equal(b.data['ary-profile-photo-v46'],savedPhoto);
+ b.context.arySavePhoto46(input);const oldImage=images.at(-1);b.context.arySavePhoto46(input);const latestImage=images.at(-1),encodeCount=encodes.length;oldImage.onload();assert.equal(encodes.length,encodeCount,'An older upload cannot overwrite the newer selection');latestImage.naturalWidth=1000;latestImage.naturalHeight=3000;latestImage.onload();assert.equal(encodes.at(-1).width,256);assert.equal(encodes.at(-1).height,768);
+ b.context.arySavePhoto46(input);const closingImage=images.at(-1),refreshBeforeClose=photoRefreshes;b.run("closeM();screen='home'");closingImage.onload();assert.equal(photoRefreshes,refreshBeforeClose,'A completed upload does not reopen a closed profile');
+ b.context.arySavePhoto46(input);const removedImage=images.at(-1);b.context.aryRemovePhoto46();assert.equal(b.data['ary-profile-photo-v46'],undefined);removedImage.onload();assert.equal(b.data['ary-profile-photo-v46'],undefined,'Removing photo cancels a pending upload');assert.equal(revoked.length,urlIndex,'Temporary image URLs are released');
  console.log('PASS complete script order, 13 routes x 5 locales, income edits, persistence, deficit, payments, dated expenses, theme state:',existing?'existing profile':'fresh storage');
  console.log('PASS translated interface and protected user names, goals, messages, textarea contents and debt options.');
  console.log('PASS calendar payment display, edits, deletions, reload, future-date protection and unique payment IDs.');
  console.log('PASS purchase assessment uses shared snapshot, exposes missing data, supports locales and leaves finances unchanged.');
+ console.log('PASS photo compression, profile draft preservation, quota/decode failures, concurrent uploads, modal close and removal.');
 }
 console.log('DOM stubs: this verifies JavaScript integration, not browser layout or camera permissions.');
