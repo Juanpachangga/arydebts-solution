@@ -338,6 +338,30 @@ async function check(engine, label, viewport) {
     await page.evaluate(()=>toggleMode());
     assert.equal(await page.locator('.brandLetter59 b').evaluate(el=>getComputedStyle(el).animationName),'none');
     await page.evaluate(() => closeM());
+    // Header cues are based on pending dates, not historical expense dates.
+    const reminderBefore60=await page.evaluate(()=>({debts:s.debts,expenses:s.expenses,calendarEvents:s.calendarEvents,payments:s.payments,mode:s.mode}));
+    const reminderDate60=await page.evaluate(()=>{const d=new Date();d.setDate(d.getDate()+1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`});
+    await page.evaluate(date=>{s.mode='immersive';s.debts=[{id:6001,name:'Carro',balance:1000,min:100,due:date,icon:'🚗'}];s.payments=[];s.calendarEvents=[{id:6002,name:'Luz',date,kind:'reminder',amount:80},{id:6003,name:'Renta',date,kind:'reminder',amount:1600}];go('home')},reminderDate60);
+    assert.equal(await page.locator('.dueBadge60').count(),3);
+    assert.deepEqual(await page.locator('.dueBadge60>span').allTextContents(),['🔑','⚡','🏠']);
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Reminder badges fit mobile width');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-reminders-v60.png`),fullPage:true});
+    await page.locator('[onclick="aryShowDue60(\'power\')"]').click();
+    assert.match(await page.locator('#modal').innerText(),/Luz/);
+    await page.locator('[onclick^="aryCalendarDate60("]').click();
+    assert.equal(await page.evaluate(()=>screen),'calendar');
+    assert.ok((await page.locator('.calDetail35').innerText()).includes('Luz'));
+    await page.locator('[onclick="aryCompleteReminder60(6002,true)"]').click();
+    assert.equal(await page.evaluate(()=>s.calendarEvents.find(e=>e.id===6002).completed),true);
+    assert.equal(await page.locator('[onclick="aryShowDue60(\'power\')"]').count(),0);
+    await page.reload({waitUntil:'load'});
+    assert.equal(await page.locator('[onclick="aryShowDue60(\'power\')"]').count(),0,'Completed reminder stays hidden after reload');
+    await page.evaluate(date=>aryCalendarDate60(date),reminderDate60);
+    await page.locator('[onclick="aryCompleteReminder60(6002,false)"]').click();
+    assert.equal(await page.locator('[onclick="aryShowDue60(\'power\')"]').count(),1,'Calendar allows undoing reminder completion');
+    await page.evaluate(()=>toggleMode());
+    assert.equal(await page.locator('.dueBadge60>span').first().evaluate(el=>getComputedStyle(el).animationName),'none');
+    await page.evaluate(state=>{Object.assign(s,state);save()},reminderBefore60);
     // A customer with an existing profile can open the complete public cover.
     const portalBefore=await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')));
     await page.goto(origin+'/#welcome',{waitUntil:'load'});
