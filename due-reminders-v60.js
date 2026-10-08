@@ -15,9 +15,9 @@ window.aryReminderKind60=(name='',icon='')=>{
  return 'other';
 };
 const icons={car:'🔑',power:'⚡',home:'🏠',other:'📅'};
-window.aryDueReminders60=(now=new Date())=>{
+window.aryDueReminders60=(now=new Date(),horizon=7)=>{
  const today=localKey(now),day=dateNumber(today),out=[];
- const add=(item,date)=>{const n=dateNumber(date);if(n===null||n-day>7)return;out.push({...item,date,days:n-day,kind:aryReminderKind60(item.name,item.icon)})};
+ const add=(item,date)=>{const n=dateNumber(date);if(n===null||n-day>horizon)return;out.push({...item,date,days:n-day,kind:aryReminderKind60(item.name,item.icon)})};
  for(const d of s.debts||[]){
   if(!(Number(d.balance)>0)||dateNumber(d.due)===null)continue;
   const minimum=Math.max(0,Number(d.min)||0),paid=(s.payments||[]).filter(p=>Number(p.debtId)===Number(d.id)&&String(p.date||'').slice(0,7)===d.due.slice(0,7)&&dateNumber(p.date)!==null&&p.date<=today).reduce((sum,p)=>sum+Math.max(0,Number(p.amount)||0),0);

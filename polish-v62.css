@@ -1,0 +1,6 @@
+/* Empty or dismissed messages must never leave a white bubble on a screen. */
+#toast:empty{display:none!important}
+#toast:not(.show){visibility:hidden;pointer-events:none}
+#toast.show{max-width:calc(100% - 32px);text-align:center;overflow-wrap:anywhere}
+button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #41d8ff;outline-offset:3px}
+body.ary-light button:focus-visible,body.ary-light .btn:focus-visible,body.ary-light input:focus-visible,body.ary-light select:focus-visible,body.ary-light textarea:focus-visible{outline-color:#2563b7}
