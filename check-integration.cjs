@@ -156,3 +156,8 @@ console.log('PASS exact V52 sample cleanup with existing profile, archived origi
 console.log('DOM stubs: this verifies JavaScript integration, not browser layout or camera permissions.');
 
 const greeting58=boot(true);greeting58.run("const DeviceDate58=Date;Date=class extends DeviceDate58{getHours(){return 8}}");assert.match(greeting58.run('aryHumanGreeting41().title'),/^Buenos días/);greeting58.run("Date=class extends DeviceDate58{getHours(){return 14}}");assert.match(greeting58.run('aryHumanGreeting41().title'),/^Buenas tardes/);greeting58.run("Date=class extends DeviceDate58{getHours(){return 22}}");assert.match(greeting58.run('aryHumanGreeting41().title'),/^Buenas noches/);greeting58.run("go('home')");assert.doesNotMatch(greeting58.nodes.app.innerHTML,/onclick="back\(\)"/);console.log('PASS device-hour greetings and no Back on signed-in home');
+
+const seasons59=boot(true);
+for(const [m,d,birthday,expected]of [[10,8,'','halloween'],[12,25,'','christmas'],[12,31,'','newyear'],[1,1,'','newyear'],[4,10,'','everyday'],[10,8,'10-08','birthday']])assert.equal(seasons59.run(`arySeason59(new Date(2026,${m-1},${d}),'${birthday}')`),expected);
+seasons59.run("s.debts=[{id:44,name:'Card',balance:100,min:7}];go('setupDebts')");assert.match(seasons59.nodes.app.innerHTML,/deleteDebt\(44\)/);seasons59.run('deleteDebt(44)');assert.equal(seasons59.run('s.debts.length'),0);
+console.log('PASS seasonal boundaries, birthday priority and initial-debt deletion');

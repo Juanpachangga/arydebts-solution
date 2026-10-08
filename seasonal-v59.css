@@ -1,0 +1,21 @@
+/* Compact, seasonal brand: the original landing globe is unchanged. */
+.top .brandWrap{min-width:0;max-width:calc(100% - 64px)}
+.brandNeon59{--brand-a:#ff84ce;--brand-b:#7663ff;--brand-c:#24ddff;position:relative;display:flex;align-items:center;gap:10px;isolation:isolate;padding:8px 0;max-width:100%}
+.brandLetter59{min-width:0;position:relative}
+.brandNeon59 .brandLetter59 b{display:block;font-family:AryCinzel,Georgia,serif!important;font-weight:700;font-size:clamp(25px,6.8vw,38px);letter-spacing:-.055em;line-height:1.16;background:linear-gradient(110deg,var(--brand-a),var(--brand-b),var(--brand-c),var(--brand-a));background-size:240% 100%;background-clip:text;-webkit-background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent!important;filter:drop-shadow(0 0 8px #755fff50)}
+.brandLetter59 small{display:block;font-size:10px;font-weight:750;letter-spacing:.18em;text-transform:uppercase;margin-top:4px;color:#a9c9e7}
+.brandCharm59{display:grid;place-items:center;flex:none;width:36px;height:40px;font-size:31px;color:#44dfff;filter:drop-shadow(0 0 9px #ff883e60)}
+.brandCharm59 svg{width:100%;height:100%}.brandSpark59{color:#68e3ff;font-size:15px;align-self:flex-start}
+.season-halloween{--brand-a:#ff983e;--brand-b:#be69eb;--brand-c:#40dfff}.season-christmas{--brand-a:#dc385c;--brand-b:#46c59f;--brand-c:#55daff}.season-newyear{--brand-a:#ffd76c;--brand-b:#bd78ff;--brand-c:#3fe4ff}
+.mode-immersive .brandLetter59 b{animation:brandFlow59 6s ease-in-out infinite}.mode-immersive .brandCharm59{animation:brandCharmFloat59 3.2s ease-in-out infinite}.mode-immersive .brandSpark59{animation:brandSpark59 2.8s ease-in-out infinite}
+@keyframes brandFlow59{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}@keyframes brandCharmFloat59{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-4px) rotate(5deg)}}@keyframes brandSpark59{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.1)}}
+body.ary-light .brandNeon59{--brand-a:#b24710;--brand-b:#7436ae;--brand-c:#007eaa}body.ary-light .brandLetter59 small{color:#52657f}body.ary-light .brandSpark59{color:#007eaa}
+/* Keep the close action inside the usable dynamic viewport, above browser chrome. */
+#modal.modal:not(.hidden){display:grid;place-items:center;box-sizing:border-box;height:100%;height:100dvh;inset:0;z-index:1000;padding:16px;padding-top:max(16px,env(safe-area-inset-top));padding-bottom:max(32px,env(safe-area-inset-bottom));overflow:hidden}
+#modal>.sheet{box-sizing:border-box;min-height:0;max-height:100%;max-width:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scroll-padding-bottom:80px;padding-bottom:24px;animation:none!important}
+#modal .profileClose59{position:sticky;bottom:0;z-index:2;display:block;min-height:48px;margin-top:18px;margin-bottom:0;background:#0b2344!important;color:#fff!important;border-color:#497cad!important;box-shadow:0 -8px 18px #06162e55}
+body.ary-light #modal .profileClose59{background:#fff!important;color:#17233b!important;border-color:#b8c9dc!important;box-shadow:0 -8px 18px #fff9}
+.birthdayFields59{margin:16px 0;border:1px solid #7b91b344;border-radius:14px;padding:12px}.birthdayFields59 legend{font-weight:750}.birthdayFields59 p{font-size:12px}.birthdayFields59>div{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.birthdayFields59 select{min-height:44px}body.mode-lite .brandNeon59 *,body.mode-lite .brandNeon59 *::before{animation:none!important}
+@media(prefers-reduced-motion:reduce){.brandNeon59 *{animation:none!important}}
+@media(max-width:360px){.brandNeon59{gap:6px}.brandCharm59{width:30px}.brandSpark59{display:none}}

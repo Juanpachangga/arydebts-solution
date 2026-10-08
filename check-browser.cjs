@@ -109,6 +109,16 @@ async function check(engine, label, viewport) {
     await page.locator('#m').fill('100');
     await page.locator('[onclick="saveDebt(null)"]').click();
     assert.ok((await page.locator('#app').innerText()).includes('Initial credit card'));
+    await page.locator('[onclick^="deleteDebt("]').click();
+    assert.equal(await page.evaluate(()=>s.debts.length),0,'Initial debt can be deleted');
+    await page.reload({waitUntil:'load'});
+    assert.equal(await page.evaluate(()=>s.debts.length),0,'Deleted initial debt stays deleted');
+    await page.locator('[onclick="debtForm()"]').click();
+    await page.locator('#n').fill('Initial credit card');
+    await page.locator('#b').fill('1000');
+    await page.locator('#m').fill('100');
+    await page.locator('[onclick="saveDebt(null)"]').click();
+
     await page.locator('[onclick="go(\'setupExpenses\')"]').click();
     assert.ok((await page.locator('#app').innerText()).includes('Initial groceries'), 'Going back keeps entered expenses');
     await page.locator('[onclick="go(\'setupDebts\')"]').click();
@@ -279,7 +289,20 @@ async function check(engine, label, viewport) {
     await page.evaluate(() => aryProfile46());
     for(const input of await page.locator('#modal input[type="file"]').all())assert.equal(await input.isVisible(),false,'Native file fields remain hidden');
     if(viewport.width<700)assert.equal(await page.locator('#aryName46').evaluate(el=>getComputedStyle(el).fontSize),'16px','Inputs avoid automatic iPhone text zoom');
+
+    await page.waitForFunction(()=>getComputedStyle(document.querySelector('.profileModal54')).opacity==='1');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-profile-editor.png`),fullPage:true});
+    const oldViewport=page.viewportSize();
+    await page.setViewportSize({width:oldViewport.width,height:600});
+    await page.locator('.profileClose59').scrollIntoViewIfNeeded();
+    const closeBox=await page.locator('.profileClose59').boundingBox();
+    assert.ok(closeBox.y>=0&&closeBox.y+closeBox.height<=568,'Close is fully visible with safe bottom space in a short viewport');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-profile-close-v59.png`),fullPage:true});
+    await page.locator('.profileClose59').click();
+    assert.equal(await page.locator('#modal').isVisible(),false);
+    await page.setViewportSize(oldViewport);
+    await page.evaluate(()=>aryProfile46());
+
     await page.locator('#aryName46').fill('Draft stays');
     // A browser-created image exercises actual decoding, canvas and upload events.
     const png = await page.evaluate(() => { const c=document.createElement('canvas'); c.width=1200;c.height=900;c.getContext('2d').fillRect(0,0,1200,900);return c.toDataURL('image/png').split(',')[1]; });
@@ -291,6 +314,26 @@ async function check(engine, label, viewport) {
     assert.ok(Math.max(...dimensions)<=768, 'Photo is resized by the real browser');
     await page.locator('[onclick="aryRemovePhoto46()"]').click();
     assert.equal(await page.evaluate(() => localStorage.getItem('ary-profile-photo-v46')), null);
+
+    await page.locator('#aryBirthdayMonth59').selectOption('2');
+    await page.locator('#aryBirthdayDay59').selectOption('31');
+    await page.locator('[onclick="arySaveProfile46()"]').click();
+    assert.equal(await page.locator('#modal').isVisible(),true,'Invalid birthday does not save');
+    await page.locator('#aryBirthdayMonth59').selectOption('10');
+    await page.locator('#aryBirthdayDay59').selectOption('8');
+    await page.locator('[onclick="arySaveProfile46()"]').click();
+    assert.equal(await page.evaluate(()=>profile.birthday),'10-08');
+    await page.reload({waitUntil:'load'});
+    assert.equal(await page.evaluate(()=>profile.birthday),'10-08','Birthday month/day persists');
+    assert.equal(await page.evaluate(()=>arySeason59(new Date(2026,9,8))),'birthday');
+    assert.equal(await page.evaluate(()=>arySeason59(new Date(2026,9,9))),'halloween');
+    assert.equal(await page.evaluate(()=>arySeason59(new Date(2026,11,25))),'christmas');
+    assert.equal(await page.evaluate(()=>arySeason59(new Date(2027,0,1))),'newyear');
+    await page.evaluate(()=>{s.mode='immersive';render()});
+    assert.equal(await page.locator('.brandLetter59 b').evaluate(el=>getComputedStyle(el).animationName),'brandFlow59');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-brand-v59.png`),fullPage:true});
+    await page.evaluate(()=>toggleMode());
+    assert.equal(await page.locator('.brandLetter59 b').evaluate(el=>getComputedStyle(el).animationName),'none');
     await page.evaluate(() => closeM());
     // A customer with an existing profile can open the complete public cover.
     const portalBefore=await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')));
