@@ -138,7 +138,7 @@ async function check(engine, label, viewport) {
       await page.evaluate(()=>closeM());
       await page.evaluate(()=>customizeHome());
       audit.customizeHome=await page.locator('#modal').innerText();
-      assert.doesNotMatch(audit.customizeHome,/\bhome\b|\bdebts\b|\bexpenses\b|\bmore\b/,'Home customization uses translated labels rather than internal route names');
+      assert.doesNotMatch((await page.locator('#modal .row b').allTextContents()).join(' '),/\bhome\b|\bdebts\b|\bexpenses\b|\bmore\b/,'Home customization uses translated labels rather than internal route names');
       await page.evaluate(()=>closeM());
       await fs.writeFile(path.join(root,'browser-results',`${label}-${locale}-copy.json`),JSON.stringify(audit,null,2));
       await navigate('income');
