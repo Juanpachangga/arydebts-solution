@@ -30,6 +30,54 @@ async function check(engine, label, viewport) {
     await page.goto(origin, { waitUntil:'load' });
     assert.ok((await page.locator('#app').innerText()).includes('Arydebts'), 'Fresh startup renders');
     assert.equal(await page.evaluate(() => s.income), 0, 'Fresh startup has no invented income');
+    // Exercise the actual signup and questions, rather than injecting an onboarded profile.
+    await page.locator('[onclick="aryStartOnboarding43()"]').click();
+    await page.locator('#an').fill('Initial User');
+    await page.locator('#ae').fill('initial@example.com');
+    await page.locator('#ap').fill('synthetic-test-password');
+    await page.locator('[onclick="localAuth(\'signup\')"]').click();
+    await page.locator('[onclick="go(\'setupIncome\')"]').click();
+    await page.locator('#oi').fill('1000');
+    await page.locator('#of').selectOption('monthly');
+    await page.locator('[onclick="arySaveIncome54()"]').click();
+    assert.equal(await page.evaluate(() => screen), 'setupExpenses', 'Income leads to expenses before goals');
+    await page.locator('[onclick="expenseForm()"]').click();
+    await page.locator('#n').fill('Initial groceries');
+    await page.locator('#b').fill('250');
+    await page.locator('[onclick="saveExpense(null)"]').click();
+    assert.ok((await page.locator('#app').innerText()).includes('Initial groceries'));
+    await page.reload({waitUntil:'load'});
+    assert.equal(await page.evaluate(() => screen), 'setupExpenses', 'Reload resumes the current question');
+    await page.locator('[onclick="go(\'setupDebts\')"]').click();
+    await page.locator('[onclick="debtForm()"]').click();
+    await page.locator('#n').fill('Initial credit card');
+    await page.locator('#b').fill('1000');
+    await page.locator('#m').fill('100');
+    await page.locator('[onclick="saveDebt(null)"]').click();
+    assert.ok((await page.locator('#app').innerText()).includes('Initial credit card'));
+    await page.locator('[onclick="go(\'setupExpenses\')"]').click();
+    assert.ok((await page.locator('#app').innerText()).includes('Initial groceries'), 'Going back keeps entered expenses');
+    await page.locator('[onclick="go(\'setupDebts\')"]').click();
+    await page.locator('[onclick="go(\'setupGoal\')"]').click();
+    await page.locator('[onclick="aryContinueGoals54()"]').click();
+    assert.equal(await page.evaluate(() => screen), 'setupGoal', 'Empty goal does not jump to another question');
+    await page.locator('[onclick="aryChooseGoal54(\'debtFree\')"]').click();
+    await page.locator('[onclick="aryContinueGoals54()"]').click();
+    assert.equal(await page.evaluate(() => s.onboarded), true);
+    await page.reload({waitUntil:'load'});
+    assert.equal(await page.evaluate(() => screen), 'home');
+    assert.equal(await page.evaluate(() => s.expenses[0].amount), 250);
+    assert.equal(await page.evaluate(() => s.debts[0].balance), 1000);
+    // Empty lists use explicit next steps; the goal can be chosen later.
+    await page.evaluate(() => { aryEmptyFinancialState54(); go('intro'); });
+    await page.locator('[onclick="go(\'setupIncome\')"]').click();
+    await page.locator('#oi').fill('0');
+    await page.locator('[onclick="arySaveIncome54()"]').click();
+    await page.locator('[onclick="go(\'setupDebts\')"]').click();
+    await page.locator('[onclick="go(\'setupGoal\')"]').click();
+    await page.locator('[onclick="aryFinishOnboarding54()"]').click();
+    assert.equal(await page.evaluate(() => screen), 'home');
+    assert.equal(await page.evaluate(() => s.expenses.length+s.debts.length), 0);
     await page.evaluate(() => {
       profile = { name:'Browser Test', email:'browser@example.com', localDemo:true };
       Object.assign(s, { name:'Browser Test', onboarded:true, income:1000, incomeFrequency:'monthly', mode:'lite', locale:'es-US', currency:'USD', goal:'security', goals:['security'], debts:[], expenses:[], payments:[] });
@@ -64,6 +112,26 @@ async function check(engine, label, viewport) {
       assert.ok(heading.includes(locale==='en-US' ? 'My income' : locale==='pt-BR' ? 'Minha renda' : 'Mis ingresos'), `${locale} income is localized`);
     }
     await page.evaluate(() => { s.locale='es-US'; save(); go('home'); });
+    for (const locale of ['es-US','en-US','pt-BR']) {
+      await page.evaluate(locale => { s.locale=locale; go('more'); }, locale);
+      // Observers must settle rather than rewriting the same elements each frame.
+      const mutations = await page.evaluate(async () => {
+        const frame = () => new Promise(resolve => requestAnimationFrame(resolve));
+        for(let i=0;i<4;i++) await frame();
+        let count=0;
+        const observer=new MutationObserver(records => count+=records.length);
+        observer.observe(document.getElementById('app'),{childList:true,subtree:true,attributes:true,characterData:true});
+        for(let i=0;i<8;i++) await frame();
+        observer.disconnect();return count;
+      });
+      assert.equal(mutations, 0, 'Idle preferences screen does not continuously rewrite the DOM');
+      for(let i=0;i<3;i++) {
+        await page.locator('#app button').filter({hasText:/Preferencias de la app|App preferences|Preferências do app/}).click();
+        await page.locator('#modal [onclick="closeM()"]').click();
+        assert.equal(await page.locator('#modal').evaluate(el => el.classList.contains('hidden')), true);
+      }
+    }
+    await page.evaluate(() => { s.locale='es-US'; go('home'); });
     const navigation = page.locator('#nav button');
     assert.equal(await navigation.count(), 5);
     assert.equal(await page.locator('#nav button[aria-current="page"]').count(), 1);

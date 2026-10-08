@@ -11,7 +11,7 @@ function newProfileOnboarding(){if(typeof s==='undefined')return;if(!hasProfile(
 migrateLegacyDemo();
 window.aryStartOnboarding43=()=>{newProfileOnboarding();if(typeof go==='function')go('signup')};
 window.aryPrepareNewProfile44=newProfileOnboarding;
-/* Original five-step sequence: intro=1, income=2, goal=3, debts=4, expenses=5. */
+/* Guided sequence: intro=1, income=2, expenses=3, debts=4, goal=5. */
 window.aryBeginQuestions43=()=>{if(typeof go==='function')go('intro')};
 window.aryEmptyFinancialState54=emptyFinancialState;
 function patchAuth(){if(typeof window.localAuth!=='function'||window.localAuth.__ary54)return;const original=window.localAuth;const wrapped=function(mode){if(mode!=='signup')return original.apply(this,arguments);const name=document.getElementById('an')?.value.trim(),email=document.getElementById('ae')?.value.trim(),pass=document.getElementById('ap')?.value||'';if(!name||!email||!pass){if(typeof toast==='function')toast(tx().required);return}if(typeof s!=='undefined'){s.name=name;s.onboarded=false;resetDebtBaseline();try{localStorage.setItem(typeof KEY!=='undefined'?KEY:'arydebts-v3',JSON.stringify(s))}catch(e){}}try{const p={name,email};localStorage.setItem(typeof AUTH!=='undefined'?AUTH:'arydebts-profile',JSON.stringify(p));if(typeof profile!=='undefined')profile=p}catch(e){}if(typeof go==='function')go('intro')};wrapped.__ary54=true;window.localAuth=wrapped;try{localAuth=wrapped}catch(e){}}
