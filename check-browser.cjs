@@ -41,7 +41,7 @@ async function check(engine, label, viewport) {
     await page.screenshot({path:path.join(root,'browser-results',`${label}-typography.png`),fullPage:true});
     assert.equal(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).animationName),'worldTurn57','Planet has a gentle turn');
     const turnBefore=await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).transform);
-    await page.waitForTimeout(350);
+    await page.waitForFunction(before=>getComputedStyle(document.querySelector('.worldCore57')).transform!==before,turnBefore);
     assert.notEqual(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).transform),turnBefore,'Planet moves over time');
     assert.equal(await page.locator('.worldMotion57 animate').count(),2,'Both flag groups have wind motion');
     await page.evaluate(()=>{s.mode='lite';render()});
