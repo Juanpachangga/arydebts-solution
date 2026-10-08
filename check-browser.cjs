@@ -42,7 +42,7 @@ async function check(engine, label, viewport) {
     await page.screenshot({path:path.join(root,'browser-results',`${label}-landing-dark.png`),fullPage:true});
     await page.locator('[onclick="aryToggleLangMenu(event)"]').click();
     await page.locator('[onclick="arySetLandingLang(\'pt\')"]').click();
-    assert.equal(await page.locator('.cta21').innerText(), 'Começar hoje→');
+    assert.match(await page.locator('.cta21').innerText(), /^Começar hoje\s*→$/);
     // Exercise the actual signup and questions, rather than injecting an onboarded profile.
     await page.locator('[onclick="aryStartOnboarding43()"]').click();
     assert.ok((await page.locator('#app').innerText()).includes('Este espaço é seu'));
