@@ -1,0 +1,22 @@
+/* V54 visual sweetness: subtle feedback, aligned forms, no fake-data styling. */
+:root{--ary-ease:cubic-bezier(.2,.8,.2,1)}
+button,.btn,.card[role="button"],.homeMetric51,.calDay35,.tabs button,.choice,.rowActions button{transition:transform .16s var(--ary-ease),box-shadow .2s var(--ary-ease),border-color .2s var(--ary-ease),background .2s var(--ary-ease),opacity .2s ease}
+button:active,.btn:active,.card[role="button"]:active,.homeMetric51:active,.tabs button:active,.choice:active{transform:scale(.965)}
+nav button:active{transform:translateY(-2px) scale(.94)}
+nav button.on,nav button[aria-current="page"]{transform:translateY(-2px)}
+nav button.on .ico,nav button[aria-current="page"] .ico{animation:aryIconPop54 .32s var(--ary-ease)}
+.calDay35:active{transform:scale(.88)}
+.calDay35.selected{animation:arySelect54 .28s var(--ary-ease)}
+.choice.on{transform:translateY(-2px);box-shadow:0 9px 25px rgba(93,78,255,.18)}
+.modal:not(.hidden)>*{animation:aryModalIn54 .24s var(--ary-ease)}
+.row:active{transform:scale(.99)}
+@keyframes aryIconPop54{0%{transform:scale(.75)}65%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes arySelect54{0%{transform:scale(.88)}70%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes aryModalIn54{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+/* iOS date inputs can ignore normal sizing unless these are explicit. */
+.modal label{display:block}
+.modal input,.modal select,.modal textarea{display:block;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+.modal input[type="date"]{-webkit-appearance:none;appearance:none;min-height:56px;padding-left:16px!important;padding-right:16px!important;text-align:left}
+.modal input[type="date"]::-webkit-date-and-time-value{text-align:left;min-width:0}
+.modal input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
