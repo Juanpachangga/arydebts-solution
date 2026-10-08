@@ -351,13 +351,13 @@ async function check(engine, label, viewport) {
     await page.locator('[onclick^="aryCalendarDate60("]').click();
     assert.equal(await page.evaluate(()=>screen),'calendar');
     assert.ok((await page.locator('.calDetail35').innerText()).includes('Luz'));
-    await page.locator('[onclick="aryCompleteReminder60(6002,true)"]').click();
+    await page.locator('#app [onclick="aryCompleteReminder60(6002,true)"]').click();
     assert.equal(await page.evaluate(()=>s.calendarEvents.find(e=>e.id===6002).completed),true);
     assert.equal(await page.locator('[onclick="aryShowDue60(\'power\')"]').count(),0);
     await page.reload({waitUntil:'load'});
     assert.equal(await page.locator('[onclick="aryShowDue60(\'power\')"]').count(),0,'Completed reminder stays hidden after reload');
     await page.evaluate(date=>aryCalendarDate60(date),reminderDate60);
-    await page.locator('[onclick="aryCompleteReminder60(6002,false)"]').click();
+    await page.locator('#app [onclick="aryCompleteReminder60(6002,false)"]').click();
     assert.equal(await page.locator('[onclick="aryShowDue60(\'power\')"]').count(),1,'Calendar allows undoing reminder completion');
     await page.evaluate(()=>toggleMode());
     assert.equal(await page.locator('.dueBadge60>span').first().evaluate(el=>getComputedStyle(el).animationName),'none');
