@@ -67,6 +67,12 @@ async function check(engine, label, viewport) {
     for (const theme of ['light','dark']) {
       await page.evaluate(theme => { localStorage.setItem('ary-theme-v46', theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
       assert.equal(await page.locator('html').getAttribute('data-ary-theme'), theme);
+      // Wait for theme transitions, so screenshots show the finished theme.
+      await page.evaluate(async () => {
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        await Promise.all(document.getAnimations().filter(animation => animation.effect?.getComputedTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {})));
+      });
+      assert.equal(await page.locator('body').evaluate(el => getComputedStyle(el).color), theme==='light'?'rgb(17, 24, 39)':'rgb(244, 248, 255)', 'Theme sets readable foreground');
       await page.screenshot({ path:path.join(root,'browser-results', `${label}-${theme}.png`), fullPage:true });
     }
     await navigate('profile');
