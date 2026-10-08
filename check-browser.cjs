@@ -34,6 +34,11 @@ async function check(engine, label, viewport) {
     assert.ok(await page.locator('.heroPhoto55').evaluate(img=>img.naturalWidth>=1200),'Hero has a high resolution source');
     assert.equal(await page.locator('.heroPhoto55').evaluate(img=>getComputedStyle(img).objectFit),'contain','Original globe and flags are shown without cropping');
     assert.match(await page.locator('.heroPhoto55').getAttribute('src'),/world-retouched/);
+    await page.evaluate(()=>document.fonts.ready);
+    assert.ok(await page.evaluate(()=>document.fonts.check('700 40px AryCinzel')),'Brand font downloaded');
+    assert.ok(await page.evaluate(()=>document.fonts.check('italic 600 31px AryCormorant')),'Distinct tagline font downloaded');
+    assert.equal(await page.locator('.brandEcho56').getAttribute('aria-hidden'),'true','Decorative second brand stays out of spoken text');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-typography.png`),fullPage:true});
     assert.equal(await page.locator('.social55 svg').count(),5,'Recognizable vector social logos');
     assert.doesNotMatch(await page.locator('#app').innerText(),/Solution/);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Landing fits viewport');
