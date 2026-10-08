@@ -14,6 +14,19 @@ function boot(existing=false){
 }
 for(const existing of [false,true]){
  const b=boot(existing);
+ const monthly=boot(existing);monthly.run("s.income=1000;s.incomeFrequency='monthly';s.expenses=[{id:1,name:'Food',amount:200,date:localDate(),cat:'Esencial'}];s.debts=[{id:1,name:'Card',balance:1000,min:100},{id:2,name:'Small debt',balance:40,min:100}];s.payments=[]");
+ assert.equal(monthly.run('aryRealData54.snapshot().minimums'),140,'Reserve never exceeds remaining debt');assert.equal(monthly.run('aryRealData54.snapshot().availableAfterMinimums'),660);
+ monthly.run('aryApplyPayment54({debtId:1,amount:60})');assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),60);assert.equal(monthly.run('aryRealData54.snapshot().minimums'),80);assert.equal(monthly.run('aryRealData54.snapshot().availableAfterMinimums'),660,'Partial minimum is not counted twice');
+ monthly.run('aryApplyPayment54({debtId:1,amount:150})');assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),210);assert.equal(monthly.run('aryRealData54.snapshot().minimums'),40);assert.equal(monthly.run('aryRealData54.snapshot().availableAfterMinimums'),550,'Extra payments reduce estimated margin');
+ monthly.run('aryApplyPayment54({debtId:2,amount:40})');assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),250);assert.equal(monthly.run('aryRealData54.snapshot().minimums'),0);assert.equal(monthly.run('aryRealData54.snapshot().availableAfterMinimums'),550,'Paid-off debt still counts as money paid this month');
+ assert.equal(monthly.run('aryAssessPurchase45(100).before'),550);monthly.run("go('plan')");assert.match(monthly.nodes.app.innerHTML,/Pagos de deuda este mes/);assert.match(monthly.nodes.app.innerHTML,/Reserva estimada de mínimos/);
+ monthly.run('aryDeletePayment54(s.payments[1].id)');assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),100);assert.equal(monthly.run('aryRealData54.snapshot().minimums'),40);assert.equal(monthly.run('aryRealData54.snapshot().availableAfterMinimums'),660);
+ const monthReload=boot(monthly.data);assert.equal(monthReload.run('aryRealData54.snapshot().availableAfterMinimums'),660);
+ const sharedReal=monthReload.context.aryRealData54;delete monthReload.context.aryRealData54;assert.equal(monthReload.run('aryAssessPurchase45(100).before'),660,'Fallback purchase calculation uses the same monthly engine');monthReload.run("go('plan')");assert.match(monthReload.nodes.app.innerHTML,/Pagos de deuda este mes/);monthReload.context.aryRealData54=sharedReal;
+ monthly.run("s.payments.push({id:99,debtId:1,amount:999,date:'2000-01-01'});s.payments.push({id:100,debtId:1,amount:999,date:'2099-01-01'})");assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),100,'Other months and future payments do not enter current cash flow');
+ assert.equal(monthly.run("aryBudgetSnapshot54(s,new Date(2099,0,2)).debtPayments"),999,'Payments are grouped by the selected month');
+ monthly.run("s.debts.push({id:3,name:'Other card',balance:40,min:40})");
+ assert.equal(monthly.run("aryBudgetSnapshot54(s,new Date(2099,0,2)).minimums"),40,'Minimum credit applies only to the linked debt');
  const legacyState={currency:'USD',locale:'es-US',mode:'lite',name:'Test',income:1000,incomeFrequency:'monthly',goal:'Family emergency fund',goals:['Comprar casa','Family emergency fund','Comprar carro','Negocio propio'],theme:'dark',navOrder:['home','debts','expenses','plan','more'],onboarded:true,savings:0,debts:[],expenses:[],calendarEvents:[],payments:[]};
  const migrated=boot({'arydebts-v3':JSON.stringify(legacyState),'arydebts-profile':JSON.stringify({name:'Test'})});
  assert.equal(migrated.run('s.goal'),'Family emergency fund','Migration preserves chosen custom primary goal');assert.deepEqual(JSON.parse(migrated.run('JSON.stringify(s.goals)')),['home','Family emergency fund','car','Negocio propio']);
@@ -123,5 +136,6 @@ for(const existing of [false,true]){
  console.log('PASS purchase assessment uses shared snapshot, exposes missing data, supports locales and leaves finances unchanged.');
  console.log('PASS photo compression, profile draft preservation, quota/decode failures, concurrent uploads, modal close and removal.');
  console.log('PASS legacy/custom goal migration, primary selection, localized labels, duplicates, reload and savings inputs.');
+ console.log('PASS monthly cash flow accounts for actual payments, remaining minimum reserves, payoff, deletion, reload and month boundaries.');
 }
 console.log('DOM stubs: this verifies JavaScript integration, not browser layout or camera permissions.');
