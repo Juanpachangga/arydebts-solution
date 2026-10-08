@@ -92,3 +92,12 @@ body.mode-lite *,body.mode-lite *::before,body.mode-lite *::after{animation:none
 #app h1,#app h2,#app .hello>strong,#modal h2{font-family:AryCinzel,Georgia,serif;font-weight:700;letter-spacing:-.025em}
 html[data-ary-theme="light"] .brandEcho56{color:#345a8b!important;-webkit-text-fill-color:#345a8b!important;opacity:.12}
 @media(max-width:700px){.landing55 .brand21 b{font-size:clamp(31px,9.4vw,43px)}.brandEcho56{font-size:clamp(39px,11.5vw,54px)}.landing55 .tag21{font-size:31px}.landing55 .brand21 .brandLayers56{padding-top:22px}}
+/* V57: animate layers of the existing artwork, keeping every flag visible. */
+.landingVisual55{isolation:isolate;perspective:900px}
+.worldMotion57{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+.worldCore57{transform-box:view-box;transform-origin:50% 53%;animation:worldTurn57 15s ease-in-out infinite}
+.worldDawn57{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 70% 24%,#ffe49470,transparent 48%);mix-blend-mode:screen;animation:worldDawn57 15s ease-in-out infinite}
+@keyframes worldTurn57{0%,100%{transform:perspective(1400px) rotateY(-3deg) rotate(-.45deg)}50%{transform:perspective(1400px) rotateY(3deg) rotate(.45deg)}}
+@keyframes worldDawn57{0%,100%{opacity:.03;transform:translateX(-12%)}50%{opacity:.65;transform:translateX(0)}}
+body.mode-lite .worldMotion57,body.mode-lite .worldDawn57{display:none}
+@media(prefers-reduced-motion:reduce){.worldMotion57,.worldDawn57{display:none}}
