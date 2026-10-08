@@ -213,6 +213,15 @@ async function check(engine, label, viewport) {
     await page.locator('[onclick="aryRemovePhoto46()"]').click();
     assert.equal(await page.evaluate(() => localStorage.getItem('ary-profile-photo-v46')), null);
     await page.evaluate(() => closeM());
+    // A customer with an existing profile can open the complete public cover.
+    const portalBefore=await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')));
+    await page.goto(origin+'/#welcome',{waitUntil:'load'});
+    assert.ok(await page.locator('.landing9').isVisible());
+    assert.equal(await page.locator('#nav').innerText(),'');
+    assert.equal(await page.evaluate(()=>s.income),portalBefore.income);
+    assert.deepEqual(await page.evaluate(()=>s.debts),portalBefore.debts);
+    await page.locator('.cta21').click();
+    assert.ok(await page.locator('#an').isVisible(),'Cover leads to signup');
     assert.deepEqual(errors, [], 'No uncaught errors or unhandled promise rejections');
     console.log(`PASS ${label}: startup, income persistence, purchase, 5 locales, routes, themes, photo decoding`);
   } catch (error) {

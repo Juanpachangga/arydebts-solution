@@ -18,7 +18,20 @@ return{income,expenses,debt,debtPayments,registeredMinimums,minimums,remainingMi
 (()=>{
   const KEY='arydebts-v3';
   try{
-    if(localStorage.getItem(KEY)!==null)return;
+    const raw=localStorage.getItem(KEY);
+    if(raw!==null){
+      // V52 saved its sample finances even after creating a local profile.
+      // Match the complete untouched sample, never a total or a person's name.
+      const old=JSON.parse(raw),debts=[[1,'Tarjeta de crédito',2300,75,28],[2,'Carro',8500,200,9],[3,'Teléfono',700,50,12],[4,'Renta atrasada',1200,300,0],[5,'Préstamo personal',3000,150,16]],expenses=[[1,'Comida',32,'Esencial'],[2,'Gasolina',60,'Esencial'],[3,'Restaurantes',35,'Hormiga'],[4,'Gaseosas / Snacks',72,'Hormiga'],[5,'Café',46,'Hormiga'],[6,'Uber / Transporte',72,'Variable']];
+      const sample=old&&Number(old.income)===850&&old.incomeFrequency==='weekly'&&Number(old.savings||0)===0&&!(old.payments||[]).length&&!(old.calendarEvents||[]).length&&Array.isArray(old.debts)&&old.debts.length===5&&debts.every(([id,name,balance,min,apr])=>old.debts.some(d=>d.id===id&&d.name===name&&Number(d.balance)===balance&&Number(d.min)===min&&Number(d.apr)===apr&&!d.due&&!d.note))&&Array.isArray(old.expenses)&&old.expenses.length===6&&expenses.every(([id,name,amount,cat])=>old.expenses.some(e=>e.id===id&&e.name===name&&Number(e.amount)===amount&&e.cat===cat&&!e.date));
+      if(sample){
+        const archive='ary-v52-sample-backup-v54';
+        if(localStorage.getItem(archive)===null)localStorage.setItem(archive,raw);
+        localStorage.setItem(KEY,JSON.stringify({...old,income:0,incomeFrequency:'monthly',debts:[],expenses:[],onboarded:false,onboardingStep:'intro'}));
+        localStorage.removeItem('ary-home-baseline-v29');
+      }
+      return;
+    }
     const fresh={
       currency:'USD',locale:'es-US',mode:'immersive',name:'',income:0,
       incomeFrequency:'monthly',goal:'',goals:[],greeting:'',theme:'dark',
@@ -28,3 +41,4 @@ return{income,expenses,debt,debtPayments,registeredMinimums,minimums,remainingMi
     localStorage.setItem(KEY,JSON.stringify(fresh));
   }catch(e){}
 })();
+

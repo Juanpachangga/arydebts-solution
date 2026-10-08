@@ -1,13 +1,13 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
  const scripts=[...fs.readFileSync(__dirname+'/index.html','utf8').matchAll(/<script src="([^"?]+)/g)].map(m=>m[1]);
-function boot(existing=false){
+function boot(existing=false,startHash){
  const nodes={},data={};
  const element=()=>{const classes=new Set();return{innerHTML:'',textContent:'',style:{setProperty(){}},dataset:{},classList:{add:name=>classes.add(name),remove:name=>classes.delete(name),contains:name=>classes.has(name),toggle:(name,on)=>on===false?classes.delete(name):classes.add(name)},querySelectorAll:()=>[],querySelector:()=>null,setAttribute(){},addEventListener(){},appendChild(){},remove(){}}};
  for(const id of ['app','nav','modal','toast'])nodes[id]=element();
  const document={body:element(),documentElement:element(),getElementById:id=>nodes[id]||null,querySelector:sel=>sel.startsWith('#')?nodes[sel.slice(1)]||null:null,querySelectorAll:()=>[],createTreeWalker:()=>({nextNode:()=>null}),createElement:element,addEventListener(){}};
  if(existing&&typeof existing==='object')Object.assign(data,existing);
  else if(existing){data['arydebts-profile']=JSON.stringify({name:'Test',email:'test@example.com'});data['arydebts-v3']=JSON.stringify({currency:'USD',locale:'es-US',mode:'lite',name:'Test',income:1000,incomeFrequency:'weekly',goal:'security',goals:['security'],theme:'dark',navOrder:['home','debts','expenses','plan','more'],onboarded:true,savings:0,debts:[],expenses:[],calendarEvents:[],payments:[]});}
- const context=vm.createContext({document,location:{hash:existing?'#home':''},history:{length:1,replaceState(){},pushState(){}},localStorage:{getItem:k=>data[k]??null,setItem:(k,v)=>data[k]=v,removeItem:k=>delete data[k]},navigator:{},console,Intl,NodeFilter:{SHOW_TEXT:4},MutationObserver:class{observe(){}},addEventListener(){},setTimeout(){},requestAnimationFrame(){},confirm:()=>true});
+ const context=vm.createContext({document,location:{hash:startHash??(existing?'#home':'')},history:{length:1,replaceState(){},pushState(){}},localStorage:{getItem:k=>data[k]??null,setItem:(k,v)=>data[k]=v,removeItem:k=>delete data[k]},navigator:{},console,Intl,NodeFilter:{SHOW_TEXT:4},MutationObserver:class{observe(){}},addEventListener(){},setTimeout(){},requestAnimationFrame(){},confirm:()=>true});
  context.window=context;
  for(const file of scripts)vm.runInContext(fs.readFileSync(__dirname+'/'+file,'utf8'),context,{filename:file});
  return{context,nodes,data,run:code=>vm.runInContext(code,context)};
@@ -138,4 +138,16 @@ for(const existing of [false,true]){
  console.log('PASS legacy/custom goal migration, primary selection, localized labels, duplicates, reload and savings inputs.');
  console.log('PASS monthly cash flow accounts for actual payments, remaining minimum reserves, payoff, deletion, reload and month boundaries.');
 }
+const legacy={currency:'USD',locale:'es-US',mode:'lite',theme:'dark',name:'Customer',income:850,incomeFrequency:'weekly',onboarded:true,goals:[],goal:'',savings:0,navOrder:['home','debts','expenses','plan','more'],debts:[[1,'Tarjeta de crédito',2300,75,28],[2,'Carro',8500,200,9],[3,'Teléfono',700,50,12],[4,'Renta atrasada',1200,300,0],[5,'Préstamo personal',3000,150,16]].map(([id,name,balance,min,apr])=>({id,name,balance,min,apr})),expenses:[[1,'Comida',32,'Esencial'],[2,'Gasolina',60,'Esencial'],[3,'Restaurantes',35,'Hormiga'],[4,'Gaseosas / Snacks',72,'Hormiga'],[5,'Café',46,'Hormiga'],[6,'Uber / Transporte',72,'Variable']].map(([id,name,amount,cat])=>({id,name,amount,cat})),payments:[],calendarEvents:[]};
+const legacyStorage=value=>({'arydebts-profile':JSON.stringify({name:'Customer',email:'customer@example.com'}),'arydebts-v3':JSON.stringify(value)});
+const cleaned=boot(legacyStorage(legacy),'#welcome');
+assert.equal(cleaned.run('s.debts.length+s.expenses.length'),0);
+assert.equal(cleaned.run('s.income'),0);
+assert.equal(cleaned.run('screen'),'welcome');
+assert.equal(JSON.parse(cleaned.data['ary-v52-sample-backup-v54']).debts.reduce((a,d)=>a+d.balance,0),15700);
+for(const mutate of [x=>x.debts[0].balance=2301,x=>x.income=900,x=>x.payments=[{id:1,amount:10}],x=>x.expenses[0].date='2026-10-01']){
+ const actual=JSON.parse(JSON.stringify(legacy));mutate(actual);const retained=boot(legacyStorage(actual),'#welcome');assert.equal(retained.run('s.debts.length'),5);assert.equal(retained.data['ary-v52-sample-backup-v54'],undefined);assert.equal(retained.run('screen'),'welcome');
+}
+const portal=boot(true,'#welcome');assert.equal(portal.run('screen'),'welcome');assert.equal(portal.run('s.income'),1000);assert.equal(portal.nodes.nav.innerHTML,'');
+console.log('PASS exact V52 sample cleanup with existing profile, archived original, changed finances preserved, direct welcome route.');
 console.log('DOM stubs: this verifies JavaScript integration, not browser layout or camera permissions.');
