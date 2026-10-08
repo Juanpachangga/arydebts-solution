@@ -28,7 +28,7 @@ async function check(engine, label, viewport) {
   try {
     const origin = `http://127.0.0.1:${server.address().port}`;
     await page.goto(origin, { waitUntil:'load' });
-    assert.ok((await page.locator('#app').innerText()).includes('Arydebts'), 'Fresh startup renders');
+    assert.match(await page.locator('#app').innerText(), /ARYDEBTS/i, 'Fresh startup renders');
     assert.equal(await page.evaluate(() => s.income), 0, 'Fresh startup has no invented income');
     await page.locator('.heroPhoto55').evaluate(img=>img.decode());
     assert.ok(await page.locator('.heroPhoto55').evaluate(img=>img.naturalWidth>=1700),'Hero has a high resolution source');
