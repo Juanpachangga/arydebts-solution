@@ -24,7 +24,7 @@ function assessPurchase(price){
 if(!Number.isFinite(price)||price<=0)return{status:'INVALID',price,before:null,after:null};
 const r=snapshot(),undated=(s.expenses||[]).filter(e=>!e.date).length,due=nextDue();
 if(!(Number(s.income)>0))return{status:'MISSING_INCOME',price,before:null,after:null,undated,due};
-const before=Number(r.availableAfterMinimums),rawAfter=before-price,after=Math.abs(rawAfter)<1e-8?0:rawAfter;
+const before=window.aryPersonalBudget61?aryPersonalBudget61().margin:Number(r.availableAfterMinimums),rawAfter=before-price,after=Math.abs(rawAfter)<1e-8?0:rawAfter;
 if(!Number.isFinite(before))return{status:'INCOMPLETE',price,before:null,after:null,undated,due};
 const status=after<0?'SHORTFALL':after===0?'ZERO_MARGIN':undated?'INCOMPLETE':'ESTIMATE';
 return{status,price,before,after,undated,due}
@@ -33,7 +33,7 @@ function purchasePage(){const x=purchaseText();return head(x.title,x.sub)+`<sect
 function checkPurchase(){const x=purchaseText(),raw=String(document.getElementById('buyPrice')?.value??'').trim(),name=String(document.getElementById('buyName45')?.value||'').trim(),r=assessPurchase(raw===''?NaN:amountNumber(raw)),out=document.getElementById('buyResult');if(!out)return;
 if(r.status==='INVALID'){out.innerHTML=`<div class="notice bad">${x.invalid}</div>`;return}
 const heading={MISSING_INCOME:x.missing,SHORTFALL:x.short,ZERO_MARGIN:x.zero,INCOMPLETE:x.incomplete,ESTIMATE:x.estimate}[r.status],bad=r.status==='SHORTFALL',route=r.status==='MISSING_INCOME'?'income':r.status==='INCOMPLETE'?'expenses':'plan',action=route==='income'?x.addIncome:route==='expenses'?x.expenses:x.details;
-out.innerHTML=`<div class="buy45"><b class="${bad?'bad':''}">${heading}</b>${name?`<p>${x.item}: ${userText(name)}</p>`:''}${r.before===null?`<p>${x.missingText}</p>`:`<p>${x.impact(money(r.price),money(r.after))}</p><div class="list">${row('📊',x.before,'',money(r.before))}${row('🛍️',x.after,'',money(r.after))}</div>`}${r.undated?`<p>${x.undated(r.undated)}</p>`:''}${r.due?`<p>${x.due}: ${userText(r.due.name)} · ${dateLabel(r.due.date)} · ${money(r.due.amount)}</p>`:''}<p class="muted">${x.basis}</p><p class="muted">${x.limit}</p><button type="button" class="btn widebtn" onclick="go('${route}')">${action}</button></div>`
+out.innerHTML=`<div class="buy45"><b class="${bad?'bad':''}">${heading}</b>${name?`<p>${x.item}: ${userText(name)}</p>`:''}${r.before===null?`<p>${x.missingText}</p>`:`<p>${x.impact(money(r.price),money(r.after))}</p><div class="list">${row('📊',x.before,'',money(r.before))}${row('🛍️',x.after,'',money(r.after))}</div>`}${r.undated?`<p>${x.undated(r.undated)}</p>`:''}${r.due?`<p>${x.due}: ${userText(r.due.name)} · ${dateLabel(r.due.date)} · ${money(r.due.amount)}</p>`:''}${window.aryBudgetNote61&&aryBudgetNote61()?`<p class="muted">${aryBudgetNote61()}</p>`:''}<p class="muted">${x.basis}</p><p class="muted">${x.limit}</p><button type="button" class="btn widebtn" onclick="go('${route}')">${action}</button></div>`
 }
 window.aryAssessPurchase45=assessPurchase;
 window.aryCheckBuy45=checkPurchase;
