@@ -4,7 +4,8 @@ const allowedRoutes89=new Set(['home','calendar','ants','notifications']);
 self.addEventListener('push',event=>{
  let data={};try{data=event.data?.json()||{}}catch{}
  const locale=['es','en','pt'].includes(data.locale)?data.locale:'es';
- const body={es:'Tienes una novedad en Arydebts. Abre la app para verla.',en:'You have an update in Arydebts. Open the app to view it.',pt:'Você tem uma novidade no Arydebts. Abra o app para ver.'}[locale];
+ const generic={es:'Tienes una novedad en Arydebts. Abre la app para verla.',en:'You have an update in Arydebts. Open the app to view it.',pt:'Você tem uma novidade no Arydebts. Abra o app para ver.'}[locale];
+ const body=data.type==='morning'?{es:'Buenos días. Un pequeño paso hoy acerca tu tranquilidad de mañana.',en:'Good morning. A small step today brings peace tomorrow.',pt:'Bom dia. Um pequeno passo hoje traz tranquilidade amanhã.'}[locale]:generic;
  const route=allowedRoutes89.has(data.route)?data.route:'notifications';
  const date=typeof data.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(data.date)?data.date:'';
  event.waitUntil(self.registration.showNotification('Arydebts',{body,tag:typeof data.id==='string'?data.id.slice(0,180):'arydebts-update',data:{route,date},renotify:false}));
