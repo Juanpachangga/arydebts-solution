@@ -15,6 +15,9 @@ assert.equal(localClock90(new Date('2026-11-01T06:30:00Z'),'America/Chicago').ge
 assert.equal(localClock90(new Date('2026-11-01T07:30:00Z'),'America/Chicago').getHours(),1,'DST fall-back follows local clock');
 assert.equal(planPush90(state,prefs,new Date('2026-10-09T01:00:00Z')).some(x=>x.payload.type==='morning'),false);
 assert.throws(()=>planPush90(state,{...prefs,timezone:'nonsense'},now));
+assert.doesNotThrow(()=>planPush90({...state,debts:[null],expenses:[null],calendarEvents:[null],payments:[null]},prefs,now));
+assert.throws(()=>planPush90(state,{...prefs,ants:'true'},now));
+assert.equal(planPush90(state,prefs,now).find(x=>x.payload.type==='ants').key,'spending:2026-10-09');
 const curve=createECDH('prime256v1');curve.generateKeys();const sub={endpoint:'https://fcm.googleapis.com/fcm/send/synthetic',keys:{p256dh:curve.getPublicKey().toString('base64url'),auth:Buffer.alloc(16,1).toString('base64url')}};
 assert.ok(validateSubscription90(sub));for(const endpoint of ['http://fcm.googleapis.com/a','https://127.0.0.1/a','https://fcm.googleapis.com.evil.test/a','https://x@fcm.googleapis.com/a','https://fcm.googleapis.com:8443/a'])assert.throws(()=>validateSubscription90({...sub,endpoint}));
 const owner='11111111-1111-4111-8111-111111111111',calls=[];
