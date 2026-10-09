@@ -337,7 +337,8 @@ async function check(engine, label, viewport) {
     }
     await navigate('profile');
     await navigate('more');
-    await page.locator('.menuItem[onclick="go(\'profile\')"]').click();
+    await page.locator('.moreDetails94').first().locator('summary').click();
+    await page.locator('.more94 [onclick="go(\'profile\')"]').click();
     await page.locator('[onclick="back()"]').click();
     assert.equal(await page.evaluate(()=>screen),'more','Profile Back returns inside the app');
     await navigate('home');
@@ -828,7 +829,8 @@ async function check(engine, label, viewport) {
     await page.evaluate(()=>closeM());
     await page.evaluate(()=>{arySetUI72('size',1.3);arySetUI72('palette','ocean');arySetUI72('brand','amber');arySetUI72('contrast','true');go('more')});
     assert.equal(await page.locator('body').getAttribute('data-palette72'),'ocean');assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('highContrast72')));
-    assert.ok(await page.locator('.communityLink72').last().isVisible());
+    await page.locator('.moreDetails94').last().locator('summary').click();
+    assert.ok(await page.locator('.more94 [onclick="go(\'feedback\')"]').isVisible());
     await page.screenshot({path:path.join(root,'browser-results',`${label}-workspace-v72.png`),fullPage:true});
     await navigate('feedback');
     await page.locator('#feedbackText72').fill('Preserve this draft');
