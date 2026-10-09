@@ -795,6 +795,21 @@ async function check(engine, label, viewport) {
     assert.deepEqual(errors, [], 'No uncaught errors or unhandled promise rejections');
 
     // Local profile motion must not control the signed-out public cover.
+
+    const beforeActivity82=await page.evaluate(()=>JSON.parse(JSON.stringify(s)));
+    await page.evaluate(()=>{const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);const due=`${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;s.locale='es-US';s.currency='USD';s.debts=[{id:8201,name:'Pending card',balance:200,min:76,due}];s.payments=[{id:8202,debtId:8201,amount:30,date:due}];s.expenses=[{id:8203,name:'Gas recurrente',amount:60,cat:'Esencial',frequency:'monthly',date:localDate()}];s.calendarEvents=[];go('home')});
+    const activityRecords82=await page.evaluate(()=>JSON.stringify([s.debts,s.payments,s.expenses]));
+    assert.match(await page.locator('.upcoming70').first().innerText(),/Pending card/);
+    assert.ok((await page.locator('.upcoming70').first().innerText()).includes(await page.evaluate(()=>money(46))),'Partial minimum shows the outstanding amount');
+    for(const [locale,label] of [['es-US','Vencido'],['en-US','Overdue'],['pt-BR','Vencido']]){await page.evaluate(locale=>{s.locale=locale;go('home')},locale);assert.ok((await page.locator('.upcoming70').first().innerText()).includes(label));}
+    await page.locator('.upcoming70').filter({hasText:'Gas recurrente'}).click();
+    assert.equal(await page.evaluate(()=>screen),'calendar');
+    assert.ok((await page.locator('.calDetail35').innerText()).includes('Gas recurrente'),'Dated recurring expense appears on its calendar day');
+    await page.locator('.calDetail35 [onclick="expenseForm(8203)"]').click();
+    assert.equal(await page.locator('#modal #n').inputValue(),'Gas recurrente');
+    await page.locator('#modal [onclick="closeM()"]').last().click();
+    assert.equal(await page.evaluate(()=>JSON.stringify([s.debts,s.payments,s.expenses])),activityRecords82);
+    await page.evaluate(previous=>{Object.assign(s,previous);save();go('home')},beforeActivity82);
     const profile80=await page.evaluate(()=>JSON.parse(JSON.stringify(profile)));
     await page.evaluate(()=>{s.mode='lite';save();logout()});
     assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'true');

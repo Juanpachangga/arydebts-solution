@@ -2,6 +2,7 @@
 const x=t();
 const payments=Array.isArray(s.payments)?s.payments:[];
 return [
+...(window.aryCalendarExpenses82?aryCalendarExpenses82(k):[]),
 ...(s.debts||[]).filter(d=>d.due===k&&(Number(d.balance)||0)>0).map(d=>({type:'debt',id:d.id,name:d.name,amount:+d.min||0,icon:d.icon||iconFor(d.name,'deuda'),note:d.apr?`${d.apr}% APR · ${x.min}`:x.min})),
 ...calendarEvents().filter(e=>e.date===k).map(e=>({...e,type:'event'})),
 ...payments.filter(p=>p.date===k&&Number(p.amount)>0).map(p=>({type:'ledgerPayment',id:p.id,name:p.debtName||x.payment,amount:Number(p.amount),icon:'💸',note:p.note||''}))
@@ -10,7 +11,8 @@ const x=t();if(!selected)return `<section class="card full calHint35"><b>${x.tap
 const ev=eventsFor(selected);
 const entries=ev.map(e=>{
 let actions;
-if(e.type==='debt')actions=`<button class="btn tiny" onclick="aryEditDue35(${e.id})">${x.edit}</button>`;
+if(e.type==='expense')actions=`<button type="button" class="btn tiny" onclick="expenseForm(${e.id})">${x.edit}</button>`;
+else if(e.type==='debt')actions=`<button class="btn tiny" onclick="aryEditDue35(${e.id})">${x.edit}</button>`;
 else if(e.type==='ledgerPayment')actions=`<div class="rowActions"><button class="btn tiny" onclick="aryEditPayment54(${e.id})">${x.edit}</button><button class="btn tiny dangerBtn" onclick="aryDeletePayment54(${e.id})">×</button></div>`;
 else actions=`<div class="rowActions"><button class="btn tiny" onclick="aryEditEvent36(${e.id})">${x.edit}</button><button class="btn tiny dangerBtn" onclick="aryDeleteEvent36(${e.id})">×</button></div>`;
 if(e.type==='event'&&window.aryReminderAction60)actions+=aryReminderAction60(e);
