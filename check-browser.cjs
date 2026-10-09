@@ -75,7 +75,7 @@ async function check(engine, label, viewport) {
     await page.emulateMedia({reducedMotion:'no-preference'});
     await page.waitForFunction(()=>!document.querySelector('.worldMotion57').animationsPaused());
     assert.ok(await page.locator('.worldMotion57').isVisible(),'Immersive restores artwork motion');
-    assert.equal(await page.locator('.motivation72 p').count(),2,'Landing shows only the two weekly thoughts');
+    assert.equal(await page.locator('.motivation72 p').count(),1,'Landing shows one compact weekly thought');
     for(const provider of ['Google','Facebook','Instagram','Discord','Apple']){
       await page.locator('.social55 button').filter({has:page.locator('.social'+provider+'55')}).click();
       assert.ok(await page.locator('#modal h2').innerText().then(text=>text.includes(provider)));
@@ -831,6 +831,11 @@ async function check(engine, label, viewport) {
           await page.evaluate(({locale,route})=>{s.locale=locale;go(route)}, {locale,route});
           const result=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,nav:[...document.querySelectorAll('#nav button')].map(b=>({width:b.getBoundingClientRect().width,height:b.getBoundingClientRect().height}))}));
           assert.ok(result.overflow<=1,`No horizontal overflow: ${width}, ${locale}, ${route}`);
+          if(route==='home'){
+            const cards=await page.evaluate(()=>{const grid=document.querySelector('.homeDaily81'),g=grid.getBoundingClientRect();return [...grid.querySelectorAll(':scope>.third')].map(c=>({width:c.getBoundingClientRect().width,gridWidth:g.width,kpiWidth:c.querySelector('.kpi').clientWidth,kpiScroll:c.querySelector('.kpi').scrollWidth}))});
+            assert.equal(cards.length,2);
+            for(const card of cards){assert.ok(card.width>=card.gridWidth*(width<=600?.95:.45),'Summary cards use available space');assert.ok(card.kpiScroll<=card.kpiWidth+1,'Amounts fit without clipping')}
+          }
           assert.equal(result.nav.length,5);
           for(const target of result.nav)assert.ok(target.width>=44&&target.height>=44,'Bottom navigation has usable touch targets');
           audit80.push({width,locale,route,...result});

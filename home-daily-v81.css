@@ -15,3 +15,15 @@
 @media(max-width:500px){.homeDaily81{grid-template-columns:minmax(0,1fr)}.homeDaily81>.third{grid-column:1}.homeActions81{padding:14px!important}.homeActions81 .btn{padding:12px 8px!important;font-size:1rem!important}.homeUpcoming81>.linkBtn{float:none;display:block;margin-top:8px}}
 
 #app .homeGreeting69>.muted[hidden]{display:none!important}
+
+/* Scope the daily grid above the legacy three-column !important rules. */
+body.signed64 #app .grid.homeDaily81{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+body.signed64 #app .homeDaily81>.third{grid-column:span 1!important;width:100%;min-width:0;text-align:left}
+body.signed64 #app .homeDaily81>.full{grid-column:1/-1!important}
+body.signed64 #app .homeDaily81 .homeMetric51 .kpi{overflow-wrap:normal;word-break:normal;font-size:clamp(24px,4vw,34px)!important}
+@media(min-width:1000px){body.signed64 #app .homeDaily81>.homeMargin81{grid-column:1!important}body.signed64 #app .homeDaily81>.homeActions81{grid-column:2!important}}
+@media(max-width:600px){body.signed64 #app .grid.homeDaily81{grid-template-columns:minmax(0,1fr)!important}body.signed64 #app .homeDaily81>.third{grid-column:1/-1!important}}
+/* A single quiet weekly thought beneath the landing controls. */
+#app .trust55 .motivation72{margin:0 auto;max-width:65ch}
+#app .trust55 .motivation72 p{font-family:inherit;font-size:calc(16px * var(--ui-scale72,1))!important;font-weight:500;line-height:1.5;margin:0;text-align:center}
+#app .trust55{padding:16px 20px!important}
