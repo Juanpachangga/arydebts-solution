@@ -1,0 +1,22 @@
+/* The same quiet white, mint and lilac used by the mobile welcome. */
+html.authRoot99,body.authPortal99{background:#fcfcff!important;color:#17192c!important;color-scheme:light!important;transition:none!important}
+body.authPortal99 .aurora,body.authPortal99 .seasonBackdrop71{display:none!important}
+body.authPortal99 #app{width:100%!important;max-width:none!important;padding:0!important;margin:0!important;transition:none!important}
+body.authPortal99 #app .authForm99{box-sizing:border-box;width:100%;max-width:480px;margin:0 auto!important;min-height:100svh;padding:calc(18px + env(safe-area-inset-top)) 24px calc(28px + env(safe-area-inset-bottom));background:none!important;border:0!important;box-shadow:none!important;text-align:left;color:#17192c!important;font-family:Inter,system-ui,-apple-system,sans-serif!important}
+body.authPortal99 #app .authForm99,body.authPortal99 #app .authForm99 *{-webkit-text-fill-color:currentColor!important}
+body.authPortal99 #app .authForm99>.btn:first-child{align-self:flex-start;width:auto!important;min-width:72px;min-height:44px;padding:8px 12px;margin:0 0 26px;border:1px solid #e5e3ee!important;border-radius:999px;background:#fff!important;color:#595469!important;box-shadow:none!important;font-size:calc(12px * var(--ui-scale,1))!important}
+body.authPortal99 #app .authForm99 .logoMark,body.authPortal99 #app .authForm99 .socials,body.authPortal99 #app .authForm99 .socials+p{display:none!important}
+body.authPortal99 #app .authBrand99{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 16px;color:#756487!important;font-size:13px;font-weight:800;letter-spacing:.5px}
+body.authPortal99 #app .authBrand99 span{color:inherit!important}
+body.authPortal99 #app .authBrand99 i{font-style:normal;font-size:19px;letter-spacing:3px}
+body.authPortal99 #app .authForm99 h1{font-family:inherit!important;font-size:calc(30px * var(--ui-scale,1))!important;line-height:1.15!important;font-weight:850;letter-spacing:-1px;text-align:center;color:#17192c!important;margin:0 0 12px!important;text-shadow:none!important;overflow-wrap:anywhere}
+body.authPortal99 #app .authForm99>h1+p{color:#716b80!important;font-size:calc(13px * var(--ui-scale,1))!important;line-height:1.6;text-align:center;margin:0 0 26px!important}
+body.authPortal99 #app .authForm99 label{color:#504a60!important;text-align:left;font-size:calc(12px * var(--ui-scale,1))!important;line-height:1.5;margin:0 0 5px;font-weight:650}
+body.authPortal99 #app .authForm99 input{box-sizing:border-box;width:100%;min-height:52px;padding:13px 15px;margin:0 0 17px!important;border:1px solid #dedbe9!important;border-radius:16px!important;background:#fff!important;color:#242036!important;font-family:inherit;font-size:calc(16px * var(--ui-scale,1))!important;box-shadow:0 3px 14px #73608b06!important}
+body.authPortal99 #app .authForm99 input::placeholder{color:#847d93!important;opacity:1}
+body.authPortal99 #app .authForm99 input:focus{border-color:#9d87cd!important;outline:2px solid #ded6f0!important;outline-offset:2px}
+body.authPortal99 #app .authForm99 .accountStatus83{color:#716b80!important;font-size:calc(11px * var(--ui-scale,1))!important;line-height:1.6;text-align:left;margin:2px 0 16px!important;padding:12px 14px;background:#f5f3fa;border:1px solid #e9e4f3;border-radius:14px}
+body.authPortal99 #app .authForm99>.primary{width:100%;min-height:54px;padding:14px 16px;margin:0!important;background:linear-gradient(110deg,#d2f5e9,#e5dafa 65%,#f6dff0)!important;color:#242036!important;border:1px solid #e2d9ed!important;border-radius:19px!important;box-shadow:0 5px 18px #8c6faf10!important;font-family:inherit;font-size:calc(15px * var(--ui-scale,1))!important;line-height:1.4}
+body.authPortal99 #app .authForm99>.primary:after{display:none!important}
+@media(min-width:901px){body.authPortal99 #app .authForm99{padding-top:36px}}
+@media(max-width:360px){body.authPortal99 #app .authForm99{padding-left:20px;padding-right:20px}}
