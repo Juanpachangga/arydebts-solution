@@ -1,0 +1,14 @@
+.numberHint63{display:block;margin:7px 0 12px;font-size:.75rem;line-height:1.45}
+.recurrenceNote63{grid-column:1/-1;padding:14px;border:1px solid #5a80ad66;border-radius:16px;line-height:1.5}
+.kpi,.row strong,.row .amount,.profileStats54 b,.antPulse28 strong,.antStats26 strong,.debtPulse33 strong,.planPulse34 strong{overflow-wrap:anywhere;min-width:0;max-width:100%;font-variant-numeric:tabular-nums}
+input[inputmode="decimal"]{font-variant-numeric:tabular-nums}
+.antHero25 .antMood58{float:none!important;position:relative!important;width:220px!important;max-width:100%;margin:0 auto 12px!important;display:flex;justify-content:center;align-items:center}
+.antHero25 .pig25{float:none!important;width:220px!important;height:174px!important;max-width:100%;margin:0!important;display:flex;align-items:center;justify-content:center;background:none!important;animation:none!important}
+.pigMascot63{display:block;width:220px;height:174px;overflow:visible;filter:drop-shadow(0 8px 16px #f188b738)}
+.pigBody63{transform-box:fill-box;transform-origin:center bottom;animation:pigBounce63 3s ease-in-out infinite}
+.pigCoin63{transform-box:fill-box;transform-origin:center;animation:pigCoinWiggle63 2s ease-in-out infinite}
+.antHero25 .antFace58{position:absolute;right:5px;top:22px;font-size:40px!important;line-height:1}
+@keyframes pigBounce63{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-7px) rotate(2deg)}}
+@keyframes pigCoinWiggle63{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+.mode-lite .pigBody63,.mode-lite .pigCoin63{animation:none!important}
+@media(prefers-reduced-motion:reduce){.pigBody63,.pigCoin63{animation:none!important}}
