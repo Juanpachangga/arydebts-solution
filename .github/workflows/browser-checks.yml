@@ -2,7 +2,7 @@ name: App integration and browser checks
 
 on:
   push:
-    branches: [v54-real-data-foundation]
+    branches: [v54-real-data-foundation, ary-push-v90]
   pull_request:
     branches: [main]
 
@@ -34,6 +34,8 @@ jobs:
         run: node server/check-assistant.mjs
       - name: Check captcha server adapter with simulated transport
         run: node server/check-registration-v72.mjs
+      - name: Check push server contracts with simulated transport
+        run: node server/check-push-v90.mjs
       - name: Install browser test dependency
         run: npm install --no-save --package-lock=false playwright@1.62.1
       - name: Check notification rules and browser behavior
@@ -72,6 +74,11 @@ jobs:
           node-version: '24'
       - run: npm install --no-save --package-lock=false pg@8.16.3
       - run: node server/check-account-rls-v83.mjs
+        env:
+          ARY_DISPOSABLE_RLS_TEST: 'yes'
+          ARY_TEST_DATABASE_URL: postgresql://postgres:disposable-ci-password@localhost:5432/ary_rls_test
+
+      - run: node server/check-push-postgres-v90.mjs
         env:
           ARY_DISPOSABLE_RLS_TEST: 'yes'
           ARY_TEST_DATABASE_URL: postgresql://postgres:disposable-ci-password@localhost:5432/ary_rls_test
