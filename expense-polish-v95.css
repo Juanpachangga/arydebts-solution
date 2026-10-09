@@ -3,3 +3,5 @@
 #app .rowActions{gap:6px;flex-wrap:wrap}
 #app .rowActions .btn.tiny{font-size:calc(12px * var(--ui-scale,1))!important;font-weight:600!important;min-height:44px!important;min-width:58px!important;padding:5px 9px!important;border-radius:10px!important;line-height:1.2!important;background:transparent!important;box-shadow:none!important}
 @media(min-width:1000px){#app .row .ico{font-size:34px!important;width:46px!important;min-width:46px!important}}
+
+.autoIcon96{display:inline-block;margin-inline-start:6px;font-size:20px;line-height:1;vertical-align:middle;background:transparent}
