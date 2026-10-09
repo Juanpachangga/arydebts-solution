@@ -43,7 +43,8 @@ async function check(engine, label, viewport) {
     const turnBefore=await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).transform);
     await page.waitForFunction(before=>getComputedStyle(document.querySelector('.worldCore57')).transform!==before,turnBefore);
     assert.notEqual(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).transform),turnBefore,'Planet moves over time');
-    assert.equal(await page.locator('.worldMotion57 animate').count(),2,'Both flag groups have wind motion');
+    assert.equal(await page.locator('.worldMotion57 animate').count(),2,'Cloth movement and amplitude animate without duplicate image layers');
+    assert.equal(await page.locator('.worldMotion57 image').count(),1,'Artwork uses one image without drifting overlays');
     await page.evaluate(()=>{s.mode='lite';render()});
     assert.equal(await page.locator('.worldMotion57').isVisible(),false,'Lite keeps original artwork still');
     assert.ok(await page.locator('.worldMotion57').evaluate(el=>el.animationsPaused()),'Lite stops SVG animation clocks');
@@ -348,7 +349,7 @@ async function check(engine, label, viewport) {
     await page.screenshot({path:path.join(root,'browser-results',`${label}-reminders-v60.png`),fullPage:true});
     await page.locator('[onclick="aryShowDue60(\'power\')"]').click();
     assert.match(await page.locator('#modal').innerText(),/Luz/);
-    await page.locator('[onclick^="aryCalendarDate60("]').click();
+    await page.locator('#modal [onclick^="aryCalendarDate60("]').click();
     assert.equal(await page.evaluate(()=>screen),'calendar');
     assert.ok((await page.locator('.calDetail35').innerText()).includes('Luz'));
     await page.locator('#app [onclick="aryCompleteReminder60(6002,true)"]').click();
