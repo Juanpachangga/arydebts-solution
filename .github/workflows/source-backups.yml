@@ -1,0 +1,43 @@
+name: Versioned source backups
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: source-backup-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  backup:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Package and verify exact version
+        run: bash scripts/source-backup-v92.sh "$RUNNER_TEMP/ary-source-backup"
+      - name: Keep a separate draft for each commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BACKUP_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          backup_tag="source-backup-$BACKUP_SHA"
+          if gh release view "$backup_tag" >/dev/null 2>&1; then
+            printf '%s\n' 'An existing backup will not be overwritten.'
+            exit 0
+          fi
+          gh release create "$backup_tag" --draft --target "$BACKUP_SHA" \
+            --title "Arydebts source backup $BACKUP_SHA" \
+            --notes 'Verified source ZIP, Git history, manifest and SHA-256 checksums. Source only: no financial data. Keep previous backups; download an independent copy.' \
+            "$RUNNER_TEMP/ary-source-backup/source.zip" \
+            "$RUNNER_TEMP/ary-source-backup/history.bundle" \
+            "$RUNNER_TEMP/ary-source-backup/manifest.json" \
+            "$RUNNER_TEMP/ary-source-backup/SHA256SUMS"
