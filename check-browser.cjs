@@ -233,7 +233,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     const lastCard = await page.locator('#app .grid > .card').last().boundingBox();
     const navigationBox = await page.locator('#nav').boundingBox();
-    assert.ok(lastCard.y+lastCard.height <= navigationBox.y, 'Bottom navigation leaves the final card accessible');
+    if(viewport.width>=1000){assert.ok(navigationBox.x+navigationBox.width<=lastCard.x,'Desktop rail does not cover the final card');assert.ok(lastCard.y+lastCard.height<=viewport.height+1,'Final card remains visible at the end of the page')}else assert.ok(lastCard.y+lastCard.height <= navigationBox.y, 'Bottom navigation leaves the final card accessible');
     await page.evaluate(() => window.scrollTo(0, 0));
     for (const theme of ['light','dark']) {
       await page.evaluate(theme => { localStorage.setItem('ary-theme-v46', theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
