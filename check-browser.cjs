@@ -520,6 +520,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(previous=>{profile=previous.profile;safeSet(AUTH,JSON.stringify(profile));go('home')},sessionBefore65);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Responsive header and navigation fit the viewport');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-navigation-v65.png`),fullPage:false});
+    await navigate('home');await page.locator('.brandProfile70').click();assert.equal(await page.evaluate(()=>screen),'profile','Brand opens the profile');
     const state70=await page.evaluate(()=>JSON.parse(JSON.stringify(s)));
     await page.evaluate(()=>{s.locale='es-US';s.currency='USD';s.income=1000;s.incomeFrequency='monthly';s.debts=[{id:7001,name:'Afirm',balance:700,min:58.3,due:'2027-01-07',apr:0}];s.expenses=[];s.payments=[];s.calendarEvents=[];save();go('home')});
     await page.locator('.upcoming70').click();
