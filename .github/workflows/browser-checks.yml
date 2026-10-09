@@ -28,6 +28,8 @@ jobs:
           node-version: '24'
       - name: Check local recovery and storage failures
         run: node check-backups-v92.cjs
+      - name: Check financial analysis calculations
+        run: node check-analysis-v93.cjs
       - name: Check application integration
         run: node check-integration.cjs
       - name: Check real account adapter contracts
@@ -42,6 +44,8 @@ jobs:
         run: npm install --no-save --package-lock=false playwright@1.62.1
       - name: Exercise local backup controls
         run: node check-backups-browser-v92.cjs
+      - name: Exercise analysis and net worth controls
+        run: node check-analysis-browser-v93.cjs
       - name: Check notification rules and browser behavior
         run: node check-notifications-v89.cjs
       - name: Exercise application in real browsers
