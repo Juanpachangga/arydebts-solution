@@ -769,7 +769,8 @@ async function check(engine, label, viewport) {
     assert.ok((await page.locator('.debtExpenses66').innerText()).includes('$76.00'));
     assert.ok((await page.locator('.debtExpenses66').innerText()).includes('$1,000.00'));
     const iconSize66=await page.locator('.debtExpenses66 .ico').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
-    assert.ok(iconSize66>=36,'Debt and expense row icons fill their tiles');
+    assert.ok(iconSize66>=30&&iconSize66<=34,'Record emojis use a discreet readable size');
+    assert.equal(await page.locator('.debtExpenses66 .ico').evaluate(el=>getComputedStyle(el).backgroundImage),'none','Record icons have no colored tile');
     await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
     const lastAction66=await page.locator('.debtExpenses66 .dangerBtn').boundingBox(),dock66=await page.locator('#nav').boundingBox();
     assert.ok(lastAction66.y+lastAction66.height<dock66.y,'Debt payment actions can scroll clear of the bottom dock');
