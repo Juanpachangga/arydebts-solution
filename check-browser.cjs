@@ -255,7 +255,7 @@ async function check(engine, label, viewport) {
     await navigate('home');
     assert.equal(await page.locator('#app .back').count(),0,'Account home has no Back button');
     await navigate('more');
-    assert.equal(await page.locator('[onclick="logout()"]').count(),1,'More has one separate sign-out control');
+    assert.equal(await page.locator('#app [onclick="logout()"]').count(),1,'More has one separate sign-out control');
     await page.evaluate(()=>aryV18Settings());
     await page.locator('[onclick="arySetMode58(\'lite\')"]').click();
     assert.equal(await page.evaluate(()=>s.mode),'lite');
