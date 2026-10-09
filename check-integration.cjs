@@ -207,3 +207,5 @@ assert.equal(recurrence63.run("aryValidDate63('2026-02-30')"),false);
 console.log('PASS recurring budget, all periods, actual/reserve distinction, linked expense double-count protection, reminders, reload, localized numbers and very large amounts');
 
 recurrence63.run("s.calendarEvents=[{id:99,name:'Reminder',frequency:'monthly',amount:60,date:'',kind:'reminder',completed:true,completedMonth63:localDate().slice(0,7)}]");assert.equal(recurrence63.run('aryPersonalBudget61().reserve'),0);recurrence63.run("s.calendarEvents[0].completedMonth63='2000-01'");assert.equal(recurrence63.run('aryPersonalBudget61().reserve'),60,'Recurring reserve restarts next month without inventing a payment');
+
+const navigation65=boot(true);navigation65.run("s.navOrder=['home','plan','home','unknown','more'];go('home')");assert.deepEqual(Array.from(navigation65.run('s.navOrder')),['home','plan','more','debts','expenses']);assert.match(navigation65.nodes.nav.innerHTML,/go\('expenses'\)/);assert.equal(boot(navigation65.data).run('s.navOrder.length'),5);console.log('PASS complete navigation repair preserves order, restores Expenses and survives reload');

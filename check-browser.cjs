@@ -233,7 +233,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     const lastCard = await page.locator('#app .grid > .card').last().boundingBox();
     const navigationBox = await page.locator('#nav').boundingBox();
-    if(viewport.width>=1000){assert.ok(navigationBox.x+navigationBox.width<=lastCard.x,'Desktop rail does not cover the final card');assert.ok(lastCard.y+lastCard.height<=viewport.height+1,'Final card remains visible at the end of the page')}else assert.ok(lastCard.y+lastCard.height <= navigationBox.y, 'Bottom navigation leaves the final card accessible');
+    assert.ok(lastCard.y+lastCard.height <= navigationBox.y, 'Bottom navigation leaves the final card accessible');
     await page.evaluate(() => window.scrollTo(0, 0));
     for (const theme of ['light','dark']) {
       await page.evaluate(theme => { localStorage.setItem('ary-theme-v46', theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
@@ -479,21 +479,47 @@ async function check(engine, label, viewport) {
     if(viewport.width>=1000){
       const nav64=await page.locator('#nav').boundingBox(),app64=await page.locator('#app').boundingBox();
       assert.ok(app64.width>700,'Desktop content uses available width');
-      assert.ok(nav64.x+nav64.width<app64.x,'Persistent rail is separate from the content');
+      assert.ok(nav64.y>viewport.height/2,'Desktop has the same bottom tabs as mobile');
       assert.ok(nav64.y>=0&&nav64.y+nav64.height<=viewport.height,'All primary navigation fits the screen');
       await page.locator('#nav [onclick="go(\'expenses\')"]').click();
       assert.equal(await page.evaluate(()=>screen),'expenses');
       await page.evaluate(()=>scrollTo(0,500));
       await page.locator('#nav [onclick="go(\'home\')"]').click();
-      assert.equal(await page.evaluate(()=>screen),'home','Sidebar returns directly to Home');
+      assert.equal(await page.evaluate(()=>screen),'home','Bottom tabs return directly to Home');
       assert.equal(await page.evaluate(()=>scrollY),0);
       assert.equal(await page.locator('#nav .active').getAttribute('aria-current'),'page');
     }else{
       const nav64=await page.locator('#nav').boundingBox();
       assert.ok(nav64.y>viewport.height/2,'Mobile keeps bottom navigation');
     }
+    const orderBefore65=await page.evaluate(()=>[...s.navOrder]);
+    await page.evaluate(()=>{s.navOrder=['home','plan','home','unknown','more'];save()});
+    assert.equal(await page.locator('#nav button').count(),5,'Repair incomplete or duplicate saved navigation');
+    for(const route of ['home','debts','expenses','plan','more']){
+      const button=page.locator(`#nav [onclick="go('${route}')"]`),box=await button.boundingBox();
+      assert.ok(box.x>=0&&box.x+box.width<=viewport.width+1&&box.y>=0&&box.y+box.height<=viewport.height,'Every tab is fully visible');
+      await button.click();assert.equal(await page.evaluate(()=>screen),route,`Tab opens ${route}`);
+    }
+    await page.evaluate(order=>{s.navOrder=order;save();go('home')},orderBefore65);
+    await page.evaluate(()=>{s.mode='immersive';save()});
+    if(viewport.width>=1000){assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el).display),'block');assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el,'::before').animationName),'colorWave65');}
+    await page.locator('.settings64').click();
+    assert.ok(await page.locator('.signoutWave65').isVisible(),'Preferences include a separate red sign-out control');
+    assert.equal(await page.locator('.signoutWave65').evaluate(el=>getComputedStyle(el,'::before').animationName),'signoutRipple65');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-preferences-v65.png`),fullPage:false});
+    await page.locator('#modal [onclick="closeM()"]').click();
+    await page.evaluate(()=>{s.mode='lite';save()});
+    await page.locator('.settings64').click();
+    assert.equal(await page.locator('.signoutWave65').evaluate(el=>getComputedStyle(el,'::before').animationName),'none');
+    if(viewport.width>=1000)assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el,'::before').animationName),'none');
+    const sessionBefore65=await page.evaluate(()=>({profile:JSON.parse(JSON.stringify(profile)),finances:localStorage.getItem(KEY)}));
+    await page.locator('.signoutWave65').click();
+    assert.equal(await page.evaluate(()=>screen),'welcome');
+    assert.equal(await page.locator('#nav button').count(),0,'Sign-out hides account navigation');
+    assert.equal(await page.evaluate(()=>localStorage.getItem(KEY)),sessionBefore65.finances,'Sign-out preserves financial records');
+    await page.evaluate(previous=>{profile=previous.profile;safeSet(AUTH,JSON.stringify(profile));go('home')},sessionBefore65);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Responsive header and navigation fit the viewport');
-    await page.screenshot({path:path.join(root,'browser-results',`${label}-navigation-v64.png`),fullPage:false});
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-navigation-v65.png`),fullPage:false});
     // A customer with an existing profile can open the complete public cover.
     const portalBefore=await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')));
     await page.goto(origin+'/#welcome',{waitUntil:'load'});

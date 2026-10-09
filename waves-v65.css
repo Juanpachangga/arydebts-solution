@@ -1,0 +1,20 @@
+/* Decorative waves never intercept clicks or alter the content's contrast. */
+#app{position:relative;z-index:1}
+.waves65{display:none;position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;isolation:isolate}
+@media(min-width:1000px){body.signed64 .waves65{display:block}}
+.waves65::before,.waves65::after{content:"";position:absolute;left:-30%;top:-15%;width:160%;height:130%;border-radius:45%;pointer-events:none;transform:translate3d(0,0,0)}
+.waves65::before{background:radial-gradient(ellipse at 18% 78%,#ac31cf45 0%,#6557dd25 30%,transparent 58%),radial-gradient(ellipse at 90% 22%,#19bede38 0%,#2879eb22 30%,transparent 61%)}
+.waves65::after{background:radial-gradient(ellipse at 60% 105%,#fa549e28 0%,transparent 56%),radial-gradient(ellipse at 35% 8%,#7660f926 0%,transparent 52%)}
+.mode-immersive .waves65::before{animation:colorWave65 16s ease-in-out infinite}
+.mode-immersive .waves65::after{animation:colorWave65 23s ease-in-out infinite reverse}
+.signoutWave65{position:relative!important;overflow:hidden;isolation:isolate;display:flex;justify-content:center;align-items:center;gap:10px;min-height:50px;margin:20px 0 12px!important;border:1px solid #ff648a99!important;background:linear-gradient(110deg,#681f3d,#432047)!important;color:#ffdce5!important;box-shadow:0 6px 22px #f2457420}
+.signoutWave65 svg{width:22px;height:22px;position:relative;z-index:1}.signoutWave65 span{position:relative;z-index:1}
+.signoutWave65::before{content:"";position:absolute;inset:-120% -60%;border-radius:45%;background:linear-gradient(110deg,transparent 25%,#ff74874d 48%,#ff38a035 60%,transparent 80%);z-index:0;pointer-events:none}
+.mode-immersive .signoutWave65::before{animation:signoutRipple65 5s ease-in-out infinite}
+.signoutWave65:hover{border-color:#ffa1b7!important;box-shadow:0 7px 24px #e9437833}
+body.ary-light .signoutWave65{background:linear-gradient(110deg,#fff0f3,#ffe2eb)!important;border-color:#df7990!important;color:#a62244!important}
+body.ary-light .waves65::before,body.ary-light .waves65::after{opacity:.65}
+.mode-lite .waves65::before,.mode-lite .waves65::after,.mode-lite .signoutWave65::before{animation:none!important}
+@keyframes colorWave65{0%,100%{transform:translate3d(-3%,2%,0) rotate(-5deg) scale(1.02)}50%{transform:translate3d(5%,-4%,0) rotate(7deg) scale(1.08)}}
+@keyframes signoutRipple65{0%,100%{transform:translate3d(-10%,0,0) rotate(-12deg)}50%{transform:translate3d(10%,0,0) rotate(16deg)}}
+@media(prefers-reduced-motion:reduce){.waves65::before,.waves65::after,.signoutWave65::before{animation:none!important}}
