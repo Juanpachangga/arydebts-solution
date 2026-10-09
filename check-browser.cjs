@@ -788,7 +788,7 @@ async function check(engine, label, viewport) {
     await page.reload();
     assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'false');
     await page.locator('.coverMotion80').click();
-    await page.evaluate(p=>{profile=p;go('home')},profile80);
+    await page.evaluate(p=>{profile=p;s.onboarded=true;go('home')},profile80);
     assert.equal(await page.evaluate(()=>s.mode),'lite');
     if(viewport.width<700){
       const audit80=[];

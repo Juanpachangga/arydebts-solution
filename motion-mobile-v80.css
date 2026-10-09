@@ -13,3 +13,5 @@
  #app input,#app select,#modal input:not([type=checkbox]),#modal select,#modal textarea{min-height:48px;font-size:max(16px,1rem)}
  .landing55 .landingSwitches80 .control9{font-size:12px;padding:9px 12px;gap:8px}
 }
+
+@media(max-width:360px){.landing55 .landingToolbar55{gap:8px}.landing55 .landingSwitches80 .control9{font-size:11px;padding:8px;gap:6px}.landing55 .langControl9{padding:8px;gap:5px;font-size:11px}}
