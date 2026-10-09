@@ -1,0 +1,54 @@
+/* Small, pearlescent bubbles for financial records. */
+#app .row .ico{border-radius:50%!important;background:radial-gradient(circle at 28% 20%,#ffffff52,transparent 52%),linear-gradient(145deg,#b9d8ff18,#bda5ee12)!important;border:1px solid #cedfff45!important;box-shadow:inset 0 1px 3px #fff3,0 3px 8px #0001!important;font-size:27px!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important}
+body.ary-light #app .row .ico{background:radial-gradient(circle at 28% 20%,#fff,transparent 60%),linear-gradient(145deg,#e6faf7,#eeebff)!important;border-color:#dadff0!important}
+.autoIcon96{border-radius:50%;padding:4px;border:1px solid #b5c9e940;background:linear-gradient(145deg,#b9d8ff18,#bda5ee12);font-size:18px}
+@media(max-width:900px){
+html.coverRoot97,body.cover97{background:#fcfcff!important;color:#17192c!important;color-scheme:light!important}
+body.cover97 .aurora,body.cover97 .seasonBackdrop71{display:none!important}
+body.cover97 #app{padding:0!important;max-width:none!important;width:100%!important;margin:0!important}
+#app .mobileWelcome97{display:flex!important;flex-direction:column!important;gap:0!important;width:100%!important;max-width:600px!important;min-height:100svh!important;padding:calc(16px + env(safe-area-inset-top)) 24px calc(16px + env(safe-area-inset-bottom))!important;margin:auto!important;border:0!important;border-radius:0!important;background:#fcfcff!important;color:#17192c!important;text-align:center!important;box-shadow:none!important}
+.mobileWelcome97 .landingToolbar55{position:relative!important;display:flex!important;justify-content:space-between!important;align-items:center!important;min-height:44px!important;gap:12px!important;margin:0!important;width:100%!important}
+.mobileWelcome97 .control9{background:transparent!important;color:#56556e!important;border:0!important;box-shadow:none!important;min-height:44px!important;padding:8px!important;font-size:12px!important}
+.mobileWelcome97 .darkControl9{display:none!important}
+.mobileWelcome97 .landingSwitches80{display:flex!important;gap:0!important}
+.mobileWelcome97 .coverMotion80{min-width:90px!important}
+.mobileWelcome97 .langMenu22{background:#fff!important;color:#17192c!important;z-index:10;top:44px!important;left:0!important;border-color:#dedcec!important}
+.mobileWelcome97 .langMenu22 button{color:#363348!important}
+.introStage97{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12px 0 22px;min-height:330px;animation:introEnter97 .45s ease both;touch-action:pan-y}
+.artHalo97{width:min(100%,310px);height:clamp(180px,30svh,270px);display:grid;place-items:center;background:radial-gradient(ellipse,#e5fff055,transparent 70%);margin-bottom:18px}
+.introArt97{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 12px 15px #7c76b510)}
+.sculpture97{animation:float97 4s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+.satellite97{animation:spark97 3s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+.receipt97{animation:receipt97 4s ease-in-out infinite}
+.eyes97{animation:blink97 5s ease infinite;transform-origin:center;transform-box:fill-box}
+.introTag97{font-size:10px!important;letter-spacing:.13em;font-weight:700;color:#73708a!important;margin:0 0 14px!important;line-height:1.5}
+.mobileWelcome97 .introTitle97{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;font-size:clamp(28px,7.5vw,39px)!important;font-weight:800!important;letter-spacing:-.045em!important;line-height:1.12!important;max-width:390px!important;text-align:center!important;margin:0 0 14px!important;color:#17192c!important;-webkit-text-fill-color:#17192c!important;text-shadow:none!important;background:none!important}
+.mobileWelcome97 .introBrand97{font-size:clamp(48px,14vw,66px)!important;display:block;line-height:1.1!important}
+.introBrand97 span{display:inline-block;animation:brandBreathe97 4s ease-in-out infinite}
+.introBrand97 span+span{animation-delay:.25s}
+.introNote97{font-size:calc(14px * var(--ui-scale,1))!important;line-height:1.6!important;color:#656278!important;max-width:330px;margin:0!important}
+.introFooter97{display:flex;flex-direction:column;align-items:stretch;gap:0;width:100%;padding-top:8px}
+.introDots97{display:flex;justify-content:center;gap:0;margin-bottom:14px}
+.introDots97 button{width:44px;height:44px;border:0;background:transparent;display:grid;place-items:center;padding:0;cursor:pointer}
+.introDots97 i{width:6px;height:6px;border-radius:50%;background:#d8d6e3;transition:width .2s}
+.introDots97 [aria-current] i{width:22px;border-radius:10px;background:linear-gradient(90deg,#5ddac8,#8c74ed)}
+.introActions97{display:flex;gap:10px;align-items:center}
+.mobileWelcome97 .introNext97,.mobileWelcome97 .cta21{flex:1;display:flex!important;justify-content:center!important;align-items:center!important;gap:12px!important;width:auto!important;border:1px solid #a297e9!important;border-radius:19px!important;min-height:54px!important;padding:14px 20px!important;background:linear-gradient(110deg,#d4fff4,#e6ddff 65%,#f8e6f7)!important;color:#25223d!important;-webkit-text-fill-color:#25223d!important;font-size:15px!important;font-weight:750!important;box-shadow:0 6px 20px #8f75cf12!important;margin:0!important;animation:none!important;text-shadow:none!important}
+.mobileWelcome97 .cta21:after{display:none!important}
+.introBack97{border:0;background:transparent;color:#625a7b;min-height:44px;padding:8px;font-size:13px}
+.introAccount97{font-size:12px;color:#777185;margin:18px 0 3px;line-height:1.5}
+.introAccount97 button{font:inherit;font-weight:700;color:#6450b0;background:none;border:0;padding:8px 4px;min-height:36px}
+.introSkip97{background:none;border:0;color:#736c86;font-size:12px;min-height:36px;align-self:center;padding:6px 12px}
+.introSkip97:empty{display:none}
+.introFooter97>small{color:#9a94a5;font-size:10px;line-height:1.5;margin-top:10px}
+.mobileWelcome97 button:focus-visible{outline:3px solid #8c73e8;outline-offset:3px}
+body.mode-lite .mobileWelcome97 *,body.mode-lite .mobileWelcome97 *:before{animation:none!important}
+@media(max-height:650px){.artHalo97{height:170px;margin-bottom:8px}.introStage97{padding-bottom:8px;min-height:290px}.mobileWelcome97 .introTitle97{font-size:28px!important}.mobileWelcome97 .introBrand97{font-size:48px!important}.introDots97{margin-bottom:5px}}
+}
+@keyframes float97{50%{transform:translateY(-7px) rotate(2deg)}}
+@keyframes spark97{50%{transform:translateY(-6px) scale(1.04)}}
+@keyframes receipt97{50%{transform:translateY(-5px)}}
+@keyframes blink97{0%,43%,47%,100%{transform:scaleY(1)}45%{transform:scaleY(.12)}}
+@keyframes brandBreathe97{50%{text-shadow:0 0 20px #a492e657;transform:translateY(-1px)}}
+@keyframes introEnter97{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.mobileWelcome97 *{animation:none!important;transition:none!important}}

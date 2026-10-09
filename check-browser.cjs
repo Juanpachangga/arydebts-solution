@@ -30,6 +30,8 @@ async function check(engine, label, viewport) {
     await page.goto(origin, { waitUntil:'load' });
     assert.match(await page.locator('#app').innerText(), /ARYDEBTS/i, 'Fresh startup renders');
     assert.equal(await page.evaluate(() => s.income), 0, 'Fresh startup has no invented income');
+    const mobileCover97=viewport.width<=900;
+    if(!mobileCover97){
     await page.locator('.heroPhoto55').evaluate(img=>img.decode());
     assert.ok(await page.locator('.heroPhoto55').evaluate(img=>img.naturalWidth>=1200),'Hero has a high resolution source');
     assert.equal(await page.locator('.heroPhoto55').evaluate(img=>getComputedStyle(img).objectFit),'contain','Original globe and flags are shown without cropping');
@@ -105,6 +107,12 @@ async function check(engine, label, viewport) {
       }
     }
     await page.screenshot({path:path.join(root,'browser-results',`${label}-landing-dark.png`),fullPage:true});
+    }else{
+      assert.equal(await page.locator('.mobileWelcome97').count(),1);
+      assert.equal(await page.locator('body.cover97').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(252, 252, 255)');
+      await page.evaluate(()=>aryIntroStep97(4));
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    }
     await page.locator('[onclick="aryToggleLangMenu(event)"]').click();
     await page.locator('[onclick="arySetLandingLang(\'pt\')"]').click();
     assert.match(await page.locator('.cta21').innerText(), /^Começar hoje\s*→$/);
@@ -769,8 +777,8 @@ async function check(engine, label, viewport) {
     assert.ok((await page.locator('.debtExpenses66').innerText()).includes('$76.00'));
     assert.ok((await page.locator('.debtExpenses66').innerText()).includes('$1,000.00'));
     const iconSize66=await page.locator('.debtExpenses66 .ico').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
-    assert.ok(iconSize66>=30&&iconSize66<=34,'Record emojis use a discreet readable size');
-    assert.equal(await page.locator('.debtExpenses66 .ico').evaluate(el=>getComputedStyle(el).backgroundImage),'none','Record icons have no colored tile');
+    assert.ok(iconSize66>=27&&iconSize66<=34,'Record emojis use a discreet readable size');
+    assert.equal(await page.locator('.debtExpenses66 .ico').evaluate(el=>getComputedStyle(el).borderRadius),'50%','Record icons sit inside small bubbles');
     await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
     const lastAction66=await page.locator('.debtExpenses66 .dangerBtn').boundingBox(),dock66=await page.locator('#nav').boundingBox();
     assert.ok(lastAction66.y+lastAction66.height<dock66.y,'Debt payment actions can scroll clear of the bottom dock');
@@ -855,6 +863,7 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('body.signed64').count(),0,'Public landing keeps its full layout');
     assert.equal(await page.evaluate(()=>s.income),portalBefore.income);
     assert.deepEqual(await page.evaluate(()=>s.debts),portalBefore.debts);
+    if(mobileCover97)await page.evaluate(()=>aryIntroStep97(4));
     await page.locator('.cta21').click();
     assert.ok(await page.locator('#an').isVisible(),'Cover leads to signup');
     assert.deepEqual(errors, [], 'No uncaught errors or unhandled promise rejections');
@@ -878,7 +887,8 @@ async function check(engine, label, viewport) {
     const profile80=await page.evaluate(()=>JSON.parse(JSON.stringify(profile)));
     await page.evaluate(()=>{s.mode='lite';save();logout()});
     assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'true');
-    assert.ok(await page.locator('.worldMotion57').isVisible());
+    if(!mobileCover97)assert.ok(await page.locator('.worldMotion57').isVisible());
+    else assert.notEqual(await page.locator('.sculpture97').evaluate(el=>getComputedStyle(el).animationName),'none');
     await page.locator('.coverMotion80').click();
     assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'false');
     await page.reload();
