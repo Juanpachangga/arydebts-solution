@@ -65,3 +65,10 @@ body.mode-lite .mobileWelcome97 *,body.mode-lite .mobileWelcome97 *:before{anima
 .introPause97{border:0;background:none;color:#77708e;width:36px;height:36px;font-size:14px;cursor:pointer}
 }
 @keyframes storyFill97{to{width:100%}}
+@media(max-width:900px){
+html.coverRoot97,body.cover97,body.cover97 #app{transition:none!important}
+body.cover97 #app .mobileWelcome97,body.cover97 #app .mobileWelcome97 *{-webkit-text-fill-color:currentColor!important}
+body.cover97 #app .mobileWelcome97 .langLabel9,body.cover97 #app .mobileWelcome97 .control9 b,body.cover97 #app .mobileWelcome97 .introBrand97 span{color:inherit!important}
+body.cover97 #app .mobileWelcome97 .introAccount97{color:#777185!important}
+body.cover97 #app .mobileWelcome97 .introFooter97>small{color:#777185!important}
+}
