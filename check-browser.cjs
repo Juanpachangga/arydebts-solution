@@ -520,9 +520,35 @@ async function check(engine, label, viewport) {
     await page.evaluate(previous=>{profile=previous.profile;safeSet(AUTH,JSON.stringify(profile));go('home')},sessionBefore65);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Responsive header and navigation fit the viewport');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-navigation-v65.png`),fullPage:false});
+    const localeBefore67=await page.evaluate(()=>s.locale);
+    for(const locale67 of ['es-US','en-US','es-CO','es-ES','pt-BR']){
+      await page.evaluate(locale=>{s.locale=locale;expenseForm()},locale67);
+      const amount67=page.locator('#b'),formatted67=new Intl.NumberFormat(locale67,{useGrouping:true}).format(2000000),small67=new Intl.NumberFormat(locale67,{useGrouping:true}).format(2000);
+      await amount67.fill("2'000.000");
+      assert.equal(await amount67.inputValue(),formatted67,'Apostrophe grouping corrects without leaving the field');
+      await amount67.evaluate(el=>el.setSelectionRange(el.value.length-3,el.value.length));
+      await amount67.press('Backspace');
+      assert.equal(await amount67.inputValue(),small67,'Deleting the final three zeros updates grouping immediately');
+      await amount67.fill('');await amount67.pressSequentially('2000000');
+      assert.equal(await amount67.inputValue(),formatted67,'Grouping updates digit by digit');
+      for(let i=0;i<3;i++)await amount67.press('Backspace');
+      assert.equal(await amount67.inputValue(),small67);
+      const decimal67=new Intl.NumberFormat(locale67).formatToParts(1.1).find(p=>p.type==='decimal').value;
+      await amount67.pressSequentially(decimal67+'05');
+      assert.equal(await amount67.inputValue(),small67+decimal67+'05','Decimals remain editable');
+      await amount67.fill('123456');await amount67.evaluate(el=>el.setSelectionRange(4,4));await amount67.press('Backspace');
+      assert.equal(await amount67.inputValue(),new Intl.NumberFormat(locale67).format(12456),'Backspace on grouping separator deletes the adjacent digit');
+      await amount67.pressSequentially('9');
+      assert.equal(await amount67.inputValue(),new Intl.NumberFormat(locale67).format(129456),'Cursor stays at the edited position');
+      await amount67.fill('');assert.equal(await amount67.inputValue(),'');
+      await page.locator('#modal [onclick="closeM()"]').click();
+    }
+    await page.evaluate(locale=>{s.locale=locale;go('expenses')},localeBefore67);
+    assert.equal(await page.locator('#app .fab').count(),0,'Expenses has no stray plus control');
+    assert.ok(await page.locator('.addExpense67').isVisible(),'Adding expenses remains available with a clear label');
     const before66=await page.evaluate(()=>JSON.parse(JSON.stringify(s)));
     await page.evaluate(()=>{s.locale='es-US';s.currency='USD';s.income=1000;s.incomeFrequency='monthly';s.expenses=[];s.debts=[];s.payments=[];s.calendarEvents=[];save();go('expenses')});
-    await page.locator('.fab').click();
+    await page.locator('.addExpense67').click();
     await page.locator('.debtChoice66 button').click();
     await page.locator('#n').fill('Tarjeta de prueba');
     await page.getByLabel('Saldo total pendiente',{exact:true}).fill('1000');

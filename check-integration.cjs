@@ -209,3 +209,15 @@ console.log('PASS recurring budget, all periods, actual/reserve distinction, lin
 recurrence63.run("s.calendarEvents=[{id:99,name:'Reminder',frequency:'monthly',amount:60,date:'',kind:'reminder',completed:true,completedMonth63:localDate().slice(0,7)}]");assert.equal(recurrence63.run('aryPersonalBudget61().reserve'),0);recurrence63.run("s.calendarEvents[0].completedMonth63='2000-01'");assert.equal(recurrence63.run('aryPersonalBudget61().reserve'),60,'Recurring reserve restarts next month without inventing a payment');
 
 const navigation65=boot(true);navigation65.run("s.navOrder=['home','plan','home','unknown','more'];go('home')");assert.deepEqual(Array.from(navigation65.run('s.navOrder')),['home','plan','more','debts','expenses']);assert.match(navigation65.nodes.nav.innerHTML,/go\('expenses'\)/);assert.equal(boot(navigation65.data).run('s.navOrder.length'),5);console.log('PASS complete navigation repair preserves order, restores Expenses and survives reload');
+const live67=boot(true);
+for(const locale of ['es-US','en-US','es-CO','es-ES','pt-BR']){
+ const expected=new Intl.NumberFormat(locale,{maximumFractionDigits:0,useGrouping:true}).format(2000000),small=new Intl.NumberFormat(locale,{maximumFractionDigits:0,useGrouping:true}).format(2000);
+ assert.equal(live67.run(`aryLiveNumber67("2'000.000",${JSON.stringify(locale)})`),expected,'Imported apostrophe grouping is normalized');
+ assert.equal(live67.run(`aryLiveNumber67(${JSON.stringify(expected.slice(0,-3))},${JSON.stringify(locale)})`),small,'Deleting three zeros regroups the remaining amount');
+ const decimal=new Intl.NumberFormat(locale).formatToParts(1.1).find(p=>p.type==='decimal').value;
+ assert.equal(live67.run(`aryLiveNumber67(${JSON.stringify('2000'+decimal+'05')},${JSON.stringify(locale)})`),small+decimal+'05');
+ assert.equal(live67.run(`aryLiveNumber67(${JSON.stringify('2000'+decimal)},${JSON.stringify(locale)})`),small+decimal,'Trailing decimal is retained while editing');
+ assert.equal(live67.run(`aryLiveNumber67('',${JSON.stringify(locale)})`),'','Deleting everything leaves an empty editable field');
+}
+assert.equal(live67.run("aryLiveNumber67('9007199254740993123','en-US')"),'9,007,199,254,740,993,123','Live input grouping does not round the integer');
+console.log('PASS live numeric regrouping, apostrophes, decimal editing, empty fields and large integer preservation');
