@@ -36,3 +36,23 @@ El payload admite `state` y `profile`, comprueba las listas principales, limita 
 - https://supabase.com/docs/reference/javascript/auth-getuser
 - https://supabase.com/docs/guides/database/postgres/row-level-security
 - https://supabase.com/docs/guides/database/secure-data
+
+## Acceso social solicitado
+
+El adaptador tiene `social(provider)` para Google, Apple, Facebook y Discord, y `finishOAuth(code)` para intercambiar el código de retorno mediante el SDK. `providers` comienza vacío: solo se habilitan los que el propietario haya configurado. `projectUrl` valida que la URL recibida para OAuth pertenezca al servidor Auth esperado. Google solicita `prompt=select_account`. El proveedor y el estado real de la sesión los verifica Supabase; el código no crea un perfil local como sustituto del registro.
+
+El cliente debe inicializarse con `auth.flowType: 'pkce'` y `auth.detectSessionInUrl: false` si el callback intercambia el código explícitamente con `finishOAuth`; no ejecutar ambos procesamientos.
+
+Esto todavía requiere la integración del SDK en la página y del callback con la carga de datos. No se conectó una aplicación de ningún proveedor ni se declaró activo ningún icono. Para activar:
+
+| Proveedor | Configuración del propietario |
+| --- | --- |
+| Google | Cliente OAuth web, pantalla de consentimiento y callback de Supabase registrado; habilitar Google en Supabase. |
+| Facebook | Aplicación Meta con Facebook Login, identificador/secreto en Supabase y redirect autorizado; comprobar acceso público y revisión aplicable. |
+| Discord | Aplicación en Discord Developer Portal, cliente/secreto en Supabase y callback autorizado. |
+| Apple | Identificadores y configuración de Sign in with Apple, dominio/return URL, clave y credenciales del servidor según Apple/Supabase; mantener su renovación. |
+| Instagram | La API actual de Instagram Login está orientada a cuentas profesionales, no al registro genérico de usuarios particulares. No se implementa como proveedor equivalente de Supabase. |
+
+Las credenciales secretas de proveedores se configuran directamente en el panel seguro de Supabase; no en GitHub ni en mensajes del chat. El callback del proveedor es `https://<project-ref>.supabase.co/auth/v1/callback`; la URL de vuelta a Arydebts se configura por separado en Supabase. No enlazar las cuentas existentes únicamente por un correo escrito localmente: usar los flujos de identidad verificados del proveedor.
+
+Referencias: https://supabase.com/docs/guides/auth/social-login ; https://supabase.com/docs/reference/javascript/auth-signinwithoauth ; https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-instagram-login

@@ -28,6 +28,18 @@ const data={state:{debts:[],expenses:[],payments:[],calendarEvents:[],income:100
  assert.throws(()=>api.validatePayload({...data,profile:{bio:'x'.repeat(270000)}}),{code:'data_too_large'});
  assert.throws(()=>api.create({auth,from},{redirectTo:'http://example.test'}),{code:'invalid_redirect'});
  await service.recover('a@example.test');await service.changePassword('new-long-password');await service.logout();
+
+ auth.signInWithOAuth=async args=>{calls.push(['oauth',args]);return {data:{url:'https://project.supabase.co/auth/v1/authorize?provider='+args.provider}}};
+ auth.exchangeCodeForSession=async code=>({data:{session:{}}});
+ const social=api.create({auth,from},{redirectTo:'https://example.test/auth-callback',projectUrl:'https://project.supabase.co',providers:['google','apple','facebook','discord']});
+ for(const provider of ['google','apple','facebook','discord'])assert.equal(new URL((await social.social(provider)).url).searchParams.get('provider'),provider);
+ assert.equal(calls.find(([kind,args])=>kind==='oauth'&&args.provider==='google')[1].options.queryParams.prompt,'select_account');
+ await assert.rejects(()=>social.social('instagram'),{code:'unsupported_provider'});
+ await assert.rejects(()=>service.social('google'),{code:'provider_not_enabled'});
+ assert.equal((await social.finishOAuth('synthetic-code')).id,A);
+ await assert.rejects(()=>social.finishOAuth(''),{code:'invalid_auth_code'});
+ auth.signInWithOAuth=async()=>({data:{url:'https://attacker.example/auth/v1/authorize?provider=google'}});
+ await assert.rejects(()=>social.social('google'),{code:'invalid_oauth_response'});
  auth.getUser=async()=>({error:{message:'Sensitive internal error'}});await assert.rejects(()=>service.identity(),{code:'service_error'});
- console.log('PASS account adapter contracts: validation, email confirmation, verified identity, account changes, optimistic conflicts, payload limits, password recovery and generic errors (simulated SDK).');
+ console.log('PASS account adapter contracts: validation, email confirmation, verified identity, account changes, optimistic conflicts, payload limits, password recovery, OAuth providers, account picker, callback exchange, redirect validation and generic errors (simulated SDK).');
 })().catch(e=>{console.error(e);process.exitCode=1});
