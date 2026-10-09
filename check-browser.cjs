@@ -64,10 +64,10 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('.worldMotion57 image').count(),2,'Planet and flag movement have separate masks');
     assert.equal(await page.locator('#clothBreeze72 feDisplacementMap').getAttribute('scale'),'5','Breeze stays local to the flag masks');
     assert.equal(await page.locator('.heroPhoto55').evaluate(el=>getComputedStyle(el).opacity),'1','Original sky stays visible and still');
-    await page.evaluate(()=>{s.mode='lite';render()});
+    await page.locator('.coverMotion80').click();
     assert.equal(await page.locator('.worldMotion57').isVisible(),false,'Lite keeps original artwork still');
     assert.ok(await page.locator('.worldMotion57').evaluate(el=>el.animationsPaused()),'Lite stops SVG animation clocks');
-    await page.evaluate(()=>{s.mode='immersive';render()});
+    await page.locator('.coverMotion80').click();
     await page.emulateMedia({reducedMotion:'reduce'});
     await page.waitForFunction(()=>document.querySelector('.worldMotion57').animationsPaused());
     assert.equal(await page.locator('.worldMotion57').isVisible(),false,'Reduced motion keeps artwork still');
@@ -777,6 +777,39 @@ async function check(engine, label, viewport) {
     await page.locator('.cta21').click();
     assert.ok(await page.locator('#an').isVisible(),'Cover leads to signup');
     assert.deepEqual(errors, [], 'No uncaught errors or unhandled promise rejections');
+
+    // Local profile motion must not control the signed-out public cover.
+    const profile80=await page.evaluate(()=>JSON.parse(JSON.stringify(profile)));
+    await page.evaluate(()=>{s.mode='lite';save();logout()});
+    assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'true');
+    assert.ok(await page.locator('.worldMotion57').isVisible());
+    await page.locator('.coverMotion80').click();
+    assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'false');
+    await page.reload();
+    assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'false');
+    await page.locator('.coverMotion80').click();
+    await page.evaluate(p=>{profile=p;go('home')},profile80);
+    assert.equal(await page.evaluate(()=>s.mode),'lite');
+    if(viewport.width<700){
+      const audit80=[];
+      for(const width of [320,390,430,768]){
+        await page.setViewportSize({width,height:844});
+        for(const locale of ['es-US','en-US','pt-BR'])for(const route of ['home','debts','expenses','plan','more']){
+          await page.evaluate(({locale,route})=>{s.locale=locale;go(route)}, {locale,route});
+          const result=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,nav:[...document.querySelectorAll('#nav button')].map(b=>({width:b.getBoundingClientRect().width,height:b.getBoundingClientRect().height}))}));
+          assert.ok(result.overflow<=1,`No horizontal overflow: ${width}, ${locale}, ${route}`);
+          assert.equal(result.nav.length,5);
+          for(const target of result.nav)assert.ok(target.width>=44&&target.height>=44,'Bottom navigation has usable touch targets');
+          audit80.push({width,locale,route,...result});
+        }
+      }
+      await fs.writeFile(path.join(root,'browser-results',`${label}-mobile-audit-v80.json`),JSON.stringify(audit80,null,2));
+      await page.setViewportSize(viewport);
+      await page.evaluate(()=>{s.locale='es-US';s.mode='immersive';go('home')});
+      await page.screenshot({path:path.join(root,'browser-results',`${label}-mobile-home-v80.png`),fullPage:false});
+      await page.evaluate(()=>go('welcome'));
+      await page.screenshot({path:path.join(root,'browser-results',`${label}-cover-switch-v80.png`),fullPage:false});
+    }
     console.log(`PASS ${label}: startup, income persistence, purchase, 5 locales, routes, themes, photo decoding`);
   } catch (error) {
     await page.screenshot({ path:path.join(root,'browser-results',`${label}-failure.png`), fullPage:true }).catch(() => {});

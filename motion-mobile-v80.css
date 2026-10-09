@@ -1,0 +1,15 @@
+.landingSwitches80{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.landing55 .landingSwitches80 .control9{justify-content:space-between;min-height:48px}
+.coverMotion80 i{position:relative;display:block;flex:none;width:40px;height:24px;border-radius:20px;background:#365273;border:1px solid #8caad2}
+.coverMotion80 i::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#f3f8ff;transition:transform .2s}
+.coverMotion80[aria-checked="true"] i{background:linear-gradient(90deg,#8354ec,#19aac9)}
+.coverMotion80[aria-checked="true"] i::after{transform:translateX(16px)}
+.coverMotion80:focus-visible{outline:3px solid #55d9ef;outline-offset:3px}
+.ary-light .coverMotion80{background:#fff;color:#17233b;border-color:#b9c9dd}
+@media(max-width:700px){
+ #app .btn,#modal .btn,#nav button{min-height:48px;min-width:48px;touch-action:manipulation}
+ .headerActions64 .pill{width:48px;height:48px;min-width:48px}
+ #nav button{font-size:12px;line-height:1.3}
+ #app input,#app select,#modal input:not([type=checkbox]),#modal select,#modal textarea{min-height:48px;font-size:max(16px,1rem)}
+ .landing55 .landingSwitches80 .control9{font-size:12px;padding:9px 12px;gap:8px}
+}
