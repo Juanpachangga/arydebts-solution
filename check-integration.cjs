@@ -20,7 +20,7 @@ for(const existing of [false,true]){
  monthly.run('aryApplyPayment54({debtId:1,amount:150})');assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),210);assert.equal(monthly.run('aryRealData54.snapshot().minimums'),40);assert.equal(monthly.run('aryRealData54.snapshot().availableAfterMinimums'),550,'Extra payments reduce estimated margin');
  monthly.run('aryApplyPayment54({debtId:2,amount:40})');assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),250);assert.equal(monthly.run('aryRealData54.snapshot().minimums'),0);assert.equal(monthly.run('aryRealData54.snapshot().availableAfterMinimums'),550,'Paid-off debt still counts as money paid this month');
  assert.equal(monthly.run('aryAssessPurchase45(100).before'),550);monthly.run("go('plan')");assert.match(monthly.nodes.app.innerHTML,/Pagos de deuda este mes/);assert.match(monthly.nodes.app.innerHTML,/Reserva estimada de mínimos/);
- monthly.run('aryDeletePayment54(s.payments[1].id)');assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),100);assert.equal(monthly.run('aryRealData54.snapshot().minimums'),40);assert.equal(monthly.run('aryRealData54.snapshot().availableAfterMinimums'),660);
+ monthly.run("aryDeleteConfirmed68('payment',s.payments[1].id)");assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),100);assert.equal(monthly.run('aryRealData54.snapshot().minimums'),40);assert.equal(monthly.run('aryRealData54.snapshot().availableAfterMinimums'),660);
  const monthReload=boot(monthly.data);assert.equal(monthReload.run('aryRealData54.snapshot().availableAfterMinimums'),660);
  const sharedReal=monthReload.context.aryRealData54;delete monthReload.context.aryRealData54;assert.equal(monthReload.run('aryAssessPurchase45(100).before'),660,'Fallback purchase calculation uses the same monthly engine');monthReload.run("go('plan')");assert.match(monthReload.nodes.app.innerHTML,/Pagos de deuda este mes/);monthReload.context.aryRealData54=sharedReal;
  monthly.run("s.payments.push({id:99,debtId:1,amount:999,date:'2000-01-01'});s.payments.push({id:100,debtId:1,amount:999,date:'2099-01-01'})");assert.equal(monthly.run('aryRealData54.snapshot().debtPayments'),100,'Other months and future payments do not enter current cash flow');
@@ -57,7 +57,7 @@ for(const existing of [false,true]){
  b.run("s.locale='es-US';s.payments=[]");
  assert.equal(b.run("aryApplyPayment54({debtId:1,amount:100}).ok"),true);assert.equal(b.run('s.debts[0].balance'),400);
  assert.equal(b.run("aryApplyPayment54({debtId:1,amount:401}).ok"),false);assert.equal(b.run('s.debts[0].balance'),400);assert.equal(b.run('s.payments.length'),1);
- b.run('aryDeletePayment54(s.payments[0].id)');assert.equal(b.run('s.debts[0].balance'),500);assert.equal(b.run('s.payments.length'),0);
+ b.run("aryDeleteConfirmed68('payment',s.payments[0].id)");assert.equal(b.run('s.debts[0].balance'),500);assert.equal(b.run('s.payments.length'),0);
  b.run("s.debts=[{id:10,name:'Calendar payment',balance:300,min:20}];s.payments=[];s.calendarEvents=[];aryApplyPayment54({debtId:10,amount:100,date:'2000-01-02'});go('calendar');aryPickDay35('2000-01-02')");
  assert.match(b.nodes.app.innerHTML,/Calendar payment/,'Recorded payment appears in calendar');
  assert.match(b.nodes.app.innerHTML,/aryEditPayment54/,'Calendar edits use central payment editor');
@@ -67,7 +67,7 @@ for(const existing of [false,true]){
  b.run("aryPickDay35('2000-01-02')");assert.doesNotMatch(b.nodes.app.innerHTML,/Calendar payment/);
  b.run("aryPickDay35('2000-01-03')");assert.match(b.nodes.app.innerHTML,/Calendar payment/);
  b.nodes.editPayAmount54.value='25';b.nodes.editPayDate54.value='2099-01-01';b.run('arySaveEditedPayment54(s.payments[0].id)');assert.equal(b.run('s.debts[0].balance'),250);assert.equal(b.run('s.payments[0].amount'),50);assert.equal(b.run('s.payments[0].date'),'2000-01-03');
- b.run('aryDeletePayment54(s.payments[0].id)');assert.equal(b.run('s.debts[0].balance'),300);assert.doesNotMatch(b.nodes.app.innerHTML,/Calendar payment/);
+ b.run("aryDeleteConfirmed68('payment',s.payments[0].id)");assert.equal(b.run('s.debts[0].balance'),300);assert.doesNotMatch(b.nodes.app.innerHTML,/Calendar payment/);
  assert.equal(b.run("aryApplyPayment54({debtId:10,amount:50,date:'2099-01-01'}).ok"),false,'Future payments cannot reduce balance');
  assert.equal(b.run("aryApplyPayment54({debtId:10,amount:50,date:'2026-02-30'}).ok"),false,'Invalid dates cannot enter ledger');
  assert.equal(b.run('s.debts[0].balance'),300);assert.equal(b.run('s.payments.length'),0);
@@ -221,3 +221,10 @@ for(const locale of ['es-US','en-US','es-CO','es-ES','pt-BR']){
 }
 assert.equal(live67.run("aryLiveNumber67('9007199254740993123','en-US')"),'9,007,199,254,740,993,123','Live input grouping does not round the integer');
 console.log('PASS live numeric regrouping, apostrophes, decimal editing, empty fields and large integer preservation');
+const logic68=boot(true);logic68.run("s.expenses=[{id:1,name:'Renta',cat:'Hormiga',amount:1600,frequency:'monthly'},{id:2,name:'Celulares',cat:'Variable',amount:300,frequency:'monthly'},{id:3,name:'Pañales',cat:'Hormiga',amount:50,frequency:'monthly'},{id:4,name:'Energizantes',cat:'Hormiga',amount:8,frequency:'daily'},{id:5,name:'Energizantes',cat:'Hormiga',amount:8,sourceExpenseId:4,date:localDate()}]");
+assert.deepEqual(JSON.parse(logic68.run('JSON.stringify(aryExpenseCuts68().map(e=>e.name))')),['Energizantes']);
+assert.equal(logic68.run('aryExpenseCuts68()[0].monthly'),8*365/12,'Linked spending does not duplicate recurring estimates');
+logic68.run("go('ants')");assert.match(logic68.nodes.app.innerHTML,/Energizantes/);assert.match(logic68.nodes.app.innerHTML,/recurringAnts68/);
+logic68.run("s.calendarEvents=[{id:'44',name:'holis',kind:'income',amount:111,date:localDate()}];aryDeleteEvent36(44)");assert.equal(logic68.run('s.calendarEvents.length'),1,'X opens an in-app confirmation');assert.match(logic68.nodes.modal.innerHTML,/aryDeleteConfirmed68/);
+logic68.run("aryDeleteConfirmed68('event',44)");assert.equal(logic68.run('s.calendarEvents.length'),0);assert.equal(boot(logic68.data).run('s.calendarEvents.length'),0,'Deletion survives reload');
+console.log('PASS protected essentials, recurring ant visibility, non-duplicated adjustment estimates and in-app calendar deletion');

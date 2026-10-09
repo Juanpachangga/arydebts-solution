@@ -6,7 +6,7 @@ window.aryInputNumber63=n=>new Intl.NumberFormat(locale(),{useGrouping:true,maxi
 window.aryNumberHint63=()=>({es:'Los separadores siguen tu idioma. Los valores fuera de la precisión numérica se muestran con ≈ (aproximados).',en:'Separators follow your language. Values beyond numeric precision are shown with ≈ (approximate).',pt:'Os separadores seguem seu idioma. Valores além da precisão numérica são exibidos com ≈ (aproximados).'}[s.locale==='en-US'?'en':s.locale==='pt-BR'?'pt':'es']);
 const monetaryIds=new Set(['oi','inc','inc45','b','m','payAmount54','editPayAmount54','cevAmount36','aryAntCustom','goalAmount54','buyPrice45']);
 const isAmount=el=>el&&el.tagName==='INPUT'&&el.type==='text'&&(el.inputMode==='decimal'||monetaryIds.has(el.id));
-const separators=loc=>{const p=new Intl.NumberFormat(loc).formatToParts(1000.1);return{decimal:p.find(p=>p.type==='decimal')?.value||'.',group:p.find(p=>p.type==='group')?.value||','}};
+const separators=loc=>{const p=new Intl.NumberFormat(loc,{useGrouping:true}).formatToParts(1000.1);return{decimal:p.find(p=>p.type==='decimal')?.value||'.',group:p.find(p=>p.type==='group')?.value||','}};
 // Keep fractional digits and a trailing decimal while editing; regroup integers without rounding them.
 window.aryLiveNumber67=(raw,loc=locale(),pasted=false)=>{
  const text=String(raw??'').trim(),{decimal}=separators(loc);

@@ -520,6 +520,27 @@ async function check(engine, label, viewport) {
     await page.evaluate(previous=>{profile=previous.profile;safeSet(AUTH,JSON.stringify(profile));go('home')},sessionBefore65);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Responsive header and navigation fit the viewport');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-navigation-v65.png`),fullPage:false});
+    const before68=await page.evaluate(()=>JSON.parse(JSON.stringify(s)));
+    await page.evaluate(()=>{s.locale='es-US';s.currency='USD';s.income=1000;s.incomeFrequency='monthly';s.calendarEvents=[{id:6801,name:'holis',note:'holis',amount:111,kind:'income',date:localDate(),icon:'🟢'}];s.expenses=[{id:6802,name:'Renta',amount:1600,frequency:'monthly',cat:'Hormiga'},{id:6803,name:'Celulares',amount:300,frequency:'monthly',cat:'Variable'},{id:6804,name:'Energizantes',amount:8,frequency:'daily',cat:'Hormiga'}];s.debts=[{id:6805,name:'Tarjeta',balance:100,min:10,apr:0}];s.payments=[];delete s.dismissedAPR68;save();aryCalendarDate60(localDate())});
+    await page.locator('[onclick="aryDeleteEvent36(6801)"]').click();
+    assert.ok(await page.locator('#modal').isVisible(),'Calendar X opens a visible in-app confirmation');
+    await page.locator('[onclick="aryDeleteConfirmed68(\'event\',6801)"]').click();
+    assert.equal(await page.evaluate(()=>s.calendarEvents.length),0,'Holis actually disappears');
+    await page.reload();assert.equal(await page.evaluate(()=>s.calendarEvents.length),0);
+    await navigate('ants');
+    assert.ok((await page.locator('.recurringAnts68').innerText()).includes('Energizantes'),'Onboarding recurring ants remain visible');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-ants-v68.png`),fullPage:true});
+    await navigate('plan');
+    const cuts68=await page.locator('.expenseCuts68 .list').innerText();
+    assert.ok(cuts68.includes('Energizantes'));assert.ok(!cuts68.includes('Renta')&&!cuts68.includes('Celulares'),'Suggestions protect essentials even if miscategorized');
+    await page.locator('.aprNotice68').waitFor({state:'hidden',timeout:10000});
+    await page.evaluate(()=>render());assert.equal(await page.locator('.aprNotice68').count(),0,'APR notice stays dismissed after render');
+    await navigate('home');assert.equal(await page.locator('.homeMetric51 small').filter({hasText:'›'}).count(),0);
+    await page.evaluate(()=>{s.mode='immersive';save()});
+    assert.equal(await page.locator('.palette68 span').first().evaluate(el=>getComputedStyle(el).animationName),'paletteCycle68');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-colors-v68.png`),fullPage:false});
+    await page.evaluate(()=>{s.mode='lite';save()});assert.equal(await page.locator('.palette68 span').first().evaluate(el=>getComputedStyle(el).animationName),'none');
+    await page.evaluate(previous=>{Object.assign(s,previous);save();go('home')},before68);
     const localeBefore67=await page.evaluate(()=>s.locale);
     for(const locale67 of ['es-US','en-US','es-CO','es-ES','pt-BR']){
       await page.evaluate(locale=>{s.locale=locale;expenseForm()},locale67);
