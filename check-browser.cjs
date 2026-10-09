@@ -402,6 +402,22 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('.interest61').count(),1,'Repeated sports expenses offer a purchase analysis with positive margin');
     assert.equal(await page.locator('.homeMetric51[onclick="go(\'plan\')"] .kpi').innerText(),await page.evaluate(()=>money(1670)),'Home margin includes pending calendar reserve');
     assert.equal(await page.locator('.homeSetup54').count(),0,'Completed onboarding removes the setup banner');
+    const dailyOrder81=await page.locator('.homeDaily81').evaluate(el=>Array.from(el.children).map(x=>x.className));
+    assert.match(dailyOrder81[0],/homeMargin81/);
+    assert.match(dailyOrder81[1],/homeActions81/);
+    assert.match(dailyOrder81[2],/homeUpcoming81/);
+    assert.ok(await page.locator('.hello>.muted').isHidden(),'Home does not duplicate its motivational phrase');
+    assert.equal(await page.locator('.homeSupport81').getAttribute('open'),null,'Extra guidance starts collapsed');
+    const beforeDaily81=await page.evaluate(()=>JSON.stringify([s.income,s.expenses,s.debts,s.payments]));
+    await page.locator('.homeActions81 [onclick="expenseForm()"]').click();
+    assert.ok(await page.locator('#modal #n').isVisible(),'Daily add action opens the expense form directly');
+    await page.locator('#modal [onclick="closeM()"]').last().click();
+    assert.equal(await page.evaluate(()=>JSON.stringify([s.income,s.expenses,s.debts,s.payments])),beforeDaily81,'Opening and cancelling leaves records unchanged');
+    await page.locator('.homeSupport81>summary').click();
+    assert.ok(await page.locator('.homeSupport81 .coach61').isVisible(),'Guidance remains available on demand');
+    await page.locator('.homeSupport81>summary').press('Enter');
+    assert.equal(await page.locator('.homeSupport81').getAttribute('open'),null,'Keyboard can collapse guidance');
+
     await page.evaluate(()=>languageMenu());
     const languageButtons78=page.locator('#modal [onclick^="setLocale"]');
     assert.equal(await languageButtons78.count(),3);
@@ -806,7 +822,7 @@ async function check(engine, label, viewport) {
       await fs.writeFile(path.join(root,'browser-results',`${label}-mobile-audit-v80.json`),JSON.stringify(audit80,null,2));
       await page.setViewportSize(viewport);
       await page.evaluate(()=>{s.locale='es-US';s.mode='immersive';go('home')});
-      await page.screenshot({path:path.join(root,'browser-results',`${label}-mobile-home-v80.png`),fullPage:false});
+      await page.screenshot({path:path.join(root,'browser-results',`${label}-mobile-home-v81.png`),fullPage:false});
       await page.evaluate(()=>go('welcome'));
       await page.screenshot({path:path.join(root,'browser-results',`${label}-cover-switch-v80.png`),fullPage:false});
     }
