@@ -30,3 +30,16 @@ Documentación: https://developers.cloudflare.com/turnstile/get-started/server-s
 `donationUrl` acepta un enlace HTTPS de cobro del propietario (PayPal, Stripe, Ko-fi u otro). Hasta recibirlo, Apoyo explica que las donaciones estarán disponibles pronto; no simula cobros.
 Comentarios se guardan en el navegador; el botón de envío abre una revisión y luego un borrador de issue en GitHub que la persona publica por su cuenta. No se publican automáticamente ni hay un muro comunitario sincronizado todavía.
 Eventos son una agenda de celebraciones anuales por la región seleccionada, con enlaces oficiales y acceso a la agenda viva de NASA; no son noticias en tiempo real.
+
+## V74: botones de registro social
+
+Los iconos usan `social-links-v74.js`. No enlazan a páginas generales de Google/Facebook ni simulan una cuenta social. Sin configuración, explican que el proveedor no está conectado y ofrecen crear un perfil local.
+
+Para activarlos hace falta un backend de autenticación real (por ejemplo Supabase Auth), crear/configurar la aplicación de Arydebts en cada proveedor y permitir el callback de producción. Los secretos/client secrets se guardan solo en servidor. Solo una vez completo y probado el flujo de sesión se configura `socialAuth.startUrl` (ruta HTTPS del servidor que inicia OAuth) y `socialAuth.providers` (nombres minúsculos de los proveedores activados) en `ui-config-v72.js`. La URL de inicio recibe `provider` y `returnTo`; el backend debe validar ese retorno contra una lista exacta de destinos permitidos, crear/verificar state y usar PKCE cuando corresponda.
+
+El callback debe verificar el código con el proveedor, vincular por identidad estable verificada, emitir una sesión segura y conectar el inicio/cierre de sesión de Arydebts. No activar los botones antes de esa integración: el adaptador de enlaces no es un servidor de autenticación. Separar los datos de cada cuenta y definir cómo migrar el perfil local con consentimiento del usuario. No poner secretos, access tokens, refresh tokens ni datos financieros en enlaces de configuración.
+
+Google/Facebook/Discord/Apple están documentados como proveedores de Supabase. Instagram requiere revisar su plataforma para cuentas profesionales y no se ofrece como un login genérico activo para consumidores. No se han creado aplicaciones de terceros ni transmitido credenciales.
+Documentación: https://supabase.com/docs/guides/auth/social-login y https://www.postman.com/meta/instagram/documentation/6yqw8pt/instagram-api
+
+Las dos frases de portada rotan cada lunes según la fecha local. El cambio se aplica al abrir la app, volver a la pestaña o pasar la medianoche con la portada abierta. Las favoritas del inicio son independientes de esa rotación.

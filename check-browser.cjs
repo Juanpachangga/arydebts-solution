@@ -74,6 +74,13 @@ async function check(engine, label, viewport) {
     await page.emulateMedia({reducedMotion:'no-preference'});
     await page.waitForFunction(()=>!document.querySelector('.worldMotion57').animationsPaused());
     assert.ok(await page.locator('.worldMotion57').isVisible(),'Immersive restores artwork motion');
+    assert.equal(await page.locator('.motivation72 p').count(),2,'Landing shows only the two weekly thoughts');
+    for(const provider of ['Google','Facebook','Instagram','Discord','Apple']){
+      await page.locator('.social55 button').filter({has:page.locator('.social'+provider+'55')}).click();
+      assert.ok(await page.locator('#modal h2').innerText().then(text=>text.includes(provider)));
+      assert.match(await page.locator('#modal').innerText(),/aún no está conectado/,'Missing OAuth configuration is explicit');
+      await page.locator('#modal [onclick="closeM()"]').click();
+    }
     assert.equal(await page.locator('.social55 svg').count(),5,'Recognizable vector social logos');
     assert.doesNotMatch(await page.locator('#app').innerText(),/Solution/);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Landing fits viewport');
@@ -667,6 +674,19 @@ async function check(engine, label, viewport) {
     await page.reload();
     assert.equal(await page.evaluate(()=>s.debts.find(d=>d.id===s.debts[0].id).balance),924,'Debt balance persists');
     await page.evaluate(previous=>{Object.assign(s,previous);save();go('home')},before66);
+    // Quote controls must not bubble into a legacy card navigation handler.
+    await navigate('home');
+    const quoteBefore74=await page.locator('.homeCoach29>b').innerText();
+    await page.locator('[data-quote-action="next"]').click();
+    assert.equal(await page.evaluate(()=>screen),'home');
+    assert.notEqual(await page.locator('.homeCoach29>b').innerText(),quoteBefore74);
+    await page.locator('[data-quote-action="next"]').press('Enter');
+    assert.equal(await page.evaluate(()=>screen),'home');
+    await page.locator('[data-quote-action="favorite"]').click();
+    assert.equal(await page.evaluate(()=>screen),'home');
+    assert.equal(await page.locator('[data-quote-action="favorite"]').getAttribute('aria-pressed'),'true');
+    const chosen74=await page.locator('.homeCoach29>b').innerText();
+    await page.reload();assert.equal(await page.locator('.homeCoach29>b').innerText(),chosen74,'Favorite survives reload');
     // V72 privacy and accessibility, exercised with synthetic records only.
     await page.evaluate(()=>{s.debts=[{id:7201,name:'Préstamo Árbol',balance:900,min:30}];s.payments=[{id:7202,amount:100,debtId:7201,date:localDate()}];go('home')});
     assert.equal(await page.locator('.progressRing72 span').innerText(),'10%');
