@@ -52,3 +52,16 @@ body.mode-lite .mobileWelcome97 *,body.mode-lite .mobileWelcome97 *:before{anima
 @keyframes brandBreathe97{50%{text-shadow:0 0 20px #a492e657;transform:translateY(-1px)}}
 @keyframes introEnter97{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.mobileWelcome97 *{animation:none!important;transition:none!important}}
+
+@media(max-width:900px){
+.introStory97{display:flex;align-items:center;gap:8px;margin:5px 0 0}
+.introProgress97{display:flex;gap:5px;flex:1}
+.introProgress97>span{height:3px;background:#e8e5f0;border-radius:6px;flex:1;overflow:hidden}
+.introProgress97 i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5cdcc6,#a48bef);border-radius:6px}
+.introProgress97 .done i{width:100%}
+.introProgress97 .current i{animation:storyFill97 3.8s linear both}
+[data-playing="false"] .introProgress97 .current i{animation:none;width:100%}
+[data-step="4"]~.introFooter97 .introProgress97 .current i{width:100%}
+.introPause97{border:0;background:none;color:#77708e;width:36px;height:36px;font-size:14px;cursor:pointer}
+}
+@keyframes storyFill97{to{width:100%}}
