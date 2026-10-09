@@ -1,0 +1,14 @@
+/* One persisted theme for welcome, accounts and the application. */
+html[data-ary-theme="light"],body.ary-light{background:#fcfcff!important}
+html[data-ary-theme="dark"],body.ary-dark{background:#17152b!important}
+html.authRoot99[data-ary-theme="dark"],body.authPortal99.ary-dark{background:#17152b!important;color:#f5f1ff!important;color-scheme:dark!important}
+body.authPortal99.ary-dark #app .authForm99{color:#f5f1ff!important}
+body.authPortal99.ary-dark #app .authForm99 h1{color:#f5f1ff!important}
+body.authPortal99.ary-dark #app .authForm99>h1+p,body.authPortal99.ary-dark #app .authForm99 label,body.authPortal99.ary-dark #app .authBrand99,body.authPortal99.ary-dark #app .authSocialTitle100,body.authPortal99.ary-dark #app .authSocialHint100{color:#c7bddc!important}
+body.authPortal99.ary-dark #app .authForm99 input{background:#242039!important;color:#f5f1ff!important;border-color:#49405f!important;box-shadow:none!important}
+body.authPortal99.ary-dark #app .authForm99 input::placeholder{color:#aaa0bd!important}
+body.authPortal99.ary-dark #app .authForm99 .accountStatus83{background:#242039!important;color:#c7bddc!important;border-color:#49405f!important}
+body.authPortal99.ary-dark #app .authForm99>.btn:first-child,body.authPortal99.ary-dark #app .authSocialButton100{background:#242039!important;color:#e3dbee!important;border-color:#49405f!important}
+body.authPortal99.ary-dark #app .authSocialButton100 .socialApple55{color:#f5f1ff!important}
+body.authPortal99.ary-dark #app .authSocialTitle100:before,body.authPortal99.ary-dark #app .authSocialTitle100:after{background:#49405f}
+body.mode-lite *,body.mode-lite *:before,body.mode-lite *:after{animation:none!important}
