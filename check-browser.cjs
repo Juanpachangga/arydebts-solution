@@ -281,13 +281,13 @@ async function check(engine, label, viewport) {
       const mutations = await page.evaluate(async () => {
         const frame = () => new Promise(resolve => requestAnimationFrame(resolve));
         for(let i=0;i<4;i++) await frame();
-        let count=0;
-        const observer=new MutationObserver(records => count+=records.length);
+        let count=0;const details=[];
+        const observer=new MutationObserver(records=>{count+=records.length;for(const r of records)details.push({type:r.type,target:r.target.nodeName,css:r.target.parentElement?.className,attribute:r.attributeName,text:r.target.textContent?.slice(0,100)})});
         observer.observe(document.getElementById('app'),{childList:true,subtree:true,attributes:true,characterData:true});
         for(let i=0;i<8;i++) await frame();
-        observer.disconnect();return count;
+        observer.disconnect();return {count,details};
       });
-      assert.equal(mutations, 0, 'Idle preferences screen does not continuously rewrite the DOM');
+      assert.equal(mutations.count, 0, 'Idle preferences screen does not continuously rewrite the DOM: '+JSON.stringify(mutations.details));
       await page.locator('.moreDetails94').first().locator('summary').click();
       for(let i=0;i<3;i++) {
         await page.locator('#app button').filter({hasText:/Preferencias de la app|App preferences|Preferências do app/}).click();
