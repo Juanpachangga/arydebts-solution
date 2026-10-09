@@ -6,7 +6,7 @@
 .homeActions81{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .homeActions81 .widebtn{margin:0;min-height:48px;white-space:normal}
 .homeUpcoming81>.list{clear:both}
-.homeSupport81{margin:14px 0 24px;border:1px solid #56cfff70;border-radius:20px;background:var(--card,#0b2348)}
+.homeSupport81{color:#f0f5ff;margin:14px 0 24px;border:1px solid #56cfff70;border-radius:20px;background:var(--card,#0b2348)}
 .homeSupport81>summary{padding:18px;min-height:48px;font-size:1rem;font-weight:750;cursor:pointer;color:inherit}
 .homeSupport81>.coach61{margin:0;border:0;box-shadow:none;background:transparent}
 .homeSupport81[open]>summary{border-bottom:1px solid #56cfff40}
