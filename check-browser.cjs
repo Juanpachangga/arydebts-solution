@@ -538,6 +538,9 @@ async function check(engine, label, viewport) {
     assert.ok((await page.locator('.debtExpenses66').innerText()).includes('$1,000.00'));
     const iconSize66=await page.locator('.debtExpenses66 .ico').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
     assert.ok(iconSize66>=36,'Debt and expense row icons fill their tiles');
+    await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
+    const lastAction66=await page.locator('.debtExpenses66 .dangerBtn').boundingBox(),dock66=await page.locator('#nav').boundingBox();
+    assert.ok(lastAction66.y+lastAction66.height<dock66.y,'Debt payment actions can scroll clear of the bottom dock');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-debt-expenses-v66.png`),fullPage:true});
     await page.locator('.debtExpenses66 [onclick^="aryDebtPayment54"]').click();
     await page.locator('#payAmount54').fill('76');
