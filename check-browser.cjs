@@ -278,12 +278,12 @@ async function check(engine, label, viewport) {
     assert.equal(await page.evaluate(()=>screen),'ants','Expenses includes the original small-expenses screen');
     const antState=await page.evaluate(()=>({expenses:s.expenses,income:s.income,incomeFrequency:s.incomeFrequency,mode:s.mode}));
     await page.evaluate(()=>{s.mode='immersive';s.income=1000;s.incomeFrequency='monthly';s.expenses=[{id:999,name:'Coffee test',amount:200,cat:'Hormiga',date:localDate()}];render()});
-    assert.equal(await page.locator('.pig25').innerText(),'😣','Pig reacts to spending level');
-    assert.equal(await page.locator('.pig25').evaluate(el=>getComputedStyle(el).animationName),'aryPig55');
+    assert.equal(await page.locator('.antFace58').innerText(),'😣','Pig reacts to spending level');
+    assert.equal(await page.locator('.pigBody63').evaluate(el=>getComputedStyle(el).animationName),'pigBounce63');
     await page.evaluate(()=>{s.expenses[0].amount=500;render()});
-    assert.equal(await page.locator('.pig25').innerText(),'🤯');
+    assert.equal(await page.locator('.antFace58').innerText(),'🤯');
     await page.evaluate(()=>toggleMode());
-    assert.equal(await page.locator('.pig25').evaluate(el=>getComputedStyle(el).animationName),'none','Lite stops animated icons');
+    assert.equal(await page.locator('.pigBody63').evaluate(el=>getComputedStyle(el).animationName),'none','Lite stops animated icons');
     await page.evaluate(state=>{Object.assign(s,state);save()},antState);
     await navigate('profile');
     await page.locator('.profileAvatar46').waitFor({state:'visible'});
