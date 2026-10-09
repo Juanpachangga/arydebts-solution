@@ -402,9 +402,21 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('.interest61').count(),1,'Repeated sports expenses offer a purchase analysis with positive margin');
     assert.equal(await page.locator('.homeMetric51[onclick="go(\'plan\')"] .kpi').innerText(),await page.evaluate(()=>money(1670)),'Home margin includes pending calendar reserve');
     assert.equal(await page.locator('.homeSetup54').count(),0,'Completed onboarding removes the setup banner');
+    await page.evaluate(()=>languageMenu());
+    const languageButtons78=page.locator('#modal [onclick^="setLocale"]');
+    assert.equal(await languageButtons78.count(),3);
+    assert.deepEqual(await languageButtons78.allTextContents(),['🌐 Español','🇺🇸 English','🇧🇷 Português']);
+    await page.locator('#modal [onclick="closeM()"]').click();
+
     await page.evaluate(()=>{s.mode='immersive';window.originalSeason77=aryBackdropSeason71;window.aryBackdropSeason71=()=> 'halloween';render()});
     assert.ok(await page.locator('.hello .greetingScene77 svg').isVisible());
     assert.equal(await page.locator('.greetingBat77').evaluate(el=>getComputedStyle(el).animationName),'greetingFlight77');
+    const values78=await page.locator('.homeMetric51 .kpi').allTextContents();
+    const tide78=await page.locator('.homeMetric51').first().evaluate(el=>getComputedStyle(el,'::before').transform);
+    await page.waitForFunction(before=>getComputedStyle(document.querySelector('.homeMetric51'),'::before').transform!==before,tide78);
+    assert.deepEqual(await page.locator('.homeMetric51 .kpi').allTextContents(),values78,'Card motion leaves values unchanged');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-card-waves-v78.png`),fullPage:true});
+
     const batBefore77=await page.locator('.greetingBat77').evaluate(el=>getComputedStyle(el).transform);
     await page.waitForFunction(before=>getComputedStyle(document.querySelector('.greetingBat77')).transform!==before,batBefore77);
     await page.screenshot({path:path.join(root,'browser-results',`${label}-greeting-dark-v77.png`),fullPage:false});
@@ -412,9 +424,11 @@ async function check(engine, label, viewport) {
     await page.screenshot({path:path.join(root,'browser-results',`${label}-greeting-light-v77.png`),fullPage:false});
     await page.evaluate(()=>{s.mode='lite';render()});
     assert.equal(await page.locator('.greetingBat77').evaluate(el=>getComputedStyle(el).animationName),'none');
+    assert.equal(await page.locator('.homeMetric51').first().evaluate(el=>getComputedStyle(el,'::before').animationName),'none');
     await page.evaluate(()=>{s.mode='immersive';render()});
     await page.emulateMedia({reducedMotion:'reduce'});
     assert.equal(await page.locator('.greetingBat77').evaluate(el=>getComputedStyle(el).animationName),'none');
+    assert.equal(await page.locator('.homeMetric51').first().evaluate(el=>getComputedStyle(el,'::before').animationName),'none');
     await page.emulateMedia({reducedMotion:'no-preference'});
     await page.evaluate(()=>{window.aryBackdropSeason71=window.originalSeason77;delete window.originalSeason77;arySetTheme46('dark');render()});
     await page.screenshot({path:path.join(root,'browser-results',`${label}-polished-home-v62.png`),fullPage:false});

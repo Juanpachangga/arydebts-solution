@@ -1,0 +1,13 @@
+/* Only the color layer moves; financial text and click targets stay still. */
+.signed64 #app :is(.homeMetric51,.homeCoach29){position:relative;isolation:isolate;overflow:hidden}
+.signed64 #app :is(.homeMetric51,.homeCoach29)::before{content:"";position:absolute;inset:-65%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 25% 35%,var(--season-a,#b25bef) 0,transparent 45%),radial-gradient(ellipse at 75% 65%,var(--season-b,#20c6d3) 0,transparent 45%),radial-gradient(ellipse at 55% 15%,var(--season-c,#ec70b1) 0,transparent 40%);opacity:.22;filter:blur(20px);transform:translate(-5%,3%) rotate(-5deg)}
+.mode-immersive.signed64 #app :is(.homeMetric51,.homeCoach29)::before{animation:cardTide78 12s ease-in-out infinite}
+.mode-immersive.signed64 #app .homeMetric51:nth-of-type(2)::before{animation-delay:-4s}
+.mode-immersive.signed64 #app .homeMetric51:nth-of-type(3)::before{animation-delay:-8s}
+.mode-immersive .progressRibbon72{animation:cardTide78 10s ease-in-out infinite}
+@keyframes cardTide78{0%,100%{transform:translate(-5%,3%) rotate(-5deg)}50%{transform:translate(6%,-5%) rotate(7deg)}}
+.ary-light.signed64 #app :is(.homeMetric51,.homeCoach29)::before{opacity:.14}
+.highContrast72.signed64 #app :is(.homeMetric51,.homeCoach29)::before{display:none}
+.mode-lite.signed64 #app :is(.homeMetric51,.homeCoach29)::before{animation:none!important}
+.seasonPaused71.signed64 #app :is(.homeMetric51,.homeCoach29)::before,.seasonPaused71 .progressRibbon72{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.signed64 #app :is(.homeMetric51,.homeCoach29)::before,.progressRibbon72{animation:none!important}}
