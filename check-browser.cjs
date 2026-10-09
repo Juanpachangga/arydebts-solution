@@ -190,6 +190,27 @@ async function check(engine, label, viewport) {
     assert.equal(await page.evaluate(() => s.income), 1250.5, 'Income survives reload');
     assert.equal(await page.evaluate(() => s.incomeFrequency), 'weekly');
     await page.evaluate(() => { s.income=1000; s.incomeFrequency='monthly'; save(); });
+    const presetState86=await page.evaluate(()=>({locale:s.locale,currency:s.currency,finances:JSON.stringify([s.income,s.debts,s.expenses,s.payments])}));
+    for(const width of [320,390,1280]){
+      await page.setViewportSize({width,height:844});
+      for(const locale of ['es-US','en-US','pt-BR'])for(const currency of ['USD','COP','EUR']){
+        await page.evaluate(({locale,currency})=>{s.locale=locale;s.currency=currency;render()},{locale,currency});
+        for(const kind of ['expense','debt']){
+          await page.evaluate(kind=>kind==='expense'?expenseForm():debtForm(),kind);
+          const buttons=page.locator('#modal .amountPresets>.btn');
+          assert.equal(await buttons.count(),4);
+          const geometry=await buttons.evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect(),p=n.closest('.sheet').getBoundingClientRect();return {scroll:n.scrollWidth,width:n.clientWidth,left:r.left,right:r.right,sheetLeft:p.left,sheetRight:p.right,height:r.height}}));
+          for(const g of geometry){assert.ok(g.scroll<=g.width+1,'Complete currency shortcut fits');assert.ok(g.left>=g.sheetLeft&&g.right<=g.sheetRight,'Shortcut stays inside sheet');assert.ok(g.height>=48,'Shortcut remains a usable touch target')}
+          await buttons.first().click();
+          assert.equal(await page.evaluate(()=>parseNum(document.querySelector('#b').value)),kind==='expense'?5:50,'Shortcut adds its complete amount');
+          if(width===390&&locale==='pt-BR'&&currency==='USD'&&kind==='expense')await page.screenshot({path:path.join(root,'browser-results',`${label}-amount-shortcuts-v86.png`),fullPage:false});
+          await page.evaluate(()=>closeM());
+        }
+      }
+    }
+    await page.setViewportSize(viewport);
+    await page.evaluate(({locale,currency})=>{s.locale=locale;s.currency=currency;render()},presetState86);
+    assert.equal(await page.evaluate(()=>JSON.stringify([s.income,s.debts,s.expenses,s.payments])),presetState86.finances,'Cancelling shortcuts leaves finances unchanged');
     await navigate('buy');
     const before = await page.evaluate(() => localStorage.getItem('arydebts-v3'));
     await page.locator('#buyPrice').fill('100');
