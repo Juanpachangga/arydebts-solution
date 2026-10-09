@@ -13,3 +13,5 @@
 .theme-light .homeSupport81{background:#ffffffdc;color:#17243a}
 @media(min-width:901px){.homeDaily81 .homeMargin81{grid-column:1}.homeDaily81 .homeActions81{grid-column:2;align-content:center}}
 @media(max-width:500px){.homeDaily81{grid-template-columns:minmax(0,1fr)}.homeDaily81>.third{grid-column:1}.homeActions81{padding:14px!important}.homeActions81 .btn{padding:12px 8px!important;font-size:1rem!important}.homeUpcoming81>.linkBtn{float:none;display:block;margin-top:8px}}
+
+#app .homeGreeting69>.muted[hidden]{display:none!important}
