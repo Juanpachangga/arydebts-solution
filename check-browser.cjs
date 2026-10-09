@@ -249,7 +249,7 @@ async function check(engine, label, viewport) {
     }
     await navigate('profile');
     await navigate('more');
-    await page.locator('[onclick="go(\'profile\')"]').click();
+    await page.locator('.menuItem[onclick="go(\'profile\')"]').click();
     await page.locator('[onclick="back()"]').click();
     assert.equal(await page.evaluate(()=>screen),'more','Profile Back returns inside the app');
     await navigate('home');
