@@ -1,0 +1,21 @@
+/* Seasonal illustration sits behind every screen and never covers the globe. */
+body[data-season71]{--season-a:#9658ef;--season-b:#23bdd5;--season-c:#ee6aad}
+body[data-season71="halloween"]{--season-a:#ff872f;--season-b:#a557e9;--season-c:#40d8ce}
+body[data-season71="christmas"]{--season-a:#ef557b;--season-b:#27c89c;--season-c:#83dfff}
+body[data-season71="newyear"]{--season-a:#ffd26a;--season-b:#a16eff;--season-c:#58ddff}
+body[data-season71="birthday"]{--season-a:#ff80c9;--season-b:#9c74ff;--season-c:#ffe091}
+body[data-season71="usa"]{--season-a:#f36387;--season-b:#5c82f1;--season-c:#e7edff}
+body[data-season71="colombia"]{--season-a:#ffd266;--season-b:#4d85f5;--season-c:#eb5b80}
+body[data-season71="brazil"]{--season-a:#50d396;--season-b:#ebcd5b;--season-c:#568bf2}
+.seasonBackdrop71{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:paint;isolation:isolate}
+.seasonGlow71,.seasonMist71{position:absolute;inset:-15%;background:radial-gradient(ellipse at 5% 35%,color-mix(in srgb,var(--season-a) 34%,transparent),transparent 52%),radial-gradient(ellipse at 95% 75%,color-mix(in srgb,var(--season-b) 36%,transparent),transparent 52%);opacity:.8}
+.seasonMist71{background:radial-gradient(ellipse at 55% 5%,color-mix(in srgb,var(--season-c) 23%,transparent),transparent 55%);opacity:.55}
+.seasonArt71{position:absolute;width:clamp(84px,11vw,155px);height:clamp(84px,11vw,155px);opacity:.13;filter:drop-shadow(0 0 18px color-mix(in srgb,var(--season-a) 55%,transparent));transform:translate3d(0,0,0)}
+.seasonArt71 svg{display:block;width:100%;height:100%}.art71-0{left:-12px;top:17%}.art71-1{right:1%;top:9%}.art71-2{right:-16px;top:65%}.art71-3{left:2%;top:78%}
+.mode-immersive .seasonGlow71{animation:seasonAurora71 22s ease-in-out infinite}.mode-immersive .seasonMist71{animation:seasonAurora71 29s ease-in-out infinite reverse}
+.mode-immersive .seasonArt71{animation:seasonDrift71 15s ease-in-out infinite}.mode-immersive .art71-1{animation-delay:-4s}.mode-immersive .art71-2{animation-delay:-8s}.mode-immersive .art71-3{animation-delay:-12s}
+@keyframes seasonAurora71{0%,100%{transform:translate3d(-3%,2%,0) scale(1);opacity:.55}50%{transform:translate3d(4%,-3%,0) scale(1.05);opacity:.9}}
+@keyframes seasonDrift71{0%,100%{opacity:0;transform:translate3d(0,18px,0) rotate(-7deg)}25%,65%{opacity:.28}50%{transform:translate3d(8px,-20px,0) rotate(6deg)}85%{opacity:0}}
+.ary-light .seasonBackdrop71{opacity:.55}.mode-lite .seasonBackdrop71 *{animation:none!important}.mode-lite .seasonArt71{opacity:.12}.seasonPaused71 .seasonBackdrop71 *{animation-play-state:paused!important}
+@media(max-width:600px){.seasonArt71{width:94px;height:94px}.art71-1{right:-14px;top:12%}.art71-3{left:-14px;top:82%}}
+@media(prefers-reduced-motion:reduce){.seasonBackdrop71 *{animation:none!important}.seasonArt71{opacity:.12}}
