@@ -30,6 +30,8 @@ jobs:
         run: node check-integration.cjs
       - name: Check assistant backend adapter with simulated transport
         run: node server/check-assistant.mjs
+      - name: Check captcha server adapter with simulated transport
+        run: node server/check-registration-v72.mjs
       - name: Install browser test dependency
         run: npm install --no-save --package-lock=false playwright@1.62.1
       - name: Exercise application in real browsers

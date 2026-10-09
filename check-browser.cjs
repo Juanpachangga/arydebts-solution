@@ -43,8 +43,10 @@ async function check(engine, label, viewport) {
     const turnBefore=await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).transform);
     await page.waitForFunction(before=>getComputedStyle(document.querySelector('.worldCore57')).transform!==before,turnBefore);
     assert.notEqual(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).transform),turnBefore,'Planet moves over time');
-    assert.equal(await page.locator('.worldMotion57 animate').count(),2,'Cloth movement and amplitude animate without duplicate image layers');
-    assert.equal(await page.locator('.worldMotion57 image').count(),1,'Artwork uses one image without drifting overlays');
+    assert.equal(await page.locator('.worldMotion57 animate').count(),1,'A soft breeze animates only the flag fabric');
+    assert.equal(await page.locator('.worldMotion57 image').count(),2,'Planet and flag movement have separate masks');
+    assert.equal(await page.locator('#clothBreeze72 feDisplacementMap').getAttribute('scale'),'1.3','Fabric displacement stays below two source pixels');
+    assert.equal(await page.locator('.heroPhoto55').evaluate(el=>getComputedStyle(el).opacity),'1','Original sky stays visible and still');
     await page.evaluate(()=>{s.mode='lite';render()});
     assert.equal(await page.locator('.worldMotion57').isVisible(),false,'Lite keeps original artwork still');
     assert.ok(await page.locator('.worldMotion57').evaluate(el=>el.animationsPaused()),'Lite stops SVG animation clocks');
@@ -649,6 +651,34 @@ async function check(engine, label, viewport) {
     await page.reload();
     assert.equal(await page.evaluate(()=>s.debts.find(d=>d.id===s.debts[0].id).balance),924,'Debt balance persists');
     await page.evaluate(previous=>{Object.assign(s,previous);save();go('home')},before66);
+    // V72 privacy and accessibility, exercised with synthetic records only.
+    await page.evaluate(()=>{s.debts=[{id:7201,name:'Préstamo Árbol',balance:900,min:30}];s.payments=[{id:7202,amount:100,debtId:7201,date:localDate()}];go('home')});
+    assert.equal(await page.locator('.progressRing72 span').innerText(),'10%');
+    assert.ok(await page.locator('.privacy72').isVisible());
+    const financial72=await page.evaluate(()=>JSON.stringify([s.income,s.debts,s.expenses,s.payments]));
+    await page.locator('.privacy72').click();
+    assert.equal(await page.locator('.progressRing72 span').innerText(),'••••');
+    for(const route of ['home','debts','expenses','plan','progress']){await navigate(route);assert.doesNotMatch(await page.locator('#app').innerText(),/\$\s*[\d,]+/,'Financial amounts stay hidden on '+route)}
+    await page.reload();assert.equal(await page.evaluate(()=>aryHidden72()),true);
+    await page.evaluate(()=>debtForm(7201));
+    assert.equal(await page.locator('#b').getAttribute('type'),'password');
+    assert.equal(await page.locator('#b').isDisabled(),true);
+    const draft72=await page.locator('#b').inputValue();
+    await page.evaluate(()=>aryTogglePrivacy72());
+    assert.equal(await page.locator('#b').inputValue(),draft72);
+    assert.equal(await page.locator('#b').isDisabled(),false);
+    await page.evaluate(()=>closeM());
+    assert.equal(await page.evaluate(()=>JSON.stringify([s.income,s.debts,s.expenses,s.payments])),financial72);
+    await page.evaluate(()=>arySearch72());await page.locator('#searchQuery72').fill('arbol');await page.locator('.searchResult72').click();
+    assert.ok(await page.locator('#b').isVisible(),'Search opens the matching debt');await page.evaluate(()=>closeM());
+    await page.evaluate(()=>{arySetUI72('size',1.3);arySetUI72('palette','ocean');arySetUI72('brand','amber');arySetUI72('contrast','true');go('more')});
+    assert.equal(await page.locator('body').getAttribute('data-palette72'),'ocean');assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('highContrast72')));
+    assert.ok(await page.locator('.communityLink72').last().isVisible());
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-workspace-v72.png`),fullPage:true});
+    await navigate('feedback');await page.locator('#feedbackText72').fill('A clear app <thanks>');await page.locator('[onclick="arySaveFeedback72()"]').click();
+    assert.match(await page.locator('.feedbackCard72').innerText(),/A clear app <thanks>/);
+    await page.evaluate(()=>{arySetUI72('size',1);arySetUI72('contrast','false');arySetUI72('palette','season');arySetUI72('brand','season');go('home')});
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-progress-v72.png`),fullPage:true});
     // A customer with an existing profile can open the complete public cover.
     const portalBefore=await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')));
     await page.goto(origin+'/#welcome',{waitUntil:'load'});

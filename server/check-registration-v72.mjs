@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {createRegistrationHandler72} from './registration-handler-v72.mjs';
+let creations=0,calls=0;
+const request=(body={},origin='https://juanpachangga.github.io')=>new Request('https://api.example.test/register',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({name:'Test',email:'test@example.com',password:'test-password',token:'synthetic-token',...body})});
+const options={secret:'synthetic-secret',allowedOrigin:'https://juanpachangga.github.io',hostname:'juanpachangga.github.io',consumeQuota:async()=>true,createAccount:async()=>{creations++;return{success:true}},fetchImpl:async()=>{calls++;return Response.json({success:true,hostname:'juanpachangga.github.io',action:'signup'})}};
+assert.equal((await createRegistrationHandler72(options)(request())).status,201);assert.equal(creations,1);
+for(const bad of [{success:false},{success:true,hostname:'other.example',action:'signup'},{success:true,hostname:'juanpachangga.github.io',action:'login'}])assert.equal((await createRegistrationHandler72({...options,fetchImpl:async()=>Response.json(bad)})(request())).status,403);
+assert.equal(creations,1,'Rejected captcha never creates an account');
+assert.equal((await createRegistrationHandler72({...options,createAccount:null})(request())).status,503);
+assert.equal((await createRegistrationHandler72({...options,consumeQuota:async()=>false})(request())).status,429);
+assert.equal((await createRegistrationHandler72(options)(request({token:''}))).status,400);
+assert.equal((await createRegistrationHandler72(options)(request({},'https://other.example'))).status,403);
+assert.equal((await createRegistrationHandler72({...options,fetchImpl:async()=>{throw new Error('network')}})(request())).status,503);
+assert.equal(creations,1);assert.equal(calls,1);
+console.log('PASS registration: valid token, hostname/action, rate limit, rejected and unavailable service, no unverified account creation (simulated transport)');

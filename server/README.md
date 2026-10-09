@@ -16,3 +16,17 @@ El usuario decide mediante una casilla si comparte cifras agregadas. No se adjun
 El servicio no modifica registros ni hace pagos. Usa Responses API con `store:false`; esto no equivale a una garantía de cero retención del proveedor. Documentación: https://developers.openai.com/api/docs/guides/migrate-to-responses
 
 Las pruebas usan una respuesta simulada; falta probar la integración real con una cuenta API y la autenticación del backend desplegado.
+
+## V72: registro con Turnstile y Apoyo
+
+`registration-handler-v72.mjs` valida Turnstile en servidor y solo después llama a `createAccount`.
+No está desplegado ni se usa una clave de prueba en producción. El registro publicado sigue siendo local hasta conectar un servicio real.
+
+Para activarlo, crear un widget Turnstile para `juanpachangga.github.io`, guardar el secreto exclusivamente en servidor y conectar almacenamiento de cuentas, contraseñas cifradas mediante un hash adecuado, sesiones seguras, verificación de correo y límites compartidos. La función `consumeQuota(request)` debe limitar intentos en servidor; el adaptador falla cerrado si faltan esas conexiones. Configurar `allowedOrigin=https://juanpachangga.github.io`, `hostname=juanpachangga.github.io` y exigir action `signup`. Tokens caducados/repetidos son rechazados por Siteverify.
+
+En `ui-config-v72.js` solo escribir la clave pública del widget y la URL HTTPS del endpoint. El secreto jamás va al cliente. Conectar además el inicio de sesión al mismo servicio antes de ofrecer autenticación de cuenta real. No se ha transmitido información ni se han creado cuentas en servicios externos.
+Documentación: https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
+
+`donationUrl` acepta un enlace HTTPS de cobro del propietario (PayPal, Stripe, Ko-fi u otro). Hasta recibirlo, Apoyo explica que las donaciones estarán disponibles pronto; no simula cobros.
+Comentarios se guardan en el navegador; el botón de envío abre una revisión y luego un borrador de issue en GitHub que la persona publica por su cuenta. No se publican automáticamente ni hay un muro comunitario sincronizado todavía.
+Eventos son una agenda de celebraciones anuales por la región seleccionada, con enlaces oficiales y acceso a la agenda viva de NASA; no son noticias en tiempo real.

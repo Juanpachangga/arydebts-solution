@@ -2,4 +2,9 @@
 
 .brandProfile70{display:block;border:0;background:transparent;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer;max-width:100%;border-radius:14px}.brandProfile70:focus-visible{outline:3px solid #57dcff;outline-offset:5px}.brandProfile70:hover{filter:brightness(1.12)}
 
-.mode-immersive .heroPhoto55{opacity:0}.worldDawn57{display:none!important}.worldCore57{animation:worldTurn57 10s ease-in-out infinite!important}@keyframes worldTurn57{0%,100%{transform:translateX(-.5px) rotate(-.15deg)}50%{transform:translateX(.5px) rotate(.15deg)}}.mode-lite .heroPhoto55{opacity:1}@media(prefers-reduced-motion:reduce){.heroPhoto55{opacity:1!important}.worldCore57{animation:none!important}}
+/* V72: keep the original sky still; move only the masked planet and cloth. */
+.heroPhoto55,.mode-immersive .heroPhoto55{opacity:1!important}.worldDawn57{display:none!important}
+.mode-immersive .worldCore57{animation:worldTurn57 9s ease-in-out infinite!important;transform-origin:48% 51%;transform-box:view-box}
+@keyframes worldTurn57{0%,100%{transform:rotate(-.65deg) scaleX(.996)}50%{transform:rotate(.65deg) scaleX(1.004)}}
+.mode-lite .worldCore57{animation:none!important}
+@media(prefers-reduced-motion:reduce){.worldCore57{animation:none!important}}
