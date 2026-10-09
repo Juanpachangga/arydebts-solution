@@ -5,6 +5,7 @@
   const svg=document.querySelector('.worldMotion57');
   if(!svg)return;
   const paused=document.body.classList.contains('mode-lite')||reduced.matches||document.hidden;
+  svg.classList.toggle('worldMotionPaused77',paused);
   if(typeof svg.pauseAnimations==='function'){
    if(paused)svg.pauseAnimations();else svg.unpauseAnimations();
   }

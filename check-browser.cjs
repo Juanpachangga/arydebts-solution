@@ -40,6 +40,7 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('.brandEcho56').getAttribute('aria-hidden'),'true','Decorative second brand stays out of spoken text');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-typography.png`),fullPage:true});
     assert.equal(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).animationName),'worldTurn57','Planet has a gentle turn');
+    assert.equal(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).animationDuration),'7s');
     // Light mode reveals the seasonal artwork through the cover, across regions.
     await page.evaluate(()=>{window._seasonTest73=aryBackdropSeason71;arySetTheme46('light')});
     for(const season of ['halloween','christmas','newyear','birthday','usa','colombia','brazil']){
@@ -61,7 +62,7 @@ async function check(engine, label, viewport) {
     assert.notEqual(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).transform),turnBefore,'Planet moves over time');
     assert.equal(await page.locator('.worldMotion57 animate').count(),1,'A soft breeze animates only the flag fabric');
     assert.equal(await page.locator('.worldMotion57 image').count(),2,'Planet and flag movement have separate masks');
-    assert.equal(await page.locator('#clothBreeze72 feDisplacementMap').getAttribute('scale'),'1.3','Fabric displacement stays below two source pixels');
+    assert.equal(await page.locator('#clothBreeze72 feDisplacementMap').getAttribute('scale'),'5','Breeze stays local to the flag masks');
     assert.equal(await page.locator('.heroPhoto55').evaluate(el=>getComputedStyle(el).opacity),'1','Original sky stays visible and still');
     await page.evaluate(()=>{s.mode='lite';render()});
     assert.equal(await page.locator('.worldMotion57').isVisible(),false,'Lite keeps original artwork still');
@@ -400,6 +401,22 @@ async function check(engine, label, viewport) {
     assert.equal(await page.evaluate(()=>aryAssessPurchase45(100).after),1570);
     assert.equal(await page.locator('.interest61').count(),1,'Repeated sports expenses offer a purchase analysis with positive margin');
     assert.equal(await page.locator('.homeMetric51[onclick="go(\'plan\')"] .kpi').innerText(),await page.evaluate(()=>money(1670)),'Home margin includes pending calendar reserve');
+    assert.equal(await page.locator('.homeSetup54').count(),0,'Completed onboarding removes the setup banner');
+    await page.evaluate(()=>{s.mode='immersive';window.originalSeason77=aryBackdropSeason71;window.aryBackdropSeason71=()=> 'halloween';render()});
+    assert.ok(await page.locator('.hello .greetingScene77 svg').isVisible());
+    assert.equal(await page.locator('.greetingBat77').evaluate(el=>getComputedStyle(el).animationName),'greetingFlight77');
+    const batBefore77=await page.locator('.greetingBat77').evaluate(el=>getComputedStyle(el).transform);
+    await page.waitForFunction(before=>getComputedStyle(document.querySelector('.greetingBat77')).transform!==before,batBefore77);
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-greeting-dark-v77.png`),fullPage:false});
+    await page.evaluate(()=>arySetTheme46('light'));
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-greeting-light-v77.png`),fullPage:false});
+    await page.evaluate(()=>{s.mode='lite';render()});
+    assert.equal(await page.locator('.greetingBat77').evaluate(el=>getComputedStyle(el).animationName),'none');
+    await page.evaluate(()=>{s.mode='immersive';render()});
+    await page.emulateMedia({reducedMotion:'reduce'});
+    assert.equal(await page.locator('.greetingBat77').evaluate(el=>getComputedStyle(el).animationName),'none');
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    await page.evaluate(()=>{window.aryBackdropSeason71=window.originalSeason77;delete window.originalSeason77;arySetTheme46('dark');render()});
     await page.screenshot({path:path.join(root,'browser-results',`${label}-polished-home-v62.png`),fullPage:false});
     await page.evaluate(()=>scrollTo(0,350));
     const homeScroll62=await page.evaluate(()=>scrollY);

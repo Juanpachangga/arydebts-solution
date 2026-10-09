@@ -1,0 +1,17 @@
+.signed64 #app .hello.greetingCard77{position:relative;isolation:isolate;overflow:hidden;min-height:160px;padding:22px 24px;background:linear-gradient(110deg,#081b35 45%,#29144d)!important}
+.greetingCard77>.muted,.greetingCard77>h1{position:relative;z-index:2;max-width:75%;text-shadow:0 2px 8px #061426}
+.greetingScene77{position:absolute;inset:auto 0 0 auto;width:360px;max-width:55%;height:180px;pointer-events:none;z-index:1;opacity:.85;mask-image:linear-gradient(90deg,transparent,#000 30%)}
+.greetingScene77 svg{width:100%;height:100%;display:block;overflow:visible}
+.greetingEmblem77{display:grid;place-items:center;height:100%;font-size:88px;filter:drop-shadow(0 0 22px #bd88ff55)}
+.mode-immersive .greetingBat77{animation:greetingFlight77 5s ease-in-out infinite;transform-origin:127px 50px}
+.mode-immersive .greetingGhost77{animation:greetingFloat77 4s ease-in-out infinite}
+.mode-immersive .greetingPumpkin77,.mode-immersive .greetingEmblem77{animation:greetingGlow77 5s ease-in-out infinite}
+@keyframes greetingFlight77{0%,100%{transform:translate(-8px,0) rotate(-5deg)}50%{transform:translate(10px,-9px) rotate(5deg)}}
+@keyframes greetingFloat77{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes greetingGlow77{0%,100%{filter:drop-shadow(0 0 2px #ffac4455)}50%{filter:drop-shadow(0 0 10px #ffac4499)}}
+body.ary-light.signed64 #app .hello.greetingCard77{background:linear-gradient(110deg,#fff6ec 45%,#ebdcfa)!important;border-color:#b59ccf}
+body.ary-light .greetingCard77>.muted,body.ary-light .greetingCard77>h1{text-shadow:none}
+.worldMotionPaused77 .worldCore57,.seasonPaused71 .greetingScene77 *{animation-play-state:paused!important}
+.mode-lite .greetingScene77 *{animation:none!important}
+@media(max-width:600px){.signed64 #app .hello.greetingCard77{padding:20px 18px;min-height:172px}.greetingScene77{max-width:65%;height:160px;opacity:.6}.greetingCard77>.muted,.greetingCard77>h1{max-width:100%;text-shadow:0 2px 6px #081b35}.greetingScene77{mask-image:linear-gradient(90deg,transparent,#000 70%)}}
+@media(prefers-reduced-motion:reduce){.greetingScene77 *{animation:none!important}}
