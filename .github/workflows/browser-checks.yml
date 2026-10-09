@@ -2,7 +2,7 @@ name: App integration and browser checks
 
 on:
   push:
-    branches: [v54-real-data-foundation, ary-push-v90]
+    branches: [v54-real-data-foundation, ary-push-v90, ary-repairs-v91]
   pull_request:
     branches: [main]
 
