@@ -72,3 +72,14 @@ body.cover97 #app .mobileWelcome97 .control9 span,body.cover97 #app .mobileWelco
 body.cover97 #app .mobileWelcome97 .introAccount97{color:#777185!important}
 body.cover97 #app .mobileWelcome97 .introFooter97>small{color:#777185!important}
 }
+/* Original weather planet: a calm storm turns toward sunlight. */
+.sunGlow98{animation:sunBreathe98 4s ease-in-out infinite;transform-origin:198px 91px}
+.stormCloud98{animation:cloudDrift98 5s ease-in-out infinite}
+.lightning98{animation:lightningGlow98 3.5s ease-in-out infinite}
+.bat98,.batSmall98{animation:batFloat98 4.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.batSmall98{animation-delay:-2s}
+@media(max-width:900px){.mobileWelcome97[data-cover-season="halloween"] .artHalo97{background:radial-gradient(ellipse at 35% 40%,#e9defc65,transparent 60%),radial-gradient(ellipse at 75% 55%,#ffefd745,transparent 60%)}.mobileWelcome97[data-cover-season="halloween"] .introTag97{color:#837095!important}}
+@keyframes sunBreathe98{50%{transform:scale(1.045);opacity:.85}}
+@keyframes cloudDrift98{50%{transform:translateX(3px)}}
+@keyframes lightningGlow98{50%{opacity:.65}}
+@keyframes batFloat98{50%{transform:translateY(-4px) rotate(5deg)}}
