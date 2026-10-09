@@ -1,0 +1,40 @@
+/* Keep the compact mobile controls; give larger screens permanent navigation. */
+.top{align-items:flex-start!important;gap:12px}
+.top .brandWrap{flex:1;min-width:0;max-width:calc(100% - 112px)}
+.headerActions64{display:flex;align-items:center;gap:8px;flex:none;padding-top:8px}
+.headerActions64 .pill{display:grid;place-items:center;width:46px;height:46px;min-width:46px;padding:0!important;border:1px solid #4898c4aa;border-radius:16px;background:linear-gradient(135deg,#123158,#061931);color:#75e8ff;cursor:pointer}
+.headerActions64 .bell{font-size:24px}.settings64 svg{width:25px;height:25px;transition:transform .2s ease}
+.mode-immersive .settings64:hover svg{transform:rotate(35deg)}
+.headerActions64 .pill:hover{border-color:#55e4ff;box-shadow:0 0 18px #36dbff22}
+body.ary-light .headerActions64 .pill{background:#fff;color:#246194;border-color:#b8cee6}
+@media(max-width:359px){.headerActions64{gap:6px}.headerActions64 .pill{width:42px;height:44px;min-width:42px}.top .brandWrap{max-width:calc(100% - 100px)}.brandNeon59 .brandLetter59 b{font-size:23px!important}.brandCharm59{width:27px;font-size:25px}.brandSpark59{display:none}}
+@media(min-width:1000px){
+ body.signed64{--rail-left64:max(24px,calc((100vw - 1180px)/2));padding-bottom:24px!important}
+ body.signed64 #app{box-sizing:border-box;width:min(900px,calc(100% - 280px))!important;max-width:900px!important;margin-left:calc(var(--rail-left64) + 228px)!important;margin-right:24px!important;padding:28px 20px 40px!important}
+ body.signed64 #nav{position:fixed!important;inset:32px auto auto var(--rail-left64)!important;transform:none!important;width:200px!important;max-width:200px!important;height:auto!important;max-height:calc(100dvh - 64px);box-sizing:border-box;overflow-y:auto;display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px;padding:18px 12px!important;border-radius:24px;background:linear-gradient(165deg,#0d2445ee,#071124ee)!important;border:1px solid #549cc777!important;box-shadow:0 18px 48px #0003;z-index:50}
+ body.signed64 #nav::before{content:attr(data-title);display:block;padding:6px 12px 18px;color:#aec6e4;font-family:AryCinzel,Georgia,serif;font-size:18px;font-weight:700}
+ body.signed64 #nav::after{content:attr(data-note);display:block;padding:18px 12px 8px;border-top:1px solid #789ac644;color:#9eb4d3;font-size:12px;line-height:1.6;margin-top:10px}
+ body.signed64 #nav button{display:flex!important;align-items:center;justify-content:flex-start!important;gap:14px;flex:none!important;width:100%;min-height:56px;padding:12px 16px!important;border-radius:15px!important;font-size:14px!important;text-align:left;color:#bfd0e7!important}
+ body.signed64 #nav button i{display:inline-block;font-size:24px!important;min-width:24px;line-height:1;font-style:normal}
+ body.signed64 #nav button span{display:inline!important;font-size:14px!important}
+ body.signed64 #nav button.active{background:linear-gradient(110deg,#23519b77,#6848a744)!important;color:#8feaff!important;box-shadow:inset 3px 0 #48dfff}
+ body.signed64 #nav button::after{display:none!important}
+ body.signed64 #nav button:hover{background:#537ab52a!important;color:#fff!important}
+ body.signed64 .top .brandWrap{max-width:calc(100% - 132px)}
+ body.signed64 .headerActions64 .pill{width:52px;height:52px;min-width:52px}
+ body.signed64 .grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px}
+ body.signed64 .grid>.full{grid-column:1/-1!important}
+ body.signed64 .grid>.third{grid-column:auto!important;min-width:0}
+ body.signed64 .grid>.third .kpi{font-size:clamp(24px,2.7vw,34px)}
+ body.signed64 .adaptiveLinks61{gap:16px}
+ body.signed64 .adaptiveLinks61 button{min-height:100px}
+ body.signed64 .coach61>p{max-width:75ch}
+ body.signed64 .menuGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ body.signed64 .fab{bottom:28px!important;right:max(28px,calc((100vw - 1180px)/2))!important}
+ body.signed64.ary-light #nav{background:linear-gradient(165deg,#ffffffee,#eef4ffee)!important;border-color:#bacce3!important}
+ body.signed64.ary-light #nav::before,body.signed64.ary-light #nav::after{color:#526685}
+ body.signed64.ary-light #nav button{color:#405675!important}
+ body.signed64.ary-light #nav button.active{background:#dbeaff!important;color:#155394!important;box-shadow:inset 3px 0 #1671b9}
+ body.signed64.ary-light #nav button:hover{background:#e7f0fc!important;color:#172a4b!important}
+}
+@media(prefers-reduced-motion:reduce){.settings64 svg{transition:none!important;transform:none!important}}

@@ -467,11 +467,39 @@ async function check(engine, label, viewport) {
     await page.evaluate(()=>{s.mode='lite';save()});
     assert.equal(await page.locator('.pigBody63').evaluate(el=>getComputedStyle(el).animationName),'none','Lite pauses pig');
     await page.evaluate(state=>{Object.assign(s,state);save()},beforeRecurring63);
+    await navigate('home');
+    const settings64=page.locator('.headerActions64 .settings64'),bell64=page.locator('.headerActions64 .bell');
+    assert.ok(await settings64.isVisible(),'Header has a direct settings gear');
+    const gearBox64=await settings64.boundingBox(),bellBox64=await bell64.boundingBox();
+    assert.ok(gearBox64.x+gearBox64.width<=bellBox64.x,'Settings gear sits beside the bell');
+    assert.ok(gearBox64.width>=42&&gearBox64.height>=44,'Header controls have usable targets');
+    await settings64.click();
+    assert.ok(await page.locator('#modal .experience58').isVisible(),'Gear opens complete app preferences');
+    await page.locator('#modal [onclick="closeM()"]').click();
+    if(viewport.width>=1000){
+      const nav64=await page.locator('#nav').boundingBox(),app64=await page.locator('#app').boundingBox();
+      assert.ok(app64.width>700,'Desktop content uses available width');
+      assert.ok(nav64.x+nav64.width<app64.x,'Persistent rail is separate from the content');
+      assert.ok(nav64.y>=0&&nav64.y+nav64.height<=viewport.height,'All primary navigation fits the screen');
+      await page.locator('#nav [onclick="go(\'expenses\')"]').click();
+      assert.equal(await page.evaluate(()=>screen),'expenses');
+      await page.evaluate(()=>scrollTo(0,500));
+      await page.locator('#nav [onclick="go(\'home\')"]').click();
+      assert.equal(await page.evaluate(()=>screen),'home','Sidebar returns directly to Home');
+      assert.equal(await page.evaluate(()=>scrollY),0);
+      assert.equal(await page.locator('#nav .active').getAttribute('aria-current'),'page');
+    }else{
+      const nav64=await page.locator('#nav').boundingBox();
+      assert.ok(nav64.y>viewport.height/2,'Mobile keeps bottom navigation');
+    }
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Responsive header and navigation fit the viewport');
+    await page.screenshot({path:path.join(root,'browser-results',`${label}-navigation-v64.png`),fullPage:false});
     // A customer with an existing profile can open the complete public cover.
     const portalBefore=await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')));
     await page.goto(origin+'/#welcome',{waitUntil:'load'});
     await page.locator('.landing9').waitFor({state:'visible'});
     assert.equal(await page.locator('#nav').innerText(),'');
+    assert.equal(await page.locator('body.signed64').count(),0,'Public landing keeps its full layout');
     assert.equal(await page.evaluate(()=>s.income),portalBefore.income);
     assert.deepEqual(await page.evaluate(()=>s.debts),portalBefore.debts);
     await page.locator('.cta21').click();
