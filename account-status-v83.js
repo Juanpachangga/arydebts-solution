@@ -1,0 +1,5 @@
+(()=>{
+// Online account integration is deliberately not activated without a project.
+function paint(){if(!['signup','login'].includes(screen))return;const host=document.querySelector('#app .auth');if(!host||host.querySelector('.accountStatus83'))return;const x={es:{note:'Modo local: todavía no se verifica una cuenta en línea. No uses una contraseña real aquí.',continue:'Continuar en modo local'},en:{note:'Local mode: online account verification is not active yet. Do not use a real password here.',continue:'Continue in local mode'},pt:{note:'Modo local: a verificação de conta online ainda não está ativa. Não use uma senha real aqui.',continue:'Continuar no modo local'}}[s.locale==='en-US'?'en':s.locale==='pt-BR'?'pt':'es'];const button=host.querySelector('[onclick*="localAuth"]');if(!button)return;const note=document.createElement('p');note.className='muted accountStatus83';note.textContent=x.note;host.insertBefore(note,button);button.textContent=x.continue}
+const before=window.render;window.render=()=>{const r=before();paint();return r};render();
+})();

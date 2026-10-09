@@ -28,6 +28,8 @@ jobs:
           node-version: '24'
       - name: Check application integration
         run: node check-integration.cjs
+      - name: Check real account adapter contracts
+        run: node server/check-accounts-v83.cjs
       - name: Check assistant backend adapter with simulated transport
         run: node server/check-assistant.mjs
       - name: Check captcha server adapter with simulated transport
@@ -43,3 +45,31 @@ jobs:
           path: browser-results/
           retention-days: 7
           if-no-files-found: ignore
+
+  account-rls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    services:
+      database:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: disposable-ci-password
+          POSTGRES_DB: ary_rls_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: npm install --no-save --package-lock=false pg@8.16.3
+      - run: node server/check-account-rls-v83.mjs
+        env:
+          ARY_DISPOSABLE_RLS_TEST: 'yes'
+          ARY_TEST_DATABASE_URL: postgresql://postgres:disposable-ci-password@localhost:5432/ary_rls_test

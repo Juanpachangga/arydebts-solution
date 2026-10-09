@@ -1,0 +1,33 @@
+const assert=require('node:assert/strict');
+const api=require('../account-service-v83.js');
+const A='11111111-1111-4111-8111-111111111111',B='22222222-2222-4222-8222-222222222222';
+let user={id:A,email:'a@example.test',email_confirmed_at:'2026-10-09',user_metadata:{name:'A'}},calls=[],rows=new Map();
+const auth={getUser:async()=>({data:{user}}),signUp:async args=>{calls.push(['signup',args]);return {data:{session:null}}},signInWithPassword:async args=>{calls.push(['login',args]);return {data:{session:{}}}},resetPasswordForEmail:async(...args)=>{calls.push(['recover',args]);return {data:{}}},updateUser:async args=>({data:{user}}),signOut:async()=>({data:{}})};
+function from(){const filters={},q={kind:'read',value:null,select(){return q},eq(k,v){filters[k]=v;return q},insert(v){q.kind='insert';q.value=v;return q},update(v){q.kind='update';q.value=v;return q},delete(){q.kind='delete';return q},async maybeSingle(){return perform()},then(resolve,reject){return Promise.resolve(perform()).then(resolve,reject)}};function perform(){const id=q.kind==='insert'?q.value.user_id:filters.user_id;if(id!==user?.id)return {error:{code:'42501'}};const old=rows.get(id);if(q.kind==='read')return {data:old||null};if(q.kind==='insert'){if(old)return {error:{code:'23505'}};rows.set(id,{...q.value});return {data:rows.get(id)}}if(q.kind==='delete'){rows.delete(id);return {data:null}}if(!old||old.revision!==filters.revision)return {data:null};rows.set(id,{...old,...q.value});return {data:rows.get(id)}}return q}
+const service=api.create({auth,from},{redirectTo:'https://example.test/auth-callback'});
+const data={state:{debts:[],expenses:[],payments:[],calendarEvents:[],income:1000},profile:{name:'A'}};
+(async()=>{
+ await assert.rejects(()=>service.signup({name:'A',email:'invalid',password:'long-password'}),{code:'invalid_email'});
+ await assert.rejects(()=>service.signup({name:'A',email:'a@example.test',password:'short'}),{code:'invalid_password'});
+ assert.equal(calls.length,0);
+ assert.deepEqual(await service.signup({name:'A',email:'a@example.test',password:'long-password'}),{confirmationRequired:true});
+ assert.equal(calls[0][1].options.emailRedirectTo,'https://example.test/auth-callback');
+ assert.equal((await service.login({email:'a@example.test',password:'legacy'})).id,A);
+ user.email_confirmed_at=null;await assert.rejects(()=>service.read(),{code:'verified_account_required'});user.email_confirmed_at='2026-10-09';
+ user.is_anonymous=true;await assert.rejects(()=>service.identity(),{code:'verified_account_required'});user.is_anonymous=false;
+ let read=await service.read();assert.equal(read.revision,null);
+ const first=await service.write(data,read);assert.equal(first.revision,1);
+ await assert.rejects(()=>service.write(data,read),{code:'write_conflict'});
+ read=await service.read();const updated=await service.write({...data,state:{...data.state,income:1200}},read);assert.equal(updated.revision,2);
+ await assert.rejects(()=>service.write(data,read),{code:'write_conflict'});
+ user={...user,id:B};await assert.rejects(()=>service.write(data,updated),{code:'account_changed'});assert.equal((await service.read()).payload,null);
+ await assert.rejects(()=>service.deleteData(A),{code:'account_changed'});
+ user={...user,id:A};assert.equal((await service.read()).payload.state.income,1200);
+ assert.throws(()=>api.validatePayload({...data,profile:{password:'secret'}}),{code:'sensitive_data'});
+ assert.throws(()=>api.validatePayload({...data,state:[]}),{code:'invalid_data'});
+ assert.throws(()=>api.validatePayload({...data,profile:{bio:'x'.repeat(270000)}}),{code:'data_too_large'});
+ assert.throws(()=>api.create({auth,from},{redirectTo:'http://example.test'}),{code:'invalid_redirect'});
+ await service.recover('a@example.test');await service.changePassword('new-long-password');await service.logout();
+ auth.getUser=async()=>({error:{message:'Sensitive internal error'}});await assert.rejects(()=>service.identity(),{code:'service_error'});
+ console.log('PASS account adapter contracts: validation, email confirmation, verified identity, account changes, optimistic conflicts, payload limits, password recovery and generic errors (simulated SDK).');
+})().catch(e=>{console.error(e);process.exitCode=1});

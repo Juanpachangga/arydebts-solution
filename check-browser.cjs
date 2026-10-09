@@ -103,6 +103,8 @@ async function check(engine, label, viewport) {
     assert.ok((await page.locator('#app').innerText()).includes('Este espaço é seu'));
     assert.ok((await page.locator('#app').innerText()).includes('Senha'));
     assert.doesNotMatch(await page.locator('#app').innerText(), /Contraseña|Correo electrónico|Crear mi espacio/);
+    assert.match(await page.locator('.accountStatus83').innerText(),/Modo local/);
+    assert.equal(await page.locator('[onclick="localAuth(\'signup\')"]').innerText(),'Continuar no modo local');
     await page.locator('#an').fill('Initial User');
     await page.locator('#ae').fill('initial@example.com');
     await page.locator('#ap').fill('synthetic-test-password');
