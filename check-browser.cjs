@@ -288,6 +288,7 @@ async function check(engine, label, viewport) {
         observer.disconnect();return count;
       });
       assert.equal(mutations, 0, 'Idle preferences screen does not continuously rewrite the DOM');
+      await page.locator('.moreDetails94').first().locator('summary').click();
       for(let i=0;i<3;i++) {
         await page.locator('#app button').filter({hasText:/Preferencias de la app|App preferences|Preferências do app/}).click();
         await page.locator('#modal [onclick="closeM()"]').click();
