@@ -22,7 +22,7 @@ window.aryDueReminders60=(now=new Date(),horizon=7)=>{
   if(!(Number(d.balance)>0)||dateNumber(d.due)===null)continue;
   const minimum=Math.max(0,Number(d.min)||0),paid=(s.payments||[]).filter(p=>Number(p.debtId)===Number(d.id)&&String(p.date||'').slice(0,7)===d.due.slice(0,7)&&dateNumber(p.date)!==null&&p.date<=today).reduce((sum,p)=>sum+Math.max(0,Number(p.amount)||0),0);
   if(minimum>0&&paid>=minimum)continue;
-  add({source:'debt',id:d.id,name:d.name||'',icon:d.icon||'',amount:Math.max(0,minimum-paid)},d.due);
+  add({source:'debt',id:d.id,name:d.name||'',icon:iconFor(d.name,'deuda'),amount:Math.max(0,minimum-paid)},d.due);
  }
  for(const e of s.calendarEvents||[]){if(e.kind!=='reminder'||e.completed)continue;add({source:'event',id:e.id,name:e.name||'',icon:e.icon||'',amount:Number(e.amount)||0},e.date)}
  return out.sort((a,b)=>a.days-b.days||String(a.name).localeCompare(String(b.name)));

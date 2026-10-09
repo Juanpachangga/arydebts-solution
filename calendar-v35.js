@@ -3,7 +3,7 @@ const x=t();
 const payments=Array.isArray(s.payments)?s.payments:[];
 return [
 ...(window.aryCalendarExpenses82?aryCalendarExpenses82(k):[]),
-...(s.debts||[]).filter(d=>d.due===k&&(Number(d.balance)||0)>0).map(d=>({type:'debt',id:d.id,name:d.name,amount:+d.min||0,icon:d.icon||iconFor(d.name,'deuda'),note:d.apr?`${d.apr}% APR · ${x.min}`:x.min})),
+...(s.debts||[]).filter(d=>d.due===k&&(Number(d.balance)||0)>0).map(d=>({type:'debt',id:d.id,name:d.name,amount:+d.min||0,icon:iconFor(d.name,'deuda'),note:d.apr?`${d.apr}% APR · ${x.min}`:x.min})),
 ...calendarEvents().filter(e=>e.date===k).map(e=>({...e,type:'event'})),
 ...payments.filter(p=>p.date===k&&Number(p.amount)>0).map(p=>({type:'ledgerPayment',id:p.id,name:p.debtName||x.payment,amount:Number(p.amount),icon:'💸',note:p.note||''}))
 ]},monthName=()=>new Intl.DateTimeFormat(loc(),{month:'long',year:'numeric'}).format(view),dateName=k=>new Intl.DateTimeFormat(loc(),{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date(k+'T12:00:00'));function cells(){const y=view.getFullYear(),m=view.getMonth(),first=new Date(y,m,1).getDay(),count=new Date(y,m+1,0).getDate();let out='';for(let i=0;i<first;i++)out+='<span class="calBlank35"></span>';for(let d=1;d<=count;d++){const k=key(y,m,d),ev=eventsFor(k),cls=[k===today()?'today':'',k===selected?'selected':'',ev.length?'hasEvent':''].filter(Boolean).join(' ');out+=`<button class="calDay35 ${cls}" onclick="aryPickDay35('${k}')"><b>${d}</b>${ev.length?`<i>${ev.length}</i>`:''}</button>`}return out}function detail(){
