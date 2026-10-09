@@ -4,7 +4,7 @@ const valid=k=>typeof k==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(k)&&key(new Date(
 const positive=v=>Math.max(0,Number(v)||0);
 const copy=()=>({es:{late:'Vencido',today:'Hoy',pending:'Pendiente',reserve:'Reserva recurrente'},en:{late:'Overdue',today:'Today',pending:'Pending',reserve:'Recurring reserve'},pt:{late:'Vencido',today:'Hoje',pending:'Pendente',reserve:'Reserva recorrente'}}[s.locale==='en-US'?'en':s.locale==='pt-BR'?'pt':'es']);
 // Only use explicitly entered dates. Frequency alone never invents a due date.
-window.aryHomeActivity82=(now=new Date())=>{
+window.aryHomeActivity82=(now=new Date(),limit=4)=>{
  const today=key(now),out=[];
  for(const d of s.debts||[]){
   if(!valid(d.due)||positive(d.balance)<=0)continue;
@@ -24,7 +24,7 @@ window.aryHomeActivity82=(now=new Date())=>{
   if(positive(e.amount)>0&&recorded>=positive(e.amount))continue;
   out.push({source:'expense',id:e.id,date:e.date,name:e.name,amount:Math.max(0,positive(e.amount)-recorded),icon:e.icon||iconFor(e.name,e.cat)});
  }
- return out.sort((a,b)=>a.date.localeCompare(b.date)||String(a.name||'').localeCompare(String(b.name||''))).slice(0,4);
+ return out.sort((a,b)=>a.date.localeCompare(b.date)||String(a.name||'').localeCompare(String(b.name||''))).slice(0,limit);
 };
 window.aryActivityDate82=date=>{const x=copy(),today=key(new Date()),label=new Intl.DateTimeFormat(s.locale||'es-US',{month:'short',day:'numeric',year:'numeric'}).format(new Date(date+'T12:00:00'));return (date<today?x.late+' · ':date===today?x.today+' · ':'')+label};
 window.aryCalendarExpenses82=date=>(s.expenses||[]).filter(e=>window.aryRecurring63&&aryRecurring63(e)&&valid(e.date)&&e.date===date).map(e=>({type:'expense',id:e.id,name:e.name,amount:positive(e.amount),icon:e.icon||iconFor(e.name,e.cat),note:copy().reserve+' · '+aryFrequencyLabel63(e.frequency)}));
