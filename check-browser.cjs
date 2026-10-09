@@ -131,6 +131,27 @@ async function check(engine, label, viewport) {
     await page.locator('[onclick="saveExpense(null)"]').click();
     assert.ok((await page.locator('#app').innerText()).includes('Initial groceries'));
     assert.ok((await page.locator('#app').innerText()).includes('Adicionar mais gastos'),'Existing expenses change add label');
+    const setupLocale88=await page.evaluate(()=>s.locale);
+    for(const width of [320,390,1280]){
+      await page.setViewportSize({width,height:844});
+      for(const locale of ['es-US','en-US','pt-BR']){
+        await page.evaluate(locale=>{s.locale=locale;render()},locale);
+        const layout=await page.locator('.setupRow88').first().evaluate(row=>{const amount=row.querySelector(':scope>div:last-child>b').getBoundingClientRect(),actions=[...row.querySelectorAll('.rowActions button')].map(el=>el.getBoundingClientRect());return {amountBottom:amount.bottom,buttons:actions.map(r=>({x:r.x,y:r.y,width:r.width,height:r.height})),overflow:document.documentElement.scrollWidth-innerWidth}});
+        assert.equal(layout.buttons.length,2,'Onboarding separates both actions');
+        assert.ok(Math.abs(layout.buttons[0].y-layout.buttons[1].y)<1,'Edit and delete stay aligned');
+        assert.ok(Math.abs(layout.buttons[0].width-layout.buttons[1].width)<1,'Actions have balanced widths');
+        for(const button of layout.buttons)assert.ok(button.height>=44,'Actions remain usable');
+        if(width<700)assert.ok(layout.buttons[0].y>=layout.amountBottom,'Amount sits above the actions');
+        assert.ok(layout.overflow<=1,'Onboarding row fits viewport');
+        if(width===390&&locale==='es-US')await page.screenshot({path:path.join(root,'browser-results',`${label}-setup-expenses-v88.png`),fullPage:false});
+      }
+    }
+    await page.setViewportSize(viewport);
+    await page.evaluate(locale=>{s.locale=locale;render()},setupLocale88);
+    await page.locator('[onclick^="expenseForm("]').first().click();
+    assert.equal(await page.locator('#n').inputValue(),'Initial groceries','Edit opens the selected onboarding expense');
+    await page.evaluate(()=>closeM());
+
     await page.locator('[onclick^="deleteExpense("]').click();
     assert.equal(await page.evaluate(()=>s.expenses.length),0,'Onboarding expense can be removed');
     await page.locator('[onclick="expenseForm()"]').click();
