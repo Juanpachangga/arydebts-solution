@@ -5,7 +5,7 @@ body.authPortal99 #app{width:100%!important;max-width:none!important;padding:0!i
 body.authPortal99 #app .authForm99{box-sizing:border-box;width:100%;max-width:480px;margin:0 auto!important;min-height:100svh;padding:calc(18px + env(safe-area-inset-top)) 24px calc(28px + env(safe-area-inset-bottom));background:none!important;border:0!important;box-shadow:none!important;text-align:left;color:#17192c!important;font-family:Inter,system-ui,-apple-system,sans-serif!important}
 body.authPortal99 #app .authForm99,body.authPortal99 #app .authForm99 *{-webkit-text-fill-color:currentColor!important}
 body.authPortal99 #app .authForm99>.btn:first-child{align-self:flex-start;width:auto!important;min-width:72px;min-height:44px;padding:8px 12px;margin:0 0 26px;border:1px solid #e5e3ee!important;border-radius:999px;background:#fff!important;color:#595469!important;box-shadow:none!important;font-size:calc(12px * var(--ui-scale,1))!important}
-body.authPortal99 #app .authForm99 .logoMark,body.authPortal99 #app .authForm99 .socials,body.authPortal99 #app .authForm99 .socials+p{display:none!important}
+body.authPortal99 #app .authForm99 .logoMark{display:none!important}
 body.authPortal99 #app .authBrand99{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 16px;color:#756487!important;font-size:13px;font-weight:800;letter-spacing:.5px}
 body.authPortal99 #app .authBrand99 span{color:inherit!important}
 body.authPortal99 #app .authBrand99 i{font-style:normal;font-size:19px;letter-spacing:3px}
@@ -22,3 +22,17 @@ body.authPortal99 #app .authForm99>.primary:after{display:none!important}
 @media(max-width:360px){body.authPortal99 #app .authForm99{padding-left:20px;padding-right:20px}}
 
 body.authPortal99 #nav{display:none!important}
+
+body.authPortal99 #app .authSocial100{margin:26px 0 0;text-align:center}
+body.authPortal99 #app .authSocialTitle100{display:flex;align-items:center;gap:12px;margin:0 0 16px;color:#84798e!important;font-size:12px}
+body.authPortal99 #app .authSocialTitle100:before,body.authPortal99 #app .authSocialTitle100:after{content:"";flex:1;height:1px;background:#e7e1ef}
+body.authPortal99 #app .authSocialButtons100{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+body.authPortal99 #app .authSocialButton100{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-width:0;min-height:76px;padding:11px 3px;border:1px solid #e6dfee;border-radius:17px;background:#fff;color:#595068!important;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px #8971a508}
+body.authPortal99 #app .authSocialButton100 .socialIcon55{display:grid;place-items:center;width:25px;height:25px;margin:0;color:#222034}
+body.authPortal99 #app .authSocialButton100 svg{display:block;width:24px;height:24px;fill:currentColor}
+body.authPortal99 #app .authSocialButton100 .socialFacebook55{color:#1877f2}
+body.authPortal99 #app .authSocialButton100 small{font-size:10px;font-weight:650;color:inherit!important;white-space:nowrap}
+body.authPortal99 #app .authSocialButton100:hover{background:#faf7ff;border-color:#c6b4e1}
+body.authPortal99 #app .authSocialButton100:focus-visible{outline:2px solid #9d87cd;outline-offset:3px}
+body.authPortal99 #app .authSocialHint100{display:block!important;margin:13px 0 0!important;color:#8a8095!important;font-size:11px!important;line-height:1.5;text-align:center}
+@media(max-width:360px){body.authPortal99 #app .authSocialButtons100{gap:5px}body.authPortal99 #app .authSocialButton100 small{font-size:9px}}
