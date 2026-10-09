@@ -20,3 +20,5 @@ body.authPortal99 #app .authForm99>.primary{width:100%;min-height:54px;padding:1
 body.authPortal99 #app .authForm99>.primary:after{display:none!important}
 @media(min-width:901px){body.authPortal99 #app .authForm99{padding-top:36px}}
 @media(max-width:360px){body.authPortal99 #app .authForm99{padding-left:20px;padding-right:20px}}
+
+body.authPortal99 #nav{display:none!important}
