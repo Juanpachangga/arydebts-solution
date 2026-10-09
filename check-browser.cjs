@@ -40,6 +40,22 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('.brandEcho56').getAttribute('aria-hidden'),'true','Decorative second brand stays out of spoken text');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-typography.png`),fullPage:true});
     assert.equal(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).animationName),'worldTurn57','Planet has a gentle turn');
+    // Light mode reveals the seasonal artwork through the cover, across regions.
+    await page.evaluate(()=>{window._seasonTest73=aryBackdropSeason71;arySetTheme46('light')});
+    for(const season of ['halloween','christmas','newyear','birthday','usa','colombia','brazil']){
+      await page.evaluate(season=>{window.aryBackdropSeason71=()=>season;aryUpdateBackdrop71()},season);
+      assert.equal(await page.locator('body').getAttribute('data-season71'),season);
+      assert.equal(await page.locator('.seasonArt71').count(),4);
+      assert.equal(await page.locator('.landing55').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)','The cover cannot hide the seasonal scene behind a white rectangle');
+      assert.equal(await page.locator('.seasonBackdrop71').evaluate(el=>getComputedStyle(el).opacity),'1');
+      assert.ok(await page.locator('.seasonArt71').first().isVisible());
+      if(season==='halloween'||season==='christmas'&&viewport.width>1000){
+        await page.evaluate(()=>Promise.all(document.getAnimations().filter(a=>{const timing=a.effect.getComputedTiming();return timing.iterations!==Infinity}).map(a=>a.finished.catch(()=>{}))));
+        await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+        await page.screenshot({path:path.join(root,'browser-results',`${label}-light-${season}-v73.png`),fullPage:true});
+      }
+    }
+    await page.evaluate(()=>{window.aryBackdropSeason71=window._seasonTest73;arySetTheme46('dark');aryUpdateBackdrop71()});
     const turnBefore=await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).transform);
     await page.waitForFunction(before=>getComputedStyle(document.querySelector('.worldCore57')).transform!==before,turnBefore);
     assert.notEqual(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).transform),turnBefore,'Planet moves over time');

@@ -29,7 +29,7 @@ const host=document.createElement('div');host.className='seasonBackdrop71';host.
 for(const name of ['seasonGlow71','seasonMist71']){const layer=document.createElement('div');layer.className=name;host.appendChild(layer)}
 const art=document.createElement('div');art.className='seasonMotifs71';host.appendChild(art);document.body.appendChild(host);
 let last='';
-window.aryUpdateBackdrop71=()=>{const season=aryBackdropSeason71();document.body.dataset.season71=season;host.dataset.season=season;if(last===season)return;last=season;art.innerHTML=motifs[season].map((shape,i)=>`<span class="seasonArt71 art71-${i}"><svg viewBox="0 0 100 100" aria-hidden="true">${shapes[shape]}</svg></span>`).join('')};
+window.aryUpdateBackdrop71=()=>{const season=aryBackdropSeason71();document.body.dataset.season71=season;host.dataset.season=season;if(last===season)return;last=season;art.innerHTML=motifs[season].map((shape,i)=>`<span class="seasonArt71 art71-${i}" data-shape="${shape}"><svg viewBox="0 0 100 100" aria-hidden="true">${shapes[shape]}</svg></span>`).join('')};
 const before=window.render;window.render=()=>{const result=before();aryUpdateBackdrop71();return result};
 const refresh=()=>{document.body.classList.toggle('seasonPaused71',document.hidden);if(!document.hidden)aryUpdateBackdrop71()};
 document.addEventListener('visibilitychange',refresh);window.addEventListener('focus',refresh);

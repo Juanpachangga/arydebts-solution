@@ -1,0 +1,14 @@
+/* The light cover must reveal the same seasonal scene as the rest of the app. */
+html[data-ary-theme="light"] body.ary-light .landing9.landing55{background:transparent!important}
+body.ary-light .seasonBackdrop71{opacity:1;--season-motif-alpha71:.4}
+body.ary-light .palette68{opacity:.55}
+body.ary-light .seasonGlow71{background:radial-gradient(ellipse at 6% 35%,color-mix(in srgb,var(--season-a) 42%,transparent),transparent 58%),radial-gradient(ellipse at 94% 75%,color-mix(in srgb,var(--season-b) 40%,transparent),transparent 58%)}
+body.ary-light .seasonMist71{background:radial-gradient(ellipse at 55% 5%,color-mix(in srgb,var(--season-c) 28%,transparent),transparent 60%)}
+body.ary-light .seasonArt71[data-shape="ghost"] svg>path{fill:#9563bd}
+body.ary-light .seasonArt71[data-shape="bat"] svg>path{fill:#8250bd}
+body.ary-light .seasonArt71[data-shape="star"] svg>path:first-child{fill:#d99521}
+body.ary-light.mode-lite .seasonArt71{opacity:.22}
+body.ary-light.highContrast72 .seasonBackdrop71,body.ary-light.highContrast72 .palette68{opacity:.18}
+body.ary-light .landing55 .landingPromise55,body.ary-light .landing55 .features21 small{color:#34465e!important}
+body.ary-light .landing55 .account21 button{color:#086786!important;-webkit-text-fill-color:#086786!important}
+@media(prefers-reduced-motion:reduce){body.ary-light .seasonArt71{opacity:.22}}
