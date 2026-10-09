@@ -9,3 +9,5 @@
 - Detalles discretos y distintos por sección durante Halloween: calabaza, luna, murciélago, sombrero y estrella. Se respeta el selector de temporada existente.
 
 Comprobaciones: integración existente, máquina de estados de la guía y frases, y comportamiento real en Chromium/WebKit con móvil, tablet y escritorio, incluyendo texto grande a 320 px, formularios, traducciones y movimiento reducido. Los datos financieros y los mecanismos de recuperación V92 conservan sus contratos.
+
+Reparación del encabezado: los refrescos de notificaciones conservan la insignia y el texto accesible de la campana cuando sus valores no han cambiado, evitando reescrituras innecesarias del DOM.
