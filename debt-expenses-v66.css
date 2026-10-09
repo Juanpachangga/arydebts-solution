@@ -2,3 +2,6 @@
 .debtExpenses66{margin-top:20px!important}.debtExpenses66 h2{font-size:22px;margin:0 0 12px}.debtExpenses66 p,.debtChoice66 p,.debtNote66{line-height:1.55}.paymentPeriod66{display:block;font-size:12px;margin-top:5px}.debtChoice66{padding:12px;margin:14px 0;border:1px solid #479bc466;border-radius:16px;background:linear-gradient(125deg,#334fa625,#af38c519)}.debtChoice66 p{margin:0 0 10px}.debtChoice66 .btn{margin:0!important}.debtNote66{padding:12px;border-radius:12px;background:#7e5cf019;font-size:12px}
 @media(min-width:1000px){.row .ico{font-size:42px!important;min-width:68px;min-height:68px}}
 @media(max-width:359px){.row .ico{font-size:32px!important;min-width:52px;min-height:52px}}
+
+.debtExpenses66 .rowActions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;margin-top:8px}.debtExpenses66 .rowActions .btn{white-space:nowrap;min-width:62px;padding:7px 10px!important}
+@media(max-width:600px){.debtExpenses66 .row{display:grid;grid-template-columns:1fr;gap:12px}.debtExpenses66 .rowleft{width:100%;min-width:0}.debtExpenses66 .rowleft>div{min-width:0}.debtExpenses66 .row>div:last-child{text-align:right}.debtExpenses66 .rowActions{justify-content:flex-start}.debtExpenses66 .rowActions .btn:first-child{white-space:normal}.debtExpenses66 .rowleft .muted{line-height:1.5}}
