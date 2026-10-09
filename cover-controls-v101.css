@@ -1,7 +1,7 @@
 /* Compact, aligned cover settings. */
 @media(max-width:900px){
 body.cover97 #app .mobileWelcome97 .landingToolbar55{align-items:flex-start!important;gap:14px!important}
-body.cover97 #app .mobileWelcome97 .landingSwitches80{display:grid!important;grid-template-columns:1fr!important;gap:0!important;width:119px;flex:none;padding:3px 7px!important;border:1px solid #e3deed!important;border-radius:13px!important;background:#f6f3fb!important;box-shadow:none!important}
+body.cover97 #app .mobileWelcome97 .landingSwitches80{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:214px;flex:none;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
 body.cover97 #app .mobileWelcome97 .landingSwitches80 .control9{position:static!important;display:flex!important;align-items:center!important;justify-content:space-between!important;width:100%!important;min-width:0!important;min-height:36px!important;padding:5px 2px!important;gap:7px!important;font-size:10px!important;line-height:1.2!important;border-radius:7px!important;background:none!important;border:0!important}
 body.cover97 #app .mobileWelcome97 .darkLabel9{display:block!important}
 body.cover97 #app .mobileWelcome97 .landingSwitches80 i{position:relative!important;display:block!important;flex:none!important;width:27px!important;height:17px!important;border:1px solid #c3bad7!important;border-radius:20px!important;background:#dfd9e9!important;box-shadow:none!important}
@@ -11,7 +11,7 @@ body.cover97 #app .mobileWelcome97 .landingSwitches80 [aria-checked="true"] i:af
 html.coverRoot97[data-ary-theme="dark"],body.cover97.ary-dark,body.cover97.ary-dark #app .mobileWelcome97{background:#17152b!important;color:#f5f1ff!important;color-scheme:dark!important}
 body.cover97.ary-dark #app .mobileWelcome97 .introTitle97{color:#f5f1ff!important;-webkit-text-fill-color:currentColor!important}
 body.cover97.ary-dark #app .mobileWelcome97 .introNote97,body.cover97.ary-dark #app .mobileWelcome97 .introTag97,body.cover97.ary-dark #app .mobileWelcome97 .introAccount97,body.cover97.ary-dark #app .mobileWelcome97 .introFooter97>small,body.cover97.ary-dark #app .mobileWelcome97 .control9,body.cover97.ary-dark #app .mobileWelcome97 .introBack97,body.cover97.ary-dark #app .mobileWelcome97 .introSkip97{color:#c7bddc!important}
-body.cover97.ary-dark #app .mobileWelcome97 .landingSwitches80{background:#242039!important;border-color:#49405f!important}
+body.cover97.ary-dark #app .mobileWelcome97 .landingSwitches80{background:transparent!important;border-color:transparent!important}
 body.cover97.ary-dark #app .mobileWelcome97 .introAccount97 button{color:#c7b1ff!important}
 body.cover97.ary-dark #app .mobileWelcome97 .langMenu22{background:#242039!important;border-color:#49405f!important}
 body.cover97.ary-dark #app .mobileWelcome97 .langMenu22 button{color:#f5f1ff!important}
@@ -19,3 +19,6 @@ body.cover97.ary-dark #app .mobileWelcome97 .introProgress97>span{background:#3b
 }
 
 .aryLogo101{display:block;width:30px;height:30px;object-fit:contain}
+
+@media(max-width:900px){body.cover97 #app .mobileWelcome97 .landingToolbar55{align-items:center!important}body.cover97 #app .mobileWelcome97 .landingSwitches80 .control9{min-height:44px!important;padding:7px 5px!important;border:1px solid #e3deed!important;border-radius:11px!important;background:#f6f3fb!important}body.cover97.ary-dark #app .mobileWelcome97 .landingSwitches80 .control9{background:#242039!important;border-color:#49405f!important}}
+@media(max-width:360px){body.cover97 #app .mobileWelcome97 .landingToolbar55{gap:6px!important}body.cover97 #app .mobileWelcome97 .landingSwitches80{width:190px;gap:6px!important}body.cover97 #app .mobileWelcome97 .langControl9{font-size:10px!important;padding:4px!important}}
