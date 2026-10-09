@@ -5,3 +5,5 @@
 @media(max-width:600px){.recurringAnts68 .row{display:grid;grid-template-columns:1fr;gap:12px}.recurringAnts68 .rowActions{justify-content:flex-start}.recurringAnts68 .btn{white-space:normal}}
 @media(prefers-reduced-motion:reduce){.palette68 span{animation:none!important}}
 .row:active{transform:none!important}.rowActions{position:relative;z-index:2;flex-shrink:0}.rowActions button{position:relative;min-width:32px;min-height:32px;flex-shrink:0;pointer-events:auto}.rowActions button:active{transform:none!important}
+
+#app .homeGreeting69>h1{font-size:clamp(30px,3.4vw,44px)!important;line-height:1.22;margin:12px 0 24px;overflow-wrap:anywhere;text-wrap:balance}#app .homeGreeting69>.muted{display:block;font-size:clamp(15px,1.4vw,18px)!important;line-height:1.6;max-width:75ch}
