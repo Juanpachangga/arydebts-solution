@@ -274,6 +274,13 @@ async function check(engine, label, viewport) {
       });
       await page.waitForFunction(expected => getComputedStyle(document.body).color === expected, theme==='light'?'rgb(17, 24, 39)':'rgb(244, 248, 255)');
       assert.equal(await page.locator('body').evaluate(el => getComputedStyle(el).color), theme==='light'?'rgb(17, 24, 39)':'rgb(244, 248, 255)', 'Theme sets readable foreground');
+      const navColors85=await page.locator('#nav button').evaluateAll(buttons=>buttons.map(button=>{const color=getComputedStyle(button).color;return {active:button.classList.contains('active'),color,label:getComputedStyle(button.querySelector('span')).color,icon:getComputedStyle(button.querySelector('i')).color}}));
+      assert.equal(navColors85.length,5);
+      for(const item of navColors85){
+        assert.equal(item.color,theme==='light'?(item.active?'rgb(22, 78, 140)':'rgb(48, 65, 95)'):(item.active?'rgb(130, 232, 255)':'rgb(201, 216, 237)'),'Navigation keeps its theme foreground');
+        assert.equal(item.label,item.color,'Navigation labels inherit readable foreground');
+        assert.equal(item.icon,item.color,'Navigation icons inherit readable foreground');
+      }
       await page.screenshot({ path:path.join(root,'browser-results', `${label}-${theme}.png`), fullPage:true });
     }
     await navigate('profile');

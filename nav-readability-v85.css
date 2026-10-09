@@ -1,0 +1,11 @@
+/* Navigation is outside #app: set theme colors on the controls and inherit
+   them in their labels, rather than borrowing global span/b rules. */
+html[data-ary-theme="dark"] body.signed64 #nav{background:#07162b!important}
+html[data-ary-theme="light"] body.signed64 #nav{background:#f8fbff!important}
+html[data-ary-theme="dark"] body.signed64 #nav button{color:#c9d8ed!important}
+html[data-ary-theme="light"] body.signed64 #nav button{color:#30415f!important}
+html[data-ary-theme="dark"] body.signed64 #nav button.active{color:#82e8ff!important;background:#143552!important}
+html[data-ary-theme="light"] body.signed64 #nav button.active{color:#164e8c!important;background:#e1edff!important}
+body.signed64 #nav button :is(span,i,b){color:inherit!important;-webkit-text-fill-color:currentColor!important;opacity:1!important}
+body.signed64 #nav button{opacity:1!important;-webkit-text-fill-color:currentColor!important}
+body.signed64 #nav button:focus-visible{outline:3px solid currentColor;outline-offset:-3px}
