@@ -333,6 +333,10 @@ async function check(engine, label, viewport) {
     await page.evaluate(()=>aryProfile46());
 
     await page.locator('#aryName46').fill('Draft stays');
+    await page.locator('#selfNote72').fill('One step at a time');
+    await page.locator('[onclick="arySaveNote72()"]').click();
+    assert.equal(await page.locator('#modal').isVisible(),true,'Saving a note keeps the profile open');
+    assert.equal(await page.locator('#aryName46').inputValue(),'Draft stays');
     // A browser-created image exercises actual decoding, canvas and upload events.
     const png = await page.evaluate(() => { const c=document.createElement('canvas'); c.width=1200;c.height=900;c.getContext('2d').fillRect(0,0,1200,900);return c.toDataURL('image/png').split(',')[1]; });
     await page.locator('#aryPhoto46').setInputFiles({ name:'synthetic.png', mimeType:'image/png', buffer:Buffer.from(png,'base64') });
@@ -707,6 +711,13 @@ async function check(engine, label, viewport) {
     assert.equal(await page.evaluate(()=>JSON.stringify([s.income,s.debts,s.expenses,s.payments])),financial72);
     await page.evaluate(()=>arySearch72());await page.locator('#searchQuery72').fill('arbol');await page.locator('.searchResult72').click();
     assert.ok(await page.locator('#b').isVisible(),'Search opens the matching debt');await page.evaluate(()=>closeM());
+    await page.evaluate(()=>aryAppearance72());
+    await page.locator('#palette72').focus();
+    await page.locator('#palette72').selectOption('violet');
+    assert.equal(await page.evaluate(()=>document.activeElement.id),'palette72','Changing style preserves keyboard focus');
+    await page.locator('[onclick="aryResetUI72()"]').click();
+    assert.equal(await page.locator('#palette72').inputValue(),'season');
+    await page.evaluate(()=>closeM());
     await page.evaluate(()=>{arySetUI72('size',1.3);arySetUI72('palette','ocean');arySetUI72('brand','amber');arySetUI72('contrast','true');go('more')});
     assert.equal(await page.locator('body').getAttribute('data-palette72'),'ocean');assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('highContrast72')));
     assert.ok(await page.locator('.communityLink72').last().isVisible());
