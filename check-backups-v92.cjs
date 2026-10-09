@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict'),{create,KEY,HISTORY}=require('./backups-v92.js');
+const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v)};
+const state=n=>JSON.stringify({income:n,debts:[],expenses:[],payments:[],calendarEvents:[]});
+let warnings=[];const b=create(storage,storage.setItem,k=>warnings.push(k));
+b.write(KEY,state(0));for(let i=1;i<=12;i++)b.write(KEY,state(i));
+assert.equal(b.read().length,8);assert.equal(JSON.parse(b.read()[0].raw).income,11);
+b.write(KEY,state(12));assert.equal(b.read().length,8);
+b.restore(1);assert.equal(JSON.parse(storage.getItem(KEY)).income,10);
+assert.equal(JSON.parse(b.read()[0].raw).income,12);
+assert.equal(JSON.parse(b.export()).state.income,10);
+map.set(HISTORY,'corrupt');assert.deepEqual(b.read(),[]);b.capture('bad');assert.deepEqual(b.read(),[]);
+map.set(HISTORY,JSON.stringify([{at:'date',raw:state(4)}]));
+const failing=create(storage,(k,v)=>{if(k===HISTORY)throw Error('quota');storage.setItem(k,v)},k=>warnings.push(k));
+failing.write(KEY,state(99));assert.equal(JSON.parse(storage.getItem(KEY)).income,99);assert.equal(warnings.at(-1),'backup');assert.equal(JSON.parse(failing.read()[0].raw).income,4);
+const blocked=create(storage,()=>{throw Error('quota')},k=>warnings.push(k));
+assert.throws(()=>blocked.write(KEY,state(100)));assert.equal(JSON.parse(storage.getItem(KEY)).income,99);assert.equal(warnings.at(-1),'save');
+console.log('PASS: bounded history, deduplication, recovery, export, corruption and quota failures');
