@@ -4,7 +4,7 @@
 
 /* V72: keep the original sky still; move only the masked planet and cloth. */
 .heroPhoto55,.mode-immersive .heroPhoto55{opacity:1!important}.worldDawn57{display:none!important}
-.mode-immersive .worldCore57{animation:worldTurn57 7s ease-in-out infinite!important;transform-origin:48% 51%;transform-box:view-box}
-@keyframes worldTurn57{0%,100%{transform:rotate(-1.8deg) scaleX(.99)}50%{transform:rotate(1.8deg) scaleX(1.01)}}
+.mode-immersive .worldCore57{animation:worldTurn57 7s ease-in-out infinite!important;transform-origin:48.644% 52.233%;transform-box:view-box}
+@keyframes worldTurn57{0%,100%{transform:rotate(-1.8deg)}50%{transform:rotate(1.8deg)}}
 .mode-lite .worldCore57{animation:none!important}
 @media(prefers-reduced-motion:reduce){.worldCore57{animation:none!important}}

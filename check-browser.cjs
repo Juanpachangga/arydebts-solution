@@ -41,6 +41,16 @@ async function check(engine, label, viewport) {
     await page.screenshot({path:path.join(root,'browser-results',`${label}-typography.png`),fullPage:true});
     assert.equal(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).animationName),'worldTurn57','Planet has a gentle turn');
     assert.equal(await page.locator('.worldCore57').evaluate(el=>getComputedStyle(el).animationDuration),'7s');
+    assert.equal(await page.locator('.worldCore57').evaluate(el=>el.tagName.toLowerCase()),'g','The planet and its mask rotate as one piece');
+    const coverage87=await page.locator('#planetMask72 ellipse').evaluate(el=>{const cx=+el.getAttribute('cx'),cy=+el.getAttribute('cy'),rx=+el.getAttribute('rx'),ry=+el.getAttribute('ry');return [[865,625],[1000,625],[865,760],[1000,760],[825,775],[970,775],[825,860],[970,860]].map(([x,y])=>Math.hypot((x-cx)/rx,(y-cy)/ry))});
+    assert.ok(coverage87.every(radius=>radius<.97),'The complete house and car stay inside the opaque moving planet');
+    for(const time of [0,3500]){
+      const rigid87=await page.locator('.worldCore57').evaluate((el,time)=>{const a=el.getAnimations()[0];a.pause();a.currentTime=time;const m=new DOMMatrix(getComputedStyle(el).transform);return {x:Math.hypot(m.a,m.b),y:Math.hypot(m.c,m.d),dot:m.a*m.c+m.b*m.d}},time);
+      assert.ok(Math.abs(rigid87.x-1)<.00001&&Math.abs(rigid87.y-1)<.00001&&Math.abs(rigid87.dot)<.00001,'Planet rotation does not stretch the house');
+      await page.locator('.landingVisual55').screenshot({path:path.join(root,'browser-results',`${label}-whole-planet-${time}-v87.png`)});
+    }
+    await page.locator('.worldCore57').evaluate(el=>el.getAnimations()[0].play());
+
     // Light mode reveals the seasonal artwork through the cover, across regions.
     await page.evaluate(()=>{window._seasonTest73=aryBackdropSeason71;arySetTheme46('light')});
     for(const season of ['halloween','christmas','newyear','birthday','usa','colombia','brazil']){
