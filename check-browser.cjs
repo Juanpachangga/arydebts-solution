@@ -722,7 +722,16 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('body').getAttribute('data-palette72'),'ocean');assert.ok(await page.locator('body').evaluate(el=>el.classList.contains('highContrast72')));
     assert.ok(await page.locator('.communityLink72').last().isVisible());
     await page.screenshot({path:path.join(root,'browser-results',`${label}-workspace-v72.png`),fullPage:true});
-    await navigate('feedback');await page.locator('#feedbackText72').fill('A clear app <thanks>');await page.locator('[onclick="arySaveFeedback72()"]').click();
+    await navigate('feedback');
+    await page.locator('#feedbackText72').fill('Preserve this draft');
+    await page.evaluate(()=>{window.originalStorage76=Storage.prototype.setItem;Storage.prototype.setItem=function(){throw new DOMException('Full','QuotaExceededError')}});
+    try{
+      await page.locator('[onclick="arySaveFeedback72()"]').click();
+      assert.equal(await page.locator('#feedbackText72').inputValue(),'Preserve this draft');
+      assert.match(await page.locator('#toast').innerText(),/No se pudo guardar|Could not save|Não foi possível salvar/);
+      assert.equal(await page.locator('.feedbackCard72').count(),0);
+    }finally{await page.evaluate(()=>{Storage.prototype.setItem=window.originalStorage76;delete window.originalStorage76})}
+    await page.locator('#feedbackText72').fill('A clear app <thanks>');await page.locator('[onclick="arySaveFeedback72()"]').click();
     assert.match(await page.locator('.feedbackCard72').innerText(),/A clear app <thanks>/);
     await page.evaluate(()=>{arySetUI72('size',1);arySetUI72('contrast','false');arySetUI72('palette','season');arySetUI72('brand','season');go('home')});
     await page.screenshot({path:path.join(root,'browser-results',`${label}-progress-v72.png`),fullPage:true});
