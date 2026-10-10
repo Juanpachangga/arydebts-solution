@@ -2,9 +2,9 @@
 'use strict';
 const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const C={
- es:{saveError:'No se pudo guardar. Tus datos siguen como antes.',deleteExpense:'¿Eliminar este gasto? Esta acción no se puede deshacer.',deletedExpense:'Gasto eliminado'},
- en:{saveError:'Could not save. Your data remains unchanged.',deleteExpense:'Delete this expense? This action cannot be undone.',deletedExpense:'Expense deleted'},
- pt:{saveError:'Não foi possível salvar. Seus dados continuam como antes.',deleteExpense:'Excluir esta despesa? Esta ação não pode ser desfeita.',deletedExpense:'Despesa excluída'}
+ es:{saveError:'No se pudo guardar. Tus datos siguen como antes.',deleteExpense:'¿Eliminar este gasto? Esta acción no se puede deshacer.',deletedExpense:'Gasto eliminado',deleteDebt:'¿Eliminar esta deuda? Esta acción no se puede deshacer.',deletedDebt:'Deuda eliminada'},
+ en:{saveError:'Could not save. Your data remains unchanged.',deleteExpense:'Delete this expense? This action cannot be undone.',deletedExpense:'Expense deleted',deleteDebt:'Delete this debt? This action cannot be undone.',deletedDebt:'Debt deleted'},
+ pt:{saveError:'Não foi possível salvar. Seus dados continuam como antes.',deleteExpense:'Excluir esta despesa? Esta ação não pode ser desfeita.',deletedExpense:'Despesa excluída',deleteDebt:'Excluir esta dívida? Esta ação não pode ser desfeita.',deletedDebt:'Dívida excluída'}
 };
 const t=()=>C[lang()];
 const commit=change=>typeof window.aryCommitFinancial109==='function'&&window.aryCommitFinancial109(change);
@@ -20,6 +20,24 @@ window.deleteExpense=function(id){
  }
  if(typeof render==='function')render();
  if(typeof toast==='function')toast(t().deletedExpense);
+ return true;
+};
+
+window.deleteDebt=function(id){
+ const key=String(id),exists=(s.debts||[]).some(x=>String(x.id)===key);
+ if(!exists)return false;
+ const onboarding=typeof screen==='string'&&screen==='setupDebts';
+ if(!onboarding&&!confirm(t().deleteDebt))return false;
+ if(!commit(next=>{
+  next.debts=(next.debts||[]).filter(x=>String(x.id)!==key);
+  // Payments are debt-owned records; removing them prevents orphan financial history.
+  next.payments=(next.payments||[]).filter(x=>String(x.debtId)!==key);
+ })){
+  if(typeof toast==='function')toast(t().saveError);
+  return false;
+ }
+ if(typeof render==='function')render();
+ if(typeof toast==='function')toast(t().deletedDebt);
  return true;
 };
 
