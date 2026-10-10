@@ -56,7 +56,7 @@ window.moveNav=function(index,direction){
 
 window.aryUniqueId120=function(...collections){
  const used=new Set();
- for(const collection of collections.flat())for(const item of Array.isArray(collection)?collection:[])if(item&&item.id!==undefined&&item.id!==null)used.add(String(item.id));
+ for(const collection of collections)for(const item of Array.isArray(collection)?collection:[])if(item&&item.id!==undefined&&item.id!==null)used.add(String(item.id));
  let id=Date.now();while(used.has(String(id)))id++;return id;
 };
 
