@@ -36,12 +36,12 @@ if(typeof oldBack==='function'&&!oldBack._ary163){
 window.aryNavigationIntegrity163={valid};
 })();
 
-// V181 — prevent stale guide starts from stealing routes and keep interaction safe.
+// V182 — automatic first-use guidance yields to real app interaction.
 (()=>{
  if(document.getElementById('aryGuideInteractionSafetyLoader180'))return;
  const script=document.createElement('script');
  script.id='aryGuideInteractionSafetyLoader180';
- script.src='guide-interaction-safety-v180.js?v=181.1';
+ script.src='guide-interaction-safety-v180.js?v=182.1';
  script.async=false;
  document.body.appendChild(script);
 })();
