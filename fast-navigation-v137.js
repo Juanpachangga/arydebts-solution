@@ -22,7 +22,6 @@ if(typeof baseGo==='function'&&!baseGo._aryFastNav137){
  wrapped._aryFastNav137=true;
  window.go=wrapped;
 }
-// Ignore accidental double activation on bottom/tab navigation without changing normal single taps.
 let lastNavTap=0,lastNavTarget='';
 document.addEventListener('click',e=>{
  if(guideActive())return;
@@ -34,4 +33,14 @@ document.addEventListener('click',e=>{
  lastNavTarget=key;lastNavTap=now;
 },{capture:true});
 window.aryFastNavigation137={active:true};
+})();
+
+// V138 — preserve recurrence/date/source metadata in late atomic expense saves.
+(()=>{
+ if(document.getElementById('aryExpenseRecurrenceIntegrityLoader138'))return;
+ const script=document.createElement('script');
+ script.id='aryExpenseRecurrenceIntegrityLoader138';
+ script.src='expense-recurrence-integrity-v138.js?v=138.1';
+ script.async=false;
+ document.body.appendChild(script);
 })();
