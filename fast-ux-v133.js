@@ -38,7 +38,6 @@ function syncFab(){
  fab=document.createElement('button');fab.id=FAB;fab.type='button';fab.textContent='+';fab.setAttribute('aria-label',t().label);fab.title=t().label;fab.onclick=quickSheet;document.body.appendChild(fab);
 }
 function hook(name,after,before){const fn=window[name];if(typeof fn!=='function'||fn._aryFast133)return;const wrapped=function(){if(before)before();const out=fn.apply(this,arguments);if(after)requestAnimationFrame(after);return out};wrapped._aryFast133=true;window[name]=wrapped}
-// Update only on actual app lifecycle events instead of watching the entire DOM.
 hook('render',syncFab);
 hook('aryStartFullGuide125',null,()=>document.getElementById(FAB)?.remove());
 hook('aryFullGuideFinish125',syncFab);
@@ -46,17 +45,16 @@ hook('logout',syncFab);
 hook('localAuth',syncFab);
 window.addEventListener('hashchange',()=>requestAnimationFrame(syncFab));
 document.addEventListener('click',e=>{if(e.target?.closest?.('.ary125skip'))setTimeout(syncFab,80)},{capture:true});
-// Escape safely dismisses an open sheet/modal on desktop.
 window.addEventListener('keydown',e=>{if(e.key!=='Escape'||guideActive())return;const m=document.getElementById('modal');if(m&&!m.classList.contains('hidden')&&typeof closeM==='function'){e.preventDefault();closeM()}});
 ensureStyle();syncFab();
 })();
 
-// V134 — make financial forms faster to fill without changing their save logic.
+// V134/V139 — make forms fast and load the corrected automatic-guide continuation layer.
 (()=>{
  if(document.getElementById('aryFastFormsLoader134'))return;
  const script=document.createElement('script');
  script.id='aryFastFormsLoader134';
- script.src='fast-forms-v134.js?v=134.1';
+ script.src='fast-forms-v134.js?v=134.2';
  script.async=false;
  document.body.appendChild(script);
 })();
