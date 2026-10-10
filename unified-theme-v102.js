@@ -133,3 +133,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V123 — use globally collision-safe IDs for debts and calendar events.
+(()=>{
+ if(document.getElementById('aryRecordIdsLoader123'))return;
+ const script=document.createElement('script');
+ script.id='aryRecordIdsLoader123';
+ script.src='record-ids-v123.js?v=123.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
