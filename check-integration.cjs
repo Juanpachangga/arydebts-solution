@@ -335,3 +335,11 @@ assert.match(direct111.nodes.app.innerHTML,/Tu ajuste prioritario/);assert.match
 assert.equal(direct111.run('aryExpenseCuts68()[0].potential'),24);
 for(const [dx,dy,result]of [[0,-100,1],[0,100,-1],[-100,0,0],[100,0,0],[5,-20,0],[100,100,0]])assert.equal(direct111.run(`aryIntroGesture111(${dx},${dy})`),result);
 console.log('PASS direct adjustment uses actual optional spending, excludes essentials/future records, selects biggest actionable cut and recognizes only vertical cover swipes');
+
+const review112=boot(true);review112.run("s.expenses=[{id:1,name:'Café',cat:'Hormiga',amount:0.1,date:localDate()},{id:2,name:'Cafe',cat:'Hormiga',amount:0.2,date:localDate()},{id:3,name:'Invalid recurring',cat:'Hormiga',amount:1000,frequency:'daily',date:localDate().slice(0,7)+'-99'},{id:4,name:'Old coffee',cat:'Hormiga',amount:1000,date:'2000-01-01'}]");
+assert.equal(review112.run('aryExpenseCuts68().length'),1);assert.equal(review112.run('aryExpenseCuts68()[0].monthly'),0.3);assert.equal(review112.run('aryExpenseCuts68()[0].potential'),0.06);
+assert.deepEqual(JSON.parse(review112.run('JSON.stringify(aryExpenseCuts68()[0].ids)')),[1,2]);
+const beforeReview112=review112.run('JSON.stringify(s.expenses)');
+for(const locale of ['es-US','en-US','pt-BR']){review112.run(`s.locale='${locale}';aryReviewAdjustment112(1)`);assert.match(review112.nodes.modal.innerHTML,/adjustmentReview112/);assert.match(review112.nodes.modal.innerHTML,/aryEditAdjustmentRecord112\(0\)/);assert.match(review112.nodes.modal.innerHTML,/aryEditAdjustmentRecord112\(1\)/);assert.doesNotMatch(review112.nodes.modal.innerHTML,/Invalid recurring|Old coffee/)}
+assert.equal(review112.run('JSON.stringify(s.expenses)'),beforeReview112,'Review does not edit financial records');
+console.log('PASS grouped optional expense review, exact decimal totals, source IDs, valid dates, translations and unchanged financial records');
