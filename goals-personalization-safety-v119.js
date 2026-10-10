@@ -8,11 +8,12 @@ const copy={
 const t=()=>copy[lang()];
 const commit=change=>typeof window.aryCommitFinancial109==='function'&&window.aryCommitFinancial109(change);
 const parseAmount=value=>typeof parseNum==='function'?parseNum(value):Number(value);
+const addMoney=(a,b)=>window.aryMoney108&&typeof aryMoney108.add==='function'?aryMoney108.add(a,b):(Number(a)||0)+(Number(b)||0);
 
 window.saveSaving=function(){
  const raw=String(document.getElementById('sv')?.value||'').trim(),value=parseAmount(raw);
  if(raw===''||!Number.isFinite(value)||value<=0){if(typeof toast==='function')toast(t().invalidSaving);return false;}
- if(!commit(next=>{next.savings=Math.max(0,Number(next.savings)||0)+value;})){if(typeof toast==='function')toast(t().saveError);return false;}
+ if(!commit(next=>{next.savings=Math.max(0,addMoney(Number(next.savings)||0,value));})){if(typeof toast==='function')toast(t().saveError);return false;}
  if(typeof closeM==='function')closeM();
  if(typeof render==='function')render();
  if(typeof toast==='function')toast(t().savingSaved);
