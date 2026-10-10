@@ -12,7 +12,11 @@ if(typeof baseGo==='function'&&!baseGo._aryFastNav137){
  const wrapped=function(route){
    if(guideActive())return baseGo.apply(this,arguments);
    const dest=typeof route==='string'?route:'';
-   if(dest&&typeof screen==='string'&&dest===screen&&!modalOpen())return false;
+   if(dest&&typeof screen==='string'&&dest===screen&&!modalOpen()){
+     // Preserve the fast path without freezing locale/data changes on the current route.
+     if(typeof render==='function')render();
+     return true;
+   }
    return baseGo.apply(this,arguments);
  };
  wrapped._aryFastNav137=true;
