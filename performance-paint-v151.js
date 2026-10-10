@@ -38,7 +38,7 @@ window.aryPerformancePaint151={sync,interactivePaintSafe:true};
  if(document.getElementById('aryHomeProgressIntegrityLoader154'))return;
  const script=document.createElement('script');
  script.id='aryHomeProgressIntegrityLoader154';
- script.src='home-progress-integrity-v154.js?v=154.1';
+ script.src='home-progress-integrity-v154.js?v=154.2';
  script.async=false;
  document.body.appendChild(script);
 })();
