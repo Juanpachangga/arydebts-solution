@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
-const CLOUD='.ary125cloud';
-let userAuto=false,internalToggle=false,explicitStart=false,abortStale=false,abortRaf=0;
+const CLOUD='.ary125cloud',GLOBAL='arydebts-guide-v125';
+let userAuto=false,internalToggle=false,explicitStart=false,manualSession=false,autoSession=false,abortStale=false,abortRaf=0;
 const status=()=>{try{return window.aryFullGuideStatus125?.()||null}catch{return null}};
 const routeNow=()=>{try{return typeof screen==='string'?screen:null}catch{return null}};
 const rawToggle=window.aryFullGuideToggleAuto125;
@@ -15,27 +15,30 @@ function pauseAuto(){
 }
 function keepGuidePending(){
  try{window.aryGuideLifecycle128?.resetCurrent?.()}catch{}
- try{localStorage.removeItem('arydebts-guide-v125')}catch{}
+ try{localStorage.removeItem(GLOBAL)}catch{}
 }
-function cancelStale(){
+function softenAutoOverlay(){
+ // Automatic first-use guidance must never trap an already-open form.
+ document.getElementById('aryGuideBlock127')?.style.setProperty('pointer-events','none','important');
+}
+function abortPendingGuide(){
  cancelAnimationFrame(abortRaf);abortRaf=0;
- if(!abortStale)return false;
+ if(!autoSession&&!abortStale)return false;
  const skip=document.querySelector('.ary125skip');
  if(skip){
-  abortStale=false;
+  autoSession=false;abortStale=false;userAuto=false;
   skip.click();
-  // V125 treats Skip as completion. This abort is different: the person never
-  // saw the guide, so restore pending state for the next legitimate Home visit.
   keepGuidePending();
   return true;
  }
- abortRaf=requestAnimationFrame(()=>{
-  abortRaf=0;
-  const late=document.querySelector('.ary125skip');
-  if(late){abortStale=false;late.click();keepGuidePending()}
- });
+ // If V127 mounted its blocker before V125 finished painting the hidden skip,
+ // stop it from swallowing the user's current gesture while cleanup catches up.
+ softenAutoOverlay();
+ document.querySelectorAll(CLOUD).forEach(node=>node.style.setProperty('pointer-events','none','important'));
+ abortRaf=requestAnimationFrame(()=>abortPendingGuide());
  return false;
 }
+function modalOpen(){const modal=document.getElementById('modal');return !!modal&&!modal.classList.contains('hidden')&&getComputedStyle(modal).display!=='none'}
 
 if(typeof rawToggle==='function'&&!rawToggle._ary180){
  const wrapped=function(){
@@ -43,53 +46,50 @@ if(typeof rawToggle==='function'&&!rawToggle._ary180){
   if(!internalToggle)userAuto=!!status()?.automatic;
   return out;
  };
- wrapped._ary180=true;
- wrapped._ary180raw=rawToggle;
- window.aryFullGuideToggleAuto125=wrapped;
+ wrapped._ary180=true;wrapped._ary180raw=rawToggle;window.aryFullGuideToggleAuto125=wrapped;
 }
 
-// A first-use timer can become stale if the person leaves Home before it fires.
-// Do not let that old timer steal the current screen. Manual guide starts still work.
+// A delayed first-use start may fire after the person already left Home.
 const rawGo=window.go;
-if(typeof rawGo==='function'&&!rawGo._ary181){
+if(typeof rawGo==='function'&&!rawGo._ary182){
  const wrapped=function(destination){
   const st=status(),current=routeNow();
-  if(!explicitStart&&!userAuto&&destination==='home'&&current&&current!=='home'&&st?.active&&st.index===0){
-   abortStale=true;
-   pauseAuto();
-   cancelStale();
-   return false;
+  if(!explicitStart&&!manualSession&&destination==='home'&&current&&current!=='home'&&st?.active&&st.index===0){
+   autoSession=true;abortStale=true;pauseAuto();abortPendingGuide();return false;
   }
   return rawGo.apply(this,arguments);
  };
- wrapped._ary181=true;wrapped._ary181raw=rawGo;window.go=wrapped;
+ wrapped._ary182=true;wrapped._ary182raw=rawGo;window.go=wrapped;
 }
 
+// Calls through the public API are deliberate replays. Internal V125 first-use
+// starts do not pass through this wrapper, so they can be classified separately.
 const rawStart=window.aryStartFullGuide125;
-if(typeof rawStart==='function'&&!rawStart._ary180){
+if(typeof rawStart==='function'&&!rawStart._ary182){
  const wrapped=function(){
-  userAuto=false;abortStale=false;explicitStart=true;
+  userAuto=false;autoSession=false;abortStale=false;manualSession=true;explicitStart=true;
   let out;
   try{out=rawStart.apply(this,arguments)}finally{explicitStart=false}
   requestAnimationFrame(()=>{if(!userAuto)pauseAuto()});
   return out;
  };
- wrapped._ary180=true;
- window.aryStartFullGuide125=wrapped;
+ wrapped._ary182=true;wrapped._ary182raw=rawStart;window.aryStartFullGuide125=wrapped;
 }
 
 function guideControl(target){return target?.closest?.('.ary125cloud,.ary140cancelTop,.ary139confirm')}
 function userInteraction(event){
  const st=status();
- if(!userAuto||!st?.active||!st.automatic)return;
+ if(!st?.active)return;
  if(guideControl(event?.target))return;
- userAuto=false;
- pauseAuto();
+ // A person working in the app has priority over unsolicited first-use guidance.
+ if(autoSession){abortPendingGuide();return}
+ // Deliberately opened guide: keep it, just stop automatic advancement.
+ if(st.automatic){userAuto=false;pauseAuto()}
 }
 for(const ev of ['pointerdown','touchstart','focusin','input'])document.addEventListener(ev,userInteraction,{capture:true,passive:ev!=='input'&&ev!=='focusin'});
 window.addEventListener('wheel',userInteraction,{capture:true,passive:true});
-window.addEventListener('scroll',()=>{if(userAuto){userAuto=false;pauseAuto()}},{passive:true});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&status()?.automatic){userAuto=false;pauseAuto()}});
+window.addEventListener('scroll',event=>userInteraction(event),{passive:true});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&status()?.active){if(autoSession)abortPendingGuide();else if(status()?.automatic){userAuto=false;pauseAuto()}}});
 
 // WebKit can coalesce rapid fill/input work around modal enhancement. Keep the
 // live debt/expense icon tied directly to the current field value as a fallback.
@@ -100,22 +100,24 @@ document.addEventListener('input',event=>{
  window.aryPreviewIcon96(input,debt?'deuda':undefined);
 },{capture:true});
 
-// V125 can start itself from a delayed first-use hook. Watching only direct body children
-// lets us catch that one guide card without observing the application subtree.
+// Classify each newly mounted V125 card. Direct body observation is intentionally
+// narrow: no application subtree scanning and no render loop.
 const observer=new MutationObserver(records=>{
- if(abortStale){cancelStale();return}
- if(userAuto)return;
  const st=status();
- if(!st?.active||!st.automatic)return;
- for(const record of records){
-  for(const node of record.addedNodes){
-   if(node?.nodeType===1&&(node.matches?.(CLOUD)||node.querySelector?.(CLOUD))){pauseAuto();return}
-  }
- }
+ if(!st?.active){manualSession=false;autoSession=false;abortStale=false;return}
+ let added=false;
+ for(const record of records)for(const node of record.addedNodes){if(node?.nodeType===1&&(node.matches?.(CLOUD)||node.querySelector?.(CLOUD))){added=true;break}}
+ if(!added)return;
+ if(abortStale){autoSession=true;pauseAuto();abortPendingGuide();return}
+ if(!manualSession){autoSession=true;pauseAuto();softenAutoOverlay();if(modalOpen())abortPendingGuide()}
 });
 if(document.body)observer.observe(document.body,{childList:true});
 
-// If V180 loads while a first-use guide is already visible, normalize it immediately.
-pauseAuto();
-window.aryGuideInteractionSafety180={status:()=>({...status(),userAuto,abortStale}),pause:()=>{userAuto=false;return pauseAuto()}};
+// Modal visibility is the strongest signal that real work has begun. If an
+// automatic guide races in while a form is open, retire it immediately.
+const modal=document.getElementById('modal');
+if(modal)new MutationObserver(()=>{if(autoSession&&modalOpen())abortPendingGuide()}).observe(modal,{attributes:true,attributeFilter:['class','style','aria-hidden']});
+
+if(status()?.active&&document.querySelector(CLOUD)){autoSession=true;pauseAuto();softenAutoOverlay();if(modalOpen())abortPendingGuide()}
+window.aryGuideInteractionSafety180={status:()=>({...status(),userAuto,manualSession,autoSession,abortStale}),pause:()=>{userAuto=false;return pauseAuto()},yield:abortPendingGuide};
 })();
