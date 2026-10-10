@@ -34,6 +34,7 @@ const server=http.createServer(async(req,res)=>{try{const file=path.resolve(root
   await page.evaluate(()=>{closeM();s.locale='es-CO';s.currency='COP';s.expenses=[];s.debts=[];s.calendarEvents=[];s.payments=[];go('expenses')});
   await page.locator('[onclick="expenseForm()"]').click();await page.locator('#n').fill('Gas mensual');await page.locator('#b').fill('200');await page.locator('#expenseFrequency63').selectOption('monthly');await page.locator('#edate').fill('');await page.locator('[onclick="saveExpense(null)"]').click();
   await page.locator('[onclick^="aryRecordRecurringExpense63("]').click();await page.locator('#b').fill('120');await page.locator('[onclick="saveExpense(null)"]').click();assert.equal(await page.evaluate(()=>aryRealData54.snapshot().actualExpenses),120,'Recurring payment keeps the entered amount');
+  await page.evaluate(()=>go('income'));await page.locator('[onclick="aryIncomeForm45()"]').click();await page.locator('#inc45').fill('3000');await page.locator('#freq45').selectOption('quarterly');await page.locator('[onclick="arySaveIncome45()"]').click();assert.equal(await page.evaluate(()=>s.incomeFrequency),'quarterly');assert.equal(await page.evaluate(()=>aryRealData54.snapshot().income),1000,'Quarterly income uses a monthly average');
   assert.deepEqual(errors,[]);await browser.close();browser=null;
   console.log('PASS '+name+': summary consent, busy repaint, sign-out abort, cleared conversation, cancellable next session, same-route locale and theme');
  }

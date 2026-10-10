@@ -16,7 +16,7 @@ const copy={
 const t=()=>copy[lang()];
 const commit=change=>typeof window.aryCommitFinancial109==='function'&&window.aryCommitFinancial109(change);
 const parseAmount=value=>typeof window.parseNum==='function'?window.parseNum(value):typeof parseNum==='function'?parseNum(value):Number(value);
-const validFrequency=value=>['weekly','biweekly','monthly'].includes(value)?value:'monthly';
+const validFrequency=value=>['daily','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual'].includes(value)?value:'monthly';
 
 function atomicDeleteDebt(id){
  const debt=(s.debts||[]).find(d=>String(d.id)===String(id));
