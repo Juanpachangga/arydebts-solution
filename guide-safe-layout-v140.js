@@ -40,3 +40,13 @@ document.addEventListener('scroll',()=>{if(active())sync()},true);
 window.aryGuideSafeLayout140={sync};
 ensureStyle();sync();
 })();
+
+// V141 — reset deep scroll between guide sections and prevent pointer/control overlap.
+(()=>{
+ if(document.getElementById('aryGuideScrollStabilityLoader141'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideScrollStabilityLoader141';
+ script.src='guide-scroll-stability-v141.js?v=141.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
