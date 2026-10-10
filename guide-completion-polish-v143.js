@@ -58,3 +58,13 @@ const obs=new MutationObserver(()=>requestAnimationFrame(sync));obs.observe(docu
 window.aryGuideCompletion143={plans:missingKeys,finishHome};
 sync();
 })();
+
+// V144 — simplify the progress header/tips and use a lighter guide on mobile devices.
+(()=>{
+ if(document.getElementById('aryMobilePerformanceLoader144'))return;
+ const script=document.createElement('script');
+ script.id='aryMobilePerformanceLoader144';
+ script.src='mobile-performance-v144.js?v=144.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
