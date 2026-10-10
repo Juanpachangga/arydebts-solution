@@ -14,4 +14,5 @@ const failing=create(storage,(k,v)=>{if(k===HISTORY)throw Error('quota');storage
 failing.write(KEY,state(99));assert.equal(JSON.parse(storage.getItem(KEY)).income,99);assert.equal(warnings.at(-1),'backup');assert.equal(JSON.parse(failing.read()[0].raw).income,4);
 const blocked=create(storage,()=>{throw Error('quota')},k=>warnings.push(k));
 assert.throws(()=>blocked.write(KEY,state(100)));assert.equal(JSON.parse(storage.getItem(KEY)).income,99);assert.equal(warnings.at(-1),'save');
+map.set('arydebts-repair-original-v104',JSON.stringify([{at:'date',raw:'{broken'}]));assert.equal(JSON.parse(b.export()).repairedOriginals[0].raw,'{broken');
 console.log('PASS: bounded history, deduplication, recovery, export, corruption and quota failures');

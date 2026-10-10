@@ -109,7 +109,7 @@ async function check(engine, label, viewport) {
     await page.screenshot({path:path.join(root,'browser-results',`${label}-landing-dark.png`),fullPage:true});
     }else{
       assert.equal(await page.locator('.mobileWelcome97').count(),1);
-      assert.equal(await page.locator('body.cover97').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(252, 252, 255)');
+      for(const theme of ['dark','light','dark']){await page.evaluate(theme=>arySetTheme46(theme),theme);assert.equal(await page.locator('body.cover97').evaluate(el=>getComputedStyle(el).backgroundColor),theme==='dark'?'rgb(23, 21, 43)':'rgb(252, 252, 255)');}
       await page.evaluate(()=>aryIntroStep97(4));
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     }
@@ -932,10 +932,11 @@ async function check(engine, label, viewport) {
   await fs.mkdir(path.join(root,'browser-results'), { recursive:true });
   await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
   try {
+    const failures=[];
     for (const [engine,name] of [[chromium,'chromium'],[webkit,'webkit']]) {
-      for (const [size,viewport] of [['desktop',{width:1280,height:900}],['mobile',{width:390,height:844}]]) {
-        await check(engine, `${name}-${size}`, viewport);
-      }
+      const results=await Promise.allSettled([['desktop',{width:1280,height:900}],['mobile',{width:390,height:844}]].map(([size,viewport])=>check(engine,`${name}-${size}`,viewport)));
+      for(const result of results)if(result.status==='rejected')failures.push(result.reason);
     }
+    if(failures.length)throw new AggregateError(failures,'Browser regression checks failed');
   } finally { server.close(); }
 })().catch(error => { console.error(error); process.exitCode=1; });

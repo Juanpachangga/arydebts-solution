@@ -11,7 +11,8 @@ function normalize(value,defaults){
  if(!['light','dark'].includes(state.theme))state.theme=defaults.theme;
  if(!['immersive','lite'].includes(state.mode))state.mode=defaults.mode;
  if(!['monthly','weekly','biweekly'].includes(state.incomeFrequency))state.incomeFrequency=defaults.incomeFrequency;
- try{if(typeof state.locale!=='string'||typeof state.currency!=='string'||! /^[A-Z]{3}$/.test(state.currency))throw Error();new Intl.NumberFormat(state.locale,{style:'currency',currency:state.currency});}catch{state.locale=defaults.locale;state.currency=defaults.currency;}
+ try{if(typeof state.locale!=='string')throw Error();new Intl.NumberFormat(state.locale);}catch{state.locale=defaults.locale;}
+ if(typeof state.currency!=='string'||! /^[A-Z]{3}$/.test(state.currency))state.currency=defaults.currency;
  return state;
 }
 function load(storage,defaults){
