@@ -51,3 +51,13 @@ window.aryPerformancePaint151={sync};
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V155 — validate real calendar dates and keep calendar writes atomic.
+(()=>{
+ if(document.getElementById('aryCalendarIntegrityLoader155'))return;
+ const script=document.createElement('script');
+ script.id='aryCalendarIntegrityLoader155';
+ script.src='calendar-integrity-v155.js?v=155.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
