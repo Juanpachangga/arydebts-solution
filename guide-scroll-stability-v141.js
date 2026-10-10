@@ -43,12 +43,12 @@ window.aryGuideScrollStability141={sync,targetScrollOwner:'v125'};
 ensureStyle();sync();
 })();
 
-// V142 — keep V126 extra guide steps isolated from the main V125 auto/keyboard engine.
+// V142 — compatibility marker after V126 was folded into V125.
 (()=>{
  if(document.getElementById('aryGuideExtraStabilityLoader142'))return;
  const script=document.createElement('script');
  script.id='aryGuideExtraStabilityLoader142';
- script.src='guide-extra-stability-v142.js?v=142.2';
+ script.src='guide-extra-stability-v142.js?v=142.3';
  script.async=false;
  document.body.appendChild(script);
 })();
