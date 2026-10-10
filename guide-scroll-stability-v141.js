@@ -1,6 +1,7 @@
 (()=>{
 'use strict';
 const STYLE='aryGuideScrollStabilityStyle141';
+const mobile=()=>window.matchMedia?.('(max-width:820px),(pointer:coarse)')?.matches||false;
 let lastScreen=typeof screen==='string'?screen:'',lastIndex=-1,raf=0;
 function active(){try{return !!window.aryFullGuideStatus125?.()?.active||!!document.querySelector('.ary126node.ary125cloud')}catch{return false}}
 function ensureStyle(){if(document.getElementById(STYLE))return;const st=document.createElement('style');st.id=STYLE;st.textContent=`
@@ -9,6 +10,7 @@ function ensureStyle(){if(document.getElementById(STYLE))return;const st=documen
 `;document.head.appendChild(st)}
 function overlap(a,b,pad=8){return !(a.right+pad<b.left||b.right+pad<a.left||a.bottom+pad<b.top||b.bottom+pad<a.top)}
 function cleanArrow(){
+ if(mobile())return;
  const cloud=document.querySelector('.ary125cloud'),focus=document.querySelector('.ary125focus'),line=document.querySelector('.ary130link');
  if(!line)return;
  if(!cloud||!focus){line.remove();return}
@@ -33,8 +35,9 @@ function resetOnSectionChange(){
  if(st&&st.index!==lastIndex){lastIndex=st.index;const cloud=document.querySelector('.ary125cloud');if(cloud)cloud.scrollTop=0}
 }
 function sync(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{ensureStyle();if(!active())return;resetOnSectionChange();cleanArrow();keepControlsVisible()})}
-const obs=new MutationObserver(sync);obs.observe(document.documentElement,{subtree:true,childList:true});
-document.addEventListener('scroll',()=>{if(active())sync()},true);
+const obs=new MutationObserver(list=>{if(list.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.matches?.('.ary125cloud,.ary125focus,.ary126node')||n.querySelector?.('.ary125cloud,.ary125focus,.ary126node')))))sync()});
+obs.observe(document.body||document.documentElement,{subtree:false,childList:true});
+if(!mobile())document.addEventListener('scroll',()=>{if(active())sync()},true);
 for(const ev of ['resize','orientationchange'])window.addEventListener(ev,sync,{passive:true});
 window.visualViewport?.addEventListener('resize',sync,{passive:true});
 window.aryGuideScrollStability141={sync};
@@ -46,7 +49,7 @@ ensureStyle();sync();
  if(document.getElementById('aryGuideExtraStabilityLoader142'))return;
  const script=document.createElement('script');
  script.id='aryGuideExtraStabilityLoader142';
- script.src='guide-extra-stability-v142.js?v=142.1';
+ script.src='guide-extra-stability-v142.js?v=142.2';
  script.async=false;
  document.body.appendChild(script);
 })();
