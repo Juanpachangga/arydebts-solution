@@ -103,3 +103,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V120 — harden core settings/onboarding state and expose integrity diagnostics.
+(()=>{
+ if(document.getElementById('aryIntegrityLoader120'))return;
+ const script=document.createElement('script');
+ script.id='aryIntegrityLoader120';
+ script.src='integrity-polish-v120.js?v=120.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
