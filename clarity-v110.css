@@ -1,0 +1,21 @@
+/* Clear actions, static bubble halos and compact notification controls. */
+body #app .progressHeading110{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.progressHeading110>b{flex:1 1 180px;min-width:0;line-height:1.4;color:inherit}
+body #app .progressTips110,body #app .progressDetails110{width:auto;min-height:44px;padding:8px 12px!important;font:650 calc(13px * var(--ui-scale72,1))/1.3 system-ui!important;border-radius:999px!important;background:#182d4d!important;border:1px solid #9d9bfd!important;color:#f5f7ff!important;box-shadow:0 0 12px #aa8fff35;white-space:normal}
+body.ary-light #app .progressTips110,body.ary-light #app .progressDetails110{background:#fff!important;color:#37306e!important;border-color:#9786d7!important}
+.progressAdvice110 p{line-height:1.6}.progressAdvice110 dl{display:grid;gap:8px}.progressAdvice110 dl>div{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 0;border-bottom:1px solid #969fc144}.progressAdvice110 dd{margin:0;font-weight:750;overflow-wrap:anywhere}.progressAdvice110 small{display:block;line-height:1.5}
+body #app .aryGuide94,body #app .guideLaunch94{border:2px solid #9ea0ff!important;border-radius:24px!important;box-shadow:0 0 0 4px #aa9cff18,0 0 22px #9d84ff4d,inset 0 0 18px #74dcf315!important;background:linear-gradient(135deg,#18314e,#292346)!important;color:#f3f7ff!important}
+body #app .guideLaunch94{padding:16px!important;margin:18px 4px!important}body #app .guideLaunch94 small{opacity:1;color:#d9e3ff!important}
+body #app .aryGuide94:before{border-color:#9ea0ff;background:#20304a}.aryGuide94 .aryRobot94{filter:drop-shadow(0 0 8px #87dfff55)}
+body.ary-light #app .aryGuide94,body.ary-light #app .guideLaunch94{background:linear-gradient(135deg,#fbfdff,#f3edff)!important;border-color:#9180d4!important;box-shadow:0 0 0 4px #8c69de14,0 0 20px #8662c73d,inset 0 0 16px #aeebff33!important;color:#23314b!important}
+body.ary-light #app .guideLaunch94 small{color:#514b76!important}body.ary-light #app .aryGuide94:before{background:#f8faff;border-color:#9180d4}
+body #app .notifyItem89{grid-template-columns:30px minmax(0,1fr) 44px;gap:8px;padding:14px!important;align-items:start}
+body #app .notifyItem89>div{min-width:0}body #app .notifyItem89 p{font:550 calc(15px * var(--ui-scale72,1))/1.45 system-ui!important;margin:0 0 2px}
+body #app .notifyIcon89{font-size:24px;line-height:1.5}
+body #app .notifyItem89 .notifyOpen110{display:inline-flex;align-items:center;width:auto!important;min-width:44px!important;min-height:44px!important;padding:5px 8px!important;font:650 calc(13px * var(--ui-scale72,1))/1.3 system-ui!important;border-radius:12px!important;background:transparent!important;border-color:transparent!important;box-shadow:none!important}
+body #app .notifyItem89 .notifyDismiss89{width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;border:0!important;border-radius:50%!important;background:radial-gradient(circle,#bbc5df22 0 14px,transparent 15px)!important;box-shadow:none!important;font:500 20px/1 system-ui!important;color:inherit!important}
+body #app .notifyOpen110:hover{background:#929de322!important}body #app .notifyDismiss89:hover{background:#929de333!important}
+body #app .notifyOpen110:focus-visible,body #app .notifyDismiss89:focus-visible,body #app .progressTips110:focus-visible{outline:3px solid #756be8;outline-offset:2px}
+body.highContrast72 #app .aryGuide94,body.highContrast72 #app .guideLaunch94{background:#05101f!important;border-color:#bfcbff!important;box-shadow:none!important;color:#fff!important}
+body.ary-light.highContrast72 #app .aryGuide94,body.ary-light.highContrast72 #app .guideLaunch94{background:#fff!important;border-color:#34465e!important;color:#17233b!important}
+@media(max-width:360px){body #app .notifyItem89{grid-template-columns:24px minmax(0,1fr) 44px;padding:12px!important;gap:6px}.progressHeading110>b{flex-basis:100%}}

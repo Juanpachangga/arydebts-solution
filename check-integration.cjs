@@ -314,3 +314,17 @@ durable109.run('aryApplyPayment54({debtId:1,amount:0.1})');durable109.run("aryDe
 assert.equal(durable109.run('s.debts.length'),1);assert.equal(durable109.run('s.payments.length'),0);
 assert.equal(boot(durable109.data).run('s.debts.length'),1);
 console.log('PASS durable payment creation, reassignment, deletion and linked debt/event deletion; quota/security failures preserve memory and saved data; successful retries survive reload');
+
+const clarity110=boot(true);clarity110.run("s.debts=[{id:1,name:'Card',balance:2000,min:50}];s.payments=[]");
+const finances110=clarity110.run('JSON.stringify({debts:s.debts,payments:s.payments,income:s.income})');
+for(const [locale,tips,title]of [['es-US','Consejos','¿Cómo funciona tu progreso?'],['en-US','Tips','How does your progress work?'],['pt-BR','Dicas','Como funciona seu progresso?']]){
+ clarity110.run(`s.locale='${locale}';go('home')`);
+ assert.match(clarity110.nodes.app.innerHTML,/onclick="aryProgressAdvice110\(\)"/);
+ assert.ok(clarity110.nodes.app.innerHTML.includes(tips));
+ assert.match(clarity110.nodes.app.innerHTML,/<section[^>]+progressCard72/,'No nested interactive buttons in progress card');
+ clarity110.run('aryProgressAdvice110()');assert.ok(clarity110.nodes.modal.innerHTML.includes(title));
+ assert.match(clarity110.nodes.modal.innerHTML,/closeM\(\);aryPaymentForm54\(\)/);
+ assert.equal(clarity110.run('JSON.stringify({debts:s.debts,payments:s.payments,income:s.income})'),finances110);
+}
+clarity110.run("s.locale='es-US';go('signup')");assert.match(clarity110.nodes.app.innerHTML,/Este espacio es para ti/);
+console.log('PASS localized progress advice, independent actions, signup wording and unchanged financial records');
