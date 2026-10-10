@@ -71,6 +71,7 @@ window.aryDeleteEvent36=function(id){
  const event=(s.calendarEvents||[]).find(e=>String(e.id)===String(id));
  if(!event)return false;
  if(event.kind==='payment'){if(typeof toast==='function')toast(t().paymentLedger);return false;}
+ if(typeof window.aryAskDelete68==='function'){aryAskDelete68('event',id);return true;}
  if(!confirm(t().deleteConfirm))return false;
  if(!commit(next=>{next.calendarEvents=(next.calendarEvents||[]).filter(e=>String(e.id)!==String(id));})){
    if(typeof toast==='function')toast(t().saveError);return false;
