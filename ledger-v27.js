@@ -3,6 +3,21 @@ const L={es:{edit:'Editar gasto',new:'Nuevo gasto',name:'Nombre',namePh:'Comida,
 const tx=()=>{const loc=typeof s!=='undefined'?s.locale:'';return L[loc==='en-US'?'en':loc==='pt-BR'?'pt':'es']};
 const localDate=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 window.expenseForm=function(id=null){const t=tx(),e=s.expenses.find(x=>x.id===id)||{},dateValue=id?(e.date??''):localDate();modal('<h2>'+(id?t.edit:t.new)+'</h2><label>'+t.name+' <span class="autoIcon96" id="recordIcon96" aria-hidden="true">'+iconFor(e.name,e.cat)+'</span></label><input oninput="aryPreviewIcon96(this)" id="n" value="'+esc(e.name||'')+'" placeholder="'+t.namePh+'"><label>'+t.amount+'</label><input id="b" type="text" inputmode="decimal" value="'+(e.amount??'')+'"><div class="amountPresets">'+[5,10,25,50].map(x=>'<button class="btn tiny" onclick="presetExpense('+x+')">+'+money(x)+'</button>').join('')+'</div><label>'+t.category+'</label><select id="c"><option value="Esencial" '+(e.cat==='Esencial'?'selected':'')+'>'+t.essential+'</option><option value="Hormiga" '+(e.cat==='Hormiga'?'selected':'')+'>'+t.ant+'</option><option value="Variable" '+(e.cat==='Variable'?'selected':'')+'>'+t.variable+'</option></select><label>'+t.date+'</label><input id="edate" type="date" value="'+dateValue+'"><small class="muted">'+t.dateHint+'</small><button class="btn primary widebtn" onclick="saveExpense('+(id||'null')+')">'+t.save+'</button><button class="btn widebtn" onclick="closeM()">'+t.cancel+'</button>')};
-window.saveExpense=function(id){const t=tx(),n=$('#n').value.trim(),raw=$('#b').value,b=parseNum(raw),c=$('#c').value,date=$('#edate')?.value||'';if(!n||String(raw).trim()==='')return toast(t.required);if(!Number.isFinite(b)||b<=0)return toast(t.invalid);if(id){const e=s.expenses.find(x=>x.id===id);if(!e)return;Object.assign(e,{name:n,amount:b,cat:c,date})}else s.expenses.push({id:Date.now(),name:n,amount:b,cat:c,date});closeM();save()};
+// Persist the complete record once; preserve the open draft if storage fails.
+window.saveExpense=function(id,recurrence={}){
+ const t=tx(),n=$('#n').value.trim(),raw=$('#b').value,b=parseNum(raw),c=$('#c').value,date=$('#edate')?.value||'';
+ if(!n||String(raw).trim()==='')return toast(t.required);
+ if(!Number.isFinite(b)||b<=0)return toast(t.invalid);
+ if(!['Esencial','Hormiga','Variable'].includes(c))return toast(t.required);
+ const editing=id!==null&&id!==undefined;
+ if(editing&&!s.expenses.some(e=>String(e.id)===String(id)))return false;
+ if(!aryCommitFinancial109(next=>{
+  let e=editing?next.expenses.find(e=>String(e.id)===String(id)):null;
+  if(!e){let key=Date.now();while(next.expenses.some(e=>String(e.id)===String(key)))key++;e={id:key};next.expenses.push(e)}
+  Object.assign(e,{name:n,amount:b,cat:c,date});
+  if(recurrence.frequency){e.frequency=recurrence.frequency;if(recurrence.frequency!=='once')delete e.sourceExpenseId;else if(recurrence.sourceExpenseId!==null&&recurrence.sourceExpenseId!==undefined)e.sourceExpenseId=recurrence.sourceExpenseId}
+ })) {toast(aryStorageError109());return false}
+ closeM();render();return true;
+};
 window.aryExpenseDate=localDate;
 })();

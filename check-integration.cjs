@@ -343,3 +343,22 @@ const beforeReview112=review112.run('JSON.stringify(s.expenses)');
 for(const locale of ['es-US','en-US','pt-BR']){review112.run(`s.locale='${locale}';aryReviewAdjustment112(1)`);assert.match(review112.nodes.modal.innerHTML,/adjustmentReview112/);assert.match(review112.nodes.modal.innerHTML,/aryEditAdjustmentRecord112\(0\)/);assert.match(review112.nodes.modal.innerHTML,/aryEditAdjustmentRecord112\(1\)/);assert.doesNotMatch(review112.nodes.modal.innerHTML,/Invalid recurring|Old coffee/)}
 assert.equal(review112.run('JSON.stringify(s.expenses)'),beforeReview112,'Review does not edit financial records');
 console.log('PASS grouped optional expense review, exact decimal totals, source IDs, valid dates, translations and unchanged financial records');
+// Complete recurring expense records survive reload; failed writes preserve drafts and links.
+{
+ const b=boot(true);b.run("s.expenses=[{id:113,name:'Rent',amount:100,cat:'Esencial',date:'',frequency:'monthly'}];save();expenseForm()");
+ for(const [id,value] of Object.entries({n:' Rent paid ',b:'25.50',c:'Esencial',edate:b.run('localDate()'),expenseFrequency63:'once'}))b.nodes[id]={value};
+ b.run('window._expenseSource63=113');
+ const state=b.run('JSON.stringify(s)'),disk=b.data['arydebts-v3'],writer=b.context.localStorage.setItem;let writes=0;
+ b.context.localStorage.setItem=()=>{throw Error('QuotaExceededError')};
+ assert.equal(b.run('saveExpense(null)'),false);assert.equal(b.run('JSON.stringify(s)'),state);assert.equal(b.data['arydebts-v3'],disk);assert.equal(b.nodes.modal.classList.contains('hidden'),false);assert.equal(b.nodes.n.value,' Rent paid ');assert.equal(b.run('window._expenseSource63'),113);assert.match(b.nodes.toast.textContent,/No se pudo guardar/);
+ b.context.localStorage.setItem=(key,value)=>{if(key==='arydebts-v3')writes++;writer(key,value)};
+ assert.equal(b.run('saveExpense(null)'),true);assert.equal(writes,1);assert.equal(b.run('window._expenseSource63'),null);
+ const reload=boot(b.data);assert.equal(reload.run('s.expenses[1].sourceExpenseId'),113);assert.equal(reload.run('s.expenses[1].frequency'),'once');assert.equal(reload.run('s.expenses[1].amount'),25.5);
+ const paidId=b.run('s.expenses[1].id');b.nodes.b.value='30';b.nodes.expenseFrequency63.value='monthly';b.run('expenseForm('+paidId+')');
+ const editState=b.run('JSON.stringify(s)'),editDisk=b.data['arydebts-v3'];b.context.localStorage.setItem=()=>{throw Error('SecurityError')};assert.equal(b.run('saveExpense('+paidId+')'),false);assert.equal(b.run('JSON.stringify(s)'),editState);assert.equal(b.data['arydebts-v3'],editDisk);
+ assert.equal(b.run('deleteExpense(113)'),false);assert.equal(b.run('JSON.stringify(s)'),editState);assert.equal(b.data['arydebts-v3'],editDisk);
+ b.context.localStorage.setItem=writer;assert.equal(b.run('deleteExpense(113)'),true);assert.equal(b.run('s.expenses.length'),1);assert.equal(b.run('s.expenses[0].sourceExpenseId'),undefined);assert.equal(boot(b.data).run('s.expenses[0].sourceExpenseId'),undefined);
+ assert.equal(b.run('saveExpense('+paidId+')'),true);assert.equal(boot(b.data).run('s.expenses[0].frequency'),'monthly');
+ b.run('Date.now=()=>113');b.nodes.expenseFrequency63.value='once';assert.equal(b.run('saveExpense(null)'),true);assert.equal(b.run('saveExpense(null)'),true);assert.equal(b.run('new Set(s.expenses.map(e=>String(e.id))).size'),3);
+ console.log('PASS atomic recurring expense creation/edit/delete, reload, failed storage draft preservation and unique IDs');
+}

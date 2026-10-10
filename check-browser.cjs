@@ -738,7 +738,21 @@ async function check(engine, label, viewport) {
     await page.locator('[onclick="aryEditAdjustmentRecord112(1)"]').click();
     assert.equal(await page.locator('#modal #n').inputValue(),'Cafe');
     assert.equal(await page.evaluate(()=>parseNum(document.querySelector('#modal #b').value)),12,'Choose the second underlying expense');
-    await page.evaluate(raw=>{closeM();s.expenses=JSON.parse(raw);render()},previousExpenses112);
+    await page.locator('#modal #b').fill('15');
+    await page.locator('#expenseFrequency63').selectOption('monthly');
+    const unchanged113=await page.evaluate(()=>JSON.stringify(s));
+    await page.evaluate(()=>{window.originalStorage113=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(key==='arydebts-v3')throw new Error('QuotaExceededError');return window.originalStorage113.call(this,key,value)}});
+    await page.locator('#modal [onclick="saveExpense(11202)"]').click();
+    assert.equal(await page.evaluate(()=>JSON.stringify(s)),unchanged113,'Failed expense edit leaves state unchanged');
+    assert.equal(await page.locator('#modal').isVisible(),true,'Failed save preserves the open editor');
+    assert.equal(await page.locator('#modal #b').inputValue(),'15','Failed save preserves the amount draft');
+    assert.equal(await page.locator('#expenseFrequency63').inputValue(),'monthly');
+    await page.evaluate(()=>{Storage.prototype.setItem=window.originalStorage113;delete window.originalStorage113});
+    await page.locator('#modal [onclick="saveExpense(11202)"]').click();
+    assert.equal(await page.locator('#modal').isVisible(),false);
+    const persisted113=await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')).expenses.find(e=>e.id===11202));
+    assert.equal(persisted113.amount,15);assert.equal(persisted113.frequency,'monthly','Amount and frequency persisted together');
+    await page.evaluate(raw=>{closeM();s.expenses=JSON.parse(raw);save()},previousExpenses112);
 
     await navigate('home');assert.equal(await page.locator('.homeMetric51 small').filter({hasText:'›'}).count(),0);
     await page.evaluate(()=>{s.mode='immersive';save()});

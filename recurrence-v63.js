@@ -8,7 +8,11 @@ window.aryCompleteReminder60=(id,done)=>{completeBefore(id,done);const e=s.calen
 window.aryDebtMinLabel63=()=>({es:'Promedio mensual de mínimos',en:'Monthly average of minimums',pt:'Média mensal dos mínimos'}[s.locale==='en-US'?'en':s.locale==='pt-BR'?'pt':'es']);
 window.aryFrequencyLabel63=f=>f==='once'?tx().once:tx().labels[frequencies.indexOf(f)]||tx().labels[4];
 window.aryRecurring63=e=>frequencies.includes(e?.frequency);
-const deleteExpenseBefore=window.deleteExpense;window.deleteExpense=id=>{for(const e of s.expenses||[])if(String(e.sourceExpenseId)===String(id))delete e.sourceExpenseId;return deleteExpenseBefore(id)};
+window.deleteExpense=id=>{
+ if(!(s.expenses||[]).some(e=>String(e.id)===String(id)))return false;
+ if(!aryCommitFinancial109(next=>{next.expenses=next.expenses.filter(e=>String(e.id)!==String(id));for(const e of next.expenses)if(String(e.sourceExpenseId)===String(id))delete e.sourceExpenseId})) {toast(aryStorageError109());return false}
+ render();return true;
+};
 window.aryMonthly63=(amount,frequency)=>{const n=Number(amount)||0;return n*({daily:365/12,weekly:52/12,biweekly:26/12,twice_monthly:2,monthly:1,quarterly:1/3,semiannual:1/6,annual:1/12}[frequency]??1)};
 window.aryFrequencySelect63=(id,current='once',once=true,label=tx().frequency)=>`<label for="${id}">${label}</label><select id="${id}">${(once?['once',...frequencies]:frequencies).map(f=>`<option value="${f}" ${current===f?'selected':''}>${aryFrequencyLabel63(f)}</option>`).join('')}</select>`;
 window.aryRecordExpenseButton63=e=>aryRecurring63(e)?`<button class="btn tiny" onclick="aryRecordRecurringExpense63(${e.id})">${tx().record}</button>`:'';
@@ -35,7 +39,13 @@ const expenseFormBefore=window.expenseForm;
 window.expenseForm=id=>{window._expenseSource63=null;return expenseFormBefore(id)};
 window.aryRecordRecurringExpense63=id=>{const e=s.expenses.find(e=>e.id===id);if(!e||!aryRecurring63(e))return;expenseForm();window._expenseSource63=id;document.getElementById('n').value=e.name;document.getElementById('b').value=aryInputNumber63(e.amount);document.getElementById('c').value=e.cat;document.getElementById('expenseFrequency63').value='once'};
 const saveExpenseBefore=window.saveExpense;
-window.saveExpense=id=>{const f=document.getElementById('expenseFrequency63')?.value||'once',date=document.getElementById('edate')?.value||'';if(!['once',...frequencies].includes(f)||date&&!aryValidDate63(date))return toast(tx().invalid);const source=window._expenseSource63,old=(s.expenses||[]).length;saveExpenseBefore(id);if(!document.getElementById('modal').classList.contains('hidden'))return;const e=id?s.expenses.find(e=>e.id===id):s.expenses.length>old?s.expenses[s.expenses.length-1]:null;if(e){e.frequency=f;if(source&&f==='once')e.sourceExpenseId=source;else if(f!=='once')delete e.sourceExpenseId;window._expenseSource63=null;save()}};
+window.saveExpense=id=>{
+ const f=document.getElementById('expenseFrequency63')?.value||'once',date=document.getElementById('edate')?.value||'';
+ if(!['once',...frequencies].includes(f)||date&&!aryValidDate63(date))return toast(tx().invalid);
+ const saved=saveExpenseBefore(id,{frequency:f,sourceExpenseId:window._expenseSource63});
+ if(saved)window._expenseSource63=null;
+ return saved;
+};
 const saveDebtBefore=window.saveDebt;
 window.saveDebt=id=>{const f=document.getElementById('debtFrequency63')?.value||'monthly',date=document.getElementById('due')?.value||'';if(!frequencies.includes(f)||date&&!aryValidDate63(date))return toast(tx().invalid);const old=s.debts.length;saveDebtBefore(id);if(!document.getElementById('modal').classList.contains('hidden'))return;const d=id?s.debts.find(d=>d.id===id):s.debts.length>old?s.debts[s.debts.length-1]:null;if(d){d.paymentFrequency=f;save()}};
 window.aryValidDate63=k=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(k))return false;const[y,m,d]=k.split('-').map(Number),dt=new Date(y,m-1,d);return dt.getFullYear()===y&&dt.getMonth()===m-1&&dt.getDate()===d};
