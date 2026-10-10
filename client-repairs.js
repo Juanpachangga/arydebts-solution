@@ -859,14 +859,14 @@ html body .aryGuideCompanion svg{width:32px;height:36px;display:block}
 html body .ary125cloud .ary125actions button{background:#253853!important;color:#f2f8ff!important;-webkit-text-fill-color:currentColor!important;border-color:#50647e!important}
 html body.ary-light .ary125cloud .ary125actions button{background:#f1f5f9!important;color:#172641!important;border-color:#c6d3e0!important}
 html body.ary-light .ary125cloud .ary140cancelTop{background:#f1f5f9!important;color:#172641!important}
-html body .ary125cloud .ary140cancelTop{background:#253853!important;color:#f2f8ff!important}
+html body .ary125cloud .ary140cancelTop{background:#253853!important;color:#f2f8ff!important;min-height:44px!important;font-size:14px!important}
 html body .ary125cloud:before{display:none!important}
 html body .ary125cloud .ary125actions{position:static!important;background:none!important;padding:0!important;margin-top:12px!important;grid-template-columns:auto 1fr auto!important}
 html body .ary125cloud .ary125actions button{min-height:44px!important;font-size:14px!important}
 html body .ary125cloud .ary125actions button.primary,html body.ary-light .ary125cloud .ary125actions button.primary{background:linear-gradient(135deg,#087f86,#4853c8)!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
 html body .ary125cloud .ary125meta{color:inherit!important;font-size:12px!important}
 html body .ary125cloud .ary125auto{display:none!important}
-html body .ary125cloud .ary140cancelTop{position:absolute!important;top:8px!important;right:10px!important;min-height:36px!important;font-size:13px!important}
+html body .ary125cloud .ary140cancelTop{position:absolute!important;top:8px!important;right:10px!important;min-height:44px!important;font-size:14px!important}
 html body .ary125cloud .ary127section,html body .ary125cloud .ary130new,html body .ary125cloud .ary127hint,html body .ary125cloud .ary127countdown{display:none!important}
 html body .ary125focus{box-sizing:border-box;animation:none!important;transition:none!important;border-radius:14px;box-shadow:none!important}
 html body .ary125shade{transition:none!important;backdrop-filter:none!important}
@@ -1464,11 +1464,11 @@ function modalOpen(){
 }
 // A repeated route is a no-op only when the state that was painted is unchanged.
 // Locale/theme and committed state changes must still repaint the same screen.
-const signature=()=>[s,s.locale,s.currency,s.theme,s.mode,s.income,s.incomeFrequency,profile];
+const signature=()=>{try{return JSON.stringify([s,profile])}catch{return null}};
 let painted=signature();
 const baseRender=window.render;
 window.render=function(){const out=baseRender.apply(this,arguments);painted=signature();return out};
-const unchanged=()=>{const current=signature();return current.every((value,i)=>value===painted[i])};
+const unchanged=()=>{const current=signature();return current!==null&&current===painted};
 const baseGo=window.go;
 if(typeof baseGo==='function'&&!baseGo._aryFastNav137){
  const wrapped=function(route){

@@ -9,11 +9,11 @@ function modalOpen(){
 }
 // A repeated route is a no-op only when the state that was painted is unchanged.
 // Locale/theme and committed state changes must still repaint the same screen.
-const signature=()=>[s,s.locale,s.currency,s.theme,s.mode,s.income,s.incomeFrequency,profile];
+const signature=()=>{try{return JSON.stringify([s,profile])}catch{return null}};
 let painted=signature();
 const baseRender=window.render;
 window.render=function(){const out=baseRender.apply(this,arguments);painted=signature();return out};
-const unchanged=()=>{const current=signature();return current.every((value,i)=>value===painted[i])};
+const unchanged=()=>{const current=signature();return current!==null&&current===painted};
 const baseGo=window.go;
 if(typeof baseGo==='function'&&!baseGo._aryFastNav137){
  const wrapped=function(route){

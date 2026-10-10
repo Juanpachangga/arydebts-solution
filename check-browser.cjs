@@ -436,10 +436,10 @@ async function check(engine, label, viewport) {
     assert.equal(await page.evaluate(()=>arySeason59(new Date(2027,0,1))),'newyear');
     await page.evaluate(()=>{s.mode='immersive';render()});
     await page.waitForFunction(()=>{const el=document.querySelector('.brandLetter59 b');return el&&getComputedStyle(el).animationName==='brandFlow59'});
-    assert.equal(await page.locator('.brandLetter59 b').evaluate(el=>getComputedStyle(el).animationName),'brandFlow59');
+    assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.brandLetter59 b')).animationName),'brandFlow59');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-brand-v59.png`),fullPage:true});
     await page.evaluate(()=>toggleMode());
-    assert.equal(await page.locator('.brandLetter59 b').evaluate(el=>getComputedStyle(el).animationName),'none');
+    assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.brandLetter59 b')).animationName),'none');
     await page.evaluate(() => closeM());
     // Header cues are based on pending dates, not historical expense dates.
     const reminderBefore60=await page.evaluate(()=>({debts:s.debts,expenses:s.expenses,calendarEvents:s.calendarEvents,payments:s.payments,mode:s.mode}));

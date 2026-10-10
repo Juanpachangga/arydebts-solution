@@ -23,7 +23,7 @@ const server=http.createServer(async(req,res)=>{try{const file=path.resolve(root
      const card=document.querySelector('.ary125cloud'),focus=document.querySelector('.ary125focus'),nav=document.querySelector('#nav');
      const rect=n=>{if(!n)return null;const r=n.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height}};
      const primary=card.querySelector('.primary'),bg=getComputedStyle(card).backgroundColor,foreground=getComputedStyle(card).color;
-     return {card:rect(card),focus:rect(focus),nav:rect(nav),bg,foreground,scrollHeight:card.scrollHeight,clientHeight:card.clientHeight,primary:rect(primary),text:card.querySelector('p')?.textContent,robot:card.querySelector('.aryGuideCompanion')?.getAttribute('aria-label'),automatic:aryFullGuideStatus125().automatic,extras:document.querySelectorAll('.ary126node,.aryGuide94').length};
+     return {card:rect(card),focus:rect(focus),nav:rect(nav),bg,foreground,scrollHeight:card.scrollHeight,clientHeight:card.clientHeight,primary:rect(primary),cancel:rect(card.querySelector('.ary140cancelTop')),text:card.querySelector('p')?.textContent,robot:card.querySelector('.aryGuideCompanion')?.getAttribute('aria-label'),automatic:aryFullGuideStatus125().automatic,extras:document.querySelectorAll('.ary126node,.aryGuide94').length};
     });
     const label=`${name} ${viewport.width} ${theme} step ${index}`;
     assert.equal(state.automatic,false,label+': manual reading pace');assert.equal(state.extras,0,label+': one guide');
@@ -32,7 +32,7 @@ const server=http.createServer(async(req,res)=>{try{const file=path.resolve(root
     assert.ok(state.primary.top>=state.card.top&&state.primary.bottom<=state.card.bottom+1,label+': readable primary action');
     assert.ok(state.primary.height>=44,label+': touch target');assert.ok(state.scrollHeight<=state.clientHeight+1,label+': no clipped text');
     assert.notEqual(state.bg,state.foreground,label+': theme contrast');
-    if(index<27){assert.match(state.robot,/ARY.*🤖/,label+': companion');assert.ok(state.text.length<130,label+': concise explanation')}
+    if(index<27){assert.ok(state.cancel?.height>=44,label+': accessible cancel action');assert.match(state.robot,/ARY.*🤖/,label+': companion');assert.ok(state.text.length<130,label+': concise explanation')}
     if(index===8)assert.equal(await page.locator('.debtExpenses66').isVisible(),false,'Expense guide excludes debt panels');
     if(state.focus){const a=state.card,b=state.focus;assert.ok(a.bottom<=b.top||a.top>=b.bottom||a.right<=b.left||a.left>=b.right,label+': card never covers its spotlight');if(index!==3&&state.nav?.height)assert.ok(b.bottom<=state.nav.top,label+': spotlight excludes navigation')}
     if(viewport.width===390&&[6,8,13].includes(index)){await fs.mkdir('browser-results',{recursive:true});await page.screenshot({path:`browser-results/guide-${theme}-${index}-${name}.png`})}
