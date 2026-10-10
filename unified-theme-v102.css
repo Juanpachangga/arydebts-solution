@@ -1,5 +1,5 @@
 /* One persisted theme for welcome, accounts and the application. */
-html[data-ary-theme="light"],body.ary-light{background:#fcfcff!important}
+html[data-ary-theme="light"],html[data-ary-theme="light"]:has(.landing9),html[data-ary-theme="light"] body.ary-light{background:#fcfcff!important}
 html[data-ary-theme="dark"],body.ary-dark{background:#17152b!important}
 html.authRoot99[data-ary-theme="dark"],body.authPortal99.ary-dark{background:#17152b!important;color:#f5f1ff!important;color-scheme:dark!important}
 body.authPortal99.ary-dark #app .authForm99{color:#f5f1ff!important}
