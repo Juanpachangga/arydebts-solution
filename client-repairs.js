@@ -603,7 +603,9 @@ const parseAmount=value=>typeof parseNum==='function'?parseNum(value):Number(val
 const nextId=()=>typeof window.aryUniqueId120==='function'?aryUniqueId120(s.debts||[],s.expenses||[],s.payments||[],s.calendarEvents||[]):Date.now();
 const validDate=value=>typeof window.aryValidDate63==='function'?window.aryValidDate63(value):/^\d{4}-\d{2}-\d{2}$/.test(String(value||''));
 
-window.saveDebt=function(id,frequency='monthly'){
+window.saveDebt=function(id,frequency){
+ frequency=document.getElementById('debtFrequency63')?.value||frequency||'monthly';
+ if(!['daily','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual'].includes(frequency)){if(typeof toast==='function')toast(t().invalidDebt);return false;}
  const name=String(document.getElementById('n')?.value||'').trim();
  const rawBalance=String(document.getElementById('b')?.value??'').trim();
  const rawMin=String(document.getElementById('m')?.value??'').trim();
