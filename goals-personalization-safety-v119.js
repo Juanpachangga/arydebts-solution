@@ -49,6 +49,25 @@ window.aryPin61=function(route){
  return true;
 };
 
+// Keep adaptive-home visit learning transactional too. Navigation should never leave
+// in-memory preferences ahead of what was actually persisted.
+const visitRecent119={};
+const visitScore119=(value,now)=>{const n=Number(value?.score),at=Number(value?.at);return Number.isFinite(n)&&n>0&&Number.isFinite(at)&&at<=now?Math.min(n,1000)*Math.pow(.5,(now-at)/(14*86400000)):0};
+window.aryTrackVisit61=function(route,now=Date.now()){
+ if(!profile||!s.onboarded||!validRoutes.includes(route)||!Number.isFinite(now))return false;
+ const current=s.personalization61&&typeof s.personalization61==='object'&&!Array.isArray(s.personalization61)?s.personalization61:null;
+ if(current?.enabled===false)return false;
+ if(visitRecent119[route]!==undefined&&now-visitRecent119[route]<30000)return false;
+ const ok=commit(next=>{
+  if(!next.personalization61||typeof next.personalization61!=='object'||Array.isArray(next.personalization61))next.personalization61={enabled:true,visits:{},pinned:''};
+  const p=next.personalization61;if(p.enabled===false)return;
+  if(!p.visits||typeof p.visits!=='object'||Array.isArray(p.visits))p.visits={};
+  p.visits[route]={score:visitScore119(p.visits[route],now)+1,at:now};
+ });
+ if(ok)visitRecent119[route]=now;
+ return !!ok;
+};
+
 let scrollFrame=0;
 const refreshGuideFocus=()=>{if(!document.getElementById('aryGuide116'))return;cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(()=>{const focused=document.querySelector('.aryGuideFocus117');if(focused&&typeof focused.getBoundingClientRect==='function'){const r=focused.getBoundingClientRect();const top=92,bottom=window.innerHeight-190;if(r.top<top||r.bottom>bottom){try{focused.scrollIntoView({behavior:'smooth',block:'center',inline:'nearest'})}catch(e){}}}})};
 window.addEventListener('scroll',refreshGuideFocus,{passive:true});
