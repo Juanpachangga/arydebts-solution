@@ -93,3 +93,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V119 — secure goals, savings and adaptive-home preferences, and keep guide focus stable while scrolling.
+(()=>{
+ if(document.getElementById('aryGoalPreferenceSafetyLoader119'))return;
+ const script=document.createElement('script');
+ script.id='aryGoalPreferenceSafetyLoader119';
+ script.src='goals-personalization-safety-v119.js?v=119.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
