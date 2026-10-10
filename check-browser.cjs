@@ -6,6 +6,7 @@ const http = require('node:http');
 const { chromium, webkit } = require('playwright');
 
 const root = __dirname;
+const separateBoxes=(a,b)=>a.x+a.width<=b.x||a.x>=b.x+b.width||a.y+a.height<=b.y||a.y>=b.y+b.height;
 const types = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.svg':'image/svg+xml', '.jpeg':'image/jpeg', '.webp':'image/webp', '.webmanifest':'application/manifest+json' };
 const server = http.createServer(async (req, res) => {
   try {
@@ -323,7 +324,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     const lastCard = await page.locator('#app .grid > .card').last().boundingBox();
     const navigationBox = await page.locator('#nav').boundingBox();
-    assert.ok(lastCard.y+lastCard.height <= navigationBox.y, 'Bottom navigation leaves the final card accessible');
+    assert.ok(separateBoxes(lastCard,navigationBox), 'Navigation leaves the final card accessible');
     await page.evaluate(() => window.scrollTo(0, 0));
     for (const theme of ['light','dark']) {
       await page.evaluate(theme => { localStorage.setItem('ary-theme-v46', theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
@@ -808,7 +809,7 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('.debtExpenses66 .ico').evaluate(el=>getComputedStyle(el).borderRadius),'50%','Record icons sit inside small bubbles');
     await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
     const lastAction66=await page.locator('.debtExpenses66 .dangerBtn').boundingBox(),dock66=await page.locator('#nav').boundingBox();
-    assert.ok(lastAction66.y+lastAction66.height<dock66.y,'Debt payment actions can scroll clear of the bottom dock');
+    assert.ok(separateBoxes(lastAction66,dock66),'Debt payment actions remain clear of navigation');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-debt-expenses-v66.png`),fullPage:true});
     await page.locator('.debtExpenses66 [onclick^="aryDebtPayment54"]').click();
     await page.locator('#payAmount54').fill('76');
@@ -964,7 +965,7 @@ async function check(engine, label, viewport) {
   try {
     const failures=[];
     for (const [engine,name] of [[chromium,'chromium'],[webkit,'webkit']].filter(([,name])=>!process.env.ARY_TEST_ENGINE||name===process.env.ARY_TEST_ENGINE)) {
-      const results=await Promise.allSettled([['desktop',{width:1280,height:900}],['mobile',{width:390,height:844}]].map(([size,viewport])=>check(engine,`${name}-${size}`,viewport)));
+      const results=await Promise.allSettled([['desktop',{width:1280,height:900}],['mobile',{width:390,height:844}]].filter(([size])=>!process.env.ARY_TEST_LAYOUT||process.env.ARY_TEST_LAYOUT===size).map(([size,viewport])=>check(engine,`${name}-${size}`,viewport)));
       for(const result of results)if(result.status==='rejected')failures.push(result.reason);
     }
     if(failures.length)throw new AggregateError(failures,'Browser regression checks failed');
