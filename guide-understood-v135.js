@@ -19,6 +19,15 @@ document.addEventListener('click',e=>{
  if(!labels.test(text))return;
  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();next();
 },{capture:true});
-// Expose a safe handler for any future guide component that wants an explicit "understood" action.
 window.aryGuideUnderstood135=next;
+})();
+
+// V136 — keep the automatic guide moving through slow or interrupted page transitions.
+(()=>{
+ if(document.getElementById('aryGuideContinuityLoader136'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideContinuityLoader136';
+ script.src='guide-continuity-v136.js?v=136.1';
+ script.async=false;
+ document.body.appendChild(script);
 })();
