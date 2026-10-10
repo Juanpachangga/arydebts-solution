@@ -50,3 +50,13 @@ document.addEventListener('click',e=>{if(e.target?.closest?.('.ary125skip'))setT
 window.addEventListener('keydown',e=>{if(e.key!=='Escape'||guideActive())return;const m=document.getElementById('modal');if(m&&!m.classList.contains('hidden')&&typeof closeM==='function'){e.preventDefault();closeM()}});
 ensureStyle();syncFab();
 })();
+
+// V134 — make financial forms faster to fill without changing their save logic.
+(()=>{
+ if(document.getElementById('aryFastFormsLoader134'))return;
+ const script=document.createElement('script');
+ script.id='aryFastFormsLoader134';
+ script.src='fast-forms-v134.js?v=134.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
