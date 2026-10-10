@@ -70,6 +70,16 @@ window.setIncome=function(){
  const script=document.createElement('script');
  script.id='aryGuideLoader116';
  script.src='guided-tour-v116.js?v=116.1';
- script.defer=true;
+ script.async=false;
+ document.body.appendChild(script);
+})();
+
+// V117 — enhance the guided tour and close calendar persistence gaps after all base modules load.
+(()=>{
+ if(document.getElementById('aryGuideSafetyLoader117'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideSafetyLoader117';
+ script.src='guided-safety-v117.js?v=117.1';
+ script.async=false;
  document.body.appendChild(script);
 })();
