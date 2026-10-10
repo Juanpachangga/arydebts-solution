@@ -4,7 +4,8 @@ const tx=()=>L[s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es'];
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const storageError=()=>({es:'No se pudo guardar. Tus saldos e historial siguen como antes. Libera espacio o habilita el almacenamiento e inténtalo de nuevo.',en:'Could not save. Your balances and history remain unchanged. Free up space or enable storage and try again.',pt:'Não foi possível salvar. Seus saldos e histórico continuam como antes. Libere espaço ou habilite o armazenamento e tente novamente.'}[s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es']);
 // Commit a complete candidate before changing visible financial state.
-window.aryCommitFinancial109=change=>{try{const candidate=JSON.parse(JSON.stringify(s));change(candidate);localStorage.setItem(typeof KEY!=='undefined'?KEY:'arydebts-v3',JSON.stringify(candidate));Object.assign(s,candidate);return true}catch(error){return false}};
+const serializeFinancial114=value=>JSON.stringify(value,(key,item)=>{if(typeof item==='number'&&!Number.isFinite(item))throw new Error('invalid_financial_number');return item});
+window.aryCommitFinancial109=change=>{try{const candidate=JSON.parse(serializeFinancial114(s));change(candidate);const encoded=serializeFinancial114(candidate);localStorage.setItem(typeof KEY!=='undefined'?KEY:'arydebts-v3',encoded);Object.assign(s,candidate);return true}catch(error){return false}};
 window.aryStorageError109=storageError;
 const amountNumber=v=>typeof parseNum==='function'?parseNum(v):Number(String(v??'').trim().replace(',','.'));
 const debtTotal=()=> (s.debts||[]).reduce((a,d)=>aryMoney108.add(a,Number(d.balance)||0),0);

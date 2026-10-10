@@ -47,7 +47,7 @@ window.saveExpense=id=>{
  return saved;
 };
 const saveDebtBefore=window.saveDebt;
-window.saveDebt=id=>{const f=document.getElementById('debtFrequency63')?.value||'monthly',date=document.getElementById('due')?.value||'';if(!frequencies.includes(f)||date&&!aryValidDate63(date))return toast(tx().invalid);const old=s.debts.length;saveDebtBefore(id);if(!document.getElementById('modal').classList.contains('hidden'))return;const d=id?s.debts.find(d=>d.id===id):s.debts.length>old?s.debts[s.debts.length-1]:null;if(d){d.paymentFrequency=f;save()}};
+window.saveDebt=id=>{const f=document.getElementById('debtFrequency63')?.value||'monthly',date=document.getElementById('due')?.value||'';if(!frequencies.includes(f)||date&&!aryValidDate63(date))return toast(tx().invalid);return saveDebtBefore(id,f)};
 window.aryValidDate63=k=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(k))return false;const[y,m,d]=k.split('-').map(Number),dt=new Date(y,m-1,d);return dt.getFullYear()===y&&dt.getMonth()===m-1&&dt.getDate()===d};
 const saveEventBefore=window.arySaveEvent36;
 window.arySaveEvent36=id=>{const f=document.getElementById('eventFrequency63')?.value||'once',date=document.getElementById('cevDate36')?.value||'',kind=document.getElementById('cevType36')?.value,name=document.getElementById('cevName36')?.value.trim(),raw=document.getElementById('cevAmount36')?.value.trim(),amount=raw===''?0:parseNum(raw);

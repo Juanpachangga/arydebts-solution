@@ -839,6 +839,15 @@ async function check(engine, label, viewport) {
     // V72 privacy and accessibility, exercised with synthetic records only.
     await page.evaluate(()=>{s.debts=[{id:7201,name:'Préstamo Árbol',balance:900,min:30}];s.payments=[{id:7202,amount:100,debtId:7201,date:localDate()}];go('home')});
     assert.equal(await page.locator('.progressRing72 span').innerText(),'10%');
+    assert.ok(await page.locator('.progressCloud114').isVisible(),'Explanation cloud appears without navigation');
+    assert.ok((await page.locator('.progressCloud114 .progressTip114').innerText()).length>30,'Cloud gives an actual tip');
+    assert.equal(await page.evaluate(()=>screen),'home');
+    await page.locator('.progressMath114 summary').click();
+    assert.ok(await page.locator('.progressMath114').evaluate(el=>el.open));
+    assert.ok((await page.locator('.progressMath114').innerText()).includes('20%'),'Expanded guide explains the percentage with an example');
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Cloud fits mobile and desktop');
+    await page.locator('.progressMath114 summary').click();
+
     assert.ok(await page.locator('.privacy72').isVisible());
     const financial72=await page.evaluate(()=>JSON.stringify([s.income,s.debts,s.expenses,s.payments]));
     await page.locator('.privacy72').click();

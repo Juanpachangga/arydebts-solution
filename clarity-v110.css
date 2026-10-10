@@ -26,3 +26,17 @@ body #app .adjustmentTruth111{margin:8px 0 14px;font:500 calc(15px * var(--ui-sc
 
 .reviewTotal112{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid #9caac944}.reviewTotal112 b{overflow-wrap:anywhere}.adjustmentReview112>.muted{font-size:14px;line-height:1.5}.adjustmentReview112 .list{margin-top:12px}.adjustmentReview112 .row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}.adjustmentReview112 .row>div{min-width:0}.adjustmentReview112 .row strong{overflow-wrap:anywhere}.adjustmentReview112 .btn.tiny{min-height:44px;white-space:normal}
 @media(max-width:420px){.adjustmentReview112 .row{grid-template-columns:minmax(0,1fr)}.adjustmentReview112 .row>div:last-child{justify-self:start;display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding-left:44px}.adjustmentReview112 .row .ico{width:36px!important;min-width:36px!important;height:36px!important;min-height:36px!important}}
+
+/* An in-flow speech cloud explains the ring without covering amounts or controls. */
+body #app .progressCloud114{position:relative;margin:0 0 22px;padding:16px 18px;border:2px solid #a997f5;border-radius:24px;background:#25304c;color:#f6f4ff;box-shadow:0 0 20px #a997f533;overflow:visible}
+body #app .progressCloud114::after{content:"";position:absolute;bottom:-10px;left:36px;width:16px;height:16px;background:inherit;border-right:2px solid #a997f5;border-bottom:2px solid #a997f5;transform:rotate(45deg)}
+body #app .progressCloud114 b{display:block;font-size:calc(15px * var(--ui-scale72,1));line-height:1.4}
+body #app .progressCloud114 p{margin:8px 0;font-size:calc(14px * var(--ui-scale72,1));line-height:1.55;overflow-wrap:anywhere}
+body #app .progressCloud114 small{display:block;line-height:1.5;font-size:calc(12px * var(--ui-scale72,1));opacity:.9}
+body #app .progressCloud114 button{margin-top:12px}
+body.ary-light #app .progressCloud114{background:#f4f0ff;color:#322b56;border-color:#8e78d4}
+body.ary-light #app .progressCloud114::after{border-color:#8e78d4}
+.progressExample114{padding:12px;border-radius:14px;background:#9d8ce91a}
+
+body #app .progressCloud114 .progressTip114{font-weight:650;padding-top:8px;border-top:1px solid #a997f566}
+.progressMath114{margin-top:10px}.progressMath114 summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:calc(13px * var(--ui-scale72,1));font-weight:650;text-decoration:underline;text-underline-offset:3px}.progressMath114 summary::before{content:"＋";margin-right:8px}.progressMath114[open] summary::before{content:"−"}.progressMath114 summary:focus-visible{outline:3px solid #a997f5;outline-offset:3px;border-radius:6px}
