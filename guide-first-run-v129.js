@@ -1,6 +1,7 @@
 (()=>{
 'use strict';
 const GLOBAL='arydebts-guide-v125';
+const REPAIR_PREFIX='arydebts-guide-repair-v166:';
 const LAUNCH_DELAY=320;
 let launchTimer=0,hiddenPaused=false;
 const read=k=>{try{return localStorage.getItem(k)}catch{return null}};
@@ -12,6 +13,18 @@ function currentNeedsGuide(){
  const api=lifecycle();
  if(!api?.currentUser?.())return false;
  return !api.completed?.();
+}
+function repairGuideOnce(){
+ const api=lifecycle(),id=api?.currentUser?.();
+ if(!id||typeof s!=='object'||!s?.onboarded)return false;
+ const key=REPAIR_PREFIX+id;
+ if(read(key)==='done')return false;
+ try{
+   if(api.completed?.()&&typeof api.resetCurrent==='function')api.resetCurrent();
+   else remove(GLOBAL);
+ }catch{remove(GLOBAL)}
+ write(key,'done');
+ return true;
 }
 function scheduleFirstLaunch(){
  clearTimeout(launchTimer);
@@ -44,7 +57,7 @@ function wrapAuth(){
  const wrapped=function(){
    const out=fn.apply(this,arguments);
    setTimeout(()=>{
-     if(typeof s==='object'&&s?.onboarded&&currentNeedsGuide())scheduleFirstLaunch();
+     if(typeof s==='object'&&s?.onboarded){repairGuideOnce();if(currentNeedsGuide())scheduleFirstLaunch()}
    },70);
    return out;
  };
@@ -75,9 +88,10 @@ function init(){
  wrapFinishOnboarding();
  wrapAuth();
  visibility();
- // A first-use customer should receive the guide from any app route; V125 will route the first step to Home.
+ // V166 repair: replay the corrected guide exactly once per existing account.
+ repairGuideOnce();
  if(typeof s==='object'&&s?.onboarded&&currentNeedsGuide())scheduleFirstLaunch();
 }
-window.aryGuideFirstRun129={needsGuide:currentNeedsGuide,schedule:scheduleFirstLaunch};
+window.aryGuideFirstRun129={needsGuide:currentNeedsGuide,schedule:scheduleFirstLaunch,repair:repairGuideOnce};
 init();
 })();
