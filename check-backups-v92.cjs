@@ -15,4 +15,15 @@ failing.write(KEY,state(99));assert.equal(JSON.parse(storage.getItem(KEY)).incom
 const blocked=create(storage,()=>{throw Error('quota')},k=>warnings.push(k));
 assert.throws(()=>blocked.write(KEY,state(100)));assert.equal(JSON.parse(storage.getItem(KEY)).income,99);assert.equal(warnings.at(-1),'save');
 map.set('arydebts-repair-original-v104',JSON.stringify([{at:'date',raw:'{broken'}]));assert.equal(JSON.parse(b.export()).repairedOriginals[0].raw,'{broken');
+const live=JSON.parse(state(123));live.debts=[{id:1,name:'Unsaved debt',balance:321}];
+const savedBefore=storage.getItem(KEY),historyBefore=storage.getItem(HISTORY);
+let exported=JSON.parse(blocked.export(live));
+assert.equal(exported.state.income,123,'Emergency download includes the current in-memory changes');
+assert.equal(exported.state.debts[0].balance,321);
+assert.equal(exported.unsavedChanges,true);assert.equal(exported.lastSavedState.income,99,'Keep the last saved state separately');
+assert.equal(storage.getItem(KEY),savedBefore);assert.equal(storage.getItem(HISTORY),historyBefore,'Export never mutates stored data or history');
+assert.equal(JSON.parse(b.export(JSON.parse(savedBefore))).unsavedChanges,undefined,'A saved snapshot is not labeled unsaved');
+const unreadable=create({getItem(){throw Error('blocked')},setItem(){throw Error('blocked')}});
+exported=JSON.parse(unreadable.export(live));assert.equal(exported.state.income,123);assert.equal(exported.lastSavedState,null);assert.deepEqual(exported.history,[]);
+assert.throws(()=>unreadable.export());assert.throws(()=>b.export({income:123}),'Invalid live data does not silently fall back to a stale snapshot');
 console.log('PASS: bounded history, deduplication, recovery, export, corruption and quota failures');
