@@ -14,7 +14,6 @@ function ensureStyle(){
 .ary125cloud,.ary126node.ary125cloud{max-height:calc(100dvh - 24px)!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain!important;box-sizing:border-box}
 .ary125cloud .ary125actions{position:sticky;bottom:-1px;z-index:4;margin-top:10px;padding:10px 0 2px;background:linear-gradient(180deg,rgba(20,29,61,0),rgba(20,29,61,.97) 28%,rgba(20,29,61,.99))}
 .ary-light .ary125cloud .ary125actions{background:linear-gradient(180deg,rgba(255,255,255,0),rgba(248,252,255,.97) 28%,rgba(248,252,255,.99))}
-/* One exit only: V140 supplies the visible top Cancel button. Keep V125 skip in the DOM for its safe finish(false) handler, but never show it. */
 .ary125skip{display:none!important}
 .ary139confirm{position:fixed;inset:0;z-index:10040;display:grid;place-items:center;padding:18px;background:rgba(2,7,20,.82)}
 .ary139confirmCard{width:min(370px,calc(100vw - 30px));padding:20px;border-radius:22px;border:1px solid rgba(105,218,255,.35);background:#172541;color:#f4f9ff;box-shadow:0 18px 52px rgba(0,0,0,.45);text-align:center}
@@ -42,12 +41,12 @@ window.aryGuideCancel139=askCancel;
 ensureStyle();
 })();
 
-// V140 — keep long-screen guide targets and controls in a safe viewport layout.
+// V140 — add controls only; V125 owns target-aware cloud placement.
 (()=>{
  if(document.getElementById('aryGuideSafeLayoutLoader140'))return;
  const script=document.createElement('script');
  script.id='aryGuideSafeLayoutLoader140';
- script.src='guide-safe-layout-v140.js?v=140.3';
+ script.src='guide-safe-layout-v140.js?v=140.4';
  script.async=false;
  document.body.appendChild(script);
 })();
