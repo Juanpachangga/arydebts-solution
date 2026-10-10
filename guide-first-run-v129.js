@@ -2,8 +2,8 @@
 'use strict';
 const GLOBAL='arydebts-guide-v125';
 const REPAIR_PREFIX='arydebts-guide-repair-v166:';
-const LAUNCH_DELAY=320;
-let launchTimer=0,paintTimer=0,hiddenPaused=false;
+const LAUNCH_DELAY=260,READY_DELAY=120,READY_TRIES=18;
+let launchTimer=0,paintTimer=0,readyTimer=0,hiddenPaused=false;
 const read=k=>{try{return localStorage.getItem(k)}catch{return null}};
 const write=(k,v)=>{try{localStorage.setItem(k,v);return true}catch{return false}};
 const remove=k=>{try{localStorage.removeItem(k)}catch{}};
@@ -11,61 +11,70 @@ const lifecycle=()=>window.aryGuideLifecycle128;
 const status=()=>window.aryFullGuideStatus125?.();
 const onHome=()=>typeof screen!=='string'||screen==='home';
 function currentNeedsGuide(){
- const api=lifecycle();
- if(!api?.currentUser?.())return false;
+ const api=lifecycle(),id=api?.currentUser?.();
+ if(!id||typeof s!=='object'||!s?.onboarded)return false;
  return !api.completed?.();
+}
+function ready(){
+ const api=lifecycle();
+ return !!(api?.currentUser?.()&&typeof s==='object'&&s?.onboarded&&typeof window.aryStartFullGuide125==='function');
 }
 function repairGuideOnce(){
  const api=lifecycle(),id=api?.currentUser?.();
  if(!id||typeof s!=='object'||!s?.onboarded)return false;
  const key=REPAIR_PREFIX+id;
  if(read(key)==='done')return false;
- try{
-   if(api.completed?.()&&typeof api.resetCurrent==='function')api.resetCurrent();
-   else remove(GLOBAL);
- }catch{remove(GLOBAL)}
+ // Existing accounts that completed an older/broken tour receive the corrected
+ // tour once. New/incomplete accounts simply get marked as already on the repaired
+ // generation so they are never replayed unnecessarily after completing it.
+ const wasCompleted=!!api.completed?.()||read(GLOBAL)==='done';
+ if(wasCompleted){
+  try{api.resetCurrent?.()}catch{remove(GLOBAL)}
+ }else remove(GLOBAL);
  write(key,'done');
- return true;
+ return wasCompleted;
 }
 function ensureVisiblePaint(){
  clearTimeout(paintTimer);
  paintTimer=setTimeout(()=>{
-   const st=status();
-   if(!st?.active||document.hidden||document.querySelector('.ary125cloud'))return;
-   // V125 owns all guide positioning. This only asks its render wrapper for one recovery paint.
-   try{if(typeof window.render==='function')window.render()}catch{}
+  const st=status();
+  if(!st?.active||document.hidden||document.querySelector('.ary125cloud'))return;
+  try{if(typeof window.render==='function')window.render()}catch{}
  },180);
 }
-function scheduleFirstLaunch(){
- clearTimeout(launchTimer);
- if(!currentNeedsGuide())return;
- // Never interrupt a user who already left Home while the launch delay was settling.
- if(!onHome()){remove(GLOBAL);return;}
- // Temporarily suppress V125's immediate auto-start while the first Home frame settles.
- write(GLOBAL,'done');
+function scheduleFirstLaunch(delay=LAUNCH_DELAY){
+ clearTimeout(launchTimer);launchTimer=0;
+ if(!currentNeedsGuide()||document.hidden||!onHome())return false;
  launchTimer=setTimeout(()=>{
-   if(!currentNeedsGuide())return;
-   if(document.hidden||!onHome()){
-     // Keep the guide pending, but release the temporary suppression. V125 can start it
-     // naturally on a later Home render instead of hijacking the current screen.
-     remove(GLOBAL);
-     return;
-   }
-   remove(GLOBAL);
-   const st=status();
-   if(!st?.active&&typeof window.aryStartFullGuide125==='function')window.aryStartFullGuide125();
-   ensureVisiblePaint();
- },LAUNCH_DELAY);
+  launchTimer=0;
+  if(!currentNeedsGuide()||document.hidden||!onHome())return;
+  const st=status();
+  if(st?.active){ensureVisiblePaint();return}
+  const start=window.aryStartFullGuide125;
+  if(typeof start!=='function')return;
+  start();
+  ensureVisiblePaint();
+ },delay);
+ return true;
+}
+function settle(attempt=0){
+ clearTimeout(readyTimer);readyTimer=0;
+ if(!ready()){
+  // Script/bootstrap order can briefly expose V129 before profile/lifecycle are
+  // fully hydrated on reload. Retry only for a short bounded window.
+  if(attempt<READY_TRIES)readyTimer=setTimeout(()=>settle(attempt+1),READY_DELAY);
+  return;
+ }
+ repairGuideOnce();
+ if(currentNeedsGuide())scheduleFirstLaunch();
 }
 function wrapFinishOnboarding(){
  const fn=window.finishOnboarding;
  if(typeof fn!=='function'||fn._aryFirstRun129)return;
  const wrapped=function(){
-   const shouldLaunch=currentNeedsGuide();
-   if(shouldLaunch)write(GLOBAL,'done');
-   const out=fn.apply(this,arguments);
-   if(shouldLaunch)setTimeout(scheduleFirstLaunch,50);
-   return out;
+  const out=fn.apply(this,arguments);
+  setTimeout(()=>settle(0),50);
+  return out;
  };
  wrapped._aryFirstRun129=true;
  window.finishOnboarding=wrapped;
@@ -74,46 +83,36 @@ function wrapAuth(){
  const fn=window.localAuth;
  if(typeof fn!=='function'||fn._aryFirstRun129)return;
  const wrapped=function(){
-   const out=fn.apply(this,arguments);
-   setTimeout(()=>{
-     if(typeof s==='object'&&s?.onboarded){repairGuideOnce();if(currentNeedsGuide())scheduleFirstLaunch()}
-   },70);
-   return out;
+  const out=fn.apply(this,arguments);
+  setTimeout(()=>settle(0),70);
+  return out;
  };
  wrapped._aryFirstRun129=true;
  window.localAuth=wrapped;
 }
 function visibility(){
  document.addEventListener('visibilitychange',()=>{
-   const st=status();
-   if(document.hidden){
-     clearTimeout(launchTimer);clearTimeout(paintTimer);
-     if(st?.active&&st.automatic&&typeof window.aryFullGuideToggleAuto125==='function'){
-       hiddenPaused=true;
-       window.aryFullGuideToggleAuto125();
-     }
-     return;
+  const st=status();
+  if(document.hidden){
+   clearTimeout(launchTimer);launchTimer=0;
+   clearTimeout(paintTimer);paintTimer=0;
+   if(st?.active&&st.automatic&&typeof window.aryFullGuideToggleAuto125==='function'){
+    hiddenPaused=true;
+    window.aryFullGuideToggleAuto125();
    }
-   if(hiddenPaused){
-     hiddenPaused=false;
-     const now=status();
-     if(now?.active&&!now.automatic&&typeof window.aryFullGuideToggleAuto125==='function')window.aryFullGuideToggleAuto125();
-     ensureVisiblePaint();
-   }else if(typeof s==='object'&&s?.onboarded&&currentNeedsGuide()&&!status()?.active){
-     scheduleFirstLaunch();
-   }else if(status()?.active){
-     ensureVisiblePaint();
-   }
+   return;
+  }
+  if(hiddenPaused){
+   hiddenPaused=false;
+   const now=status();
+   if(now?.active&&!now.automatic&&typeof window.aryFullGuideToggleAuto125==='function')window.aryFullGuideToggleAuto125();
+   ensureVisiblePaint();
+  }else settle(0);
  });
 }
 function init(){
- wrapFinishOnboarding();
- wrapAuth();
- visibility();
- // V166 repair: replay the corrected guide exactly once per existing account.
- repairGuideOnce();
- if(typeof s==='object'&&s?.onboarded&&currentNeedsGuide())scheduleFirstLaunch();
+ wrapFinishOnboarding();wrapAuth();visibility();settle(0);
 }
-window.aryGuideFirstRun129={needsGuide:currentNeedsGuide,schedule:scheduleFirstLaunch,repair:repairGuideOnce,ensurePaint:ensureVisiblePaint};
+window.aryGuideFirstRun129={needsGuide:currentNeedsGuide,schedule:scheduleFirstLaunch,repair:repairGuideOnce,ensurePaint:ensureVisiblePaint,settle};
 init();
 })();
