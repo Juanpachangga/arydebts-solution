@@ -44,12 +44,12 @@ sync();
 window.aryGuideUltra148={sync,mobile,active};
 })();
 
-// V151 — skip painting offscreen cards on constrained/mobile devices outside the guide.
+// V184 — load the current paint/navigation/guide transition chain fresh.
 (()=>{
  if(document.getElementById('aryPerformancePaintLoader151'))return;
  const script=document.createElement('script');
  script.id='aryPerformancePaintLoader151';
- script.src='performance-paint-v151.js?v=151.1';
+ script.src='performance-paint-v151.js?v=184.1';
  script.async=false;
  document.body.appendChild(script);
 })();
