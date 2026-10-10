@@ -45,6 +45,7 @@ jobs:
       - name: Check push server contracts with simulated transport
         run: node server/check-push-v90.mjs
       - name: Install browser test dependency
+        if: ${{ !cancelled() }}
         run: npm install --no-save --package-lock=false playwright@1.62.1
       - name: Exercise click and modal regression
         if: ${{ !cancelled() }}
