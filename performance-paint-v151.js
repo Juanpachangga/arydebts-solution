@@ -41,3 +41,13 @@ document.addEventListener('visibilitychange',sync);
 sync();
 window.aryPerformancePaint151={sync};
 })();
+
+// V154 — keep Home debt progress aligned with the real payment ledger.
+(()=>{
+ if(document.getElementById('aryHomeProgressIntegrityLoader154'))return;
+ const script=document.createElement('script');
+ script.id='aryHomeProgressIntegrityLoader154';
+ script.src='home-progress-integrity-v154.js?v=154.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
