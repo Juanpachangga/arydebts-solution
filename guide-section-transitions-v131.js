@@ -40,3 +40,13 @@ if(typeof baseGo==='function'&&!baseGo._aryTransition131){
 window.aryGuideTransition131={show,clear:removeNow};
 ensureStyle();
 })();
+
+// V132 — adapt the final guide screen to the customer's actual next steps.
+(()=>{
+ if(document.getElementById('aryGuideCompletionLoader132'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideCompletionLoader132';
+ script.src='guide-completion-v132.js?v=132.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
