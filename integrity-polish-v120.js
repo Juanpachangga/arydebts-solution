@@ -60,10 +60,24 @@ window.aryUniqueId120=function(...collections){
  let id=Date.now();while(used.has(String(id)))id++;return id;
 };
 
+const validMoney=value=>Number.isFinite(Number(value))&&Number(value)>=0;
 window.aryIntegrity120=function(){
- const groups={debts:s.debts||[],expenses:s.expenses||[],payments:s.payments||[],calendarEvents:s.calendarEvents||[]},duplicates={};
- for(const [name,items] of Object.entries(groups)){const seen=new Set(),dupes=[];for(const item of items){if(!item||item.id===undefined||item.id===null)continue;const id=String(item.id);if(seen.has(id)&&!dupes.includes(id))dupes.push(id);seen.add(id)}duplicates[name]=dupes;}
+ const groups={debts:s.debts||[],expenses:s.expenses||[],payments:s.payments||[],calendarEvents:s.calendarEvents||[]},duplicates={},invalid={},missingIds={};
+ for(const [name,items] of Object.entries(groups)){
+  const seen=new Set(),dupes=[],bad=[],missing=[];
+  items.forEach((item,index)=>{
+   if(!item||typeof item!=='object'||Array.isArray(item)){bad.push(index);return}
+   if(item.id===undefined||item.id===null||String(item.id).trim()==='')missing.push(index);else{const id=String(item.id);if(seen.has(id)&&!dupes.includes(id))dupes.push(id);seen.add(id)}
+   if(name==='debts'&&(!validMoney(item.balance??0)||!validMoney(item.min??0)||!validMoney(item.apr??0)))bad.push(index);
+   if(name==='expenses'&&!validMoney(item.amount??0))bad.push(index);
+   if(name==='payments'&&!validMoney(item.amount??0))bad.push(index);
+  });
+  duplicates[name]=dupes;invalid[name]=[...new Set(bad)];missingIds[name]=missing;
+ }
+ const debtIds=new Set((s.debts||[]).filter(Boolean).map(d=>String(d.id)));
+ const orphanPayments=(s.payments||[]).filter(p=>p&&p.debtId!==undefined&&p.debtId!==null&&!debtIds.has(String(p.debtId))).map(p=>String(p.id??''));
  const progress=typeof window.aryRealDebtProgress54==='function'?window.aryRealDebtProgress54():null;
- return {incomeValid:Number.isFinite(Number(s.income))&&Number(s.income)>=0,savingsValid:Number.isFinite(Number(s.savings))&&Number(s.savings)>=0,duplicates,progress};
+ const clean=validMoney(s.income)&&validMoney(s.savings)&&Object.values(duplicates).every(x=>!x.length)&&Object.values(invalid).every(x=>!x.length)&&Object.values(missingIds).every(x=>!x.length)&&!orphanPayments.length;
+ return {clean,incomeValid:validMoney(s.income),savingsValid:validMoney(s.savings),duplicates,invalid,missingIds,orphanPayments,progress};
 };
 })();
