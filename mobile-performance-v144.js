@@ -13,19 +13,24 @@ body #app .progressTips110{transition:opacity .18s ease,transform .18s ease!impo
 @media(max-width:820px),(pointer:coarse){
  html.aryGuideLite144 .ary125shade{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:none!important;background:rgba(2,6,18,.66)!important}
  html.aryGuideLite144 .ary125focus{animation:none!important;transition:none!important;box-shadow:0 0 0 3px rgba(98,221,255,.16)!important;border-width:2px!important}
- html.aryGuideLite144 .ary125cloud,html.aryGuideLite144 .ary126node.ary125cloud{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:none!important;box-shadow:0 12px 34px rgba(0,0,0,.34)!important;background:#172541!important}
+ html.aryGuideLite144 .ary125cloud,html.aryGuideLite144 .ary126node.ary125cloud{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:none!important;box-shadow:0 12px 34px rgba(0,0,0,.34)!important;background:#172541!important;color:#f2f8ff!important}
+ html.aryGuideLite144 .ary125cloud p{color:#bdd0e8!important}
+ html.aryGuideLite144 .ary127section{background:#203858!important;color:#bfefff!important;box-shadow:none!important}
+ html.aryGuideLite144.ary-light .ary125cloud,html.aryGuideLite144 .ary-light .ary125cloud{background:linear-gradient(145deg,#fff,#f1f6ff)!important;color:#172641!important;border-color:#81cfdf!important;box-shadow:0 12px 30px rgba(39,62,103,.22)!important}
+ html.aryGuideLite144.ary-light .ary125cloud p,html.aryGuideLite144 .ary-light .ary125cloud p{color:#60738c!important}
+ html.aryGuideLite144.ary-light .ary127section,html.aryGuideLite144 .ary-light .ary127section{background:#e8f8ff!important;color:#235b74!important;border-color:#b9e7f1!important}
  html.aryGuideLite144 .ary127countdown,html.aryGuideLite144 .ary130link,html.aryGuideLite144 .ary131transition{display:none!important}
- html.aryGuideLite144 .ary127section{background:#203858!important;box-shadow:none!important}
  html.aryGuideLite144 #aryGuideBlock127{touch-action:none!important}
  html.aryGuideLite144 .ary140cancelTop{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
  html.aryGuideLite144 .ary125cloud .ary125actions{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+ html.aryGuideLite144 .aryGuide94{display:none!important}
  html.aryGuideLite144 *{scroll-behavior:auto!important}
 }
 `;
  document.head.appendChild(st);
 }
 
-function guideActive(){try{return !!window.aryFullGuideStatus125?.()?.active||!!document.querySelector('.ary126node.ary125cloud')}catch{return false}}
+function guideActive(){try{return !!window.aryFullGuideStatus125?.()?.active}catch{return false}}
 function syncLite(){
  const root=document.documentElement;
  if(MOBILE()&&guideActive())root.classList.add('aryGuideLite144');
