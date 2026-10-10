@@ -9,7 +9,7 @@ const copy={
 };
 const t=()=>copy[lang()]||copy.es;
 function guideActive(){return !!window.aryFullGuideStatus125?.()?.active||!!document.querySelector('.ary125cloud,.ary126node')}
-function modalOpen(){const m=document.getElementById('modal');return !!m&&!m.classList.contains('hidden')&&m.offsetParent!==null}
+function modalOpen(){const m=document.getElementById('modal');if(!m||m.classList.contains('hidden'))return false;const cs=globalThis.getComputedStyle?.(m);return !cs||cs.display!=='none'&&cs.visibility!=='hidden'}
 function usable(){return !!profile&&!!s?.onboarded&&!modalOpen()&&!['welcome','signup','login','intro','setupIncome','setupExpenses','setupDebts','setupGoal'].includes(String(screen||''))&&!guideActive()}
 function ensureStyle(){if(document.getElementById(STYLE))return;const st=document.createElement('style');st.id=STYLE;st.textContent=`
 html{scroll-behavior:auto}button,.btn,[role="button"],a,input,select{touch-action:manipulation}.btn,button{-webkit-tap-highlight-color:transparent}
