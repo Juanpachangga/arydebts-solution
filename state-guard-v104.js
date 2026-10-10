@@ -3,11 +3,17 @@
 'use strict';
 const KEY='arydebts-v3',ARCHIVE='arydebts-repair-original-v104';
 const record=v=>v&&typeof v==='object'&&!Array.isArray(v);
+const finiteNonNegative=(value,fallback=0)=>{const n=Number(value);return Number.isFinite(n)&&n>=0?n:fallback};
+const uniqueStrings=(value,fallback=[])=>{const source=Array.isArray(value)?value:fallback,seen=new Set(),out=[];for(const item of source){if(typeof item!=='string')continue;if(seen.has(item))continue;seen.add(item);out.push(item)}return out};
 function normalize(value,defaults){
  const state={...defaults,...(record(value)?value:{})};
  for(const key of ['debts','expenses','payments','calendarEvents'])state[key]=Array.isArray(state[key])?state[key].filter(record):[];
- for(const key of ['goals','navOrder'])state[key]=Array.isArray(state[key])?state[key].filter(v=>typeof v==='string'):[...defaults[key]];
+ state.goals=uniqueStrings(state.goals,defaults.goals||[]);
+ state.navOrder=uniqueStrings(state.navOrder,defaults.navOrder||[]);
  for(const key of ['name','greeting','goal'])if(typeof state[key]!=='string')state[key]=defaults[key];
+ state.income=finiteNonNegative(state.income,finiteNonNegative(defaults.income,0));
+ state.savings=finiteNonNegative(state.savings,finiteNonNegative(defaults.savings,0));
+ state.onboarded=state.onboarded===true;
  if(!['light','dark'].includes(state.theme))state.theme=defaults.theme;
  if(!['immersive','lite'].includes(state.mode))state.mode=defaults.mode;
  if(!['daily','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual'].includes(state.incomeFrequency))state.incomeFrequency=defaults.incomeFrequency;
