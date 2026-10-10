@@ -8,22 +8,13 @@ function ensureStyle(){
  if(document.getElementById(STYLE))return;
  const st=document.createElement('style');st.id=STYLE;st.textContent=`
 @media(max-width:820px),(pointer:coarse){
- html.aryPaint151:not(.aryPaintGuide151) #app>.card,
- html.aryPaint151:not(.aryPaintGuide151) #app>.full,
- html.aryPaint151:not(.aryPaintGuide151) #app>.grid>.card,
- html.aryPaint151:not(.aryPaintGuide151) #app .list>.card{
-   content-visibility:auto;
-   contain-intrinsic-size:auto 180px;
- }
- html.aryPerfLite147:not(.aryPaintGuide151) #app .card{
-   box-shadow:none!important;
- }
+ html.aryPerfLite147:not(.aryPaintGuide151) #app .card{box-shadow:none!important}
  html.aryPerfLite147:not(.aryPaintGuide151) #app .tap45,
- html.aryPerfLite147:not(.aryPaintGuide151) #app .btn{
-   transition:none!important;
- }
+ html.aryPerfLite147:not(.aryPaintGuide151) #app .btn{transition:none!important}
 }
-html.aryPerfPaused147 #app,html.aryPerfPaused147 #nav,html.aryPerfPaused147 #modal{content-visibility:auto}
+/* Click reliability: hidden modals must never receive taps, even if another stylesheet changes display. */
+#modal.hidden{pointer-events:none!important}
+#modal:not(.hidden){pointer-events:auto}
 `;
  document.head.appendChild(st);
 }
@@ -39,7 +30,7 @@ for(const name of ['render','go','aryStartFullGuide125','aryFullGuideNext125','a
 for(const ev of ['resize','orientationchange','pageshow'])window.addEventListener(ev,()=>requestAnimationFrame(sync),{passive:true});
 document.addEventListener('visibilitychange',sync);
 sync();
-window.aryPerformancePaint151={sync};
+window.aryPerformancePaint151={sync,interactivePaintSafe:true};
 })();
 
 // V154 — keep Home debt progress aligned with the real payment ledger.
