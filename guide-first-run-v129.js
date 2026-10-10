@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 const GLOBAL='arydebts-guide-v125';
-const LAUNCH_DELAY=900;
+const LAUNCH_DELAY=320;
 let launchTimer=0,hiddenPaused=false;
 const read=k=>{try{return localStorage.getItem(k)}catch{return null}};
 const write=(k,v)=>{try{localStorage.setItem(k,v);return true}catch{return false}};
@@ -16,7 +16,7 @@ function currentNeedsGuide(){
 function scheduleFirstLaunch(){
  clearTimeout(launchTimer);
  if(!currentNeedsGuide())return;
- // Temporarily suppress V125's immediate auto-start while Home settles after onboarding.
+ // Temporarily suppress V125's immediate auto-start while the first app frame settles.
  write(GLOBAL,'done');
  launchTimer=setTimeout(()=>{
    if(!currentNeedsGuide()||document.hidden)return;
@@ -32,7 +32,7 @@ function wrapFinishOnboarding(){
    const shouldLaunch=currentNeedsGuide();
    if(shouldLaunch)write(GLOBAL,'done');
    const out=fn.apply(this,arguments);
-   if(shouldLaunch)setTimeout(scheduleFirstLaunch,80);
+   if(shouldLaunch)setTimeout(scheduleFirstLaunch,50);
    return out;
  };
  wrapped._aryFirstRun129=true;
@@ -45,7 +45,7 @@ function wrapAuth(){
    const out=fn.apply(this,arguments);
    setTimeout(()=>{
      if(typeof s==='object'&&s?.onboarded&&currentNeedsGuide())scheduleFirstLaunch();
-   },120);
+   },70);
    return out;
  };
  wrapped._aryFirstRun129=true;
@@ -75,8 +75,8 @@ function init(){
  wrapFinishOnboarding();
  wrapAuth();
  visibility();
- // Existing first-use session that loaded directly on Home: give the UI time to settle.
- if(typeof s==='object'&&s?.onboarded&&typeof screen==='string'&&screen==='home'&&currentNeedsGuide())scheduleFirstLaunch();
+ // A first-use customer should receive the guide from any app route; V125 will route the first step to Home.
+ if(typeof s==='object'&&s?.onboarded&&currentNeedsGuide())scheduleFirstLaunch();
 }
 window.aryGuideFirstRun129={needsGuide:currentNeedsGuide,schedule:scheduleFirstLaunch};
 init();
