@@ -8,4 +8,17 @@ const [emergency]=await Promise.all([page.waitForEvent('download'),page.locator(
 const emergencyContent=JSON.parse(await fs.readFile(await emergency.path(),'utf8'));
 assert.equal(emergencyContent.state.income,404,'Download preserves visible edits after storage failure');assert.equal(emergencyContent.lastSavedState.income,303);assert.equal(emergencyContent.unsavedChanges,true);
 await page.evaluate(()=>aryRestoreStorage105());
-await page.locator('#aryHistory92 button').first().click();assert.equal(await page.evaluate(()=>s.income),202);assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')).income),202);await page.reload();assert.equal(await page.evaluate(()=>s.income),202);assert.deepEqual(errors,[]);console.log('PASS browser: automatic history, settings entry, download, confirmed restoration and reload')}finally{await browser?.close();server.close()}})().catch(e=>{console.error(e);process.exitCode=1});
+await page.locator('#aryHistory92 button').first().click();assert.equal(await page.evaluate(()=>s.income),202);assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-v3')).income),202);await page.reload();assert.equal(await page.evaluate(()=>s.income),202);// Keep a recovery dialog open while its history changes.
+await page.evaluate(()=>{s.income=505;save();aryRecovery92();s.income=606;save()});
+await page.locator('#aryHistory92 button').first().click();
+assert.equal(await page.evaluate(()=>s.income),202,'The button restores the copy displayed when the dialog opened');
+// Restore a legacy record with a null debt and malformed preferences.
+await page.evaluate(()=>{const raw=JSON.stringify({income:707,debts:[{id:707,name:'Legacy card',balance:70,min:7},null],expenses:[],payments:[],calendarEvents:[],locale:'bad_locale',goals:null});localStorage.setItem('arydebts-recovery-v92',JSON.stringify([{at:new Date().toISOString(),raw}]));aryRecovery92()});
+await page.locator('#aryHistory92 button').first().click();
+assert.equal(await page.evaluate(()=>s.income),707);
+assert.equal(await page.evaluate(()=>s.debts.length),1);
+assert.equal(await page.evaluate(()=>s.debts[0].balance),70);
+assert.equal(await page.evaluate(()=>s.locale),'es-US');
+assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('arydebts-recovery-v92')).some(x=>JSON.parse(x.raw).debts?.includes(null))),true,'Keep the unmodified original');
+await page.reload();assert.equal(await page.evaluate(()=>s.income),707);assert.equal(await page.evaluate(()=>s.debts.length),1);
+assert.deepEqual(errors,[]);console.log('PASS browser: automatic history, settings entry, download, confirmed restoration and reload')}finally{await browser?.close();server.close()}})().catch(e=>{console.error(e);process.exitCode=1});

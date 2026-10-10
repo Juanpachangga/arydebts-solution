@@ -26,4 +26,32 @@ assert.equal(JSON.parse(b.export(JSON.parse(savedBefore))).unsavedChanges,undefi
 const unreadable=create({getItem(){throw Error('blocked')},setItem(){throw Error('blocked')}});
 exported=JSON.parse(unreadable.export(live));assert.equal(exported.state.income,123);assert.equal(exported.lastSavedState,null);assert.deepEqual(exported.history,[]);
 assert.throws(()=>unreadable.export());assert.throws(()=>b.export({income:123}),'Invalid live data does not silently fall back to a stale snapshot');
+// A history change while a recovery dialog is open must not change its selection.
+map.set(KEY,state(500));map.set(HISTORY,JSON.stringify([{at:'older',raw:state(400)}]));
+const selected=b.read()[0].raw;b.capture(state(450));
+assert.equal(b.restore(0,selected).income,400,'Restore the selected bytes, not a shifted index');
+const unchanged=storage.getItem(KEY);map.set(HISTORY,'[]');assert.throws(()=>b.restore(0,selected));assert.equal(storage.getItem(KEY),unchanged,'A disappeared selection cannot restore another copy');
+// Refuse replacement when the current financial snapshot cannot be backed up.
+map.set(HISTORY,JSON.stringify([{at:'older',raw:state(300)}]));
+assert.throws(()=>failing.restore(0));assert.equal(storage.getItem(KEY),unchanged,'Failed pre-restore backup leaves the current finances intact');
+const {normalize}=require('./state-guard-v104.js');
+const defaults={income:0,name:'',greeting:'',goal:'',theme:'dark',mode:'immersive',incomeFrequency:'monthly',locale:'es-US',currency:'USD',goals:[],navOrder:['home'],debts:[],expenses:[],payments:[],calendarEvents:[]};
+const damaged=JSON.stringify({...JSON.parse(state(700)),debts:[{id:7,name:'Keep me',balance:70},null],locale:'bad_locale',goals:null});
+map.set(HISTORY,JSON.stringify([{at:'older',raw:damaged}]));
+const repairing=create(storage,storage.setItem,()=>{},value=>normalize(value,defaults));
+const recovered=repairing.restore(0,damaged);
+assert.equal(recovered.debts.length,1);assert.equal(recovered.debts[0].balance,70);assert.equal(recovered.locale,'es-US');assert.deepEqual(recovered.goals,[]);
+assert.equal(JSON.parse(storage.getItem(KEY)).income,700);assert.ok(repairing.read().some(x=>x.raw===damaged),'The unmodified old copy remains available');
+assert.ok(repairing.read().some(x=>x.raw===unchanged),'The replaced financial state is backed up');
+map.set(KEY,state(800));map.set(HISTORY,JSON.stringify([{at:'older',raw:damaged}]));
+assert.throws(()=>create(storage,storage.setItem,()=>{},()=>({})).restore(0));assert.equal(storage.getItem(KEY),state(800),'Invalid preparation does not replace current data');
+const largeCurrent=JSON.stringify({...JSON.parse(state(900)),note:'x'.repeat(300000)});
+const largeOriginal=JSON.stringify({...JSON.parse(damaged),note:'y'.repeat(300000)});
+map.set(KEY,largeCurrent);map.set(HISTORY,JSON.stringify([{at:'older',raw:largeOriginal}]));
+const largeHistory=storage.getItem(HISTORY);
+assert.throws(()=>repairing.restore(0,largeOriginal),'Refuse recovery if retaining both originals exceeds the history budget');
+assert.equal(storage.getItem(KEY),largeCurrent);assert.equal(storage.getItem(HISTORY),largeHistory,'Refusal does not evict either original');
+map.set(KEY,state(800));map.set(HISTORY,JSON.stringify([{at:'older',raw:state(700)}]));
+const keyBlocked=create(storage,(key,value)=>{if(key===KEY)throw Error('quota');storage.setItem(key,value)},kind=>warnings.push(kind));
+assert.throws(()=>keyBlocked.restore(0));assert.equal(storage.getItem(KEY),state(800));assert.equal(warnings.at(-1),'save');assert.ok(keyBlocked.read().some(copy=>copy.raw===state(800)),'The original is retained even if the final write fails');
 console.log('PASS: bounded history, deduplication, recovery, export, corruption and quota failures');
