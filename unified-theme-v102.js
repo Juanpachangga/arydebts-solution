@@ -10,7 +10,7 @@ const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const copy={
  es:{invalidIncome:'Escribe un ingreso válido.',saveError:'No se pudo guardar. Tus números siguen como antes. Libera espacio o habilita el almacenamiento e inténtalo de nuevo.',deleteDebt:'¿Eliminar esta deuda? Esta acción no se puede deshacer.',deleteDebtPayments:n=>`Esta deuda tiene ${n} pago${n===1?'':'s'} registrado${n===1?'':'s'}. Si la eliminas, también se eliminará ese historial para mantener tus cálculos correctos. ¿Continuar?`,deleted:'Deuda eliminada',incomeSaved:'Ingreso guardado'},
  en:{invalidIncome:'Enter a valid income amount.',saveError:'Could not save. Your numbers remain unchanged. Free up space or enable storage and try again.',deleteDebt:'Delete this debt? This action cannot be undone.',deleteDebtPayments:n=>`This debt has ${n} recorded payment${n===1?'':'s'}. Deleting it will also remove that history so your calculations stay correct. Continue?`,deleted:'Debt deleted',incomeSaved:'Income saved'},
- pt:{invalidIncome:'Digite uma renda válida.',saveError:'Não foi possível guardar. Seus números continuam como antes. Libere espaço ou habilite o armazenamento e tente novamente.',deleteDebt:'Excluir esta dívida? Esta ação não pode ser desfeita.',deleteDebtPayments:n=>`Esta dívida tem ${n} pagamento${n===1?'':'s'} registrado${n===1?'':'s'}. Ao excluí-la, esse histórico também será removido para manter seus cálculos corretos. Continuar?`,deleted:'Dívida excluída',incomeSaved:'Renda salva'}
+ pt:{invalidIncome:'Digite uma renda válida.',saveError:'Não foi possível salvar. Seus números continuam como antes. Libere espaço ou habilite o armazenamento e tente novamente.',deleteDebt:'Excluir esta dívida? Esta ação não pode ser desfeita.',deleteDebtPayments:n=>`Esta dívida tem ${n} pagamento${n===1?'':'s'} registrado${n===1?'':'s'}. Ao excluí-la, esse histórico também será removido para manter seus cálculos corretos. Continuar?`,deleted:'Dívida excluída',incomeSaved:'Renda salva'}
 };
 const t=()=>copy[lang()];
 const commit=change=>typeof window.aryCommitFinancial109==='function'&&window.aryCommitFinancial109(change);
@@ -114,12 +114,22 @@ window.setIncome=function(){
  document.body.appendChild(script);
 })();
 
-// V121 — validate downloaded backups before restoring them and complete the local recovery loop.
+// V121 — validate and import downloaded recovery files safely.
 (()=>{
  if(document.getElementById('aryRecoveryIntegrityLoader121'))return;
  const script=document.createElement('script');
  script.id='aryRecoveryIntegrityLoader121';
  script.src='recovery-integrity-v121.js?v=121.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
+
+// V122 — replace legacy record creation with atomic writes and collision-safe IDs.
+(()=>{
+ if(document.getElementById('aryRecordIntegrityLoader122'))return;
+ const script=document.createElement('script');
+ script.id='aryRecordIntegrityLoader122';
+ script.src='record-integrity-v122.js?v=122.1';
  script.async=false;
  document.body.appendChild(script);
 })();
