@@ -153,3 +153,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V125 — replace the short guide with a full automatic spotlight tour across the important app experience.
+(()=>{
+ if(document.getElementById('aryFullGuideLoader125'))return;
+ const script=document.createElement('script');
+ script.id='aryFullGuideLoader125';
+ script.src='full-guide-v125.js?v=125.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
