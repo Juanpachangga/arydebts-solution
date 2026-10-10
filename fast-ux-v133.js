@@ -14,7 +14,6 @@ function usable(){return !!profile&&!!s?.onboarded&&!modalOpen()&&!['welcome','s
 function ensureStyle(){if(document.getElementById(STYLE))return;const st=document.createElement('style');st.id=STYLE;st.textContent=`
 html{scroll-behavior:auto}button,.btn,[role="button"],a,input,select{touch-action:manipulation}.btn,button{-webkit-tap-highlight-color:transparent}
 #aryQuickFab133{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:calc(82px + env(safe-area-inset-bottom));z-index:25;width:54px;height:54px;border:0;border-radius:18px;display:grid;place-items:center;font-size:28px;line-height:1;color:#fff;background:linear-gradient(135deg,#29d7bd,#46c5ff,#7863ff);box-shadow:0 14px 34px rgba(20,63,125,.32),0 0 0 1px rgba(255,255,255,.14);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}#aryQuickFab133:active{transform:scale(.94);box-shadow:0 7px 18px rgba(20,63,125,.26)}
-/* Belt-and-suspenders click safety: an open modal always wins the hit-test. */
 #modal:not(.hidden)~#aryQuickFab133{display:none!important;pointer-events:none!important}
 .ary133quickGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.ary133quickGrid button{min-height:74px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:18px}.ary133quickGrid .ary133ico{font-size:24px}.ary133quickGrid b{font-size:12px}
 @media(min-width:900px){#aryQuickFab133{right:28px;bottom:28px;width:58px;height:58px}}@media(max-width:560px){#aryQuickFab133{right:14px;bottom:calc(76px + env(safe-area-inset-bottom));width:52px;height:52px;border-radius:17px}.ary133quickGrid button{min-height:68px}}
@@ -49,7 +48,7 @@ function watchModal(){
  m._aryFabObserver133=obs;
 }
 hook('render',syncFab);
-hook('modal',syncFab);
+hook('modal',syncFab,()=>document.getElementById(FAB)?.remove());
 hook('closeM',syncFab);
 hook('aryStartFullGuide125',null,()=>document.getElementById(FAB)?.remove());
 hook('aryFullGuideFinish125',syncFab);
@@ -61,7 +60,6 @@ window.addEventListener('keydown',e=>{if(e.key!=='Escape'||guideActive())return;
 ensureStyle();watchModal();syncFab();
 })();
 
-// V134/V139 — make forms fast and load the corrected automatic-guide continuation layer.
 (()=>{
  if(document.getElementById('aryFastFormsLoader134'))return;
  const script=document.createElement('script');
