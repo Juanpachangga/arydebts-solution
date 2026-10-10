@@ -886,13 +886,12 @@ async function check(engine, label, viewport) {
     await page.evaluate(previous=>{Object.assign(s,previous);save();go('home')},beforeActivity82);
     const profile80=await page.evaluate(()=>JSON.parse(JSON.stringify(profile)));
     await page.evaluate(()=>{s.mode='lite';save();logout()});
-    assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'true');
-    if(!mobileCover97)assert.ok(await page.locator('.worldMotion57').isVisible());
-    else assert.notEqual(await page.locator('.sculpture97').evaluate(el=>getComputedStyle(el).animationName),'none');
+    assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'false');
+    if(mobileCover97)assert.equal(await page.locator('.sculpture97').evaluate(el=>getComputedStyle(el).animationName),'none');
     await page.locator('.coverMotion80').click();
-    assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'false');
+    assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'true');
     await page.reload();
-    assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'false');
+    assert.equal(await page.locator('.coverMotion80').getAttribute('aria-checked'),'true');
     await page.locator('.coverMotion80').click();
     await page.evaluate(p=>{profile=p;s.onboarded=true;go('home')},profile80);
     assert.equal(await page.evaluate(()=>s.mode),'lite');

@@ -2,7 +2,7 @@ name: App integration and browser checks
 
 on:
   push:
-    branches: [main, v54-real-data-foundation, ary-push-v90, ary-repairs-v91, ary-security-v92]
+    branches: [main, v54-real-data-foundation, ary-push-v90, ary-repairs-v91, ary-security-v92, repairs-v104]
   pull_request:
     branches: [main]
 
@@ -26,6 +26,8 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
+      - name: Check local startup and original state retention
+        run: node check-state-guard-v104.cjs
       - name: Check local recovery and storage failures
         run: node check-backups-v92.cjs
       - name: Check financial analysis calculations
@@ -45,16 +47,22 @@ jobs:
       - name: Install browser test dependency
         run: npm install --no-save --package-lock=false playwright@1.62.1
       - name: Exercise local backup controls
+        if: ${{ !cancelled() }}
         run: node check-backups-browser-v92.cjs
       - name: Exercise analysis and net worth controls
+        if: ${{ !cancelled() }}
         run: node check-analysis-browser-v93.cjs
       - name: Exercise compact headers and contextual guide on all devices
+        if: ${{ !cancelled() }}
         run: node check-experience-browser-v94.cjs
       - name: Exercise original mobile welcome and bubble icons
+        if: ${{ !cancelled() }}
         run: node check-mobile-welcome-v97.cjs
       - name: Check notification rules and browser behavior
+        if: ${{ !cancelled() }}
         run: node check-notifications-v89.cjs
       - name: Exercise application in real browsers
+        if: ${{ !cancelled() }}
         run: node check-browser.cjs
       - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}

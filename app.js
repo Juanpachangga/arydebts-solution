@@ -4,8 +4,10 @@ const seed={currency:"USD",locale:"es-US",mode:"immersive",name:"",income:0,inco
 function cloneSeed(){return JSON.parse(JSON.stringify(seed))}
 function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function safeSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-let s;try{s=JSON.parse(safeGet(KEY)||"null")||cloneSeed()}catch(e){s=cloneSeed()}
-let profile;try{profile=JSON.parse(safeGet(AUTH)||"null")}catch(e){profile=null}
+const loadedState104=aryState104.load(localStorage,cloneSeed());
+let s=loadedState104.state;
+if(loadedState104.repaired)window.addEventListener("DOMContentLoaded",()=>toast("Reparamos la estructura de tus datos guardados. El original se incluye al descargar tus copias."));
+let profile;try{profile=JSON.parse(safeGet(AUTH)||"null");if(!profile||typeof profile!=="object"||Array.isArray(profile))profile=null}catch(e){profile=null}
 let screen=location.hash==="#welcome"?"welcome":profile?(s.onboarded?"home":(["intro","setupIncome","setupExpenses","setupDebts","setupGoal"].includes(s.onboardingStep)?s.onboardingStep:"intro")):"welcome",debtFilter="all",expenseFilter="all";
 const appNavigation55=[];
 const $=q=>document.querySelector(q),esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),money=n=>window.aryMoney63?aryMoney63(n):new Intl.NumberFormat(s.locale||undefined,{style:"currency",currency:s.currency,maximumFractionDigits:s.currency==="COP"?0:2}).format(+n||0);
