@@ -651,10 +651,10 @@ async function check(engine, label, viewport) {
     }
     await page.evaluate(order=>{s.navOrder=order;save();go('home')},orderBefore65);
     await page.evaluate(()=>{s.mode='immersive';save()});
-    if(viewport.width>=1000){assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el).display),'block');assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el,'::before').animationName),'colorWave65');}
+    if(viewport.width>=1000){assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el).display),'block');assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el,'::before').animationName),await page.evaluate(()=>aryPerformance147.profile().constrained?'none':'colorWave65'));}
     await page.locator('.settings64').click();
     assert.ok(await page.locator('.signoutWave65').isVisible(),'Preferences include a separate red sign-out control');
-    assert.equal(await page.locator('.signoutWave65').evaluate(el=>getComputedStyle(el,'::before').animationName),'signoutRipple65');
+    assert.equal(await page.locator('.signoutWave65').evaluate(el=>getComputedStyle(el,'::before').animationName),await page.evaluate(()=>aryPerformance147.profile().constrained?'none':'signoutRipple65'));
     await page.screenshot({path:path.join(root,'browser-results',`${label}-preferences-v65.png`),fullPage:false});
     await page.locator('#modal [onclick="closeM()"]').click();
     await page.evaluate(()=>{s.mode='lite';save()});
