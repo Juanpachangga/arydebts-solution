@@ -676,7 +676,7 @@ async function check(engine, label, viewport) {
     const seasonState71=await page.evaluate(()=>({mode:s.mode,theme:document.documentElement.dataset.aryTheme}));
     await page.evaluate(()=>{s.mode='immersive';arySetTheme46('dark');save()});
     const artCount71=await page.locator('.seasonArt71').count();assert.equal(artCount71,await page.evaluate(()=>aryBackdropSeason71()==='everyday'?0:4));
-    assert.equal(await page.locator('.seasonGlow71').evaluate(el=>getComputedStyle(el).animationName),'seasonAurora71');
+    assert.equal(await page.locator('.seasonGlow71').evaluate(el=>getComputedStyle(el).animationName),await page.evaluate(()=>aryPerformance147.profile().constrained?'none':'seasonAurora71'));
     await page.screenshot({path:path.join(root,'browser-results',`${label}-season-v71.png`),fullPage:false});
     await page.evaluate(()=>{arySetTheme46('light');save()});
     assert.equal(await page.locator('html').getAttribute('data-ary-theme'),'light');
