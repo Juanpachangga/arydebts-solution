@@ -12,18 +12,16 @@ if(typeof baseGo==='function'&&!baseGo._aryFastNav137){
  const wrapped=function(route){
    if(guideActive())return baseGo.apply(this,arguments);
    const dest=typeof route==='string'?route:'';
-   if(dest&&typeof screen==='string'&&dest===screen&&!modalOpen()){
-     // Preserve the fast path without freezing locale/data changes on the current route.
-     if(typeof render==='function')render();
-     return true;
-   }
+   // Same-screen navigation is intentionally a no-op. Locale/data setters render explicitly,
+   // avoiding duplicate paints that can detach buttons while a user is tapping them.
+   if(dest&&typeof screen==='string'&&dest===screen&&!modalOpen())return false;
    return baseGo.apply(this,arguments);
  };
  wrapped._aryFastNav137=true;
  window.go=wrapped;
 }
 // V164: do not intercept click events in capture phase. Native button taps are more reliable,
-// especially on iOS/Safari, and the same-screen guard above already prevents redundant navigation.
+// especially on iOS/Safari, and the same-screen guard above prevents redundant navigation.
 window.aryFastNavigation137={active:true,captureGuard:false};
 })();
 
