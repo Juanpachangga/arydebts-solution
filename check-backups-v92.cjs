@@ -54,4 +54,13 @@ assert.equal(storage.getItem(KEY),largeCurrent);assert.equal(storage.getItem(HIS
 map.set(KEY,state(800));map.set(HISTORY,JSON.stringify([{at:'older',raw:state(700)}]));
 const keyBlocked=create(storage,(key,value)=>{if(key===KEY)throw Error('quota');storage.setItem(key,value)},kind=>warnings.push(kind));
 assert.throws(()=>keyBlocked.restore(0));assert.equal(storage.getItem(KEY),state(800));assert.equal(warnings.at(-1),'save');assert.ok(keyBlocked.read().some(copy=>copy.raw===state(800)),'The original is retained even if the final write fails');
+// Visible edits must survive recovery even when they were never persisted.
+map.set(KEY,state(100));map.set(HISTORY,JSON.stringify([{at:'older',raw:state(50)}]));
+const liveBefore=JSON.parse(state(200));
+assert.equal(b.restore(0,state(50),liveBefore).income,50);
+assert.ok(b.read().some(copy=>copy.raw===state(200)),'Retain visible unsaved edits');
+assert.ok(b.read().some(copy=>copy.raw===state(100)),'Retain the last persisted snapshot too');
+map.set(KEY,state(100));map.set(HISTORY,JSON.stringify([{at:'older',raw:state(50)}]));
+assert.throws(()=>failing.restore(0,state(50),liveBefore));assert.equal(storage.getItem(KEY),state(100));
+assert.throws(()=>b.restore(0,state(50),{income:200}));assert.equal(storage.getItem(KEY),state(100),'Invalid visible data prevents replacement');
 console.log('PASS: bounded history, deduplication, recovery, export, corruption and quota failures');
