@@ -143,3 +143,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V124 — atomic expense deletion and mobile interaction polish.
+(()=>{
+ if(document.getElementById('aryCrossDeleteMobileLoader124'))return;
+ const script=document.createElement('script');
+ script.id='aryCrossDeleteMobileLoader124';
+ script.src='cross-delete-mobile-v124.js?v=124.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
