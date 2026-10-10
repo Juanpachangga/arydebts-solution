@@ -3,6 +3,7 @@
 const GLOBAL='arydebts-guide-v125';
 const OWNER='arydebts-guide-owner-v128';
 const PREFIX='arydebts-guide-user-v128:';
+const ACTIVE_MS=1000,IDLE_MS=6000,HIDDEN_MS=8000;
 let wasActive=false,watcher=0,lastUser='';
 const read=k=>{try{return localStorage.getItem(k)}catch{return null}};
 const write=(k,v)=>{try{localStorage.setItem(k,v);return true}catch{return false}};
@@ -21,11 +22,9 @@ function syncForCurrentUser(){
  if(!id)return false;
  lastUser=id;
  const key=scoped(id),owner=read(OWNER),globalDone=read(GLOBAL)==='done',userDone=read(key)==='done';
- // One-time migration: the pre-V128 global completion belongs to the account already using this browser.
  if(!owner&&globalDone){write(OWNER,id);write(key,'done');return true}
  if(!owner)write(OWNER,id);
  if(userDone){write(GLOBAL,'done');return true}
- // A different/new account on the same browser must receive its own first-use guide.
  remove(GLOBAL);
  return false;
 }
@@ -35,16 +34,17 @@ function persistCompletion(){
  write(scoped(id),'done');
  if(!read(OWNER))write(OWNER,id);
 }
-function monitor(){
- clearInterval(watcher);
- watcher=setInterval(()=>{
-   const status=window.aryFullGuideStatus125?.();
-   if(status?.active)wasActive=true;
-   if(wasActive&&!status?.active&&read(GLOBAL)==='done'){
-     persistCompletion();wasActive=false;
-   }
- },250);
+function schedule(ms){clearTimeout(watcher);watcher=setTimeout(check,ms)}
+function check(){
+ const status=window.aryFullGuideStatus125?.();
+ if(status?.active)wasActive=true;
+ if(wasActive&&!status?.active&&read(GLOBAL)==='done'){
+   persistCompletion();wasActive=false;
+ }
+ if(document.hidden)schedule(HIDDEN_MS);
+ else schedule(status?.active?ACTIVE_MS:IDLE_MS);
 }
+function monitor(){schedule(0)}
 function wrapStart(){
  const start=window.aryStartFullGuide125;
  if(typeof start!=='function'||start._aryLifecycle128)return;
@@ -52,10 +52,23 @@ function wrapStart(){
    const id=identity();
    if(id){remove(scoped(id));remove(GLOBAL);lastUser=id}
    wasActive=true;
-   return start.apply(this,arguments);
+   const out=start.apply(this,arguments);
+   schedule(ACTIVE_MS);
+   return out;
  };
  wrapped._aryLifecycle128=true;
  window.aryStartFullGuide125=wrapped;
+}
+function wrapFinish(){
+ const finish=window.aryFullGuideFinish125;
+ if(typeof finish!=='function'||finish._aryLifecycle128)return;
+ const wrapped=function(){
+   const out=finish.apply(this,arguments);
+   setTimeout(()=>{persistCompletion();wasActive=false;schedule(IDLE_MS)},0);
+   return out;
+ };
+ wrapped._aryLifecycle128=true;
+ window.aryFullGuideFinish125=wrapped;
 }
 function wrapLogoutAndAuth(){
  for(const name of ['localAuth','logout']){
@@ -72,9 +85,8 @@ function wrapLogoutAndAuth(){
 }
 function init(){
  syncForCurrentUser();
- wrapStart();
- wrapLogoutAndAuth();
- monitor();
+ wrapStart();wrapFinish();wrapLogoutAndAuth();monitor();
+ document.addEventListener('visibilitychange',()=>schedule(document.hidden?HIDDEN_MS:0));
 }
 window.aryGuideLifecycle128={
  currentUser:()=>identity(),
