@@ -19,3 +19,7 @@ body #app .notifyOpen110:focus-visible,body #app .notifyDismiss89:focus-visible,
 body.highContrast72 #app .aryGuide94,body.highContrast72 #app .guideLaunch94{background:#05101f!important;border-color:#bfcbff!important;box-shadow:none!important;color:#fff!important}
 body.ary-light.highContrast72 #app .aryGuide94,body.ary-light.highContrast72 #app .guideLaunch94{background:#fff!important;border-color:#34465e!important;color:#17233b!important}
 @media(max-width:360px){body #app .notifyItem89{grid-template-columns:24px minmax(0,1fr) 44px;padding:12px!important;gap:6px}.progressHeading110>b{flex-basis:100%}}
+
+body #app .adjustmentTruth111{margin:8px 0 14px;font:500 calc(15px * var(--ui-scale72,1))/1.55 system-ui;overflow-wrap:anywhere}.adjustmentOthers111{margin-top:14px}.adjustmentOthers111 summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:8px}.adjustmentOthers111 summary:before{content:'＋'}.adjustmentOthers111[open] summary:before{content:'−'}
+.introSwipe111{margin:0 0 8px;font:550 12px/1.4 system-ui;color:#66617e}.introStage97{touch-action:pan-y pinch-zoom!important}.introStage97[data-direction="1"]{animation-name:introForward111}.introStage97[data-direction="-1"]{animation-name:introBack111}@keyframes introForward111{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}@keyframes introBack111{from{opacity:0;transform:translateY(-28px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.introStage97{animation:none!important}}
