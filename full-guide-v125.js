@@ -102,7 +102,7 @@ const S={
   ['assistant',[],null,null,true]
  ]
 };
-let active=false,index=0,auto=true,timer=0,target=null,renderTimer=0,renderRaf=0,paintTimer=0,renderToken=0;
+let active=false,index=0,auto=true,timer=0,target=null,renderTimer=0,renderRaf=0,paintTimer=0,renderToken=0,startTimer=0;
 const steps=()=>S[lang()]||S.es;
 const completed=()=>{try{return localStorage.getItem(KEY)==='done'}catch{return false}};
 const markDone=()=>{try{localStorage.setItem(KEY,'done')}catch{}};
@@ -112,7 +112,7 @@ function css(){
  const st=document.createElement('style');st.id='aryFullGuideStyle125';st.textContent=`
 .ary125shade{position:fixed;z-index:10000;background:rgba(2,6,18,.78);backdrop-filter:blur(1.5px);pointer-events:none;transition:all .2s ease}
 .ary125focus{position:fixed;z-index:10001;border:3px solid #62ddff;border-radius:20px;box-shadow:0 0 0 5px rgba(89,221,255,.15),0 0 38px rgba(85,209,255,.65);pointer-events:none;transition:all .2s ease}
-.ary125navShield{position:fixed;z-index:10002;background:rgba(2,6,18,.78);pointer-events:auto;border-radius:24px}
+.ary125navShield{position:fixed;z-index:10002;background:rgba(2,6,18,.78);pointer-events:none;border-radius:24px}
 .ary125cloud{position:fixed;z-index:10003;width:min(410px,calc(100vw - 24px));padding:16px;border:1px solid rgba(124,226,255,.5);border-radius:26px;background:linear-gradient(145deg,rgba(16,28,58,.98),rgba(31,23,67,.98));box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 36px rgba(69,193,255,.14);color:#f2f8ff;transition:top .18s ease,left .18s ease;max-height:min(360px,calc(100dvh - 28px));overflow:auto;box-sizing:border-box}
 .ary125cloud:before{content:'☁️';position:absolute;right:16px;top:10px;font-size:28px;filter:drop-shadow(0 5px 9px rgba(0,0,0,.25))}
 .ary125cloud h3{margin:0 42px 6px 0;font-size:17px}.ary125cloud p{margin:0;color:#bdd0e8;line-height:1.48;font-size:13px}
@@ -126,7 +126,12 @@ function css(){
 `;
  document.head.appendChild(st)
 }
-function clearPending(){clearTimeout(timer);clearTimeout(renderTimer);clearTimeout(paintTimer);cancelAnimationFrame(renderRaf);renderTimer=0;paintTimer=0;renderRaf=0;renderToken++}
+function modalOpen(){return !!document.querySelector('#modal:not(.hidden)')}
+function contextualGuideOpen(){return !!document.querySelector('.aryGuide94,#aryGuide116,#aryGuideMask116')}
+function canAutoStart(){return !active&&!completed()&&!!profile&&!!s?.onboarded&&typeof screen==='string'&&screen==='home'&&!modalOpen()&&!contextualGuideOpen()}
+function cancelAutoStart(){clearTimeout(startTimer);startTimer=0}
+function scheduleAutoStart(delay=220){if(startTimer||!canAutoStart())return;startTimer=setTimeout(()=>{startTimer=0;if(canAutoStart())start(false)},delay)}
+function clearPending(){clearTimeout(timer);clearTimeout(renderTimer);clearTimeout(paintTimer);cancelAutoStart();cancelAnimationFrame(renderRaf);renderTimer=0;paintTimer=0;renderRaf=0;renderToken++}
 function clearNodes(){document.querySelectorAll('.ary125shade,.ary125focus,.ary125navShield,.ary125cloud,.ary125skip,.ary126node').forEach(n=>n.remove())}
 function navElement(){return document.querySelector('#nav')}
 function isNavTarget(el){const nav=navElement();return !!nav&&(el===nav||nav.contains(el))}
@@ -145,7 +150,7 @@ function paint(step,expected=index,token=renderToken){if(!active||expected!==ind
 function renderFinal(){if(!active)return;clearNodes();shade(null,null);const x=copy(),box=document.createElement('section');box.className='ary125cloud ary125final';box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.innerHTML=`<div class="finishIcon">🎉</div><h3>${x.doneTitle}</h3><p>${x.doneText}</p><div class="ary125bar">${steps().map(()=>'<i class="on"></i>').join('')}</div><div class="ary125actions"><button onclick="aryFullGuideBack125()">‹ ${x.back}</button><div class="ary125meta">${x.count} ${index+1} / ${steps().length}</div><button class="primary" onclick="aryFullGuideFinish125()">${x.finish}</button></div>`;document.body.appendChild(box);placeCloud(box,null);clearTimeout(timer)}
 function route(i){const step=steps()[i];if(!step)return;clearTimeout(timer);clearTimeout(paintTimer);index=i;renderToken++;const dest=step[0];if(typeof go==='function'&&typeof screen==='string'&&screen!==dest){go(dest);requestGuideRender(MOBILE()?80:120)}else requestGuideRender()}
 function silenceContextGuide(){document.querySelectorAll('.aryGuide94').forEach(n=>n.remove());try{if(s?.guide94?.active===true&&typeof window.aryEndGuide94==='function')window.aryEndGuide94()}catch{document.querySelectorAll('.aryGuide94').forEach(n=>n.remove())}}
-function start(force=false){if(active)return;if(!force&&completed())return;if(!profile||!s?.onboarded)return;try{localStorage.setItem(OLD_KEY,'done')}catch{};try{if(typeof aryGuideSkip116==='function')aryGuideSkip116()}catch{};document.getElementById('aryGuide116')?.remove();document.getElementById('aryGuideMask116')?.remove();active=true;auto=true;index=0;silenceContextGuide();route(0)}
+function start(force=false){cancelAutoStart();if(active)return;if(!profile||!s?.onboarded)return;if(!force&&!canAutoStart())return;try{localStorage.setItem(OLD_KEY,'done')}catch{};try{if(typeof aryGuideSkip116==='function')aryGuideSkip116()}catch{};document.getElementById('aryGuide116')?.remove();document.getElementById('aryGuideMask116')?.remove();active=true;auto=true;index=0;silenceContextGuide();route(0)}
 function finish(openAssistant){active=false;clearPending();clearNodes();document.getElementById('aryGuideBlock127')?.remove();document.documentElement.classList.remove('aryGuideLite144','aryGuideUltra148');markDone();if(openAssistant&&typeof go==='function')go('assistant')}
 window.aryFullGuideNext125=()=>{if(!active)return;if(index>=steps().length-1)return finish(true);route(index+1)};
 window.aryFullGuideBack125=()=>{if(active&&index>0)route(index-1)};
@@ -156,10 +161,11 @@ window.aryFullGuideStatus125=()=>({active,index,automatic:auto,completed:complet
 window.aryGuideUnified125=true;
 window.addEventListener('resize',()=>active&&requestGuideRender(MOBILE()?100:60),{passive:true});
 if(!MOBILE())window.addEventListener('scroll',()=>{if(active)requestGuideRender(120)},{passive:true});
-const priorRender=window.render;window.render=function(){const out=priorRender.apply(this,arguments);if(active){document.querySelectorAll('.aryGuide94,.ary126node').forEach(n=>n.remove());requestGuideRender(MOBILE()?55:80)}else if(!completed()&&profile&&s?.onboarded&&screen==='home')setTimeout(()=>start(false),180);return out};
+document.addEventListener('pointerdown',()=>{if(!active&&startTimer)cancelAutoStart()},{capture:true,passive:true});
+const priorRender=window.render;window.render=function(){const out=priorRender.apply(this,arguments);if(active){cancelAutoStart();document.querySelectorAll('.aryGuide94,.ary126node').forEach(n=>n.remove());requestGuideRender(MOBILE()?55:80)}else if(canAutoStart())scheduleAutoStart(180);else cancelAutoStart();return out};
 function addRestart(){const sheet=document.querySelector('#modal .sheet');if(!sheet||sheet.querySelector('#aryRestartGuide125'))return;const b=document.createElement('button');b.id='aryRestartGuide125';b.type='button';b.className='btn widebtn';b.textContent=copy().restart;b.onclick=()=>{if(typeof closeM==='function')closeM();window.aryStartFullGuide125()};sheet.appendChild(b)}
 for(const name of ['aryV18Settings','settings']){const fn=window[name];if(typeof fn==='function'&&!fn._aryGuide125){const wrapped=function(){const r=fn.apply(this,arguments);setTimeout(addRestart,0);return r};wrapped._aryGuide125=true;window[name]=wrapped}}
 try{localStorage.setItem(OLD_KEY,'done')}catch{}
 try{if(typeof aryGuideSkip116==='function')aryGuideSkip116()}catch{}
-clearNodes();css();if(!completed()&&profile&&s?.onboarded&&screen==='home')setTimeout(()=>start(false),220);
+clearNodes();css();scheduleAutoStart(220);
 })();
