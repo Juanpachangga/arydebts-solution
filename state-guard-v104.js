@@ -10,7 +10,7 @@ function normalize(value,defaults){
  for(const key of ['name','greeting','goal'])if(typeof state[key]!=='string')state[key]=defaults[key];
  if(!['light','dark'].includes(state.theme))state.theme=defaults.theme;
  if(!['immersive','lite'].includes(state.mode))state.mode=defaults.mode;
- if(!['monthly','weekly','biweekly'].includes(state.incomeFrequency))state.incomeFrequency=defaults.incomeFrequency;
+ if(!['daily','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual'].includes(state.incomeFrequency))state.incomeFrequency=defaults.incomeFrequency;
  try{if(typeof state.locale!=='string')throw Error();new Intl.NumberFormat(state.locale);}catch{state.locale=defaults.locale;}
  if(typeof state.currency!=='string'||! /^[A-Z]{3}$/.test(state.currency))state.currency=defaults.currency;
  return state;

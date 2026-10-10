@@ -6,13 +6,13 @@ const list=value=>Array.isArray(value)?value.filter(item=>item&&typeof item==='o
 const month=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`,today=`${month}-${String(now.getDate()).padStart(2,'0')}`;
 const inMonth=value=>{const v=String(value||'');if(!/^\d{4}-\d{2}-\d{2}$/.test(v)||v.slice(0,7)!==month)return false;const[y,m,d]=v.split('-').map(Number),date=new Date(y,m-1,d);return date.getFullYear()===y&&date.getMonth()===m-1&&date.getDate()===d};
 const incomeBase=positive(state.income),income=state.incomeFrequency==='weekly'?incomeBase*52/12:state.incomeFrequency==='biweekly'?incomeBase*26/12:incomeBase;
-const expenses=list(state.expenses).filter(e=>inMonth(e.date)&&String(e.date)<=today).reduce((sum,e)=>sum+positive(e.amount),0);
+const expenses=list(state.expenses).filter(e=>inMonth(e.date)&&String(e.date)<=today).reduce((sum,e)=>aryMoney108.add(sum,positive(e.amount)),0);
 const payments=list(state.payments).filter(p=>inMonth(p.date)&&String(p.date)<=today),paidByDebt=new Map();
-let debtPayments=0;for(const p of payments){const amount=positive(p.amount);debtPayments+=amount;if(p.debtId!==undefined&&p.debtId!==null){const id=String(p.debtId);paidByDebt.set(id,(paidByDebt.get(id)||0)+amount)}}
+let debtPayments=0;for(const p of payments){const amount=positive(p.amount);debtPayments=aryMoney108.add(debtPayments,amount);if(p.debtId!==undefined&&p.debtId!==null){const id=String(p.debtId);paidByDebt.set(id,aryMoney108.add(paidByDebt.get(id)||0,amount))}}
 const active=list(state.debts).filter(d=>positive(d.balance)>0);
-const debt=active.reduce((sum,d)=>sum+positive(d.balance),0),registeredMinimums=active.reduce((sum,d)=>sum+positive(d.min),0);
-const minimums=active.reduce((sum,d)=>sum+Math.min(positive(d.balance),Math.max(0,positive(d.min)-(paidByDebt.get(String(d.id))||0))),0);
-const cashFlowBeforeMinimums=income-expenses-debtPayments,availableAfterMinimums=cashFlowBeforeMinimums-minimums;
+const debt=active.reduce((sum,d)=>aryMoney108.add(sum,positive(d.balance)),0),registeredMinimums=active.reduce((sum,d)=>aryMoney108.add(sum,positive(d.min)),0);
+const minimums=active.reduce((sum,d)=>aryMoney108.add(sum,Math.min(positive(d.balance),Math.max(0,aryMoney108.subtract(positive(d.min),paidByDebt.get(String(d.id))||0)))),0);
+const cashFlowBeforeMinimums=aryMoney108.subtract(aryMoney108.subtract(income,expenses),debtPayments),availableAfterMinimums=aryMoney108.subtract(cashFlowBeforeMinimums,minimums);
 return{income,expenses,debt,debtPayments,registeredMinimums,minimums,remainingMinimums:minimums,cashFlowBeforeMinimums,availableAfterMinimums,available:availableAfterMinimums}
 };
 (()=>{

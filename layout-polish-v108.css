@@ -1,0 +1,38 @@
+/* Record grids and semantic colors share the same rules across app sections. */
+body.signed64 #app :is(.grid,.menuGrid,.choiceGrid,.quick,.planPulse34,.debtPulse33)>*{min-width:0}
+body.signed64 #app :is(.menuGrid,.choiceGrid,.quick){grid-template-columns:repeat(2,minmax(0,1fr))}
+body.signed64 #app :is(.card,.row,.menuItem,.choice) :is(strong,b,p,span){overflow-wrap:anywhere}
+body.signed64 #app :is(.kpi,.analysisMetrics93 strong,.planPulse34 strong,.debtPulse33 strong){font-variant-numeric:tabular-nums;overflow-wrap:anywhere!important;line-height:1.35}
+body.signed64 #app .homeDaily81 .homeMetric51 .kpi{overflow-wrap:anywhere!important}
+body.signed64 #app .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:center}
+body.signed64 #app .row>.rowleft{min-width:0;width:100%}
+body.signed64 #app .row>div:last-child{min-width:0;max-width:100%;text-align:right}
+body.signed64 #app .row>div:last-child>b{display:block;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+body.signed64 #app .row .rowActions{justify-content:flex-end;gap:8px;margin-top:8px;max-width:100%}
+body.signed64 #app .row .ico{line-height:1!important;align-self:center}
+body.signed64 #app .rowActions .btn.tiny{font-size:calc(12px * var(--ui-scale72,1))!important;white-space:normal!important;overflow-wrap:anywhere;min-width:0!important}
+body.signed64 #app :is(.menuItem,.choice,.homeActions81 .btn){height:100%;white-space:normal;line-height:1.45}
+body.signed64 #app :is(.good,.kpi.good){color:#75efc0!important}
+body.signed64 #app :is(.bad,.danger,.dangerBtn,.kpi.bad){color:#ffacc0!important}
+body.ary-light.signed64 #app :is(.good,.kpi.good){color:#116449!important}
+body.ary-light.signed64 #app :is(.bad,.danger,.dangerBtn,.kpi.bad){color:#a31c42!important}
+body.signed64 #app :is(button,a,input,select,textarea):focus-visible,#modal :is(button,a,input,select,textarea):focus-visible{outline:3px solid #56cfff;outline-offset:3px}
+body.ary-light.signed64 #app :is(button,a,input,select,textarea):focus-visible,body.ary-light #modal :is(button,a,input,select,textarea):focus-visible{outline-color:#315bbd}
+body.signed64 #app .analysisCategories93 li{flex-wrap:wrap}
+body.signed64 #app .analysisCategories93 li span{min-width:0;flex-basis:90px}
+body.signed64 #app .analysisCategories93 li b{overflow-wrap:anywhere}
+@media(max-width:600px){
+ body.signed64 #app .row{grid-template-columns:minmax(0,1fr)}
+ body.signed64 #app .row>div:last-child{text-align:left}
+ body.signed64 #app .row .rowActions{justify-content:flex-start}
+ body.signed64 #app :is(.planPulse34,.debtPulse33){grid-template-columns:minmax(0,1fr)}
+ body.signed64 #app :is(.planPulse34,.debtPulse33)>.card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:12px}
+ body.signed64 #app :is(.planPulse34,.debtPulse33) strong{text-align:right}
+ body.signed64 #app :is(.planStatus34,.planAttack34>div,.debtTarget33>div){flex-wrap:wrap}
+}
+@media(max-width:360px){body.signed64 #app :is(.menuGrid,.choiceGrid,.quick){grid-template-columns:minmax(0,1fr)}}
+
+body.signed64 #app .progressBox{flex-wrap:wrap}
+body.signed64 #app .progressBox>.ring{flex-shrink:0}
+body.signed64 #app .progressBox>div:last-child{min-width:0;flex:1 1 140px}
+body.signed64 #nav button{min-height:44px;min-width:0;overflow-wrap:anywhere}

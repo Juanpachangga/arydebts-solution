@@ -257,3 +257,27 @@ console.log('PASS protected essentials, recurring ant visibility, non-duplicated
 }
 
 {const b=boot(true);b.run("s.mode='immersive';render();s.mode='lite';go('expenses')");assert.equal(b.run('aryEffectiveMotion80()'),'lite','Navigation must not restore a stale motion preference');b.run("s.expenses=[{id:1,name:'Rent',amount:300,frequency:'monthly',date:''},{id:2,name:'Planned rent',sourceExpenseId:1,amount:300,frequency:'once',date:'2026-10-25'},{id:3,name:'Food',amount:50,frequency:'once',date:'2026-10-08'}];s.debts=[];s.payments=[];s.income=1000;s.incomeFrequency='monthly'");const z=b.run('aryBudgetSnapshot54(s,new Date(2026,9,9))');assert.equal(z.actualExpenses,50);assert.equal(z.recurringExpenses,300);assert.equal(z.availableAfterMinimums,650);b.run("s.expenses[1].date='2026-10-09'");const after=b.run('aryBudgetSnapshot54(s,new Date(2026,9,9))');assert.equal(after.actualExpenses,350);assert.equal(after.recurringExpenses,0);assert.equal(after.availableAfterMinimums,650);console.log('PASS future dated expenses stay out of actual cash flow and do not prematurely consume recurrent reserves');}
+
+// Real decimal payments close the debt, can be reversed, and agree across tabs.
+const cents108=boot(true);
+cents108.run("s.income=0.6;s.incomeFrequency='monthly';s.debts=[{id:108,name:'Decimal card',balance:0.3,min:0.3}];s.expenses=[{id:108,date:localDate(),name:'A',amount:0.1},{id:109,date:localDate(),name:'B',amount:0.2}];s.payments=[];s.calendarEvents=[]");
+assert.equal(cents108.run('aryRealData54.snapshot().expenses'),0.3);
+assert.equal(cents108.run('aryPersonalBudget61().margin'),0,'No invisible deficit in a balanced budget');
+assert.equal(cents108.run('aryApplyPayment54({debtId:108,amount:0.1}).ok'),true);
+assert.equal(cents108.run('s.debts[0].balance'),0.2);
+assert.equal(cents108.run('aryApplyPayment54({debtId:108,amount:0.2}).complete'),true);
+assert.equal(cents108.run('s.debts[0].balance'),0);
+assert.equal(cents108.run('aryRealDebtProgress54().paid'),0.3);
+assert.equal(cents108.run('aryRealData54.snapshot().debtPayments'),0.3);
+assert.equal(cents108.run("aryAnalysis93.spending(s,'month',localDate(),localDate()).spent"),0.6);
+cents108.run("aryDeleteConfirmed68('payment',s.payments[1].id)");
+assert.equal(cents108.run('s.debts[0].balance'),0.2);
+assert.equal(boot(cents108.data).run('s.debts[0].balance'),0.2);
+for(const frequency of ['daily','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual']){
+ const source=boot(true);source.run(`s.income=120;s.incomeFrequency='${frequency}';save()`);
+ const reloaded=boot(source.data);
+ assert.equal(reloaded.run('s.incomeFrequency'),frequency,'Keep the saved income frequency after reload');
+ reloaded.run("go('setupIncome')");assert.match(reloaded.nodes.app.innerHTML,new RegExp('value="'+frequency+'" selected'),'Setup must show the saved frequency');
+ assert.equal(reloaded.run('aryRealData54.snapshot().income'),source.run('aryRealData54.snapshot().income'));
+}
+console.log('PASS decimal payments, full payoff, deletion, reload, balanced margin, cross-tab totals and all eight saved income frequencies');
