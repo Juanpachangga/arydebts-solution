@@ -20,6 +20,8 @@ window.saveDebt=function(id,frequency='monthly'){
  const balance=parseAmount(rawBalance),min=rawMin===''?0:parseAmount(rawMin),apr=rawApr===''?0:parseAmount(rawApr);
  const due=String(document.getElementById('due')?.value||''),note=String(document.getElementById('note')?.value||'').trim();
  const editing=id!==null&&id!==undefined;
+ const shownIcon=String(document.getElementById('recordIcon96')?.textContent||'').trim();
+ const resolvedIcon=shownIcon||(typeof iconFor==='function'?iconFor(name,'deuda'):'💳');
  if(!name||rawBalance===''||!Number.isFinite(balance)||balance<0||!Number.isFinite(min)||min<0||!Number.isFinite(apr)||apr<0){if(typeof toast==='function')toast(t().invalidDebt);return false;}
  if(editing&&!(s.debts||[]).some(d=>String(d.id)===String(id)))return false;
  if(due&&!validDate(due)){if(typeof toast==='function')toast(t().invalidDebt);return false;}
@@ -29,7 +31,7 @@ window.saveDebt=function(id,frequency='monthly'){
    if(!Array.isArray(next.payments))next.payments=[];
    let debt=editing?next.debts.find(d=>String(d.id)===String(id)):null;
    if(!debt){debt={id:recordId};next.debts.push(debt);}
-   Object.assign(debt,{name,balance,min,apr,due,note,icon:typeof iconFor==='function'?iconFor(name,'deuda'):'💳',paymentFrequency:frequency||'monthly'});
+   Object.assign(debt,{name,balance,min,apr,due,note,icon:resolvedIcon,paymentFrequency:frequency||'monthly'});
    if(editing)for(const payment of next.payments)if(String(payment?.debtId)===String(id))payment.debtName=name;
  })){if(typeof toast==='function')toast(t().saveError);return false;}
  window._debtIcon=null;
