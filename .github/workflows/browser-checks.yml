@@ -46,6 +46,9 @@ jobs:
         run: node server/check-push-v90.mjs
       - name: Install browser test dependency
         run: npm install --no-save --package-lock=false playwright@1.62.1
+      - name: Exercise click and modal regression
+        if: ${{ !cancelled() }}
+        run: node check-clicks-browser-v165.cjs
       - name: Exercise local backup controls
         if: ${{ !cancelled() }}
         run: node check-backups-browser-v92.cjs
