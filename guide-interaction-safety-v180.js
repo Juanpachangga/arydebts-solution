@@ -13,15 +13,26 @@ function pauseAuto(){
  try{rawToggle()}finally{internalToggle=false}
  return true;
 }
+function keepGuidePending(){
+ try{window.aryGuideLifecycle128?.resetCurrent?.()}catch{}
+ try{localStorage.removeItem('arydebts-guide-v125')}catch{}
+}
 function cancelStale(){
  cancelAnimationFrame(abortRaf);abortRaf=0;
  if(!abortStale)return false;
  const skip=document.querySelector('.ary125skip');
- if(skip){abortStale=false;skip.click();return true}
+ if(skip){
+  abortStale=false;
+  skip.click();
+  // V125 treats Skip as completion. This abort is different: the person never
+  // saw the guide, so restore pending state for the next legitimate Home visit.
+  keepGuidePending();
+  return true;
+ }
  abortRaf=requestAnimationFrame(()=>{
   abortRaf=0;
   const late=document.querySelector('.ary125skip');
-  if(late){abortStale=false;late.click()}
+  if(late){abortStale=false;late.click();keepGuidePending()}
  });
  return false;
 }
