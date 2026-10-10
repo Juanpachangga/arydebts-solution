@@ -51,3 +51,13 @@ window.addEventListener('pageshow',schedule,{passive:true});
 apply();
 window.aryPerformance147={profile,apply};
 })();
+
+// V148 — while the guide is active on mobile, use an ultra-light rendering path.
+(()=>{
+ if(document.getElementById('aryGuideUltraLoader148'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideUltraLoader148';
+ script.src='guide-ultralite-v148.js?v=148.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
