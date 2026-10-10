@@ -7,7 +7,6 @@ window.aryNumberHint63=()=>({es:'Los separadores siguen tu idioma. Los valores f
 const monetaryIds=new Set(['oi','inc','inc45','b','m','payAmount54','editPayAmount54','cevAmount36','aryAntCustom','goalAmount54','buyPrice45']);
 const isAmount=el=>el&&el.tagName==='INPUT'&&el.type==='text'&&(el.inputMode==='decimal'||monetaryIds.has(el.id));
 const separators=loc=>{const p=new Intl.NumberFormat(loc,{useGrouping:true}).formatToParts(1000.1);return{decimal:p.find(p=>p.type==='decimal')?.value||'.',group:p.find(p=>p.type==='group')?.value||','}};
-// Keep fractional digits and a trailing decimal while editing; regroup integers without rounding them.
 window.aryLiveNumber67=(raw,loc=locale(),pasted=false)=>{
  const text=String(raw??'').trim(),{decimal}=separators(loc);
  if(!text)return '';if(/^[-]?\d+(?:[.,]\d+)?e[+-]?\d+$/i.test(text)){const n=parseNum(text);return Number.isFinite(n)?new Intl.NumberFormat(loc,{maximumFractionDigits:20}).format(n):text}
@@ -30,6 +29,11 @@ document.addEventListener('input',event=>{if(!event.isComposing)live(event.targe
 document.addEventListener('compositionend',event=>live(event.target));
 const format=el=>{if(!isAmount(el)||document.activeElement===el||!el.value.trim())return;const value=parseNum(el.value);if(!Number.isFinite(value))return;el.value=aryInputNumber63(value);if(Math.abs(value)>Number.MAX_SAFE_INTEGER)el.setAttribute('aria-description',aryNumberHint63())};
 document.addEventListener('focusout',event=>{const el=event.target;if(isAmount(el)&&el.value.trim()){const value=parseNum(el.value);if(Number.isFinite(value))el.value=aryInputNumber63(value)}});
-const scan=()=>{document.querySelectorAll('input[type="text"][inputmode="decimal"]').forEach(format);const m=document.getElementById('modal');if(m&&!m.classList.contains('hidden')&&m.querySelector('input[inputmode="decimal"]')&&!document.getElementById('numberHint63')){const p=document.createElement('small');p.id='numberHint63';p.className='muted numberHint63';p.textContent=aryNumberHint63();m.querySelector('input[inputmode="decimal"]').insertAdjacentElement('afterend',p)}};
-new MutationObserver(scan).observe(document.getElementById('app'),{childList:true,subtree:true});new MutationObserver(scan).observe(document.getElementById('modal'),{childList:true,subtree:true});scan();if(typeof render==='function')render();
+const scan=root=>{const scope=root?.querySelectorAll?root:document;scope.querySelectorAll('input[type="text"][inputmode="decimal"]').forEach(format);const m=document.getElementById('modal');if(m&&!m.classList.contains('hidden')&&m.querySelector('input[inputmode="decimal"]')&&!document.getElementById('numberHint63')){const p=document.createElement('small');p.id='numberHint63';p.className='muted numberHint63';p.textContent=aryNumberHint63();m.querySelector('input[inputmode="decimal"]').insertAdjacentElement('afterend',p)}};
+function deferScan(root){requestAnimationFrame(()=>scan(root))}
+const renderBefore=window.render;
+if(typeof renderBefore==='function'&&!renderBefore._aryNumbers63){const wrapped=function(){const out=renderBefore.apply(this,arguments);deferScan(document.getElementById('app'));return out};wrapped._aryNumbers63=true;window.render=wrapped}
+const modalBefore=window.modal;
+if(typeof modalBefore==='function'&&!modalBefore._aryNumbers63){const wrapped=function(){const out=modalBefore.apply(this,arguments);deferScan(document.getElementById('modal'));return out};wrapped._aryNumbers63=true;window.modal=wrapped}
+scan();if(typeof render==='function')render();
 })();
