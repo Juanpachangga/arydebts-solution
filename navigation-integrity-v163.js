@@ -36,12 +36,12 @@ if(typeof oldBack==='function'&&!oldBack._ary163){
 window.aryNavigationIntegrity163={valid};
 })();
 
-// V180 — prevent the full guide from changing routes while the user is interacting.
+// V181 — prevent stale guide starts from stealing routes and keep interaction safe.
 (()=>{
  if(document.getElementById('aryGuideInteractionSafetyLoader180'))return;
  const script=document.createElement('script');
  script.id='aryGuideInteractionSafetyLoader180';
- script.src='guide-interaction-safety-v180.js?v=180.1';
+ script.src='guide-interaction-safety-v180.js?v=181.1';
  script.async=false;
  document.body.appendChild(script);
 })();
