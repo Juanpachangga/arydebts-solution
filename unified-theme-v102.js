@@ -83,3 +83,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V118 — make recurring reminder completion atomic after recurrence wrappers finish loading.
+(()=>{
+ if(document.getElementById('aryRecurrenceSafetyLoader118'))return;
+ const script=document.createElement('script');
+ script.id='aryRecurrenceSafetyLoader118';
+ script.src='recurrence-safety-v118.js?v=118.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
