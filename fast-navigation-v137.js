@@ -1,6 +1,5 @@
 (()=>{
 'use strict';
-let lastRoute='',lastAt=0;
 function guideActive(){
  try{return !!window.aryFullGuideStatus125?.()?.active}catch{return !!document.querySelector('.ary125cloud,.ary125final,.ary126node')}
 }
@@ -13,26 +12,15 @@ if(typeof baseGo==='function'&&!baseGo._aryFastNav137){
  const wrapped=function(route){
    if(guideActive())return baseGo.apply(this,arguments);
    const dest=typeof route==='string'?route:'';
-   const now=Date.now();
    if(dest&&typeof screen==='string'&&dest===screen&&!modalOpen())return false;
-   if(dest&&dest===lastRoute&&now-lastAt<220)return false;
-   lastRoute=dest;lastAt=now;
    return baseGo.apply(this,arguments);
  };
  wrapped._aryFastNav137=true;
  window.go=wrapped;
 }
-let lastNavTap=0,lastNavTarget='';
-document.addEventListener('click',e=>{
- if(guideActive())return;
- const el=e.target?.closest?.('#nav button,#nav [role="button"],nav button,nav [role="button"]');
- if(!el)return;
- const key=String(el.getAttribute('onclick')||el.dataset?.route||el.textContent||'').trim();
- const now=Date.now();
- if(key&&key===lastNavTarget&&now-lastNavTap<220){e.preventDefault();e.stopPropagation();return}
- lastNavTarget=key;lastNavTap=now;
-},{capture:true});
-window.aryFastNavigation137={active:true};
+// V164: do not intercept click events in capture phase. Native button taps are more reliable,
+// especially on iOS/Safari, and the same-screen guard above already prevents redundant navigation.
+window.aryFastNavigation137={active:true,captureGuard:false};
 })();
 
 // V138 — preserve recurrence/date/source metadata in late atomic expense saves.
