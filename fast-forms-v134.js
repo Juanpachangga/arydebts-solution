@@ -59,12 +59,12 @@ document.addEventListener('click',()=>requestAnimationFrame(enhance),{capture:tr
 ensureStyle();requestAnimationFrame(enhance);
 })();
 
-// V135 — "Entendido" must advance the automatic guide, never cancel it.
+// V139 — "Entendido" advances the correct automatic guide branch instead of ending the tour.
 (()=>{
  if(document.getElementById('aryGuideUnderstoodLoader135'))return;
  const script=document.createElement('script');
  script.id='aryGuideUnderstoodLoader135';
- script.src='guide-understood-v135.js?v=135.1';
+ script.src='guide-understood-v135.js?v=135.2';
  script.async=false;
  document.body.appendChild(script);
 })();
