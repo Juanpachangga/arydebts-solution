@@ -48,7 +48,6 @@ function enhance(){
    if(next){e.preventDefault();next.focus();return}
    if(save){e.preventDefault();save.click()}
  });
- // Focus the first empty useful field. Delay one frame so iOS/Android sheets are already visible.
  const first=fields.find(el=>String(el.value??'').trim()==='')||fields[0];
  if(first)setTimeout(()=>{if(document.querySelector('#modal:not(.hidden) .sheet')===sheet)try{first.focus({preventScroll:true})}catch{first.focus()}},40);
 }
@@ -58,4 +57,14 @@ if(typeof baseModal==='function'&&!baseModal._aryFast134){
 }
 document.addEventListener('click',()=>requestAnimationFrame(enhance),{capture:true});
 ensureStyle();requestAnimationFrame(enhance);
+})();
+
+// V135 — "Entendido" must advance the automatic guide, never cancel it.
+(()=>{
+ if(document.getElementById('aryGuideUnderstoodLoader135'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideUnderstoodLoader135';
+ script.src='guide-understood-v135.js?v=135.1';
+ script.async=false;
+ document.body.appendChild(script);
 })();
