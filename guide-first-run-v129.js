@@ -9,6 +9,7 @@ const write=(k,v)=>{try{localStorage.setItem(k,v);return true}catch{return false
 const remove=k=>{try{localStorage.removeItem(k)}catch{}};
 const lifecycle=()=>window.aryGuideLifecycle128;
 const status=()=>window.aryFullGuideStatus125?.();
+const onHome=()=>typeof screen!=='string'||screen==='home';
 function currentNeedsGuide(){
  const api=lifecycle();
  if(!api?.currentUser?.())return false;
@@ -38,10 +39,18 @@ function ensureVisiblePaint(){
 function scheduleFirstLaunch(){
  clearTimeout(launchTimer);
  if(!currentNeedsGuide())return;
- // Temporarily suppress V125's immediate auto-start while the first app frame settles.
+ // Never interrupt a user who already left Home while the launch delay was settling.
+ if(!onHome()){remove(GLOBAL);return;}
+ // Temporarily suppress V125's immediate auto-start while the first Home frame settles.
  write(GLOBAL,'done');
  launchTimer=setTimeout(()=>{
-   if(!currentNeedsGuide()||document.hidden)return;
+   if(!currentNeedsGuide())return;
+   if(document.hidden||!onHome()){
+     // Keep the guide pending, but release the temporary suppression. V125 can start it
+     // naturally on a later Home render instead of hijacking the current screen.
+     remove(GLOBAL);
+     return;
+   }
    remove(GLOBAL);
    const st=status();
    if(!st?.active&&typeof window.aryStartFullGuide125==='function')window.aryStartFullGuide125();
