@@ -81,3 +81,13 @@ window.saveExpense=function(id){
 
 window.aryExpenseRecurrenceIntegrity138={active:true};
 })();
+
+// V139 — keep guide controls reachable on long/mobile screens and add an explicit cancel choice.
+(()=>{
+ if(document.getElementById('aryGuideMobileControlsLoader139'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideMobileControlsLoader139';
+ script.src='guide-mobile-controls-v139.js?v=139.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
