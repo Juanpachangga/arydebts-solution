@@ -203,3 +203,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V130 — point the guide cloud at its spotlight and explain empty first-use states clearly.
+(()=>{
+ if(document.getElementById('aryGuideFirstDataLoader130'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideFirstDataLoader130';
+ script.src='guide-first-data-v130.js?v=130.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
