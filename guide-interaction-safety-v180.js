@@ -1,8 +1,9 @@
 (()=>{
 'use strict';
 const CLOUD='.ary125cloud';
-let userAuto=false,internalToggle=false;
+let userAuto=false,internalToggle=false,explicitStart=false,abortStale=false,abortRaf=0;
 const status=()=>{try{return window.aryFullGuideStatus125?.()||null}catch{return null}};
+const routeNow=()=>{try{return typeof screen==='string'?screen:null}catch{return null}};
 const rawToggle=window.aryFullGuideToggleAuto125;
 
 function pauseAuto(){
@@ -11,6 +12,18 @@ function pauseAuto(){
  internalToggle=true;
  try{rawToggle()}finally{internalToggle=false}
  return true;
+}
+function cancelStale(){
+ cancelAnimationFrame(abortRaf);abortRaf=0;
+ if(!abortStale)return false;
+ const skip=document.querySelector('.ary125skip');
+ if(skip){abortStale=false;skip.click();return true}
+ abortRaf=requestAnimationFrame(()=>{
+  abortRaf=0;
+  const late=document.querySelector('.ary125skip');
+  if(late){abortStale=false;late.click()}
+ });
+ return false;
 }
 
 if(typeof rawToggle==='function'&&!rawToggle._ary180){
@@ -24,11 +37,29 @@ if(typeof rawToggle==='function'&&!rawToggle._ary180){
  window.aryFullGuideToggleAuto125=wrapped;
 }
 
+// A first-use timer can become stale if the person leaves Home before it fires.
+// Do not let that old timer steal the current screen. Manual guide starts still work.
+const rawGo=window.go;
+if(typeof rawGo==='function'&&!rawGo._ary181){
+ const wrapped=function(destination){
+  const st=status(),current=routeNow();
+  if(!explicitStart&&!userAuto&&destination==='home'&&current&&current!=='home'&&st?.active&&st.index===0){
+   abortStale=true;
+   pauseAuto();
+   cancelStale();
+   return false;
+  }
+  return rawGo.apply(this,arguments);
+ };
+ wrapped._ary181=true;wrapped._ary181raw=rawGo;window.go=wrapped;
+}
+
 const rawStart=window.aryStartFullGuide125;
 if(typeof rawStart==='function'&&!rawStart._ary180){
  const wrapped=function(){
-  userAuto=false;
-  const out=rawStart.apply(this,arguments);
+  userAuto=false;abortStale=false;explicitStart=true;
+  let out;
+  try{out=rawStart.apply(this,arguments)}finally{explicitStart=false}
   requestAnimationFrame(()=>{if(!userAuto)pauseAuto()});
   return out;
  };
@@ -49,9 +80,19 @@ window.addEventListener('wheel',userInteraction,{capture:true,passive:true});
 window.addEventListener('scroll',()=>{if(userAuto){userAuto=false;pauseAuto()}},{passive:true});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&status()?.automatic){userAuto=false;pauseAuto()}});
 
+// WebKit can coalesce rapid fill/input work around modal enhancement. Keep the
+// live debt/expense icon tied directly to the current field value as a fallback.
+document.addEventListener('input',event=>{
+ const input=event.target;
+ if(input?.id!=='n'||!document.getElementById('recordIcon96')||typeof window.aryPreviewIcon96!=='function')return;
+ const debt=!!document.querySelector('#modal:not(.hidden) button[onclick*="saveDebt"]');
+ window.aryPreviewIcon96(input,debt?'deuda':undefined);
+},{capture:true});
+
 // V125 can start itself from a delayed first-use hook. Watching only direct body children
 // lets us catch that one guide card without observing the application subtree.
 const observer=new MutationObserver(records=>{
+ if(abortStale){cancelStale();return}
  if(userAuto)return;
  const st=status();
  if(!st?.active||!st.automatic)return;
@@ -65,5 +106,5 @@ if(document.body)observer.observe(document.body,{childList:true});
 
 // If V180 loads while a first-use guide is already visible, normalize it immediately.
 pauseAuto();
-window.aryGuideInteractionSafety180={status:()=>({...status(),userAuto}),pause:()=>{userAuto=false;return pauseAuto()}};
+window.aryGuideInteractionSafety180={status:()=>({...status(),userAuto,abortStale}),pause:()=>{userAuto=false;return pauseAuto()}};
 })();
