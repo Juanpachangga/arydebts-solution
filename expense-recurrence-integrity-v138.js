@@ -13,11 +13,6 @@ const uniqueId=(...collections)=>typeof window.aryUniqueId120==='function'?windo
 const amount=value=>typeof parseNum==='function'?parseNum(value):Number(value);
 const today=()=>typeof localDate==='function'?localDate():(()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`})();
 const validDate=value=>!value||(typeof window.aryValidDate63==='function'?window.aryValidDate63(value):/^\d{4}-\d{2}-\d{2}$/.test(value));
-const validSource=(expenses,sourceId)=>{
- if(sourceId==null||sourceId==='')return null;
- const parent=(expenses||[]).find(x=>String(x?.id)===String(sourceId));
- return parent&&frequencies.includes(parent.frequency)?parent.id:null;
-};
 
 window.saveExpense=function(id){
  const name=String(document.getElementById('n')?.value||'').trim();
@@ -48,12 +43,11 @@ window.saveExpense=function(id){
  if(frequency==='once'&&!date&&!editing)date=today();
  if(frequency==='once'&&!date&&editing&&existing?.date)date=existing.date;
 
- const requestedSource=sourcePending!=null&&sourcePending!==''?sourcePending:existing?.sourceExpenseId;
+ const sourceExpenseId=sourcePending!=null&&sourcePending!==''?sourcePending:existing?.sourceExpenseId;
  const icon=typeof iconFor==='function'?iconFor(name,cat):existing?.icon;
 
  if(!commit(next=>{
    if(!Array.isArray(next.expenses))next.expenses=[];
-   const sourceExpenseId=frequency==='once'?validSource(next.expenses,requestedSource):null;
    if(editing){
      const item=next.expenses.find(x=>String(x.id)===String(id));
      if(!item)return;
@@ -63,8 +57,7 @@ window.saveExpense=function(id){
      else if(item.frequency==null)item.frequency='once';
      if(dateField)item.date=date;
      else if(item.date==null&&frequency==='once')item.date=today();
-     if(sourceExpenseId!=null)item.sourceExpenseId=sourceExpenseId;
-     else delete item.sourceExpenseId;
+     if(sourceExpenseId!=null&&sourceExpenseId!=='')item.sourceExpenseId=sourceExpenseId;
    }else{
      const item={
        id:uniqueId(next.expenses,next.debts,next.payments,next.calendarEvents),
@@ -73,7 +66,7 @@ window.saveExpense=function(id){
        frequency
      };
      if(icon)item.icon=icon;
-     if(sourceExpenseId!=null)item.sourceExpenseId=sourceExpenseId;
+     if(sourceExpenseId!=null&&sourceExpenseId!=='')item.sourceExpenseId=sourceExpenseId;
      next.expenses.push(item);
    }
  })){
