@@ -281,3 +281,36 @@ for(const frequency of ['daily','weekly','biweekly','twice_monthly','monthly','q
  assert.equal(reloaded.run('aryRealData54.snapshot().income'),source.run('aryRealData54.snapshot().income'));
 }
 console.log('PASS decimal payments, full payoff, deletion, reload, balanced margin, cross-tab totals and all eight saved income frequencies');
+
+// Failed persistence must never acknowledge an unsaved payment or change its balances.
+const durable109=boot(true);
+durable109.run("s.debts=[{id:1,name:'Card',balance:0.3,min:0.1},{id:2,name:'Loan',balance:1,min:0.1}];s.payments=[];s.calendarEvents=[{id:7,name:'Reminder',date:localDate(),kind:'reminder'}];save()");
+const initial109=durable109.run('JSON.stringify(s)'),disk109=durable109.data['arydebts-v3'];
+const write109=durable109.context.localStorage.setItem;
+durable109.context.localStorage.setItem=()=>{throw Error('QuotaExceededError')};
+assert.equal(durable109.run('aryApplyPayment54({debtId:1,amount:0.1}).ok'),false);
+assert.equal(durable109.run('JSON.stringify(s)'),initial109);assert.equal(durable109.data['arydebts-v3'],disk109);
+durable109.context.localStorage.setItem=write109;
+assert.equal(durable109.run('aryApplyPayment54({debtId:1,amount:0.1}).ok'),true);
+const paid109=durable109.run('JSON.stringify(s)'),paidDisk109=durable109.data['arydebts-v3'],pid109=durable109.run('s.payments[0].id');
+for(const [key,value] of Object.entries({editPayDebt54:'2',editPayAmount54:'0.2',editPayDate54:durable109.run('localDate()'),editPayNote54:'Moved'}))durable109.nodes[key]={value};
+durable109.context.localStorage.setItem=()=>{throw Error('SecurityError')};
+durable109.run(`arySaveEditedPayment54(${pid109})`);
+assert.equal(durable109.run('JSON.stringify(s)'),paid109);
+for(const [kind,id]of [['payment',pid109],['debt',1],['event',7]]){
+ durable109.run(`aryDeleteConfirmed68('${kind}',${id})`);
+ assert.equal(durable109.run('JSON.stringify(s)'),paid109,kind+' failure preserves all records');
+ assert.equal(durable109.data['arydebts-v3'],paidDisk109);
+}
+assert.match(durable109.nodes.toast.textContent,/No se pudo guardar/);
+durable109.context.localStorage.setItem=write109;
+durable109.run(`arySaveEditedPayment54(${pid109})`);
+assert.equal(durable109.run('s.debts[0].balance'),0.3);assert.equal(durable109.run('s.debts[1].balance'),0.8);
+assert.equal(boot(durable109.data).run('s.payments[0].debtId'),2);
+durable109.run(`aryDeleteConfirmed68('payment',${pid109})`);
+assert.equal(durable109.run('s.debts[1].balance'),1);assert.equal(durable109.run('s.payments.length'),0);
+durable109.run("aryDeleteConfirmed68('event',7)");assert.equal(durable109.run('s.calendarEvents.length'),0);
+durable109.run('aryApplyPayment54({debtId:1,amount:0.1})');durable109.run("aryDeleteConfirmed68('debt',1)");
+assert.equal(durable109.run('s.debts.length'),1);assert.equal(durable109.run('s.payments.length'),0);
+assert.equal(boot(durable109.data).run('s.debts.length'),1);
+console.log('PASS durable payment creation, reassignment, deletion and linked debt/event deletion; quota/security failures preserve memory and saved data; successful retries survive reload');
