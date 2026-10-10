@@ -28,8 +28,9 @@ jobs:
           node-version: '24'
       - name: Verify client bundle matches source modules
         run: |
+          cp client-repairs.js /tmp/ary-client-repairs-before.js
           node scripts/build-client-repairs.cjs
-          git diff --exit-code -- client-repairs.js
+          cmp /tmp/ary-client-repairs-before.js client-repairs.js
       - name: Check API error and streaming body contracts
         run: node server/check-request-errors.mjs
       - name: Check local startup and original state retention

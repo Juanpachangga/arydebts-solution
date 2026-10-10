@@ -1381,7 +1381,7 @@ function enhance(){
    if(save){e.preventDefault();save.click()}
  });
  const first=fields.find(el=>String(el.value??'').trim()==='')||fields[0];
- if(first)setTimeout(()=>{if(document.querySelector('#modal:not(.hidden) .sheet')===sheet)try{first.focus({preventScroll:true})}catch{first.focus()}},40);
+ if(first)setTimeout(()=>{if(document.querySelector('#modal:not(.hidden) .sheet')===sheet&&!sheet.contains(document.activeElement))try{first.focus({preventScroll:true})}catch{first.focus()}},40);
 }
 const baseModal=window.modal;
 if(typeof baseModal==='function'&&!baseModal._aryFast134){
