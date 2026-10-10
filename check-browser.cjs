@@ -724,8 +724,10 @@ async function check(engine, label, viewport) {
     assert.ok((await page.locator('.recurringAnts68').innerText()).includes('Energizantes'),'Onboarding recurring ants remain visible');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-ants-v68.png`),fullPage:true});
     await navigate('plan');
-    const cuts68=await page.locator('.expenseCuts68 .list').innerText();
+    const cuts68=await page.locator('.expenseCuts68 .adjustmentTruth111').innerText();
+    assert.ok(cuts68.includes('20%'),'One direct recommendation gives its reduction estimate');
     assert.ok(cuts68.includes('Energizantes'));assert.ok(!cuts68.includes('Renta')&&!cuts68.includes('Celulares'),'Suggestions protect essentials even if miscategorized');
+    await page.locator('.adjustmentReview111').click();assert.equal(await page.locator('#modal #n').inputValue(),'Energizantes','Priority action opens the right expense');await page.evaluate(()=>closeM());
     await page.locator('.aprNotice68').waitFor({state:'hidden',timeout:10000});
     await page.evaluate(()=>render());assert.equal(await page.locator('.aprNotice68').count(),0,'APR notice stays dismissed after render');
     await navigate('home');assert.equal(await page.locator('.homeMetric51 small').filter({hasText:'›'}).count(),0);
