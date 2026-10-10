@@ -54,12 +54,12 @@ window.aryGuideRelabel135=relabel;
 relabel();
 })();
 
-// V136 — keep the automatic guide moving through slow or interrupted page transitions.
+// V136/V139 — keep the automatic guide moving without interrupting the automatic extra branch.
 (()=>{
  if(document.getElementById('aryGuideContinuityLoader136'))return;
  const script=document.createElement('script');
  script.id='aryGuideContinuityLoader136';
- script.src='guide-continuity-v136.js?v=136.1';
+ script.src='guide-continuity-v136.js?v=136.2';
  script.async=false;
  document.body.appendChild(script);
 })();
