@@ -29,6 +29,8 @@ const server=http.createServer(async(req,res)=>{try{const file=path.resolve(root
   await page.evaluate(()=>{go('more');s.locale='en-US';go('more')});assert.ok((await page.locator('#app').innerText()).includes('Your tools'));
   await page.evaluate(()=>{s.theme='light';localStorage.setItem('ary-theme-v46','dark');go('more')});assert.equal(await page.evaluate(()=>document.documentElement.dataset.aryTheme),'light','Model theme wins over stale legacy cache');
   await page.evaluate(()=>toggleTheme());assert.equal(await page.evaluate(()=>document.documentElement.dataset.aryTheme),'dark','Theme toggle repaints the current section');
+  await page.evaluate(()=>{go('home');aryPin61('calendar')});assert.equal(await page.locator('.adaptiveLinks61 button').first().getAttribute('data-route'),'calendar','Pinned shortcut updates immediately');
+  await page.evaluate(()=>{aryPin61('');aryToggleAdaptive61();closeM()});assert.equal(await page.locator('.adaptiveLinks61 button').first().getAttribute('data-route'),'debts','Stable shortcuts update immediately');
   assert.deepEqual(errors,[]);await browser.close();browser=null;
   console.log('PASS '+name+': summary consent, busy repaint, sign-out abort, cleared conversation, cancellable next session, same-route locale and theme');
  }
