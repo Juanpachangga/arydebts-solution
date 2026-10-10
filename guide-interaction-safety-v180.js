@@ -24,6 +24,7 @@ function softenAutoOverlay(){
 function abortPendingGuide(){
  cancelAnimationFrame(abortRaf);abortRaf=0;
  if(!autoSession&&!abortStale)return false;
+ if(!status()?.active){autoSession=false;abortStale=false;userAuto=false;return false}
  const skip=document.querySelector('.ary125skip');
  if(skip){
   autoSession=false;abortStale=false;userAuto=false;
