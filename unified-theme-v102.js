@@ -163,3 +163,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V126 — extend the full guide to dedicated small-expense and money-analysis screens.
+(()=>{
+ if(document.getElementById('aryGuideCoverageLoader126'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideCoverageLoader126';
+ script.src='guide-coverage-v126.js?v=126.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
