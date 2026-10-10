@@ -173,3 +173,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V127 — premium guide polish: interaction lock, section labels, countdown and keyboard accessibility.
+(()=>{
+ if(document.getElementById('aryGuidePremiumLoader127'))return;
+ const script=document.createElement('script');
+ script.id='aryGuidePremiumLoader127';
+ script.src='guide-premium-v127.js?v=127.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
