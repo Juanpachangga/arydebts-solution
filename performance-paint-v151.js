@@ -61,3 +61,13 @@ window.aryPerformancePaint151={sync};
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V163 — reject invalid screen routes without disturbing valid navigation.
+(()=>{
+ if(document.getElementById('aryNavigationIntegrityLoader163'))return;
+ const script=document.createElement('script');
+ script.id='aryNavigationIntegrityLoader163';
+ script.src='navigation-integrity-v163.js?v=163.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
