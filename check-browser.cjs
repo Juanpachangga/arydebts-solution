@@ -435,6 +435,7 @@ async function check(engine, label, viewport) {
     assert.equal(await page.evaluate(()=>arySeason59(new Date(2026,11,25))),'christmas');
     assert.equal(await page.evaluate(()=>arySeason59(new Date(2027,0,1))),'newyear');
     await page.evaluate(()=>{s.mode='immersive';render()});
+    await page.waitForFunction(()=>{const el=document.querySelector('.brandLetter59 b');return el&&getComputedStyle(el).animationName==='brandFlow59'});
     assert.equal(await page.locator('.brandLetter59 b').evaluate(el=>getComputedStyle(el).animationName),'brandFlow59');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-brand-v59.png`),fullPage:true});
     await page.evaluate(()=>toggleMode());
@@ -968,7 +969,7 @@ async function check(engine, label, viewport) {
   await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
   try {
     const failures=[];
-    for (const [engine,name] of [[chromium,'chromium'],[webkit,'webkit']]) {
+    for (const [engine,name] of [[chromium,'chromium'],[webkit,'webkit']].filter(([,name])=>!process.env.ARY_TEST_ENGINE||name===process.env.ARY_TEST_ENGINE)) {
       const results=await Promise.allSettled([['desktop',{width:1280,height:900}],['mobile',{width:390,height:844}]].map(([size,viewport])=>check(engine,`${name}-${size}`,viewport)));
       for(const result of results)if(result.status==='rejected')failures.push(result.reason);
     }

@@ -26,6 +26,12 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
+      - name: Verify client bundle matches source modules
+        run: |
+          node scripts/build-client-repairs.cjs
+          git diff --exit-code -- client-repairs.js
+      - name: Check API error and streaming body contracts
+        run: node server/check-request-errors.mjs
       - name: Check local startup and original state retention
         run: node check-state-guard-v104.cjs
       - name: Check local recovery and storage failures
@@ -50,6 +56,12 @@ jobs:
       - name: Exercise unified full guide on mobile browsers
         if: ${{ !cancelled() }}
         run: node check-guide-unified-v177.cjs
+      - name: Exercise guide geometry and themes on mobile and desktop
+        if: ${{ !cancelled() }}
+        run: node check-guide-layout-v185.cjs
+      - name: Exercise assistant consent and session cancellation
+        if: ${{ !cancelled() }}
+        run: node check-assistant-browser-v185.cjs
       - name: Exercise click and modal regression
         if: ${{ !cancelled() }}
         run: node check-clicks-browser-v165.cjs

@@ -7,6 +7,13 @@ function modalOpen(){
  const m=document.getElementById('modal');
  return !!m&&!m.classList.contains('hidden')&&m.offsetParent!==null;
 }
+// A repeated route is a no-op only when the state that was painted is unchanged.
+// Locale/theme and committed state changes must still repaint the same screen.
+const signature=()=>[s,s.locale,s.currency,s.theme,s.mode,s.income,s.incomeFrequency,profile];
+let painted=signature();
+const baseRender=window.render;
+window.render=function(){const out=baseRender.apply(this,arguments);painted=signature();return out};
+const unchanged=()=>{const current=signature();return current.every((value,i)=>value===painted[i])};
 const baseGo=window.go;
 if(typeof baseGo==='function'&&!baseGo._aryFastNav137){
  const wrapped=function(route){
@@ -14,7 +21,7 @@ if(typeof baseGo==='function'&&!baseGo._aryFastNav137){
    const dest=typeof route==='string'?route:'';
    // Same-screen navigation is intentionally a no-op. Locale/data setters render explicitly,
    // avoiding duplicate paints that can detach buttons while a user is tapping them.
-   if(dest&&typeof screen==='string'&&dest===screen&&!modalOpen())return false;
+   if(dest&&typeof screen==='string'&&dest===screen&&!modalOpen()&&unchanged())return false;
    return baseGo.apply(this,arguments);
  };
  wrapped._aryFastNav137=true;

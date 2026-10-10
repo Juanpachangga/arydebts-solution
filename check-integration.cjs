@@ -1,5 +1,6 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
- const scripts=[...fs.readFileSync(__dirname+'/index.html','utf8').matchAll(/<script src="([^"?]+)/g)].map(m=>m[1]);
+ const scripts=[...fs.readFileSync(__dirname+'/index.html','utf8').matchAll(/<script src="([^"?]+)/g)].map(m=>m[1]==='client-repairs.js'?'unified-theme-v102.js':m[1]);
+// This DOM-stub suite tests source modules; real-browser suites exercise the full bundle.
 function boot(existing=false,startHash){
  const nodes={},data={};
  const element=()=>{const classes=new Set();return{innerHTML:'',textContent:'',style:{setProperty(){}},dataset:{},classList:{add:name=>classes.add(name),remove:name=>classes.delete(name),contains:name=>classes.has(name),toggle:(name,on)=>on===false?classes.delete(name):classes.add(name)},querySelectorAll:()=>[],querySelector:()=>null,setAttribute(){},addEventListener(){},appendChild(){},remove(){}}};
