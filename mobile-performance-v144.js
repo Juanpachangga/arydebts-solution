@@ -76,3 +76,13 @@ if(typeof screen==='string'&&screen==='progress')progressVisit++;
 onScreenChange();
 window.aryMobilePerformance144={mobile:MOBILE,sync:()=>{syncLite();polishProgress()}};
 })();
+
+// V147 — adaptive performance profile for the whole application.
+(()=>{
+ if(document.getElementById('aryPerformanceStabilityLoader147'))return;
+ const script=document.createElement('script');
+ script.id='aryPerformanceStabilityLoader147';
+ script.src='performance-stability-v147.js?v=147.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
