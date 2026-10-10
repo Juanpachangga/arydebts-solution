@@ -10,10 +10,12 @@ const commit=change=>typeof window.aryCommitFinancial109==='function'&&window.ar
 const locales=['es-US','es-CO','es-ES','en-US','pt-BR'];
 const validCurrency=value=>typeof value==='string'&&/^[A-Z]{3}$/.test(value)&&(typeof currencies!=='function'||currencies().includes(value));
 const saveChange=change=>{if(!commit(change)){if(typeof toast==='function')toast(t().saveError);return false}return true};
+const landingLang=value=>value==='en-US'?'en':value==='pt-BR'?'pt':'es';
 
 window.setLocale=function(value){
  const locale=String(value||'');if(!locales.includes(locale))return false;
  if(!saveChange(next=>{next.locale=locale;}))return false;
+ try{localStorage.setItem('ary-lang',landingLang(locale))}catch{}
  if(typeof closeM==='function')closeM();
  if(typeof render==='function')render();
  return true;
@@ -40,6 +42,7 @@ window.saveSettings=function(){
  const currency=String(document.getElementById('cur')?.value||s.currency||'USD');
  if(!locales.includes(locale)||!validCurrency(currency)){if(typeof toast==='function')toast(t().invalidSettings);return false;}
  if(!saveChange(next=>{next.greeting=greeting;next.locale=locale;next.currency=currency;}))return false;
+ try{localStorage.setItem('ary-lang',landingLang(locale))}catch{}
  if(typeof closeM==='function')closeM();
  if(typeof render==='function')render();
  return true;
