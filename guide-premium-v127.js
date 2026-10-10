@@ -10,7 +10,8 @@ const sectionNames={
 const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const label=()=>sectionNames[lang()]?.[typeof screen==='string'?screen:'home']||sectionNames[lang()]?.home||'Arydebts';
 function ensureStyle(){if(document.getElementById(STYLE_ID))return;const st=document.createElement('style');st.id=STYLE_ID;st.textContent=`
-#aryGuideBlock127{position:fixed;inset:0;z-index:9999;background:transparent;pointer-events:auto;touch-action:none}
+#aryGuideBlock127{display:none!important;pointer-events:none!important;touch-action:auto!important}
+.ary125navShield{pointer-events:none!important}
 .ary125focus{animation:aryGuidePulse127 2.2s ease-in-out infinite}
 @keyframes aryGuidePulse127{0%,100%{box-shadow:0 0 0 5px rgba(89,221,255,.13),0 0 30px rgba(85,209,255,.46)}50%{box-shadow:0 0 0 8px rgba(89,221,255,.18),0 0 48px rgba(85,209,255,.78)}}
 .ary125cloud,.ary126node.ary125cloud{padding-top:46px!important;overflow:auto!important}
@@ -20,11 +21,12 @@ function ensureStyle(){if(document.getElementById(STYLE_ID))return;const st=docu
 @keyframes aryGuideCountdown127{from{transform:scaleX(1)}to{transform:scaleX(0)}}
 .ary127hint{margin-top:7px;text-align:center;color:#7f97b7;font-size:10px}.ary-light .ary127hint{color:#71849b}
 .ary125cloud button:focus-visible,.ary125skip:focus-visible{outline:3px solid #65dcff!important;outline-offset:3px!important}
+body:has(#modal:not(.hidden)) .ary125shade,body:has(#modal:not(.hidden)) .ary125focus,body:has(#modal:not(.hidden)) .ary125navShield,body:has(#modal:not(.hidden)) .ary125cloud,body:has(#modal:not(.hidden)) .ary125skip,body:has(#modal:not(.hidden)) .ary140cancelTop{visibility:hidden!important;pointer-events:none!important}
 @media(max-width:820px),(pointer:coarse){.ary125focus{animation:none!important}.ary125cloud,.ary126node.ary125cloud{padding-top:43px!important}.ary127section{left:14px;top:10px}.ary127hint,.ary127countdown{display:none!important}}
 @media(prefers-reduced-motion:reduce){.ary125focus{animation:none!important}.ary125shade,.ary125focus,.ary125cloud{transition:none!important}.ary127countdown i{animation:none!important}}
 `;document.head.appendChild(st)}
 function activeGuide(){const st=window.aryFullGuideStatus125?.();return !!st?.active||!!document.querySelector('.ary126node.ary125cloud')}
-function syncBlock(){const on=activeGuide();let block=document.getElementById(BLOCK_ID);if(on&&!block){block=document.createElement('div');block.id=BLOCK_ID;block.setAttribute('aria-hidden','true');block.addEventListener('click',e=>e.preventDefault());block.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});document.body.appendChild(block)}else if(!on&&block)block.remove()}
+function syncBlock(){document.getElementById(BLOCK_ID)?.remove()}
 function enrichCloud(cloud){if(!cloud||cloud.dataset.aryPremium127==='1')return;cloud.dataset.aryPremium127='1';cloud.setAttribute('aria-modal','true');cloud.setAttribute('aria-label',label());const chip=document.createElement('div');chip.className='ary127section';chip.textContent=label();cloud.prepend(chip);const actions=cloud.querySelector('.ary125actions');const status=window.aryFullGuideStatus125?.();if(!mobile()&&actions&&status?.automatic&&!cloud.classList.contains('ary125final')){const cd=document.createElement('div');cd.className='ary127countdown';cd.innerHTML='<i></i>';actions.before(cd)}if(!mobile()){const hint=document.createElement('div');hint.className='ary127hint';hint.textContent=lang()==='en'?'← → navigate · Space pauses':lang()==='pt'?'← → navegar · Espaço pausa':'← → navegar · Espacio pausa';cloud.appendChild(hint)}requestAnimationFrame(()=>{const first=cloud.querySelector('button:not([disabled])');if(first&&document.activeElement===document.body)first.focus({preventScroll:true})})}
 function sync(){ensureStyle();syncBlock();document.querySelectorAll('.ary125cloud').forEach(enrichCloud)}
 const observer=new MutationObserver(list=>{if(list.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.matches?.('.ary125cloud,.ary126node,#aryGuideBlock127')||n.querySelector?.('.ary125cloud,.ary126node')))))requestAnimationFrame(sync)});
