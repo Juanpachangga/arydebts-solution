@@ -25,6 +25,8 @@ async function run(engine,label){
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
   await page.addInitScript(()=>{
+   if(sessionStorage.getItem('ary-click-v166-seeded')==='1')return;
+   sessionStorage.setItem('ary-click-v166-seeded','1');
    const id='1f5iir3';
    localStorage.setItem('arydebts-profile',JSON.stringify({name:'Click Test',email:'click-test@example.com',localDemo:true}));
    localStorage.setItem('arydebts-v3',JSON.stringify({currency:'USD',locale:'es-US',mode:'immersive',name:'Click Test',income:2500,incomeFrequency:'monthly',goal:'',goals:[],greeting:'',theme:'dark',navOrder:['home','debts','expenses','plan','more'],savings:0,onboarded:true,debts:[],expenses:[],calendarEvents:[],payments:[]}));
@@ -84,7 +86,7 @@ async function run(engine,label){
    }
   });
   await page.reload({waitUntil:'load'});
-  await page.waitForFunction(()=>window.aryFullGuideStatus125?.()?.active===true,{timeout:5000});
+  await page.waitForFunction(()=>window.aryFullGuideStatus125?.()?.active===true,null,{timeout:5000});
   assert.ok(await page.locator('.ary125cloud').isVisible(),`${label}: repaired first-run guide becomes visible again`);
   const repairState=await page.evaluate(()=>{
    const id=window.aryGuideLifecycle128?.currentUser?.();
