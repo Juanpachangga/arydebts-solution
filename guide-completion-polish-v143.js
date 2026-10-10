@@ -54,7 +54,7 @@ sync();
  if(document.getElementById('aryMobilePerformanceLoader144'))return;
  const script=document.createElement('script');
  script.id='aryMobilePerformanceLoader144';
- script.src='mobile-performance-v144.js?v=144.2';
+ script.src='mobile-performance-v144.js?v=144.3';
  script.async=false;
  document.body.appendChild(script);
 })();
