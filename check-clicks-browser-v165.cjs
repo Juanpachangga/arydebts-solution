@@ -87,7 +87,8 @@ async function run(engine,label){
   });
   await page.reload({waitUntil:'load'});
   await page.waitForFunction(()=>window.aryFullGuideStatus125?.()?.active===true,null,{timeout:5000});
-  assert.ok(await page.locator('.ary125cloud').isVisible(),`${label}: repaired first-run guide becomes visible again`);
+  await page.locator('.ary125cloud').waitFor({state:'visible',timeout:5000});
+  assert.ok(await page.locator('.ary125cloud').isVisible(),`${label}: repaired first-run guide becomes visibly painted again`);
   const repairState=await page.evaluate(()=>{
    const id=window.aryGuideLifecycle128?.currentUser?.();
    return id?localStorage.getItem('arydebts-guide-repair-v166:'+id):null;
