@@ -34,3 +34,6 @@ body.ary-light .aryGuide94{background:linear-gradient(130deg,#f4fcff,#f3effb);bo
 @media(min-width:601px) and (max-width:999px){.aryGuide94{max-width:640px;margin-left:auto;margin-right:auto}.moreGrid94{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.aryGuide94 *{animation:none!important;transition:none!important}}
 body #modal .formHeading58{position:relative;justify-content:center;padding:0 44px;min-height:44px}body #modal .formHeading58 h2{text-align:center;font-size:clamp(19px,4.5vw,25px)}body #modal .formHeading58 .modalBack58{position:absolute;left:0;top:0;font-size:24px;min-height:44px;min-width:44px}
+/* V182: later global/desktop rules must never collapse the contextual Back control. */
+body #app .sectionTools94{display:flex!important;visibility:visible!important;opacity:1!important}
+body #app .sectionTools94 .back{display:inline-flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
