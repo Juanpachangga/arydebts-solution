@@ -3,20 +3,15 @@
 const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const understood=()=>lang()==='en'?'Got it':lang()==='pt'?'Entendi':'Entendido';
 const labels=/^(entendido|entendi|got it|understood|ok|okay|listo|compreendi|compreendido)$/i;
+let raf=0;
 function guideActive(){
  try{return !!window.aryFullGuideStatus125?.()?.active||!!document.querySelector('.ary125cloud,.aryGuide116,.ary126node.ary125cloud')}
  catch{return !!document.querySelector('.ary125cloud,.aryGuide116,.ary126node.ary125cloud')}
 }
 function isFinal(){return !!document.querySelector('.ary125final')}
-function keepMainAuto(){
- try{
-  const st=window.aryFullGuideStatus125?.();
-  if(st?.active&&!st.automatic&&typeof window.aryFullGuideToggleAuto125==='function')window.aryFullGuideToggleAuto125();
- }catch{}
-}
 function mainNext(){
  if(!guideActive()||isFinal())return false;
- keepMainAuto();
+ // Advance one step without changing the user's Pause/Automatic choice.
  setTimeout(()=>window.aryFullGuideNext125?.(),20);
  return true;
 }
@@ -38,6 +33,7 @@ function relabel(){
   b.setAttribute('aria-label',text);
  });
 }
+function scheduleRelabel(){cancelAnimationFrame(raf);raf=requestAnimationFrame(relabel)}
 document.addEventListener('click',e=>{
  const b=e.target?.closest?.('button,[role="button"]');
  if(!b||!guideActive()||isFinal())return;
@@ -47,8 +43,11 @@ document.addEventListener('click',e=>{
  const extra=!!b.closest('.ary126node.ary125cloud');
  if(extra)extraNext(b);else mainNext();
 },{capture:true});
-const observer=new MutationObserver(()=>requestAnimationFrame(relabel));
-observer.observe(document.documentElement,{subtree:true,childList:true});
+const observer=new MutationObserver(list=>{
+ if(!guideActive())return;
+ if(list.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.matches?.('.ary125cloud,.ary126node')||n.querySelector?.('.ary125cloud,.ary126node')))))scheduleRelabel();
+});
+observer.observe(document.body||document.documentElement,{subtree:false,childList:true});
 window.aryGuideUnderstood135=mainNext;
 window.aryGuideRelabel135=relabel;
 relabel();
@@ -59,7 +58,7 @@ relabel();
  if(document.getElementById('aryGuideContinuityLoader136'))return;
  const script=document.createElement('script');
  script.id='aryGuideContinuityLoader136';
- script.src='guide-continuity-v136.js?v=136.2';
+ script.src='guide-continuity-v136.js?v=136.3';
  script.async=false;
  document.body.appendChild(script);
 })();
