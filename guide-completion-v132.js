@@ -37,3 +37,13 @@ function enhance(final){
 const obs=new MutationObserver(()=>document.querySelectorAll('.ary125final').forEach(enhance));obs.observe(document.documentElement,{subtree:true,childList:true});
 style();document.querySelectorAll('.ary125final').forEach(enhance);
 })();
+
+// V133 — keep daily use fast with one-tap global quick actions after onboarding.
+(()=>{
+ if(document.getElementById('aryFastUxLoader133'))return;
+ const script=document.createElement('script');
+ script.id='aryFastUxLoader133';
+ script.src='fast-ux-v133.js?v=133.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
