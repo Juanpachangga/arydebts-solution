@@ -118,7 +118,7 @@ async function check(engine, label, viewport) {
     assert.match(await page.locator('.cta21').innerText(), /^Começar hoje\s*→$/);
     // Exercise the actual signup and questions, rather than injecting an onboarded profile.
     await page.locator('[onclick="aryStartOnboarding43()"]').click();
-    assert.ok((await page.locator('#app').innerText()).includes('Este espaço é seu'));
+    assert.ok((await page.locator('#app').innerText()).includes('Este espaço é para você'));
     assert.ok((await page.locator('#app').innerText()).includes('Senha'));
     assert.doesNotMatch(await page.locator('#app').innerText(), /Contraseña|Correo electrónico|Crear mi espacio/);
     assert.match(await page.locator('.accountStatus83').innerText(),/Modo local/);
