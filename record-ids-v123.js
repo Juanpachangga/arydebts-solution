@@ -26,9 +26,11 @@ window.saveDebt=function(id,frequency='monthly'){
  const recordId=editing?id:nextId();
  if(!commit(next=>{
    if(!Array.isArray(next.debts))next.debts=[];
+   if(!Array.isArray(next.payments))next.payments=[];
    let debt=editing?next.debts.find(d=>String(d.id)===String(id)):null;
    if(!debt){debt={id:recordId};next.debts.push(debt);}
    Object.assign(debt,{name,balance,min,apr,due,note,icon:typeof iconFor==='function'?iconFor(name,'deuda'):'💳',paymentFrequency:frequency||'monthly'});
+   if(editing)for(const payment of next.payments)if(String(payment?.debtId)===String(id))payment.debtName=name;
  })){if(typeof toast==='function')toast(t().saveError);return false;}
  window._debtIcon=null;
  if(typeof closeM==='function')closeM();
