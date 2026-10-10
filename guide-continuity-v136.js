@@ -4,12 +4,13 @@ const CHECK_MS=700,RETRY_AFTER=1400,ADVANCE_AFTER=3600;
 let timer=0,lastIndex=-1,missingSince=0,retries=0;
 function status(){try{return window.aryFullGuideStatus125?.()||null}catch{return null}}
 function visible(){return document.visibilityState!=='hidden'}
+function extraActive(){return !!document.querySelector('.ary126node.ary125cloud')}
 function hasGuideUi(){return !!document.querySelector('.ary125cloud,.ary125final')}
 function hasTransition(){return !!document.querySelector('.ary131transition')}
-function nudgeRender(){
- try{window.dispatchEvent(new Event('resize'))}catch{}
-}
+function nudgeRender(){try{window.dispatchEvent(new Event('resize'))}catch{}}
 function keepAuto(st){
+ // V126 intentionally pauses the main V125 timer while its own automatic branch is running.
+ if(extraActive())return;
  if(st?.active&&!st.automatic&&typeof window.aryFullGuideToggleAuto125==='function'){
    try{window.aryFullGuideToggleAuto125()}catch{}
  }
@@ -43,7 +44,7 @@ if(typeof prior==='function'&&!prior._aryContinuity136){
 }
 document.addEventListener('visibilitychange',()=>{if(visible())setTimeout(()=>{const st=status();if(st?.active){keepAuto(st);nudgeRender()}},120)});
 window.addEventListener('pageshow',()=>setTimeout(()=>{const st=status();if(st?.active){keepAuto(st);nudgeRender()}},120));
-window.aryGuideContinuity136={check:()=>{const st=status();return{active:!!st?.active,index:st?.index??-1,automatic:!!st?.automatic,ui:hasGuideUi(),transition:hasTransition()}}};
+window.aryGuideContinuity136={check:()=>{const st=status();return{active:!!st?.active,index:st?.index??-1,automatic:!!st?.automatic,extra:extraActive(),ui:hasGuideUi(),transition:hasTransition()}}};
 tick();
 })();
 
