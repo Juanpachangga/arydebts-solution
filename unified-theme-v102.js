@@ -183,3 +183,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V128 — make the automatic guide a true first-use experience per customer/account.
+(()=>{
+ if(document.getElementById('aryGuideLifecycleLoader128'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideLifecycleLoader128';
+ script.src='guide-lifecycle-v128.js?v=128.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
