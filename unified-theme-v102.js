@@ -9,7 +9,7 @@ render();
 const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const copy={
  es:{invalidIncome:'Escribe un ingreso válido.',saveError:'No se pudo guardar. Tus números siguen como antes. Libera espacio o habilita el almacenamiento e inténtalo de nuevo.',deleteDebt:'¿Eliminar esta deuda? Esta acción no se puede deshacer.',deleteDebtPayments:n=>`Esta deuda tiene ${n} pago${n===1?'':'s'} registrado${n===1?'':'s'}. Si la eliminas, también se eliminará ese historial para mantener tus cálculos correctos. ¿Continuar?`,deleted:'Deuda eliminada',incomeSaved:'Ingreso guardado'},
- en:{invalidIncome:'Enter a valid income amount.',saveError:'Could not save. Your numbers remain unchanged. Free up space or enable storage and try again.',deleteDebt:'Delete this debt? This action cannot be undone.',deleteDebtPayments:n=>`This debt has ${n} recorded payment${n===1?'':'s'}. Deleting it will also remove that history so your calculations stay correct. Continue?`,deleted:'Debt deleted',incomeSaved:'Income saved'},
+ en:{invalidIncome:'Enter a valid income amount.',saveError:'Could not save. Your numbers remain unchanged. Free up space or enable storage and try again.',deleteDebt:'Delete this debt? This action cannot be undone.',deleteDebtPayments:n=>`This debt has ${n} recorded payment${n===1?'':'s'} registered. Deleting it will also remove that history so your calculations stay correct. Continue?`,deleted:'Debt deleted',incomeSaved:'Income saved'},
  pt:{invalidIncome:'Digite uma renda válida.',saveError:'Não foi possível salvar. Seus números continuam como antes. Libere espaço ou habilite o armazenamento e tente novamente.',deleteDebt:'Excluir esta dívida? Esta ação não pode ser desfeita.',deleteDebtPayments:n=>`Esta dívida tem ${n} pagamento${n===1?'':'s'} registrado${n===1?'':'s'}. Ao excluí-la, esse histórico também será removido para manter seus cálculos corretos. Continuar?`,deleted:'Dívida excluída',incomeSaved:'Renda salva'}
 };
 const t=()=>copy[lang()];
@@ -210,6 +210,16 @@ window.setIncome=function(){
  const script=document.createElement('script');
  script.id='aryGuideFirstDataLoader130';
  script.src='guide-first-data-v130.js?v=130.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
+
+// V131 — smooth section-to-section transitions during the first-use guide.
+(()=>{
+ if(document.getElementById('aryGuideSectionTransitionLoader131'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideSectionTransitionLoader131';
+ script.src='guide-section-transitions-v131.js?v=131.1';
  script.async=false;
  document.body.appendChild(script);
 })();
