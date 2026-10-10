@@ -41,7 +41,7 @@ window.aryNavigationIntegrity163={valid};
  if(document.getElementById('aryGuideInteractionSafetyLoader180'))return;
  const script=document.createElement('script');
  script.id='aryGuideInteractionSafetyLoader180';
- script.src='guide-interaction-safety-v180.js?v=182.1';
+ script.src='guide-interaction-safety-v180.js?v=182.2';
  script.async=false;
  document.body.appendChild(script);
 })();
