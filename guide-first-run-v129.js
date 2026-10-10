@@ -3,7 +3,7 @@
 const GLOBAL='arydebts-guide-v125';
 const REPAIR_PREFIX='arydebts-guide-repair-v166:';
 const LAUNCH_DELAY=320;
-let launchTimer=0,hiddenPaused=false;
+let launchTimer=0,paintTimer=0,hiddenPaused=false;
 const read=k=>{try{return localStorage.getItem(k)}catch{return null}};
 const write=(k,v)=>{try{localStorage.setItem(k,v);return true}catch{return false}};
 const remove=k=>{try{localStorage.removeItem(k)}catch{}};
@@ -26,6 +26,15 @@ function repairGuideOnce(){
  write(key,'done');
  return true;
 }
+function ensureVisiblePaint(){
+ clearTimeout(paintTimer);
+ paintTimer=setTimeout(()=>{
+   const st=status();
+   if(!st?.active||document.hidden||document.querySelector('.ary125cloud'))return;
+   // V125 owns all guide positioning. This only asks its render wrapper for one recovery paint.
+   try{if(typeof window.render==='function')window.render()}catch{}
+ },180);
+}
 function scheduleFirstLaunch(){
  clearTimeout(launchTimer);
  if(!currentNeedsGuide())return;
@@ -36,6 +45,7 @@ function scheduleFirstLaunch(){
    remove(GLOBAL);
    const st=status();
    if(!st?.active&&typeof window.aryStartFullGuide125==='function')window.aryStartFullGuide125();
+   ensureVisiblePaint();
  },LAUNCH_DELAY);
 }
 function wrapFinishOnboarding(){
@@ -68,7 +78,7 @@ function visibility(){
  document.addEventListener('visibilitychange',()=>{
    const st=status();
    if(document.hidden){
-     clearTimeout(launchTimer);
+     clearTimeout(launchTimer);clearTimeout(paintTimer);
      if(st?.active&&st.automatic&&typeof window.aryFullGuideToggleAuto125==='function'){
        hiddenPaused=true;
        window.aryFullGuideToggleAuto125();
@@ -79,8 +89,11 @@ function visibility(){
      hiddenPaused=false;
      const now=status();
      if(now?.active&&!now.automatic&&typeof window.aryFullGuideToggleAuto125==='function')window.aryFullGuideToggleAuto125();
+     ensureVisiblePaint();
    }else if(typeof s==='object'&&s?.onboarded&&currentNeedsGuide()&&!status()?.active){
      scheduleFirstLaunch();
+   }else if(status()?.active){
+     ensureVisiblePaint();
    }
  });
 }
@@ -92,6 +105,6 @@ function init(){
  repairGuideOnce();
  if(typeof s==='object'&&s?.onboarded&&currentNeedsGuide())scheduleFirstLaunch();
 }
-window.aryGuideFirstRun129={needsGuide:currentNeedsGuide,schedule:scheduleFirstLaunch,repair:repairGuideOnce};
+window.aryGuideFirstRun129={needsGuide:currentNeedsGuide,schedule:scheduleFirstLaunch,repair:repairGuideOnce,ensurePaint:ensureVisiblePaint};
 init();
 })();
