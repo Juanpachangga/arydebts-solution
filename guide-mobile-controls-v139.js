@@ -65,3 +65,13 @@ document.addEventListener('scroll',()=>requestAnimationFrame(sync),true);
 window.aryGuideCancel139=askCancel;
 ensureStyle();sync();
 })();
+
+// V140 — keep long-screen guide targets and controls in a safe viewport layout.
+(()=>{
+ if(document.getElementById('aryGuideSafeLayoutLoader140'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideSafeLayoutLoader140';
+ script.src='guide-safe-layout-v140.js?v=140.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
