@@ -1,4 +1,6 @@
 (()=>{
+const LEGACY_GUIDE_KEY='arydebts-guide-v116';
+try{localStorage.setItem(LEGACY_GUIDE_KEY,'done');window.aryGuideSkip116?.()}catch{}
 const HIGHLIGHT_ID='aryGuideHighlightStyle117';
 const selectors={
  home:['.heroCard','.homeTruth29','.grid .card'],
@@ -18,10 +20,8 @@ body.ary-light .aryGuideFocus117{box-shadow:0 0 0 3px rgba(56,164,218,.75),0 0 0
 function clearFocus(){document.querySelectorAll('.aryGuideFocus117').forEach(el=>el.classList.remove('aryGuideFocus117'))}
 function currentRoute(){return typeof screen==='string'?screen:(location.hash||'').replace(/^#/,'')||'home'}
 function applyFocus(){ensureHighlightStyle();clearFocus();if(!document.getElementById('aryGuide116'))return;const route=currentRoute(),list=selectors[route]||[];let el=null;for(const selector of list){el=document.querySelector(selector);if(el)break}if(el){el.classList.add('aryGuideFocus117');try{el.scrollIntoView({behavior:'smooth',block:'center',inline:'nearest'})}catch(e){}}}
-const observer=new MutationObserver(()=>setTimeout(applyFocus,0));
-observer.observe(document.documentElement,{subtree:true,childList:true});
-window.addEventListener('resize',()=>document.getElementById('aryGuide116')&&applyFocus());
-setTimeout(applyFocus,60);
+/* V116 is legacy. Do not observe every DOM mutation for its old spotlight engine. */
+window.addEventListener('resize',()=>document.getElementById('aryGuide116')&&applyFocus(),{passive:true});
 
 const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const copy={
