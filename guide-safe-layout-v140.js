@@ -3,6 +3,7 @@
 const STYLE='aryGuideSafeLayoutStyle140';
 const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const labels={es:'Cancelar',en:'Cancel',pt:'Cancelar'};
+const mobile=()=>window.matchMedia?.('(max-width:820px),(pointer:coarse)')?.matches||false;
 let raf=0;
 function active(){try{return !!window.aryFullGuideStatus125?.()?.active||!!document.querySelector('.ary126node.ary125cloud')}catch{return false}}
 function viewport(){const v=window.visualViewport;return{top:v?.offsetTop||0,left:v?.offsetLeft||0,width:v?.width||innerWidth,height:v?.height||innerHeight}}
@@ -32,11 +33,12 @@ function place(cloud){
  cloud.scrollTop=Math.min(cloud.scrollTop,Math.max(0,cloud.scrollHeight-cloud.clientHeight));
 }
 function sync(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{ensureStyle();if(!active())return;document.querySelectorAll('.ary125cloud').forEach(c=>{addTopCancel(c);place(c)})})}
-const obs=new MutationObserver(sync);obs.observe(document.documentElement,{subtree:true,childList:true});
+const obs=new MutationObserver(list=>{if(list.some(m=>[...m.addedNodes].some(n=>n.nodeType===1&&(n.matches?.('.ary125cloud,.ary125focus,.ary126node')||n.querySelector?.('.ary125cloud,.ary125focus,.ary126node')))))sync()});
+obs.observe(document.body||document.documentElement,{subtree:false,childList:true});
 for(const ev of ['resize','orientationchange'])window.addEventListener(ev,sync,{passive:true});
 window.visualViewport?.addEventListener('resize',sync,{passive:true});
-window.visualViewport?.addEventListener('scroll',sync,{passive:true});
-document.addEventListener('scroll',()=>{if(active())sync()},true);
+if(!mobile())window.visualViewport?.addEventListener('scroll',sync,{passive:true});
+if(!mobile())document.addEventListener('scroll',()=>{if(active())sync()},true);
 window.aryGuideSafeLayout140={sync};
 ensureStyle();sync();
 })();
@@ -46,7 +48,7 @@ ensureStyle();sync();
  if(document.getElementById('aryGuideScrollStabilityLoader141'))return;
  const script=document.createElement('script');
  script.id='aryGuideScrollStabilityLoader141';
- script.src='guide-scroll-stability-v141.js?v=141.1';
+ script.src='guide-scroll-stability-v141.js?v=141.2';
  script.async=false;
  document.body.appendChild(script);
 })();
