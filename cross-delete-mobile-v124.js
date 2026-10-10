@@ -12,7 +12,7 @@ const commit=change=>typeof window.aryCommitFinancial109==='function'&&window.ar
 window.deleteExpense=function(id){
  const exists=(s.expenses||[]).some(x=>String(x.id)===String(id));
  if(!exists)return false;
- const onboarding=String(window.screen||'')==='setupExpenses';
+ const onboarding=typeof screen==='string'&&screen==='setupExpenses';
  if(!onboarding&&!confirm(t().deleteExpense))return false;
  if(!commit(next=>{next.expenses=(next.expenses||[]).filter(x=>String(x.id)!==String(id));})){
   if(typeof toast==='function')toast(t().saveError);
@@ -23,7 +23,6 @@ window.deleteExpense=function(id){
  return true;
 };
 
-// Keep modal sheets within the viewport and make destructive/action buttons easier to tap on small screens.
 const STYLE_ID='aryMobilePolish124';
 if(!document.getElementById(STYLE_ID)){
  const style=document.createElement('style');
