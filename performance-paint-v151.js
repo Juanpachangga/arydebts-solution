@@ -53,12 +53,12 @@ window.aryPerformancePaint151={sync,interactivePaintSafe:true};
  document.body.appendChild(script);
 })();
 
-// V163 — reject invalid screen routes without disturbing valid navigation.
+// V184 — reject invalid routes and load the stale-guide transition repair fresh.
 (()=>{
  if(document.getElementById('aryNavigationIntegrityLoader163'))return;
  const script=document.createElement('script');
  script.id='aryNavigationIntegrityLoader163';
- script.src='navigation-integrity-v163.js?v=163.1';
+ script.src='navigation-integrity-v163.js?v=184.1';
  script.async=false;
  document.body.appendChild(script);
 })();
