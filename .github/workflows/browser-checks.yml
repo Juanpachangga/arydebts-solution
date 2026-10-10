@@ -60,6 +60,9 @@ jobs:
       - name: Exercise guide geometry and themes on mobile and desktop
         if: ${{ !cancelled() }}
         run: node check-guide-layout-v185.cjs
+      - name: Exercise desktop workspace, progress circle and simple first step
+        if: ${{ !cancelled() }}
+        run: node check-desktop-workspace-v186.cjs
       - name: Exercise assistant consent and session cancellation
         if: ${{ !cancelled() }}
         run: node check-assistant-browser-v185.cjs

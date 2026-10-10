@@ -628,13 +628,13 @@ async function check(engine, label, viewport) {
     if(viewport.width>=1000){
       const nav64=await page.locator('#nav').boundingBox(),app64=await page.locator('#app').boundingBox();
       assert.ok(app64.width>700,'Desktop content uses available width');
-      assert.ok(nav64.y>viewport.height/2,'Desktop has the same bottom tabs as mobile');
+      assert.ok(nav64.x+nav64.width<=app64.x,'Desktop navigation stays beside its workspace');
       assert.ok(nav64.y>=0&&nav64.y+nav64.height<=viewport.height,'All primary navigation fits the screen');
       await page.locator('#nav [onclick="go(\'expenses\')"]').click();
       assert.equal(await page.evaluate(()=>screen),'expenses');
       await page.evaluate(()=>scrollTo(0,500));
       await page.locator('#nav [onclick="go(\'home\')"]').click();
-      assert.equal(await page.evaluate(()=>screen),'home','Bottom tabs return directly to Home');
+      assert.equal(await page.evaluate(()=>screen),'home','Desktop navigation returns directly to Home');
       assert.equal(await page.evaluate(()=>scrollY),0);
       assert.equal(await page.locator('#nav .active').getAttribute('aria-current'),'page');
     }else{

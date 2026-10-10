@@ -34,7 +34,7 @@ const server=http.createServer(async(req,res)=>{try{const file=path.resolve(root
     assert.notEqual(state.bg,state.foreground,label+': theme contrast');
     if(index<27){assert.ok(state.cancel?.height>=44,label+': accessible cancel action '+JSON.stringify(state.cancel));assert.match(state.robot,/ARY.*🤖/,label+': companion');assert.ok(state.text.length<130,label+': concise explanation')}
     if(index===8)assert.equal(await page.locator('.debtExpenses66').isVisible(),false,'Expense guide excludes debt panels');
-    if(state.focus){const a=state.card,b=state.focus;assert.ok(a.bottom<=b.top||a.top>=b.bottom||a.right<=b.left||a.left>=b.right,label+': card never covers its spotlight');if(index!==3&&state.nav?.height)assert.ok(b.bottom<=state.nav.top,label+': spotlight excludes navigation')}
+    if(state.focus){const a=state.card,b=state.focus;assert.ok(a.bottom<=b.top||a.top>=b.bottom||a.right<=b.left||a.left>=b.right,label+': card never covers its spotlight');if(index!==3&&state.nav?.height)assert.ok(b.bottom<=state.nav.top||b.top>=state.nav.bottom||b.right<=state.nav.left||b.left>=state.nav.right,label+': spotlight excludes navigation')}
     if(viewport.width===390&&[6,8,13].includes(index)){await fs.mkdir('browser-results',{recursive:true});await page.screenshot({path:`browser-results/guide-${theme}-${index}-${name}.png`})}
    }
    await page.evaluate(()=>aryFullGuideFinish125());await page.waitForFunction(()=>!aryFullGuideStatus125().active);
