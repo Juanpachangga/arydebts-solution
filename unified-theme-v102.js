@@ -193,3 +193,13 @@ window.setIncome=function(){
  script.async=false;
  document.body.appendChild(script);
 })();
+
+// V129 — launch the first-use guide only after onboarding settles and pause it when the app is hidden.
+(()=>{
+ if(document.getElementById('aryGuideFirstRunLoader129'))return;
+ const script=document.createElement('script');
+ script.id='aryGuideFirstRunLoader129';
+ script.src='guide-first-run-v129.js?v=129.1';
+ script.async=false;
+ document.body.appendChild(script);
+})();
