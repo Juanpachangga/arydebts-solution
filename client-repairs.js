@@ -1198,9 +1198,9 @@ window.aryGuideHome132=()=>{window.aryFullGuideFinish125?.();window.go?.('home')
 const STYLE='aryFastUxStyle133',FAB='aryQuickFab133';
 const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const copy={
- es:{label:'Acciones rápidas',expense:'Gasto',debt:'Deuda',income:'Ingreso',payment:'Pago',title:'¿Qué quieres registrar?',close:'Cerrar'},
- en:{label:'Quick actions',expense:'Expense',debt:'Debt',income:'Income',payment:'Payment',title:'What do you want to add?',close:'Close'},
- pt:{label:'Ações rápidas',expense:'Gasto',debt:'Dívida',income:'Renda',payment:'Pagamento',title:'O que deseja registrar?',close:'Fechar'}
+ es:{label:'Acciones rápidas',expense:'Gasto rápido',debt:'Deuda',income:'Ingreso',payment:'Pago',title:'¿Qué quieres registrar?',close:'Cerrar'},
+ en:{label:'Quick actions',expense:'Quick expense',debt:'Debt',income:'Income',payment:'Payment',title:'What do you want to add?',close:'Close'},
+ pt:{label:'Ações rápidas',expense:'Gasto rápido',debt:'Dívida',income:'Renda',payment:'Pagamento',title:'O que deseja registrar?',close:'Fechar'}
 };
 const t=()=>copy[lang()]||copy.es;
 function guideActive(){return !!window.aryFullGuideStatus125?.()?.active||!!document.querySelector('.ary125cloud,.ary126node')}
