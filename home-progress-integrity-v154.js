@@ -33,9 +33,10 @@ window.aryHomeProgress72=function(){
  const current=Number(r?.current)||0,paid=Number(r?.paid)||0,start=Number(r?.start)||current+paid;
  const rawPct=Number(r?.pct),pct=Number.isFinite(rawPct)?Math.max(0,Math.min(100,Math.round(rawPct))):(start>0?Math.max(0,Math.min(100,Math.round(paid/start*100))):0);
  const p1=(pct*3.6*.28).toFixed(2),p2=(pct*3.6*.52).toFixed(2),p3=(pct*3.6*.75).toFixed(2),p4=(pct*3.6).toFixed(2);
+ const hidden=typeof window.aryHidden72==='function'&&aryHidden72();
  const hasDebt=(s.debts||[]).length>0;
  const dest=hasDebt?'progress':'debts';
- return `<button type="button" class="card full heroCard homeTruth29 homeTap51" onclick="go('${dest}')"><b>${x.title}</b><div class="progressBox"><div class="ring" style="--p1:${p1}deg;--p2:${p2}deg;--p3:${p3}deg;--p4:${p4}deg"><b>${pct}%</b></div><div><span class="muted">${x.remaining}</span><div class="kpi">${money(current)}</div><span class="muted">${x.paid}</span><div class="kpi good">${money(paid)}</div></div></div>${start>0?`<small class="muted">${x.start}: ${money(start)}</small>`:`<p class="muted">${x.empty}</p>`}<small>${x.open}</small></button>`;
+ return `<button type="button" class="card full heroCard homeTruth29 homeTap51" onclick="go('${dest}')"><b>${x.title}</b><div class="progressBox"><div class="ring" style="--p1:${p1}deg;--p2:${p2}deg;--p3:${p3}deg;--p4:${p4}deg"><b>${hidden?'••••':pct+'%'}</b></div><div><span class="muted">${x.remaining}</span><div class="kpi">${money(current)}</div><span class="muted">${x.paid}</span><div class="kpi good">${money(paid)}</div></div></div>${start>0?`<small class="muted">${x.start}: ${money(start)}</small>`:`<p class="muted">${x.empty}</p>`}<small>${x.open}</small></button>`;
 };
 try{localStorage.removeItem('ary-home-baseline-v29')}catch{}
 ensureStyle();

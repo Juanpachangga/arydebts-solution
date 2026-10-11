@@ -29,3 +29,6 @@ body.ary-light[data-brand72="ocean"] .brandNeon59{--brand-a:#076387;--brand-b:#3
 .mode-lite .supportHeart72,.mode-lite .progressRibbon72{animation:none!important}@media(prefers-reduced-motion:reduce){.supportHeart72,.progressRibbon72{animation:none!important}}
 
 .quoteActions72{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.homeCoach29>b{display:block;font-size:calc(20px * var(--ui-scale72));line-height:1.55}.quoteActions72 .btn{font-size:calc(15px * var(--ui-scale72));min-height:44px}.flagBreeze72{pointer-events:none}
+
+/* Keep action hit areas fixed while hovering, pressing and scrolling. */
+body.signed64 #app button,body.signed64 #nav button{transform:none!important;transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease!important}

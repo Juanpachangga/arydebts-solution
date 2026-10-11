@@ -26,6 +26,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
+      - name: Verify client bundle matches source modules
+        run: |
+          cp client-repairs.js /tmp/ary-client-repairs-before.js
+          node scripts/build-client-repairs.cjs
+          cmp /tmp/ary-client-repairs-before.js client-repairs.js
+      - name: Check API error and streaming body contracts
+        run: node server/check-request-errors.mjs
       - name: Check local startup and original state retention
         run: node check-state-guard-v104.cjs
       - name: Check local recovery and storage failures
@@ -50,6 +57,15 @@ jobs:
       - name: Exercise unified full guide on mobile browsers
         if: ${{ !cancelled() }}
         run: node check-guide-unified-v177.cjs
+      - name: Exercise guide geometry and themes on mobile and desktop
+        if: ${{ !cancelled() }}
+        run: node check-guide-layout-v185.cjs
+      - name: Exercise desktop workspace, progress circle and simple first step
+        if: ${{ !cancelled() }}
+        run: node check-desktop-workspace-v186.cjs
+      - name: Exercise assistant consent and session cancellation
+        if: ${{ !cancelled() }}
+        run: node check-assistant-browser-v185.cjs
       - name: Exercise click and modal regression
         if: ${{ !cancelled() }}
         run: node check-clicks-browser-v165.cjs
@@ -111,3 +127,17 @@ jobs:
         env:
           ARY_DISPOSABLE_RLS_TEST: 'yes'
           ARY_TEST_DATABASE_URL: postgresql://postgres:disposable-ci-password@localhost:5432/ary_rls_test
+  personal-layout:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: node check-personal-layout-v192.cjs

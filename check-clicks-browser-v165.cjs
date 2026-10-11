@@ -64,7 +64,7 @@ async function run(engine,label){
   await page.waitForFunction(()=>document.querySelector('#modal:not(.hidden) #n')&&document.querySelector('#modal:not(.hidden) #b'));
   await page.locator('#n').fill('Click-safe expense');
   await page.locator('#b').fill('12.50');
-  await page.locator('#modal button[onclick*="saveExpense"]').click();
+  await page.locator('#modal button[onclick*="arySaveQuickExpense192"]').click();
   await page.waitForFunction(()=>document.getElementById('modal').classList.contains('hidden'));
   assert.equal(await page.evaluate(()=>s.expenses.some(e=>e.name==='Click-safe expense')),true,`${label}: expense save click works`);
   await page.waitForSelector('#aryQuickFab133');
@@ -101,8 +101,8 @@ async function run(engine,label){
 
 server.listen(0,'127.0.0.1',async()=>{
  try{
-  await run(chromium,'chromium');
-  await run(webkit,'webkit');
+  if(!process.env.ARY_TEST_ENGINE||process.env.ARY_TEST_ENGINE==='chromium')await run(chromium,'chromium');
+  if(!process.env.ARY_TEST_ENGINE||process.env.ARY_TEST_ENGINE==='webkit')await run(webkit,'webkit');
   console.log('Click, progress and guide regression browser checks passed.');
  }catch(err){console.error(err);process.exitCode=1}
  finally{server.close()}

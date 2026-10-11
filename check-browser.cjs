@@ -6,6 +6,7 @@ const http = require('node:http');
 const { chromium, webkit } = require('playwright');
 
 const root = __dirname;
+const separateBoxes=(a,b)=>a.x+a.width<=b.x||a.x>=b.x+b.width||a.y+a.height<=b.y||a.y>=b.y+b.height;
 const types = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.svg':'image/svg+xml', '.jpeg':'image/jpeg', '.webp':'image/webp', '.webmanifest':'application/manifest+json' };
 const server = http.createServer(async (req, res) => {
   try {
@@ -323,7 +324,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     const lastCard = await page.locator('#app .grid > .card').last().boundingBox();
     const navigationBox = await page.locator('#nav').boundingBox();
-    assert.ok(lastCard.y+lastCard.height <= navigationBox.y, 'Bottom navigation leaves the final card accessible');
+    assert.ok(separateBoxes(lastCard,navigationBox), 'Navigation leaves the final card accessible');
     await page.evaluate(() => window.scrollTo(0, 0));
     for (const theme of ['light','dark']) {
       await page.evaluate(theme => { localStorage.setItem('ary-theme-v46', theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
@@ -435,10 +436,11 @@ async function check(engine, label, viewport) {
     assert.equal(await page.evaluate(()=>arySeason59(new Date(2026,11,25))),'christmas');
     assert.equal(await page.evaluate(()=>arySeason59(new Date(2027,0,1))),'newyear');
     await page.evaluate(()=>{s.mode='immersive';render()});
-    assert.equal(await page.locator('.brandLetter59 b').evaluate(el=>getComputedStyle(el).animationName),'brandFlow59');
+    await page.waitForFunction(()=>{const el=document.querySelector('.brandLetter59 b');return el&&getComputedStyle(el).animationName==='brandFlow59'});
+    assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.brandLetter59 b')).animationName),'brandFlow59');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-brand-v59.png`),fullPage:true});
     await page.evaluate(()=>toggleMode());
-    assert.equal(await page.locator('.brandLetter59 b').evaluate(el=>getComputedStyle(el).animationName),'none');
+    assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.brandLetter59 b')).animationName),'none');
     await page.evaluate(() => closeM());
     // Header cues are based on pending dates, not historical expense dates.
     const reminderBefore60=await page.evaluate(()=>({debts:s.debts,expenses:s.expenses,calendarEvents:s.calendarEvents,payments:s.payments,mode:s.mode}));
@@ -627,13 +629,13 @@ async function check(engine, label, viewport) {
     if(viewport.width>=1000){
       const nav64=await page.locator('#nav').boundingBox(),app64=await page.locator('#app').boundingBox();
       assert.ok(app64.width>700,'Desktop content uses available width');
-      assert.ok(nav64.y>viewport.height/2,'Desktop has the same bottom tabs as mobile');
+      assert.ok(nav64.x+nav64.width<=app64.x,'Desktop navigation stays beside its workspace');
       assert.ok(nav64.y>=0&&nav64.y+nav64.height<=viewport.height,'All primary navigation fits the screen');
       await page.locator('#nav [onclick="go(\'expenses\')"]').click();
       assert.equal(await page.evaluate(()=>screen),'expenses');
       await page.evaluate(()=>scrollTo(0,500));
       await page.locator('#nav [onclick="go(\'home\')"]').click();
-      assert.equal(await page.evaluate(()=>screen),'home','Bottom tabs return directly to Home');
+      assert.equal(await page.evaluate(()=>screen),'home','Desktop navigation returns directly to Home');
       assert.equal(await page.evaluate(()=>scrollY),0);
       assert.equal(await page.locator('#nav .active').getAttribute('aria-current'),'page');
     }else{
@@ -650,10 +652,10 @@ async function check(engine, label, viewport) {
     }
     await page.evaluate(order=>{s.navOrder=order;save();go('home')},orderBefore65);
     await page.evaluate(()=>{s.mode='immersive';save()});
-    if(viewport.width>=1000){assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el).display),'block');assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el,'::before').animationName),'colorWave65');}
+    if(viewport.width>=1000){assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el).display),'block');assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el,'::before').animationName),await page.evaluate(()=>aryPerformance147.profile().constrained?'none':'colorWave65'));}
     await page.locator('.settings64').click();
     assert.ok(await page.locator('.signoutWave65').isVisible(),'Preferences include a separate red sign-out control');
-    assert.equal(await page.locator('.signoutWave65').evaluate(el=>getComputedStyle(el,'::before').animationName),'signoutRipple65');
+    assert.equal(await page.locator('.signoutWave65').evaluate(el=>getComputedStyle(el,'::before').animationName),await page.evaluate(()=>aryPerformance147.profile().constrained?'none':'signoutRipple65'));
     await page.screenshot({path:path.join(root,'browser-results',`${label}-preferences-v65.png`),fullPage:false});
     await page.locator('#modal [onclick="closeM()"]').click();
     await page.evaluate(()=>{s.mode='lite';save()});
@@ -675,7 +677,7 @@ async function check(engine, label, viewport) {
     const seasonState71=await page.evaluate(()=>({mode:s.mode,theme:document.documentElement.dataset.aryTheme}));
     await page.evaluate(()=>{s.mode='immersive';arySetTheme46('dark');save()});
     const artCount71=await page.locator('.seasonArt71').count();assert.equal(artCount71,await page.evaluate(()=>aryBackdropSeason71()==='everyday'?0:4));
-    assert.equal(await page.locator('.seasonGlow71').evaluate(el=>getComputedStyle(el).animationName),'seasonAurora71');
+    assert.equal(await page.locator('.seasonGlow71').evaluate(el=>getComputedStyle(el).animationName),await page.evaluate(()=>aryPerformance147.profile().constrained?'none':'seasonAurora71'));
     await page.screenshot({path:path.join(root,'browser-results',`${label}-season-v71.png`),fullPage:false});
     await page.evaluate(()=>{arySetTheme46('light');save()});
     assert.equal(await page.locator('html').getAttribute('data-ary-theme'),'light');
@@ -807,7 +809,7 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('.debtExpenses66 .ico').evaluate(el=>getComputedStyle(el).borderRadius),'50%','Record icons sit inside small bubbles');
     await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));
     const lastAction66=await page.locator('.debtExpenses66 .dangerBtn').boundingBox(),dock66=await page.locator('#nav').boundingBox();
-    assert.ok(lastAction66.y+lastAction66.height<dock66.y,'Debt payment actions can scroll clear of the bottom dock');
+    assert.ok(separateBoxes(lastAction66,dock66),'Debt payment actions remain clear of navigation');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-debt-expenses-v66.png`),fullPage:true});
     await page.locator('.debtExpenses66 [onclick^="aryDebtPayment54"]').click();
     await page.locator('#payAmount54').fill('76');
@@ -838,20 +840,14 @@ async function check(engine, label, viewport) {
     await page.reload();assert.equal(await page.locator('.homeCoach29>b').innerText(),chosen74,'Favorite survives reload');
     // V72 privacy and accessibility, exercised with synthetic records only.
     await page.evaluate(()=>{s.debts=[{id:7201,name:'Préstamo Árbol',balance:900,min:30}];s.payments=[{id:7202,amount:100,debtId:7201,date:localDate()}];go('home')});
-    assert.equal(await page.locator('.progressRing72 span').innerText(),'10%');
-    assert.ok(await page.locator('.progressCloud114').isVisible(),'Explanation cloud appears without navigation');
-    assert.ok((await page.locator('.progressCloud114 .progressTip114').innerText()).length>30,'Cloud gives an actual tip');
-    assert.equal(await page.evaluate(()=>screen),'home');
-    await page.locator('.progressMath114 summary').click();
-    assert.ok(await page.locator('.progressMath114').evaluate(el=>el.open));
-    assert.ok((await page.locator('.progressMath114').innerText()).includes('20%'),'Expanded guide explains the percentage with an example');
-    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Cloud fits mobile and desktop');
-    await page.locator('.progressMath114 summary').click();
+    assert.equal(await page.locator('.homeTruth29 .ring b').innerText(),'10%');
+    await page.locator('.homeTruth29').click();assert.equal(await page.evaluate(()=>screen),'progress','Progress card opens the dedicated view');
+    await navigate('home');
 
     assert.ok(await page.locator('.privacy72').isVisible());
     const financial72=await page.evaluate(()=>JSON.stringify([s.income,s.debts,s.expenses,s.payments]));
     await page.locator('.privacy72').click();
-    assert.equal(await page.locator('.progressRing72 span').innerText(),'••••');
+    assert.equal(await page.locator('.homeTruth29 .ring b').innerText(),'••••');
     for(const route of ['home','debts','expenses','plan','progress']){await navigate(route);assert.doesNotMatch(await page.locator('#app').innerText(),/\$\s*[\d,]+/,'Financial amounts stay hidden on '+route)}
     await page.reload();assert.equal(await page.evaluate(()=>aryHidden72()),true);
     await page.evaluate(()=>debtForm(7201));
@@ -968,8 +964,8 @@ async function check(engine, label, viewport) {
   await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
   try {
     const failures=[];
-    for (const [engine,name] of [[chromium,'chromium'],[webkit,'webkit']]) {
-      const results=await Promise.allSettled([['desktop',{width:1280,height:900}],['mobile',{width:390,height:844}]].map(([size,viewport])=>check(engine,`${name}-${size}`,viewport)));
+    for (const [engine,name] of [[chromium,'chromium'],[webkit,'webkit']].filter(([,name])=>!process.env.ARY_TEST_ENGINE||name===process.env.ARY_TEST_ENGINE)) {
+      const results=await Promise.allSettled([['desktop',{width:1280,height:900}],['mobile',{width:390,height:844}]].filter(([size])=>!process.env.ARY_TEST_LAYOUT||process.env.ARY_TEST_LAYOUT===size).map(([size,viewport])=>check(engine,`${name}-${size}`,viewport)));
       for(const result of results)if(result.status==='rejected')failures.push(result.reason);
     }
     if(failures.length)throw new AggregateError(failures,'Browser regression checks failed');

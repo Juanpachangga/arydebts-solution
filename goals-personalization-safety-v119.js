@@ -41,12 +41,13 @@ window.chooseGoal=function(value){
 const validRoutes=['debts','expenses','plan','calendar','income','goals','progress','buy','ants','assistant'];
 window.aryToggleAdaptive61=function(){
  if(!commit(next=>{if(!next.personalization61||typeof next.personalization61!=='object'||Array.isArray(next.personalization61))next.personalization61={enabled:true,visits:{},pinned:''};next.personalization61.enabled=next.personalization61.enabled===false;})){if(typeof toast==='function')toast(t().saveError);return false;}
+ if(typeof render==='function')render();
  if(typeof aryCustomize61==='function')aryCustomize61();return true;
 };
 window.aryPin61=function(route){
  const value=String(route||'');if(value!==''&&!validRoutes.includes(value))return false;
  if(!commit(next=>{if(!next.personalization61||typeof next.personalization61!=='object'||Array.isArray(next.personalization61))next.personalization61={enabled:true,visits:{},pinned:''};next.personalization61.pinned=value;})){if(typeof toast==='function')toast(t().saveError);return false;}
- return true;
+ if(typeof render==='function')render();return true;
 };
 
 // Keep adaptive-home visit learning transactional too. Navigation should never leave

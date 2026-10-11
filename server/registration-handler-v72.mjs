@@ -1,3 +1,4 @@
+import {readRequestJSON,RequestBodyError} from './request-json.mjs';
 // Connect createAccount to real account/session storage before deployment.
 // Secrets stay server-side. A local browser profile is not server authentication.
 export function createRegistrationHandler72({secret,allowedOrigin,hostname,consumeQuota,createAccount,fetchImpl=fetch}){
@@ -12,7 +13,7 @@ export function createRegistrationHandler72({secret,allowedOrigin,hostname,consu
   if(!request.headers.get('Content-Type')?.startsWith('application/json'))return answer(415,{success:false});
   try{
    if(!await consumeQuota(request))return answer(429,{success:false});
-   const raw=await request.text();if(raw.length>8192)return answer(413,{success:false});const body=JSON.parse(raw);
+   const body=await readRequestJSON(request,8192);
    const name=typeof body.name==='string'?body.name.trim():'';const email=typeof body.email==='string'?body.email.trim():'';const password=typeof body.password==='string'?body.password:'';const token=typeof body.token==='string'?body.token:'';
    if(!name||name.length>100||!/^\S+@\S+\.\S+$/.test(email)||email.length>254||password.length<8||password.length>256||!token||token.length>2048)return answer(400,{success:false});
    const response=await fetchImpl('https://challenges.cloudflare.com/turnstile/v0/siteverify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({secret,response:token}),signal:AbortSignal.timeout(10000)});
@@ -21,6 +22,6 @@ export function createRegistrationHandler72({secret,allowedOrigin,hostname,consu
    // Only a validated single-use token may reach account creation. Store hashed passwords.
    const result=await createAccount({name,email,password});if(!result?.success)return answer(400,{success:false});
    return answer(201,{success:true},result.cookie?{'Set-Cookie':result.cookie}:{});
-  }catch(e){return answer(503,{success:false})}
+  }catch(e){return answer(e instanceof RequestBodyError?e.status:e?.name==='TimeoutError'||e?.name==='AbortError'?504:503,{success:false})}
  };
 }
