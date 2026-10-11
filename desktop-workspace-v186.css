@@ -66,8 +66,8 @@ html body #app .introAry186 span{display:flex;align-items:center;font-size:32px}
 html body #app .introAry186 svg{width:40px;height:44px}
 html body #app .introPanel186 h1{font:800 clamp(28px,4vw,40px)/1.2 system-ui!important;letter-spacing:-.025em;margin:0 0 16px;color:inherit!important;text-shadow:none!important}
 html body #app .introPanel186 p{font:400 17px/1.6 system-ui;color:inherit!important;margin:0}
-html body #app .introNext186{margin:24px 0;padding:18px;border-radius:16px;background:#253853;border:1px solid #50647e}
-html body.ary-light #app .introNext186{background:#f1f5f9;border-color:#d6e0ec}
+html body #app .introNext186{margin:24px 0;padding:18px;border-radius:16px;background:#192f43;border:1px solid #36586a}
+html body.ary-light #app .introNext186{background:#eef8f8;border-color:#c5e3e5}
 html body #app .introNext186 b{display:block;color:inherit!important;margin-bottom:6px;font-size:17px}
 html body #app .introPanel186 .primary{min-height:52px;margin:0;background:linear-gradient(135deg,#087f86,#4853c8)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:none!important;font-size:17px}
 

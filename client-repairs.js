@@ -857,7 +857,7 @@ function ensureTargetVisible(el){
  return true;
 }
 
-function requestGuideRender(delay=0){clearTimeout(renderTimer);cancelAnimationFrame(renderRaf);const token=++renderToken;const run=()=>{renderRaf=requestAnimationFrame(()=>{renderRaf=0;if(active&&token===renderToken)renderStep(token)})};if(delay>0)renderTimer=setTimeout(run,delay);else run()}
+function requestGuideRender(delay=0){if(document.querySelector('.ary139confirm'))return;clearTimeout(renderTimer);cancelAnimationFrame(renderRaf);const token=++renderToken;const run=()=>{renderRaf=requestAnimationFrame(()=>{renderRaf=0;if(active&&token===renderToken)renderStep(token)})};if(delay>0)renderTimer=setTimeout(run,delay);else run()}
 function renderStep(token=renderToken){if(!active||token!==renderToken)return;silenceContextGuide();css();const step=steps()[index];if(!step)return finish(false);if(step[4])return renderFinal();clearTimeout(paintTimer);target=selectTarget(step);const moved=target?ensureTargetVisible(target):false;const expected=index;const draw=()=>{paintTimer=0;if(!active||expected!==index||token!==renderToken)return;paint(step,expected,token)};if(moved)paintTimer=setTimeout(draw,MOBILE()?65:220);else renderRaf=requestAnimationFrame(draw)}
 function paint(step,expected=index,token=renderToken){if(!active||expected!==index||token!==renderToken)return;clearNodes();target=selectTarget(step);const rect=target?targetRect(target):null;const x=copy(),box=document.createElement('section');box.className='ary125cloud';box.setAttribute('data-ary-copy','');box.setAttribute('role','dialog');box.setAttribute('aria-modal','false');box.setAttribute('aria-live','polite');box.innerHTML=`<div class="aryGuideCompanion" aria-label="ARY 🤖"><span aria-hidden="true">${window.aryRobotMarkup94?aryRobotMarkup94():'🤖'}</span> ARY</div><h3>${step[2]}</h3><p>${step[3]}</p><div class="ary125bar">${steps().map((_,i)=>`<i class="${i<=index?'on':''}"></i>`).join('')}</div><div class="ary125actions"><button ${index?'':'disabled style="opacity:.35"'} onclick="aryFullGuideBack125()">‹ ${x.back}</button><div><div class="ary125meta">${x.count} ${index+1} / ${steps().length}</div><button class="ary125auto" onclick="aryFullGuideToggleAuto125()">${auto?'⏸ '+x.pause:'▶ '+x.play}</button></div><button class="primary" aria-label="${index===steps().length-1?x.finish:x.next}" onclick="aryFullGuideNext125()">${index===steps().length-1?x.finish:x.next} ›</button></div>`;const cancel=document.createElement('button');cancel.type='button';cancel.className='ary140cancelTop';cancel.textContent=lang()==='en'?'✕ Cancel guide':lang()==='pt'?'✕ Cancelar guia':'✕ Cancelar guía';cancel.onclick=e=>{e.preventDefault();e.stopPropagation();if(window.aryGuideCancel139)aryGuideCancel139();else finish(false)};box.appendChild(cancel);document.body.appendChild(box);const sk=document.createElement('button');sk.className='ary125skip';sk.textContent=x.skip;sk.onclick=()=>finish(false);document.body.appendChild(sk);const spotlight=placeCloud(box,rect);shade(spotlight,target);schedule()}
 function renderFinal(){if(!active)return;clearNodes();shade(null,null);const x=copy(),box=document.createElement('section');box.className='ary125cloud ary125final';box.setAttribute('data-ary-copy','');box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.innerHTML=`<div class="finishIcon">🎉</div><h3>${x.doneTitle}</h3><p>${x.doneText}</p><div class="ary125bar">${steps().map(()=>'<i class="on"></i>').join('')}</div><div class="ary125actions"><button onclick="aryFullGuideBack125()">‹ ${x.back}</button><div class="ary125meta">${x.count} ${index+1} / ${steps().length}</div><button class="primary" onclick="aryFullGuideFinish125()">${x.finish}</button></div>`;document.body.appendChild(box);placeCloud(box,null);clearTimeout(timer)}
@@ -865,8 +865,8 @@ function route(i){const step=steps()[i];if(!step)return;clearTimeout(timer);clea
 function silenceContextGuide(){document.querySelectorAll('.aryGuide94').forEach(n=>n.remove());try{if(s?.guide94?.active===true&&typeof window.aryEndGuide94==='function')window.aryEndGuide94()}catch{document.querySelectorAll('.aryGuide94').forEach(n=>n.remove())}}
 function start(force=false){cancelAutoStart();if(active)return;if(!profile||!s?.onboarded)return;if(!force&&!canAutoStart())return;try{localStorage.setItem(OLD_KEY,'done')}catch{};try{if(typeof aryGuideSkip116==='function')aryGuideSkip116()}catch{};document.getElementById('aryGuide116')?.remove();document.getElementById('aryGuideMask116')?.remove();active=true;document.documentElement.classList.add('aryGuideActive');auto=false;index=0;silenceContextGuide();route(0)}
 function finish(openAssistant){active=false;document.documentElement.classList.remove('aryGuideActive');delete document.documentElement.dataset.aryGuideRoute;document.querySelector('.ary139confirm')?.remove();clearPending();clearNodes();document.getElementById('aryGuideBlock127')?.remove();document.documentElement.classList.remove('aryGuideLite144','aryGuideUltra148');markDone();if(openAssistant&&typeof go==='function')go('assistant')}
-window.aryFullGuideNext125=()=>{if(!active)return;if(index>=steps().length-1)return finish(false);route(index+1)};
-window.aryFullGuideBack125=()=>{if(active&&index>0)route(index-1)};
+window.aryFullGuideNext125=()=>{if(!active||document.querySelector('.ary139confirm')||!document.querySelector('.ary125cloud'))return;if(index>=steps().length-1)return finish(false);route(index+1)};
+window.aryFullGuideBack125=()=>{if(active&&index>0&&!document.querySelector('.ary139confirm')&&document.querySelector('.ary125cloud'))route(index-1)};
 window.aryFullGuideToggleAuto125=()=>{if(!active)return;auto=!auto;clearTimeout(timer);requestGuideRender()};
 window.aryFullGuideFinish125=()=>finish(false);
 window.aryStartFullGuide125=()=>{try{localStorage.removeItem(KEY)}catch{};active=false;clearPending();start(true)};
@@ -1516,9 +1516,9 @@ window.aryExpenseRecurrenceIntegrity138={active:true};
 const STYLE='aryGuideMobileControlsStyle139';
 const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const text={
- es:{title:'¿Cancelar la guía?',body:'Puedes cerrar el recorrido y usar Arydebts normalmente. La guía no volverá a aparecer automáticamente.',yes:'Sí, cancelar',no:'Seguir con la guía'},
- en:{title:'Cancel the guide?',body:'You can close the tour and use Arydebts normally. The guide will not appear automatically again.',yes:'Yes, cancel',no:'Keep the guide'},
- pt:{title:'Cancelar o guia?',body:'Você pode fechar o tour e usar o Arydebts normalmente. O guia não aparecerá automaticamente novamente.',yes:'Sim, cancelar',no:'Continuar guia'}
+ es:{title:'¿Cancelar la guía?',body:'Puedes volver a abrirla desde Configuración.',yes:'Sí, cancelar',no:'Seguir con la guía'},
+ en:{title:'Cancel the guide?',body:'You can reopen it from Settings.',yes:'Yes, cancel',no:'Keep the guide'},
+ pt:{title:'Cancelar o guia?',body:'Você pode reabri-lo nas Configurações.',yes:'Sim, cancelar',no:'Continuar guia'}
 };
 const t=()=>text[lang()]||text.es;
 function ensureStyle(){
@@ -1530,7 +1530,11 @@ function ensureStyle(){
 .ary125skip{display:none!important}
 .ary139confirm{position:fixed;inset:0;z-index:10040;display:grid;place-items:center;padding:18px;background:rgba(2,7,20,.82)}
 .ary139confirmCard{width:min(370px,calc(100vw - 30px));padding:20px;border-radius:22px;border:1px solid rgba(105,218,255,.35);background:#172541;color:#f4f9ff;box-shadow:0 18px 52px rgba(0,0,0,.45);text-align:center}
-.ary139confirmCard h3{margin:0 0 8px}.ary139confirmCard p{margin:0 0 16px;color:#b8cae1;font-size:13px;line-height:1.45}.ary139confirmActions{display:grid;gap:8px}.ary139confirmActions button{min-height:44px;border-radius:14px;font-weight:850}.ary139yes{border:1px solid rgba(255,129,150,.4);background:rgba(255,86,119,.15);color:#ffd8df}.ary139no{border:0;background:#58d6df;color:#071223}.ary-light .ary139confirm{background:rgba(236,244,252,.9)}.ary-light .ary139confirmCard{background:#fff;color:#19334e;border-color:#bfe4ed}.ary-light .ary139confirmCard p{color:#657d94}
+.ary139confirmCard h3{margin:0 0 8px}.ary139confirmCard p{margin:0 0 16px;color:#b8cae1;font-size:13px;line-height:1.45}.ary139confirmActions{display:grid;gap:8px}.ary139confirmActions button{min-height:44px;border-radius:14px;font-weight:850}.ary139yes{border:1px solid rgba(255,129,150,.4);background:rgba(255,86,119,.15);color:#ffd8df}.ary139no{border:0;background:#58d6df;color:#071223}.ary-light .ary139confirm{background:rgba(2,7,20,.86)}.ary-light .ary139confirmCard{background:#fff;color:#19334e;border-color:#bfe4ed}.ary-light .ary139confirmCard p{color:#657d94}
+html body .ary139confirmActions button{opacity:1!important;visibility:visible!important;pointer-events:auto!important;touch-action:manipulation;transform:none!important;transition:none!important;min-height:48px;font-size:16px;-webkit-text-fill-color:currentColor!important}
+html body .ary139confirmActions .ary139yes{background:#b42342!important;color:#fff!important;border:1px solid #b42342!important}
+html body .ary139confirmActions .ary139no{background:#087f86!important;color:#fff!important;border:1px solid #087f86!important}
+html body .ary139confirmCard{box-sizing:border-box;max-height:calc(100dvh - 36px);overflow:auto}
 @media(max-width:820px),(pointer:coarse){.ary125cloud,.ary126node.ary125cloud{width:calc(100vw - 16px)!important;max-height:calc(100dvh - 16px)!important;border-radius:18px!important}.ary125cloud .ary125actions{padding-bottom:max(4px,env(safe-area-inset-bottom));backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.ary139confirmCard{box-shadow:0 12px 28px rgba(0,0,0,.28)}}
 `;
  document.head.appendChild(st);
@@ -1538,8 +1542,7 @@ function ensureStyle(){
 function closeConfirm(){document.querySelector('.ary139confirm')?.remove()}
 function cancelConfirmed(){
  closeConfirm();
- const skip=document.querySelector('.ary125skip');
- if(skip){skip.click();return}
+ if(typeof window.aryFullGuideFinish125==='function'){window.aryFullGuideFinish125();return}
  try{localStorage.setItem('arydebts-guide-v125','done')}catch{}
  const lifecycle=window.aryGuideLifecycle128;
  try{const id=lifecycle?.currentUser?.();if(id)localStorage.setItem('arydebts-guide-user-v128:'+id,'done')}catch{}
