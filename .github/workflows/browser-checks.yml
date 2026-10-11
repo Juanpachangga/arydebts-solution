@@ -62,9 +62,7 @@ jobs:
         run: node check-guide-layout-v185.cjs
       - name: Exercise desktop workspace, progress circle and simple first step
         if: ${{ !cancelled() }}
-        run: |
-          node check-desktop-workspace-v186.cjs
-          node check-personal-layout-v192.cjs
+        run: node check-desktop-workspace-v186.cjs
       - name: Exercise assistant consent and session cancellation
         if: ${{ !cancelled() }}
         run: node check-assistant-browser-v185.cjs
@@ -129,3 +127,17 @@ jobs:
         env:
           ARY_DISPOSABLE_RLS_TEST: 'yes'
           ARY_TEST_DATABASE_URL: postgresql://postgres:disposable-ci-password@localhost:5432/ary_rls_test
+  personal-layout:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: node check-personal-layout-v192.cjs
