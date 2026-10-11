@@ -13,21 +13,21 @@ const copy=()=>TXT[lang()];
 const S={
  es:[
   ['home',['.homeTruth29','.heroCard'],'🏠 Tu resumen','Aquí ves tu dinero y cuánto has pagado.'],
-  ['income',['.card.full'],'💰 Ingresos','Agrega cuánto recibes y cada cuánto te pagan.'],
   ['expenses',['.addExpense67','.expenseRecords185'],'🧾 Gastos','Agrega tus gastos para saber cuánto te queda.'],
-  ['debts',['.card.full button.primary','.rowActions','.debtPulse33'],'💳 Deudas y pagos','Agrega tus deudas. Registra cada pago cuando lo hagas.']
+  ['debts',['.card.full button.primary','.rowActions','.debtPulse33'],'💳 Deudas y pagos','Revisa lo que debes y registra cada pago.'],
+  ['plan',['.planHero34','.planAttack34','.card.full'],'✨ Tu plan','Aquí ves cuánto te queda y cuál es tu próximo paso.']
  ],
  en:[
   ['home',['.homeTruth29','.heroCard'],'🏠 Your overview','See your money and how much you have paid.'],
-  ['income',['.card.full'],'💰 Income','Add how much you receive and how often.'],
   ['expenses',['.addExpense67','.expenseRecords185'],'🧾 Expenses','Add your expenses to see what you have left.'],
-  ['debts',['.card.full button.primary','.rowActions','.debtPulse33'],'💳 Debts and payments','Add your debts. Record each payment after making it.']
+  ['debts',['.card.full button.primary','.rowActions','.debtPulse33'],'💳 Debts and payments','Review what you owe and record each payment.'],
+  ['plan',['.planHero34','.planAttack34','.card.full'],'✨ Your plan','See what is left and choose your next step.']
  ],
  pt:[
   ['home',['.homeTruth29','.heroCard'],'🏠 Seu resumo','Veja seu dinheiro e quanto já pagou.'],
-  ['income',['.card.full'],'💰 Renda','Adicione quanto recebe e com que frequência.'],
   ['expenses',['.addExpense67','.expenseRecords185'],'🧾 Gastos','Adicione seus gastos para saber quanto sobra.'],
-  ['debts',['.card.full button.primary','.rowActions','.debtPulse33'],'💳 Dívidas e pagamentos','Adicione suas dívidas. Registre cada pagamento realizado.']
+  ['debts',['.card.full button.primary','.rowActions','.debtPulse33'],'💳 Dívidas e pagamentos','Confira suas dívidas e registre cada pagamento.'],
+  ['plan',['.planHero34','.planAttack34','.card.full'],'✨ Seu plano','Veja quanto sobra e escolha seu próximo passo.']
  ]
 };
 let routing=false,active=false,index=0,auto=false,timer=0,target=null,renderTimer=0,renderRaf=0,paintTimer=0,renderToken=0,startTimer=0;
@@ -53,14 +53,14 @@ function css(){
 @media(max-width:560px),(pointer:coarse){.ary125cloud{padding:14px;border-radius:20px;max-height:min(350px,calc(100dvh - 20px));width:calc(100vw - 20px)}.ary125cloud h3{font-size:16px}.ary125cloud p{font-size:12px}.ary125actions{grid-template-columns:minmax(86px,auto) minmax(70px,1fr) minmax(98px,auto)}.ary125actions button{font-size:12px;padding:7px 9px}.ary125actions .primary{min-width:98px}.ary125shade{backdrop-filter:none}}
 html.aryGuideActive[data-ary-guide-route="expenses"] .debtExpenses66{display:none!important}
 html.aryGuideActive .aryGuide94,html.aryGuideActive #aryGuide116,html.aryGuideActive #aryGuideMask116{display:none!important}
-html body .ary125cloud{padding:14px!important;padding-top:58px!important;width:min(410px,calc(100vw - 16px))!important;max-height:var(--ary-guide-height,calc(100dvh - 24px))!important;border-radius:26px 26px 26px 8px!important;transition:none!important;background:#172541!important;color:#f2f8ff!important;contain:layout paint}
+html body .ary125cloud{padding:14px!important;padding-top:72px!important;width:min(410px,calc(100vw - 16px))!important;max-height:var(--ary-guide-height,calc(100dvh - 24px))!important;border-radius:26px 26px 26px 8px!important;transition:none!important;background:#172541!important;color:#f2f8ff!important;contain:layout paint}
 html body.ary-light .ary125cloud{background:#fff!important;color:#172641!important}
 html body .ary125cloud h3{color:inherit!important;-webkit-text-fill-color:currentColor!important;font-size:18px!important;margin:0 0 8px!important}
 html body .ary125cloud p{color:#d3e0ef!important;-webkit-text-fill-color:currentColor!important;font-size:16px!important;line-height:1.45!important}
 html body.ary-light .ary125cloud p{color:#40536e!important}
 html body .aryGuideCompanion{position:absolute;top:12px;left:14px;display:flex;align-items:center;gap:6px;color:inherit;font-size:14px;font-weight:800}
 html body .aryGuideCompanion span{font-size:26px;display:flex;align-items:center}
-html body .aryGuideCompanion svg{width:32px;height:36px;display:block}
+html body .aryGuideCompanion svg{width:44px;height:48px;display:block}
 html body .ary125cloud .ary125actions button{background:#253853!important;color:#f2f8ff!important;-webkit-text-fill-color:currentColor!important;border-color:#50647e!important}
 html body.ary-light .ary125cloud .ary125actions button{background:#f1f5f9!important;color:#172641!important;border-color:#c6d3e0!important}
 html body.ary-light .ary125cloud .ary140cancelTop{background:#f1f5f9!important;color:#172641!important}
@@ -82,7 +82,7 @@ html body .ary125cloud.ary125final{padding-top:14px!important}
 }
 function modalOpen(){return !!document.querySelector('#modal:not(.hidden)')}
 function contextualGuideOpen(){return !!document.querySelector('.aryGuide94,#aryGuide116,#aryGuideMask116')}
-function canAutoStart(){return !active&&!completed()&&!!profile&&!!s?.onboarded&&typeof screen==='string'&&screen==='home'&&!modalOpen()&&!contextualGuideOpen()}
+function canAutoStart(){return !active&&!completed()&&!!profile&&!!s?.onboarded&&typeof screen==='string'&&screen==='home'&&!modalOpen()}
 function cancelAutoStart(){clearTimeout(startTimer);startTimer=0}
 function scheduleAutoStart(delay=220){if(startTimer||!canAutoStart())return;startTimer=setTimeout(()=>{startTimer=0;if(canAutoStart())start(false)},delay)}
 function clearPending(){clearTimeout(timer);clearTimeout(renderTimer);clearTimeout(paintTimer);cancelAutoStart();cancelAnimationFrame(renderRaf);renderTimer=0;paintTimer=0;renderRaf=0;renderToken++}

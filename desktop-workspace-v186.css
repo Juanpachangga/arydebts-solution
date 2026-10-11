@@ -75,3 +75,14 @@ html body #app .introPanel186 .primary{min-height:52px;margin:0;background:linea
 html body #app .progressBox>.ring{width:112px!important;height:112px!important;min-width:112px!important;min-height:112px!important;max-width:112px!important;max-height:112px!important;flex:0 0 112px!important;aspect-ratio:1!important;border-radius:50%!important;box-sizing:border-box!important;padding:0!important}
 html body #app .progressBox>.ring::after{inset:10px!important;border-radius:50%!important;aspect-ratio:1!important}
 @media(min-width:1000px){html body.signed64 #app .progressBox>.ring{width:132px!important;height:132px!important;min-width:132px!important;min-height:132px!important;max-width:132px!important;max-height:132px!important;flex-basis:132px!important}}
+
+/* Content spacing belongs between cards, with navigation clearance only at page end. */
+html body.signed64 #app :is(.debtExpenses66,.expenseCuts68,.recurringAnts68){margin:16px 0!important}
+html body.signed64 #app .grid{align-content:start!important;grid-auto-rows:auto!important}
+html body.signed64 #app #homeQuickExpense193{margin:16px 0;padding:16px!important;display:block}
+#homeQuickExpense193 form{display:flex;gap:10px;align-items:center;margin-top:10px}
+#homeQuickExpense193 input{flex:1;min-width:0;margin:0!important;width:100%}
+#homeQuickExpense193 button{flex:none;min-height:48px;margin:0!important;padding:10px 14px!important}
+#homeQuickExpense193 label{display:block;font-weight:700}
+#homeQuickExpense193 small{display:block;margin-top:8px}
+@media(max-width:360px){#homeQuickExpense193 form{flex-wrap:wrap}#homeQuickExpense193 button{width:100%}}

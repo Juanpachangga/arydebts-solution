@@ -141,3 +141,4 @@ jobs:
           node-version: '24'
       - run: npm install --no-save --package-lock=false playwright@1.62.1
       - run: node check-personal-layout-v192.cjs
+      - run: node check-onboarding-guide-v193.cjs

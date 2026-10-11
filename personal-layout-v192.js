@@ -26,11 +26,50 @@ document.addEventListener('touchend',end);document.addEventListener('touchcancel
 document.addEventListener('contextmenu',e=>{if(e.target.closest('[data-move192]'))e.preventDefault()});
 document.addEventListener('click',e=>{if((editing||Date.now()<suppressUntil)&&e.target.closest('[data-move192]')){e.preventDefault();e.stopImmediatePropagation()}},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')return done();const n=e.target.closest('[data-move192]');if(!n||!e.altKey||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();edit();const g=n.parentElement,list=items(g),i=list.indexOf(n),delta=['ArrowLeft','ArrowUp'].includes(e.key)?-1:1,target=list[i+delta];if(target){g.insertBefore(n,delta<0?target:target.nextSibling);if(!save(g))list.forEach(n=>g.appendChild(n));n.focus()}});
-const baseRender=window.render;window.render=function(){end();const out=baseRender.apply(this,arguments);apply();return out};
+const baseRender=window.render;window.render=function(){end();const out=baseRender.apply(this,arguments);apply();homeQuick();return out};
 const go=window.go;window.go=function(){done();return go.apply(this,arguments)};
 window.aryArrange192=()=>{apply();edit()};
 window.aryQuickExpense192=()=>{window._expenseSource63=null;const w=t();modal(`<section id="quickExpense192" data-ary-copy><h2>${w[5]}</h2><label for="n">${w[6]}</label><input id="n" maxlength="120" autocomplete="off" placeholder="${lang()==='es'?'Gasolina':lang()==='pt'?'Gasolina':'Gas'}"><label for="b">${w[7]} (${esc(s.currency||'USD')})</label><input id="b" type="text" inputmode="decimal" placeholder="50"><label for="c">${w[8]}</label><select id="c"><option value="Variable">${lang()==='en'?'Variable': 'Variable'}</option><option value="Esencial">${lang()==='en'?'Essential':lang()==='pt'?'Essencial':'Esencial'}</option><option value="Hormiga">${lang()==='en'?'Small expense':lang()==='pt'?'Pequeno gasto':'Hormiga'}</option></select><button class="btn primary widebtn" onclick="arySaveQuickExpense192()">${w[9]}</button><button class="btn widebtn" onclick="closeM()">${w[10]}</button></section>`);document.querySelector('#modal .sheet').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.target.tagName==='INPUT'){e.preventDefault();if(e.target.id==='n')document.getElementById('b').focus();else arySaveQuickExpense192()}});document.getElementById('n')?.focus()};
 window.arySaveQuickExpense192=()=>{const form=document.querySelector('#modal:not(.hidden) #quickExpense192');if(!form||form.dataset.saving==='1')return false;const name=document.getElementById('n')?.value.trim(),raw=document.getElementById('b')?.value,value=typeof parseNum==='function'?parseNum(raw):Number(raw);if(!name||!Number.isFinite(value)||value<=0){toast(t()[11]);return false}form.dataset.saving='1';try{return window.saveExpense()}finally{if(document.querySelector('#modal:not(.hidden) #quickExpense192')===form)delete form.dataset.saving}};
 const quick=window.aryQuickAction133;window.aryQuickAction133=function(type){if(type==='expense')return aryQuickExpense192();return quick.apply(this,arguments)};
+const quickWords={
+ es:['Gasto al instante','Ej. $50 gasolina','Agregar','Se guarda en Gastos con la fecha de hoy.','Escribe el monto y el nombre. Ej. $50 gasolina.','Gasto registrado','No se pudo guardar. Intenta otra vez.'],
+ en:['Instant expense','e.g. $50 gas','Add','Saved in Expenses with today’s date.','Enter an amount and name, e.g. $50 gas.','Expense recorded','Could not save. Try again.'],
+ pt:['Gasto na hora','Ex. $50 gasolina','Adicionar','Salvo em Gastos com a data de hoje.','Informe o valor e o nome. Ex. $50 gasolina.','Gasto registrado','Não foi possível salvar. Tente novamente.']
+};
+window.aryParseQuickExpense193=value=>{
+ const text=String(value||'').trim();
+ // Exactly one amount at either end. Currency always comes from the profile.
+ const prefix=text.match(/^(?:[$€£]|R\$)?\s*(\d+(?:[.,]\d+)*)\s+(.+)$/i);
+ const suffix=prefix?null:text.match(/^(.+?)\s+(?:[$€£]|R\$)?\s*(\d+(?:[.,]\d+)*)$/i);
+ if(!prefix&&!suffix)return null;
+ const raw=prefix?prefix[1]:suffix[2],name=(prefix?prefix[2]:suffix[1]).trim();
+ const valueNumber=typeof parseNum==='function'?parseNum(raw):Number(raw);
+ if(!name||name.length>120||!Number.isFinite(valueNumber)||valueNumber<=0)return null;
+ return {name,amount:valueNumber};
+};
+function homeQuick(){
+ if(!profile||!s?.onboarded||screen!=='home'||document.getElementById('homeQuickExpense193'))return;
+ const anchor=document.querySelector('#app .searchLaunch72,#app .homeDaily81,#app .homeTruth29');
+ if(!anchor)return;
+ const x=quickWords[lang()],card=document.createElement('section');card.className='card full';card.id='homeQuickExpense193';card.setAttribute('data-ary-copy','');
+ card.innerHTML=`<label for="homeExpense193">⚡ ${x[0]} (${esc(s.currency||'USD')})</label><form><input id="homeExpense193" maxlength="150" autocomplete="off" placeholder="${x[1]}" aria-describedby="homeExpenseHelp193"><button type="submit" class="btn primary">${x[2]} →</button></form><small id="homeExpenseHelp193">${x[3]}</small>`;
+ card.querySelector('form').onsubmit=event=>{event.preventDefault();window.arySaveHomeExpense193()};
+ anchor.before(card);
+}
+window.arySaveHomeExpense193=()=>{
+ const form=document.querySelector('#homeQuickExpense193 form'),input=document.getElementById('homeExpense193');
+ if(screen!=='home'||!profile||!s?.onboarded||!form||form.dataset.saving==='1'||window.aryFullGuideStatus125?.().active)return false;
+ const item=window.aryParseQuickExpense193(input?.value),x=quickWords[lang()];
+ if(!item){toast(x[4]);input?.focus();return false}
+ form.dataset.saving='1';
+ const saved=window.aryCommitFinancial109?.(next=>{
+  next.expenses=Array.isArray(next.expenses)?next.expenses:[];
+  next.expenses.push({...item,id:window.aryUniqueId120(next.expenses,next.debts,next.payments,next.calendarEvents),cat:'Variable',date:localDate(),frequency:'once',icon:iconFor(item.name,'Variable')});
+ });
+ if(!saved){delete form.dataset.saving;toast(x[6]);return false}
+ input.value='';render();toast(x[5]);return true;
+};
+homeQuick();
 const st=document.createElement('style');st.textContent=`[data-move192]{-webkit-touch-callout:none}.arranging192 [data-move192]{outline:2px dashed #258e99;outline-offset:-3px;user-select:none}.moving192{opacity:.65!important;outline:3px solid #258e99!important}#arrangeBar192{position:fixed;top:max(8px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:8px;align-items:center;padding:10px;border-radius:16px;background:#172541;color:white;box-shadow:0 4px 20px #0005;width:max-content;max-width:calc(100vw - 16px);box-sizing:border-box}#arrangeBar192 button{min-height:44px;background:#087f86;color:white;border:0;border-radius:10px;padding:8px}#arrangeBar192 b{font-size:13px}`;document.head.appendChild(st);apply();
 })();

@@ -72,12 +72,20 @@ function wrapFinishOnboarding(){
  const fn=window.finishOnboarding;
  if(typeof fn!=='function'||fn._aryFirstRun129)return;
  const wrapped=function(){
+  const wasNew=!!profile&&!s?.onboarded;
+  const complete=out=>{
+   if(out!==false&&wasNew&&s?.onboarded){
+    lifecycle()?.resetCurrent?.();
+    scheduleFirstLaunch(120);
+   }
+   return out;
+  };
   const out=fn.apply(this,arguments);
-  setTimeout(()=>settle(0),50);
-  return out;
+  return out&&typeof out.then==='function'?out.then(complete):complete(out);
  };
  wrapped._aryFirstRun129=true;
  window.finishOnboarding=wrapped;
+ window.aryFinishOnboarding54=wrapped;
 }
 function wrapAuth(){
  const fn=window.localAuth;
