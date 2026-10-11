@@ -6,8 +6,8 @@ const t=()=>words[lang()];
 let editing=false,drag=null,hold=0,suppressUntil=0;
 const key=()=>{const id=window.aryGuideLifecycle128?.currentUser?.();return id?'ary-layout-v192:'+id:null};
 const read=()=>{try{const v=JSON.parse(localStorage.getItem(key())||'{}');return v&&typeof v==='object'&&!Array.isArray(v)?v:{}}catch{return {}}};
-const groups=()=>[document.querySelector('#nav'),...document.querySelectorAll('#app .menuGrid')].filter(Boolean);
-const groupKey=g=>g.id==='nav'?'navigation':String(screen)+':'+[...document.querySelectorAll('#app .menuGrid')].indexOf(g);
+const groups=()=>[document.querySelector('#nav'),...document.querySelectorAll('#app .menuGrid,#app .moreGrid94,#app .communityGrid72,#app .homeActions81')].filter(Boolean);
+const groupKey=g=>g.id==='nav'?'navigation':String(screen)+':'+[...document.querySelectorAll('#app .menuGrid,#app .moreGrid94,#app .communityGrid72,#app .homeActions81')].indexOf(g);
 const id=n=>n.getAttribute('onclick')||'';
 const items=g=>[...g.children].filter(n=>n.tagName==='BUTTON'&&id(n));
 function save(g){const k=key();if(!k)return false;try{const data=read();data[groupKey(g)]=items(g).map(id);localStorage.setItem(k,JSON.stringify(data));return true}catch{toast(t()[4]);return false}}
