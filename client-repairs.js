@@ -1108,6 +1108,7 @@ function wrapFinishOnboarding(){
   const complete=out=>{
    if(out!==false&&wasNew&&s?.onboarded){
     lifecycle()?.resetCurrent?.();
+    repairGuideOnce();
     scheduleFirstLaunch(120);
    }
    return out;
