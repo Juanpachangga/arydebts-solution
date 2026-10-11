@@ -5,16 +5,16 @@ const server=http.createServer(async(req,res)=>{try{const file=path.resolve(root
 (async()=>{let browser;try{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  for(const [name,engine] of [['chromium',chromium],['webkit',webkit]].filter(([n])=>!process.env.ARY_TEST_ENGINE||process.env.ARY_TEST_ENGINE===n)){
-  for(const viewport of [{width:320,height:568},{width:390,height:844},{width:1280,height:800}])for(const theme of ['light','dark']){
+  for(const viewport of [{width:320,height:568},{width:390,height:844},{width:1280,height:800}])for(const theme of ['light','dark'])for(const empty of [false,true]){
    browser=await engine.launch();
    const page=await browser.newPage({viewport}),errors=[];page.on('pageerror',e=>errors.push(e.message));
    await page.goto('http://127.0.0.1:'+server.address().port);
    await page.waitForFunction(()=>!!window.aryGuideInteractionSafety180);
-   await page.evaluate(theme=>{
+   await page.evaluate(({theme,empty})=>{
     profile={name:'Test',email:'layout@example.test'};s.name='Test';s.locale='es-US';s.theme=theme;s.onboarded=true;s.income=2500;s.incomeFrequency='monthly';
     s.debts=[{id:1,name:'Carro',balance:250,min:50,apr:12}];s.expenses=[{id:2,name:'Mercado',amount:80,cat:'Esencial',date:localDate()}];
-    localStorage.setItem('ary-theme-v46',theme);render();aryStartFullGuide125();
-   },theme);
+    if(empty){s.debts=[];s.expenses=[]}localStorage.setItem('ary-theme-v46',theme);render();aryStartFullGuide125();
+   },{theme,empty});
    for(let index=0;index<28;index++){
     if(index)await page.evaluate(()=>aryFullGuideNext125());
     await page.waitForFunction(i=>aryFullGuideStatus125().index===i&&document.querySelectorAll('.ary125cloud').length===1,index);
@@ -23,10 +23,10 @@ const server=http.createServer(async(req,res)=>{try{const file=path.resolve(root
      const card=document.querySelector('.ary125cloud'),focus=document.querySelector('.ary125focus'),nav=document.querySelector('#nav');
      const rect=n=>{if(!n)return null;const r=n.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height}};
      const primary=card.querySelector('.primary'),bg=getComputedStyle(card).backgroundColor,foreground=getComputedStyle(card).color;
-     return {card:rect(card),focus:rect(focus),nav:rect(nav),bg,foreground,scrollHeight:card.scrollHeight,clientHeight:card.clientHeight,primary:rect(primary),cancel:rect(card.querySelector('.ary140cancelTop')),text:card.querySelector('p')?.textContent,robot:card.querySelector('.aryGuideCompanion')?.getAttribute('aria-label'),automatic:aryFullGuideStatus125().automatic,extras:document.querySelectorAll('.ary126node,.aryGuide94').length};
+     return {card:rect(card),focus:rect(focus),nav:rect(nav),bg,foreground,scrollHeight:card.scrollHeight,clientHeight:card.clientHeight,primary:rect(primary),cancel:rect(card.querySelector('.ary140cancelTop')),text:card.querySelector('p')?.textContent,robot:card.querySelector('.aryGuideCompanion')?.getAttribute('aria-label'),shade:getComputedStyle(document.querySelector('.ary125shade')).backgroundColor,automatic:aryFullGuideStatus125().automatic,extras:document.querySelectorAll('.ary126node,.aryGuide94').length};
     });
-    const label=`${name} ${viewport.width} ${theme} step ${index}`;
-    assert.equal(state.automatic,false,label+': manual reading pace');assert.equal(state.extras,0,label+': one guide');
+    const label=`${name} ${viewport.width} ${theme} empty=${empty} step ${index}`;
+    assert.equal(state.shade,'rgba(2, 6, 18, 0.86)',label+': darker backdrop');assert.equal(state.automatic,false,label+': manual reading pace');assert.equal(state.extras,0,label+': one guide');
     assert.ok(state.card.left>=7&&state.card.right<=viewport.width-7,label+': horizontal bounds');
     assert.ok(state.card.top>=7&&state.card.bottom<=viewport.height-7,label+': vertical bounds');
     assert.ok(state.primary.top>=state.card.top&&state.primary.bottom<=state.card.bottom+1,label+': readable primary action');
@@ -35,7 +35,7 @@ const server=http.createServer(async(req,res)=>{try{const file=path.resolve(root
     if(index<27){assert.ok(state.cancel?.height>=44,label+': accessible cancel action '+JSON.stringify(state.cancel));assert.match(state.robot,/ARY.*🤖/,label+': companion');assert.ok(state.text.length<130,label+': concise explanation')}
     if(index===8)assert.equal(await page.locator('.debtExpenses66').isVisible(),false,'Expense guide excludes debt panels');
     if(state.focus){const a=state.card,b=state.focus;assert.ok(a.bottom<=b.top||a.top>=b.bottom||a.right<=b.left||a.left>=b.right,label+': card never covers its spotlight');if(index!==3&&state.nav?.height)assert.ok(b.bottom<=state.nav.top||b.top>=state.nav.bottom||b.right<=state.nav.left||b.left>=state.nav.right,label+': spotlight excludes navigation')}
-    if(viewport.width===390&&[6,8,13].includes(index)){await fs.mkdir('browser-results',{recursive:true});await page.screenshot({path:`browser-results/guide-${theme}-${index}-${name}.png`})}
+    if(!empty&&viewport.width===390&&[6,8,13].includes(index)){await fs.mkdir('browser-results',{recursive:true});await page.screenshot({path:`browser-results/guide-${theme}-${index}-${name}.png`})}
    }
    await page.evaluate(()=>aryFullGuideFinish125());await page.waitForFunction(()=>!aryFullGuideStatus125().active);
    await page.evaluate(()=>{aryStartFullGuide125();go('expenses')});

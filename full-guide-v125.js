@@ -110,10 +110,10 @@ const TARGETS={5:['.debtPulse33'],6:['.debtTarget33','.aprNotice68'],7:['.card.f
 function css(){
  if(document.getElementById('aryFullGuideStyle125'))return;
  const st=document.createElement('style');st.id='aryFullGuideStyle125';st.textContent=`
-.ary125shade{position:fixed;z-index:10000;background:rgba(2,6,18,.78);backdrop-filter:blur(1.5px);pointer-events:none;transition:all .2s ease}
-.ary125focus{position:fixed;z-index:10001;border:3px solid #62ddff;border-radius:20px;box-shadow:0 0 0 5px rgba(89,221,255,.15),0 0 38px rgba(85,209,255,.65);pointer-events:none;transition:all .2s ease}
-.ary125navShield{position:fixed;z-index:10002;background:rgba(2,6,18,.78);pointer-events:none;border-radius:24px}
-.ary125cloud{position:fixed;z-index:10003;width:min(410px,calc(100vw - 24px));padding:16px;border:1px solid rgba(124,226,255,.5);border-radius:26px;background:linear-gradient(145deg,rgba(16,28,58,.98),rgba(31,23,67,.98));box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 36px rgba(69,193,255,.14);color:#f2f8ff;transition:top .18s ease,left .18s ease;max-height:min(360px,calc(100dvh - 28px));overflow:auto;box-sizing:border-box}
+.ary125shade{position:fixed;z-index:10000;background:rgba(2,6,18,.86);backdrop-filter:blur(1.5px);pointer-events:none;transition:none}
+.ary125focus{position:fixed;z-index:10001;border:3px solid #62ddff;border-radius:20px;box-shadow:0 0 0 5px rgba(89,221,255,.15),0 0 38px rgba(85,209,255,.65);pointer-events:none;transition:none}
+.ary125navShield{position:fixed;z-index:10002;background:rgba(2,6,18,.86);pointer-events:none;border-radius:24px}
+.ary125cloud{position:fixed;z-index:10003;width:min(410px,calc(100vw - 24px));padding:16px;border:1px solid rgba(124,226,255,.5);border-radius:26px;background:linear-gradient(145deg,rgba(16,28,58,.98),rgba(31,23,67,.98));box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 36px rgba(69,193,255,.14);color:#f2f8ff;transition:none;max-height:min(360px,calc(100dvh - 28px));overflow:auto;box-sizing:border-box}
 .ary125cloud:before{content:'☁️';position:absolute;right:16px;top:10px;font-size:28px;filter:drop-shadow(0 5px 9px rgba(0,0,0,.25))}
 .ary125cloud h3{margin:0 42px 6px 0;font-size:17px}.ary125cloud p{margin:0;color:#bdd0e8;line-height:1.48;font-size:13px}
 .ary125bar{display:flex;gap:4px;margin:13px 0 11px}.ary125bar i{height:4px;flex:1;background:rgba(255,255,255,.11);border-radius:9px}.ary125bar i.on{background:linear-gradient(90deg,#39dfc5,#5bcfff,#8b6bff)}
