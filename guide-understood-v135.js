@@ -4,7 +4,7 @@ const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const understood=()=>lang()==='en'?'Got it':lang()==='pt'?'Entendi':'Entendido';
 function relabel(){
  const st=window.aryFullGuideStatus125?.();
- if(!st?.active)return;
+ if(!st?.active||st.index===st.steps-1)return;
  const button=document.querySelector('.ary125cloud:not(.ary125final) .ary125actions .primary');
  if(!button)return;
  const text=understood();

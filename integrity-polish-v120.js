@@ -32,9 +32,12 @@ window.toggleTheme=function(){
 };
 
 window.finishOnboarding=function(){
- if(!saveChange(next=>{next.onboarded=true;}))return false;
+ if(!saveChange(next=>{next.onboarded=true;delete next.onboardingStep;next.guide94={active:false,completed:true};}))return false;
  if(typeof go==='function')go('home');return true;
 };
+
+// All setup buttons, including the goals screen, must call the same atomic finish.
+window.aryFinishOnboarding54=window.finishOnboarding;
 
 window.saveSettings=function(){
  const greeting=String(document.getElementById('greet')?.value||'').trim();
