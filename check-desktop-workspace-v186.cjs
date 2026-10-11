@@ -15,7 +15,7 @@ const rect=async(page,selector)=>page.locator(selector).first().boundingBox();
     const margin=await rect(page,'.homeMargin81'),actions=await rect(page,'.homeActions81');assert.ok(Math.abs(margin.y-actions.y)<2,label+': home actions beside monthly margin');
     if(viewport.width>=1200){const upcoming=await rect(page,'.homeUpcoming81'),income=await rect(page,'.homeDaily81>.third');assert.ok(Math.abs(upcoming.y-income.y)<2,label+': upcoming events and summaries share a row')}
    }else assert.ok(nav.y>viewport.height/2,label+': mobile retains bottom navigation');
-   for(const route of ['home','debts','expenses','calendar','analysis','assistant','more']){
+   for(const route of ['home','progress','debts','expenses','calendar','analysis','assistant','more']){
     await page.evaluate(route=>go(route),route);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),label+' '+route+': no horizontal overflow');
     if(pc&&route==='calendar'){const calendar=await rect(page,'.cal35'),detail=await rect(page,'.calDetail35,.calHint35');assert.ok(calendar.x+calendar.width<=detail.x,label+': calendar and details side by side');assert.ok(Math.abs(calendar.y-detail.y)<2,label+': calendar panels align')}

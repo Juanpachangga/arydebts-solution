@@ -70,3 +70,8 @@ html body #app .introNext186{margin:24px 0;padding:18px;border-radius:16px;backg
 html body.ary-light #app .introNext186{background:#f1f5f9;border-color:#d6e0ec}
 html body #app .introNext186 b{display:block;color:inherit!important;margin-bottom:6px;font-size:17px}
 html body #app .introPanel186 .primary{min-height:52px;margin:0;background:linear-gradient(135deg,#087f86,#4853c8)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:none!important;font-size:17px}
+
+/* Keep the payment-history ring circular as well as the Home ring. */
+html body #app .progressBox>.ring{width:112px!important;height:112px!important;min-width:112px!important;min-height:112px!important;max-width:112px!important;max-height:112px!important;flex:0 0 112px!important;aspect-ratio:1!important;border-radius:50%!important;box-sizing:border-box!important;padding:0!important}
+html body #app .progressBox>.ring::after{inset:10px!important;border-radius:50%!important;aspect-ratio:1!important}
+@media(min-width:1000px){html body.signed64 #app .progressBox>.ring{width:132px!important;height:132px!important;min-width:132px!important;min-height:132px!important;max-width:132px!important;max-height:132px!important;flex-basis:132px!important}}

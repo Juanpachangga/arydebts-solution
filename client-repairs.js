@@ -735,101 +735,29 @@ const TXT={
 const copy=()=>TXT[lang()];
 const S={
  es:[
-  ['home',['.heroCard','.homeTruth29','.grid .card'],'☁️ Tu centro financiero','Aquí ves cuánto entra, cuánto gastas y cuánto debes.'],
-  ['home',['.progressBox','.heroCard'],'📈 Progreso real','Ve cuánto has pagado de tus deudas.'],
-  ['home',['.homeDaily81','.grid'],'💵 Lo que entra y sale','Compara tus ingresos, gastos y dinero disponible.'],
-  ['home',['#nav'],'🧭 Navegación principal','Toca una pestaña para abrir esa sección.'],
-  ['income',['.card.full','.kpi'],'💰 Ingresos','Agrega cuánto recibes y cada cuánto te pagan.'],
-  ['debts',['.debtPulse33','.card.full'],'💳 Resumen de deudas','Ve cuánto debes y tus pagos mínimos.'],
-  ['debts',['.debtTarget33','.aprNotice68','.card.full .list'],'🎯 Prioridad de pago','Cubre los mínimos. Después, prioriza la deuda con mayor interés.'],
-  ['debts',['.rowActions','.card.full button.primary','.card.full'],'✍️ Acciones de deuda','Agrega tus deudas. Registra cada pago cuando lo hagas.'],
-  ['expenses',['.card.full .list','.list','.card.full'],'🌸 Gastos','Agrega tus gastos y elige su categoría.'],
-  ['expenses',['.quick','#quickAnt','.card.full button.primary'],'🐜 Registro rápido','Registra aquí las compras pequeñas del día.'],
-  ['plan',['.planHero34','.planPulse34','.card.full'],'🧭 Tu plan','Tu plan muestra cuánto reservar para gastos y deudas.'],
-  ['plan',['.planAttack34','.planStatus34','.card.full'],'⚡ Próxima acción','Ve a qué deuda destinar el dinero extra.'],
-  ['progress',['.progressBox','.card.full'],'📊 Progreso','Revisa tu avance con los pagos que registraste.'],
-  ['calendar',['.cal35','.card.full'],'📅 Calendario','Toca un día para ver sus pagos y recordatorios.'],
-  ['calendar',['.calDetail35','.list','.card.full'],'🔔 Detalle del día','Revisa lo que vence el día seleccionado.'],
-  ['more',['.menuGrid','.menuItem','.more94'],'✨ Más herramientas','Abre aquí las herramientas adicionales.'],
-  ['ants',['.antHero25','.card.full'],'🐜 Gastos hormiga','Ve cuánto suman tus compras pequeñas.'],
-  ['ants',['.antPulse28','.antStats26','.card.full'],'🔎 Impacto y tendencia','Compara tus gastos de hoy y de la semana.'],
-  ['analysis',['.analysis93','.analysisTabs93','.card.full'],'📊 Análisis de dinero','Elige un período para revisar entradas y salidas.'],
-  ['analysis',['.analysisMetrics93','.analysisCard93','.card.full'],'🏦 Balance del período','Compara lo recibido, lo gastado y el balance.'],
-  ['buy',['#buyPrice','.card.full'],'🛍️ ¿Puedo comprar esto?','Escribe el precio. ARY te muestra si puedes pagarlo.'],
-  ['goals',['.choiceGrid','.card.full','.list'],'🎯 Tus metas','Agrega lo que quieres conseguir.'],
-  ['notifications',['.card.full','.list'],'🔔 Notificaciones','Revisa tus avisos y pagos pendientes.'],
-  ['profile',['.card.full','.menuGrid'],'👤 Perfil y configuración','Consulta tus datos y preferencias.'],
-  ['profile',['button[onclick*="settings"],button[onclick*="aryV18Settings"],.btn'],'⚙️ Configuración','Cambia idioma o moneda. Guarda una copia de tus datos.'],
-  ['assistant',['.assistantIntro58','.assistant58'],'✦ Asistente Arydebts','Pregunta cómo usar la app o entender tus números.'],
-  ['assistant',['#chatinput58','.chatForm58','.assistant58'],'💬 Pregunta sin miedo','Escribe tu pregunta y toca Enviar.'],
-  ['assistant',[],null,null,true]
+  ['home',['.homeTruth29','.heroCard'],'🏠 Tu resumen','Aquí ves tu dinero y cuánto has pagado.'],
+  ['income',['.card.full'],'💰 Ingresos','Agrega cuánto recibes y cada cuánto te pagan.'],
+  ['expenses',['.addExpense67','.expenseRecords185'],'🧾 Gastos','Agrega tus gastos para saber cuánto te queda.'],
+  ['debts',['.card.full button.primary','.rowActions','.debtPulse33'],'💳 Deudas y pagos','Agrega tus deudas. Registra cada pago cuando lo hagas.']
  ],
  en:[
-  ['home',['.heroCard','.homeTruth29','.grid .card'],'☁️ Your financial hub','This is your quick overview. Use it to understand where you stand before making a decision.'],
-  ['home',['.progressBox','.heroCard'],'📈 Real progress','This uses your recorded debts and payments, so you do not need to calculate progress yourself.'],
-  ['home',['.homeDaily81','.grid'],'💵 Money in and out','These cards summarize income, spending and available margin so you can quickly see how tight the month is.'],
-  ['home',['#nav'],'🧭 Main navigation','These are your main areas. The guide will move through them one at a time.'],
-  ['income',['.card.full','.kpi'],'💰 Income','Record how much you receive and how often. This feeds the calculations behind your plan.'],
-  ['debts',['.debtPulse33','.card.full'],'💳 Debt summary','See total debt, minimums and approximate interest so you know what needs attention.'],
-  ['debts',['.debtTarget33','.aprNotice68','.card.full .list'],'🎯 Payment priority','Arydebts highlights the most expensive debt or tells you when APR data is missing.'],
-  ['debts',['.rowActions','.card.full button.primary','.card.full'],'✍️ Debt actions','Add, edit, delete and record payments here. Real payments stay linked to the debt.'],
-  ['expenses',['.card.full .list','.list','.card.full'],'🌸 Expenses','Record what you really spend and separate essential, variable and small expenses.'],
-  ['expenses',['.quick','#quickAnt','.card.full button.primary'],'🐜 Quick capture','Capture little purchases quickly so hidden money leaks become visible.'],
-  ['plan',['.planHero34','.planPulse34','.card.full'],'🧭 Your plan','Arydebts combines income, expenses, minimums and debts to show what to protect first.'],
-  ['plan',['.planAttack34','.planStatus34','.card.full'],'⚡ Next action','This turns your numbers into a concrete priority so you do not have to guess.'],
-  ['progress',['.progressBox','.card.full'],'📊 Progress','Check your real payoff progress using recorded payments.'],
-  ['calendar',['.cal35','.card.full'],'📅 Calendar','Due dates, reminders and dated movements come together here.'],
-  ['calendar',['.calDetail35','.list','.card.full'],'🔔 Day details','Pick a day to review due dates and reminders. Record a payment only after you actually make it.'],
-  ['more',['.menuGrid','.menuItem','.more94'],'✨ More tools','These complementary tools are also part of your financial system.'],
-  ['ants',['.antHero25','.card.full'],'🐜 Small expenses','This screen groups small monthly expenses and shows how much they may be draining from your income.'],
-  ['ants',['.antPulse28','.antStats26','.card.full'],'🔎 Impact and trend','See today, the last seven days, month-end projection and your heaviest category.'],
-  ['analysis',['.analysis93','.analysisTabs93','.card.full'],'📊 Money analysis','Analyze real income and outflows by period or switch to net-worth analysis to see trends.'],
-  ['analysis',['.analysisMetrics93','.analysisCard93','.card.full'],'🏦 Period balance','Keep assets, received income and debts recorded once so the analysis stays clean and avoids duplicates.'],
-  ['buy',['#buyPrice','.card.full'],'🛍️ Can I buy this?','Enter a price and Arydebts compares it with your current margin before you spend.'],
-  ['goals',['.choiceGrid','.card.full','.list'],'🎯 Goals','Save what you are working toward so paying debt connects to a real purpose.'],
-  ['notifications',['.card.full','.list'],'🔔 Notifications','Review important reminders and pending actions here.'],
-  ['profile',['.card.full','.menuGrid'],'👤 Profile & preferences','Manage language, currency and personal preferences here.'],
-  ['profile',['button[onclick*="settings"],button[onclick*="aryV18Settings"],.btn'],'⚙️ Settings','Adjust the experience, access data backups and replay this guide.'],
-  ['assistant',['.assistantIntro58','.assistant58'],'✦ Arydebts Assistant','Ask what something means or get help understanding your numbers.'],
-  ['assistant',['#chatinput58','.chatForm58','.assistant58'],'💬 Ask anything about the app','Type your question here. The assistant guides you without changing financial records on its own.'],
-  ['assistant',[],null,null,true]
+  ['home',['.homeTruth29','.heroCard'],'🏠 Your overview','See your money and how much you have paid.'],
+  ['income',['.card.full'],'💰 Income','Add how much you receive and how often.'],
+  ['expenses',['.addExpense67','.expenseRecords185'],'🧾 Expenses','Add your expenses to see what you have left.'],
+  ['debts',['.card.full button.primary','.rowActions','.debtPulse33'],'💳 Debts and payments','Add your debts. Record each payment after making it.']
  ],
  pt:[
-  ['home',['.heroCard','.homeTruth29','.grid .card'],'☁️ Seu centro financeiro','Este é o resumo rápido para entender sua situação antes de decidir.'],
-  ['home',['.progressBox','.heroCard'],'📈 Progresso real','Este indicador usa dívidas e pagamentos registrados.'],
-  ['home',['.homeDaily81','.grid'],'💵 Entradas e saídas','Veja renda, gastos e margem disponível rapidamente.'],
-  ['home',['#nav'],'🧭 Navegação principal','Estas são as áreas principais. O guia vai percorrê-las uma por uma.'],
-  ['income',['.card.full','.kpi'],'💰 Renda','Registre quanto recebe e com que frequência. Isso alimenta os cálculos do plano.'],
-  ['debts',['.debtPulse33','.card.full'],'💳 Resumo das dívidas','Veja dívida total, mínimos e juros aproximados.'],
-  ['debts',['.debtTarget33','.aprNotice68','.card.full .list'],'🎯 Prioridade','O Arydebts destaca a dívida mais cara ou avisa quando falta APR.'],
-  ['debts',['.rowActions','.card.full button.primary','.card.full'],'✍️ Ações da dívida','Adicione, edite, exclua e registre pagamentos ligados à dívida.'],
-  ['expenses',['.card.full .list','.list','.card.full'],'🌸 Gastos','Registre gastos essenciais, variáveis e pequenos gastos.'],
-  ['expenses',['.quick','#quickAnt','.card.full button.primary'],'🐜 Registro rápido','Capture compras pequenas para enxergar vazamentos de dinheiro.'],
-  ['plan',['.planHero34','.planPulse34','.card.full'],'🧭 Seu plano','Renda, gastos, mínimos e dívidas se transformam em um plano claro.'],
-  ['plan',['.planAttack34','.planStatus34','.card.full'],'⚡ Próxima ação','Aqui você vê uma prioridade concreta em vez de adivinhar.'],
-  ['progress',['.progressBox','.card.full'],'📊 Progresso','Confira o avanço real usando pagamentos registrados.'],
-  ['calendar',['.cal35','.card.full'],'📅 Calendário','Vencimentos, lembretes e movimentos por data ficam reunidos aqui.'],
-  ['calendar',['.calDetail35','.list','.card.full'],'🔔 Detalhe do dia','Escolha um dia para ver vencimentos e lembretes. Registre um pagamento somente depois de realizá-lo.'],
-  ['more',['.menuGrid','.menuItem','.more94'],'✨ Mais ferramentas','Estas ferramentas complementares também fazem parte do seu sistema.'],
-  ['ants',['.antHero25','.card.full'],'🐜 Pequenos gastos','Esta tela reúne pequenos gastos do mês e mostra quanto eles podem consumir da sua renda.'],
-  ['ants',['.antPulse28','.antStats26','.card.full'],'🔎 Impacto e tendência','Veja hoje, últimos sete dias, projeção mensal e a categoria que mais pesa.'],
-  ['analysis',['.analysis93','.analysisTabs93','.card.full'],'📊 Análise de dinheiro','Analise entradas e saídas reais por período ou mude para patrimônio para enxergar tendências.'],
-  ['analysis',['.analysisMetrics93','.analysisCard93','.card.full'],'🏦 Saldo do período','Registre bens, renda recebida e dívidas uma única vez para evitar duplicações.'],
-  ['buy',['#buyPrice','.card.full'],'🛍️ Posso comprar?','Digite um preço e compare com sua margem atual antes de gastar.'],
-  ['goals',['.choiceGrid','.card.full','.list'],'🎯 Metas','Guarde o que deseja conquistar para conectar o plano a um objetivo real.'],
-  ['notifications',['.card.full','.list'],'🔔 Notificações','Veja alertas, lembretes e ações pendentes.'],
-  ['profile',['.card.full','.menuGrid'],'👤 Perfil e preferências','Gerencie idioma, moeda e preferências pessoais.'],
-  ['profile',['button[onclick*="settings"],button[onclick*="aryV18Settings"],.btn'],'⚙️ Configurações','Ajuste a experiência, acesse backups e repita este guia.'],
-  ['assistant',['.assistantIntro58','.assistant58'],'✦ Assistente Arydebts','Pergunte o significado de qualquer área ou peça ajuda com seus números.'],
-  ['assistant',['#chatinput58','.chatForm58','.assistant58'],'💬 Pergunte sobre o app','Digite sua dúvida aqui. O assistente orienta sem alterar seus registros sozinho.'],
-  ['assistant',[],null,null,true]
+  ['home',['.homeTruth29','.heroCard'],'🏠 Seu resumo','Veja seu dinheiro e quanto já pagou.'],
+  ['income',['.card.full'],'💰 Renda','Adicione quanto recebe e com que frequência.'],
+  ['expenses',['.addExpense67','.expenseRecords185'],'🧾 Gastos','Adicione seus gastos para saber quanto sobra.'],
+  ['debts',['.card.full button.primary','.rowActions','.debtPulse33'],'💳 Dívidas e pagamentos','Adicione suas dívidas. Registre cada pagamento realizado.']
  ]
 };
 let routing=false,active=false,index=0,auto=false,timer=0,target=null,renderTimer=0,renderRaf=0,paintTimer=0,renderToken=0,startTimer=0;
 const steps=()=>S[lang()]||S.es;
 const completed=()=>{try{return localStorage.getItem(KEY)==='done'}catch{return false}};
 const markDone=()=>{try{localStorage.setItem(KEY,'done')}catch{}};
-const TARGETS={5:['.debtPulse33'],6:['.debtTarget33','.aprNotice68'],7:['.card.full button.primary','.rowActions'],8:['.expenseRecords185','.addExpense67'],9:['.addExpense67'],13:['.calGrid35'],14:['.calDetail35','.calHint35'],16:['.antHero25'],17:['.antPulse28','.antStats26'],18:['.analysisTabs93'],19:['.analysisMetrics93','.analysisCard93']};
+
 function css(){
  if(document.getElementById('aryFullGuideStyle125'))return;
  const st=document.createElement('style');st.id='aryFullGuideStyle125';st.textContent=`
@@ -885,7 +813,7 @@ function clearNodes(){document.querySelectorAll('.ary125shade,.ary125focus,.ary1
 function navElement(){return document.querySelector('#nav')}
 function isNavTarget(el){const nav=navElement();return !!nav&&(el===nav||nav.contains(el))}
 function guideFrame(){const v=window.visualViewport,top=(v?.offsetTop||0)+8,bottom=(v?.offsetTop||0)+(v?.height||innerHeight)-8,nav=navElement();let contentBottom=bottom;if(nav){const r=nav.getBoundingClientRect();if(r.width>0&&r.height>0&&r.top>top+120&&r.top<bottom)contentBottom=Math.min(contentBottom,r.top-10)}return{top,bottom,contentBottom,height:Math.max(120,contentBottom-top)}}
-function targetQueries(step){return TARGETS[index]||step[1]||[]}
+function targetQueries(step){return step[1]||[]}
 function selectTarget(step){
  if(typeof screen!=='string'||screen!==step[0])return null;
  for(const q of targetQueries(step)){
@@ -931,16 +859,16 @@ function ensureTargetVisible(el){
 
 function requestGuideRender(delay=0){clearTimeout(renderTimer);cancelAnimationFrame(renderRaf);const token=++renderToken;const run=()=>{renderRaf=requestAnimationFrame(()=>{renderRaf=0;if(active&&token===renderToken)renderStep(token)})};if(delay>0)renderTimer=setTimeout(run,delay);else run()}
 function renderStep(token=renderToken){if(!active||token!==renderToken)return;silenceContextGuide();css();const step=steps()[index];if(!step)return finish(false);if(step[4])return renderFinal();clearTimeout(paintTimer);target=selectTarget(step);const moved=target?ensureTargetVisible(target):false;const expected=index;const draw=()=>{paintTimer=0;if(!active||expected!==index||token!==renderToken)return;paint(step,expected,token)};if(moved)paintTimer=setTimeout(draw,MOBILE()?65:220);else renderRaf=requestAnimationFrame(draw)}
-function paint(step,expected=index,token=renderToken){if(!active||expected!==index||token!==renderToken)return;clearNodes();target=selectTarget(step);const rect=target?targetRect(target):null;const x=copy(),box=document.createElement('section');box.className='ary125cloud';box.setAttribute('data-ary-copy','');box.setAttribute('role','dialog');box.setAttribute('aria-modal','false');box.setAttribute('aria-live','polite');box.innerHTML=`<div class="aryGuideCompanion" aria-label="ARY 🤖"><span aria-hidden="true">${window.aryRobotMarkup94?aryRobotMarkup94():'🤖'}</span> ARY</div><h3>${step[2]}</h3><p>${step[3]}</p><div class="ary125bar">${steps().map((_,i)=>`<i class="${i<=index?'on':''}"></i>`).join('')}</div><div class="ary125actions"><button ${index?'':'disabled style="opacity:.35"'} onclick="aryFullGuideBack125()">‹ ${x.back}</button><div><div class="ary125meta">${x.count} ${index+1} / ${steps().length}</div><button class="ary125auto" onclick="aryFullGuideToggleAuto125()">${auto?'⏸ '+x.pause:'▶ '+x.play}</button></div><button class="primary" aria-label="${x.next}" onclick="aryFullGuideNext125()">${x.next} ›</button></div>`;const cancel=document.createElement('button');cancel.type='button';cancel.className='ary140cancelTop';cancel.textContent=lang()==='en'?'✕ Cancel guide':lang()==='pt'?'✕ Cancelar guia':'✕ Cancelar guía';cancel.onclick=e=>{e.preventDefault();e.stopPropagation();if(window.aryGuideCancel139)aryGuideCancel139();else finish(false)};box.appendChild(cancel);document.body.appendChild(box);const sk=document.createElement('button');sk.className='ary125skip';sk.textContent=x.skip;sk.onclick=()=>finish(false);document.body.appendChild(sk);const spotlight=placeCloud(box,rect);shade(spotlight,target);schedule()}
+function paint(step,expected=index,token=renderToken){if(!active||expected!==index||token!==renderToken)return;clearNodes();target=selectTarget(step);const rect=target?targetRect(target):null;const x=copy(),box=document.createElement('section');box.className='ary125cloud';box.setAttribute('data-ary-copy','');box.setAttribute('role','dialog');box.setAttribute('aria-modal','false');box.setAttribute('aria-live','polite');box.innerHTML=`<div class="aryGuideCompanion" aria-label="ARY 🤖"><span aria-hidden="true">${window.aryRobotMarkup94?aryRobotMarkup94():'🤖'}</span> ARY</div><h3>${step[2]}</h3><p>${step[3]}</p><div class="ary125bar">${steps().map((_,i)=>`<i class="${i<=index?'on':''}"></i>`).join('')}</div><div class="ary125actions"><button ${index?'':'disabled style="opacity:.35"'} onclick="aryFullGuideBack125()">‹ ${x.back}</button><div><div class="ary125meta">${x.count} ${index+1} / ${steps().length}</div><button class="ary125auto" onclick="aryFullGuideToggleAuto125()">${auto?'⏸ '+x.pause:'▶ '+x.play}</button></div><button class="primary" aria-label="${index===steps().length-1?x.finish:x.next}" onclick="aryFullGuideNext125()">${index===steps().length-1?x.finish:x.next} ›</button></div>`;const cancel=document.createElement('button');cancel.type='button';cancel.className='ary140cancelTop';cancel.textContent=lang()==='en'?'✕ Cancel guide':lang()==='pt'?'✕ Cancelar guia':'✕ Cancelar guía';cancel.onclick=e=>{e.preventDefault();e.stopPropagation();if(window.aryGuideCancel139)aryGuideCancel139();else finish(false)};box.appendChild(cancel);document.body.appendChild(box);const sk=document.createElement('button');sk.className='ary125skip';sk.textContent=x.skip;sk.onclick=()=>finish(false);document.body.appendChild(sk);const spotlight=placeCloud(box,rect);shade(spotlight,target);schedule()}
 function renderFinal(){if(!active)return;clearNodes();shade(null,null);const x=copy(),box=document.createElement('section');box.className='ary125cloud ary125final';box.setAttribute('data-ary-copy','');box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');box.innerHTML=`<div class="finishIcon">🎉</div><h3>${x.doneTitle}</h3><p>${x.doneText}</p><div class="ary125bar">${steps().map(()=>'<i class="on"></i>').join('')}</div><div class="ary125actions"><button onclick="aryFullGuideBack125()">‹ ${x.back}</button><div class="ary125meta">${x.count} ${index+1} / ${steps().length}</div><button class="primary" onclick="aryFullGuideFinish125()">${x.finish}</button></div>`;document.body.appendChild(box);placeCloud(box,null);clearTimeout(timer)}
 function route(i){const step=steps()[i];if(!step)return;clearTimeout(timer);clearTimeout(paintTimer);clearNodes();index=i;renderToken++;const dest=step[0];document.documentElement.dataset.aryGuideRoute=dest;if(typeof go==='function'&&typeof screen==='string'&&screen!==dest){routing=true;try{go(dest)}finally{routing=false}requestGuideRender(MOBILE()?80:120)}else requestGuideRender()}
 function silenceContextGuide(){document.querySelectorAll('.aryGuide94').forEach(n=>n.remove());try{if(s?.guide94?.active===true&&typeof window.aryEndGuide94==='function')window.aryEndGuide94()}catch{document.querySelectorAll('.aryGuide94').forEach(n=>n.remove())}}
 function start(force=false){cancelAutoStart();if(active)return;if(!profile||!s?.onboarded)return;if(!force&&!canAutoStart())return;try{localStorage.setItem(OLD_KEY,'done')}catch{};try{if(typeof aryGuideSkip116==='function')aryGuideSkip116()}catch{};document.getElementById('aryGuide116')?.remove();document.getElementById('aryGuideMask116')?.remove();active=true;document.documentElement.classList.add('aryGuideActive');auto=false;index=0;silenceContextGuide();route(0)}
 function finish(openAssistant){active=false;document.documentElement.classList.remove('aryGuideActive');delete document.documentElement.dataset.aryGuideRoute;document.querySelector('.ary139confirm')?.remove();clearPending();clearNodes();document.getElementById('aryGuideBlock127')?.remove();document.documentElement.classList.remove('aryGuideLite144','aryGuideUltra148');markDone();if(openAssistant&&typeof go==='function')go('assistant')}
-window.aryFullGuideNext125=()=>{if(!active)return;if(index>=steps().length-1)return finish(true);route(index+1)};
+window.aryFullGuideNext125=()=>{if(!active)return;if(index>=steps().length-1)return finish(false);route(index+1)};
 window.aryFullGuideBack125=()=>{if(active&&index>0)route(index-1)};
 window.aryFullGuideToggleAuto125=()=>{if(!active)return;auto=!auto;clearTimeout(timer);requestGuideRender()};
-window.aryFullGuideFinish125=()=>finish(true);
+window.aryFullGuideFinish125=()=>finish(false);
 window.aryStartFullGuide125=()=>{try{localStorage.removeItem(KEY)}catch{};active=false;clearPending();start(true)};
 window.aryFullGuideStatus125=()=>({active,index,automatic:auto,completed:completed(),steps:steps().length,unified:true});
 window.aryGuideUnified125=true;
