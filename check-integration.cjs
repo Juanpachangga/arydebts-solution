@@ -3,12 +3,12 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 // This DOM-stub suite tests source modules; real-browser suites exercise the full bundle.
 function boot(existing=false,startHash){
  const nodes={},data={};
- const element=()=>{const classes=new Set();return{innerHTML:'',textContent:'',style:{setProperty(){}},dataset:{},classList:{add:name=>classes.add(name),remove:name=>classes.delete(name),contains:name=>classes.has(name),toggle:(name,on)=>on===false?classes.delete(name):classes.add(name)},querySelectorAll:()=>[],querySelector:()=>null,setAttribute(){},addEventListener(){},appendChild(){},remove(){}}};
+ const element=()=>{const classes=new Set();return{children:[],innerHTML:'',textContent:'',style:{setProperty(){}},dataset:{},classList:{add:name=>classes.add(name),remove:name=>classes.delete(name),contains:name=>classes.has(name),toggle:(name,on)=>on===false?classes.delete(name):classes.add(name)},querySelectorAll:()=>[],querySelector:()=>null,setAttribute(){},addEventListener(){},appendChild(){},remove(){}}};
  for(const id of ['app','nav','modal','toast'])nodes[id]=element();
- const document={body:element(),documentElement:element(),getElementById:id=>nodes[id]||null,querySelector:sel=>sel.startsWith('#')?nodes[sel.slice(1)]||null:null,querySelectorAll:()=>[],createTreeWalker:()=>({nextNode:()=>null}),createElement:element,addEventListener(){}};
+ const document={head:element(),body:element(),documentElement:element(),getElementById:id=>nodes[id]||null,querySelector:sel=>sel.startsWith('#')?nodes[sel.slice(1)]||null:null,querySelectorAll:()=>[],createTreeWalker:()=>({nextNode:()=>null}),createElement:element,addEventListener(){}};
  if(existing&&typeof existing==='object')Object.assign(data,existing);
  else if(existing){data['arydebts-profile']=JSON.stringify({name:'Test',email:'test@example.com'});data['arydebts-v3']=JSON.stringify({currency:'USD',locale:'es-US',mode:'lite',name:'Test',income:1000,incomeFrequency:'weekly',goal:'security',goals:['security'],theme:'dark',navOrder:['home','debts','expenses','plan','more'],onboarded:true,savings:0,debts:[],expenses:[],calendarEvents:[],payments:[]});}
- const context=vm.createContext({document,location:{hash:startHash??(existing?'#home':'')},history:{length:1,replaceState(){},pushState(){}},localStorage:{getItem:k=>data[k]??null,setItem:(k,v)=>data[k]=v,removeItem:k=>delete data[k]},navigator:{},URL,matchMedia:()=>({matches:false,addEventListener(){}}),console,Intl,NodeFilter:{SHOW_TEXT:4},MutationObserver:class{observe(){}},addEventListener(){},setTimeout(){},setInterval(){},requestAnimationFrame(){},confirm:()=>true});
+ const context=vm.createContext({document,location:{hash:startHash??(existing?'#home':'')},history:{length:1,replaceState(){},pushState(){}},localStorage:{getItem:k=>data[k]??null,setItem:(k,v)=>data[k]=v,removeItem:k=>delete data[k]},navigator:{},URL,matchMedia:()=>({matches:false,addEventListener(){}}),console,Intl,NodeFilter:{SHOW_TEXT:4},MutationObserver:class{observe(){}},addEventListener(){},setTimeout(){},clearTimeout(){},setInterval(){},requestAnimationFrame(){},confirm:()=>true});
  context.window=context;
  for(const file of scripts)vm.runInContext(fs.readFileSync(__dirname+'/'+file,'utf8'),context,{filename:file});
  return{context,nodes,data,run:code=>vm.runInContext(code,context)};
@@ -334,8 +334,8 @@ const direct111=boot(true);direct111.run("s.income=1000;s.incomeFrequency='month
 assert.equal(direct111.run('aryAdjustment111().actual'),120);assert.equal(direct111.run('aryAdjustment111().share'),12);assert.equal(direct111.run('aryAdjustment111().top.name'),'Café');
 assert.match(direct111.nodes.app.innerHTML,/Tu ajuste prioritario/);assert.match(direct111.nodes.app.innerHTML,/12%/);assert.match(direct111.nodes.app.innerHTML,/Otros ajustes posibles/);
 assert.equal(direct111.run('aryExpenseCuts68()[0].potential'),24);
-for(const [dx,dy,result]of [[0,-100,1],[0,100,-1],[-100,0,0],[100,0,0],[5,-20,0],[100,100,0]])assert.equal(direct111.run(`aryIntroGesture111(${dx},${dy})`),result);
-console.log('PASS direct adjustment uses actual optional spending, excludes essentials/future records, selects biggest actionable cut and recognizes only vertical cover swipes');
+for(const [dx,dy,result]of [[0,-100,0],[0,100,0],[-100,0,1],[100,0,-1],[5,-20,0],[100,100,0]])assert.equal(direct111.run(`aryIntroGesture111(${dx},${dy})`),result);
+console.log('PASS direct adjustment uses actual optional spending, excludes essentials/future records, selects biggest actionable cut and recognizes only horizontal cover swipes');
 
 const review112=boot(true);review112.run("s.expenses=[{id:1,name:'Café',cat:'Hormiga',amount:0.1,date:localDate()},{id:2,name:'Cafe',cat:'Hormiga',amount:0.2,date:localDate()},{id:3,name:'Invalid recurring',cat:'Hormiga',amount:1000,frequency:'daily',date:localDate().slice(0,7)+'-99'},{id:4,name:'Old coffee',cat:'Hormiga',amount:1000,date:'2000-01-01'}]");
 assert.equal(review112.run('aryExpenseCuts68().length'),1);assert.equal(review112.run('aryExpenseCuts68()[0].monthly'),0.3);assert.equal(review112.run('aryExpenseCuts68()[0].potential'),0.06);
