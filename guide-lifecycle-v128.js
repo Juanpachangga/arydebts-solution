@@ -92,6 +92,7 @@ window.aryGuideLifecycle128={
  currentUser:()=>identity(),
  completed:()=>{const id=identity();return !!id&&read(scoped(id))==='done'},
  resetCurrent:()=>{const id=identity();if(id)remove(scoped(id));remove(GLOBAL);return !!id},
+ complete:persistCompletion,
  sync:syncForCurrentUser
 };
 init();
