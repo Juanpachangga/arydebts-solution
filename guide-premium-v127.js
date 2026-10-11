@@ -9,7 +9,7 @@ body:has(#modal:not(.hidden)) .ary125shade,body:has(#modal:not(.hidden)) .ary125
 `;
 document.head.appendChild(style);
 window.addEventListener('keydown',event=>{
- if(!window.aryFullGuideStatus125?.()?.active)return;
+ if(!window.aryFullGuideStatus125?.()?.active||document.querySelector('.ary139confirm,#modal:not(.hidden)'))return;
  if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
  if(event.key==='ArrowRight'){event.preventDefault();window.aryFullGuideNext125?.()}
  else if(event.key==='ArrowLeft'){event.preventDefault();window.aryFullGuideBack125?.()}

@@ -19,3 +19,12 @@ assert.equal((await registration(request('x'.repeat(8193)))).status,413);
 assert.equal((await registration(request('🤖'.repeat(2100)))).status,413);
 assert.equal(created,0);
 console.log('PASS API malformed JSON, null records, byte-limited streaming bodies, media types, transport timeout/outage status and no account creation on invalid input');
+
+const {readRequestJSON,RequestBodyError}=await import('./request-json.mjs');
+for(const cancel of [()=>Promise.reject(new Error('cancel failed')),()=>new Promise(()=>{})]){
+ const stream=new ReadableStream({start(c){c.enqueue(new Uint8Array(20))},cancel});
+ await assert.rejects(readRequestJSON({headers:new Headers({'Content-Type':'application/json'}),body:stream},10),e=>e instanceof RequestBodyError&&e.status===413);
+}
+const broken=new ReadableStream({start(c){c.error(new Error('upload interrupted'))}});
+await assert.rejects(readRequestJSON({headers:new Headers({'Content-Type':'application/json'}),body:broken},10),e=>e instanceof RequestBodyError&&e.status===400);
+console.log('PASS oversized upload returns 413 even if cancellation rejects or never resolves; broken upload returns 400');
