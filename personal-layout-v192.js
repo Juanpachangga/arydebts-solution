@@ -33,9 +33,9 @@ window.aryQuickExpense192=()=>{window._expenseSource63=null;const w=t();modal(`<
 window.arySaveQuickExpense192=()=>{const form=document.querySelector('#modal:not(.hidden) #quickExpense192');if(!form||form.dataset.saving==='1')return false;const name=document.getElementById('n')?.value.trim(),raw=document.getElementById('b')?.value,value=typeof parseNum==='function'?parseNum(raw):Number(raw);if(!name||!Number.isFinite(value)||value<=0){toast(t()[11]);return false}form.dataset.saving='1';try{return window.saveExpense()}finally{if(document.querySelector('#modal:not(.hidden) #quickExpense192')===form)delete form.dataset.saving}};
 const quick=window.aryQuickAction133;window.aryQuickAction133=function(type){if(type==='expense')return aryQuickExpense192();return quick.apply(this,arguments)};
 const quickWords={
- es:['Gasto al instante','Ej. $50 gasolina','Agregar','Se guarda en Gastos con la fecha de hoy.','Escribe el monto y el nombre. Ej. $50 gasolina.','Gasto registrado','No se pudo guardar. Intenta otra vez.'],
- en:['Instant expense','e.g. $50 gas','Add','Saved in Expenses with today’s date.','Enter an amount and name, e.g. $50 gas.','Expense recorded','Could not save. Try again.'],
- pt:['Gasto na hora','Ex. $50 gasolina','Adicionar','Salvo em Gastos com a data de hoje.','Informe o valor e o nome. Ex. $50 gasolina.','Gasto registrado','Não foi possível salvar. Tente novamente.']
+ es:['Gasto al instante','Ej. 3.50 café','Agregar','Se guarda en Gastos con la fecha de hoy.','Escribe el monto y el nombre. Ej. 3.50 café o 24,90 mercado.','Gasto registrado','No se pudo guardar. Intenta otra vez.'],
+ en:['Instant expense','e.g. 3.50 coffee','Add','Saved in Expenses with today’s date.','Enter an amount and name, e.g. 3.50 coffee or 24.90 groceries.','Expense recorded','Could not save. Try again.'],
+ pt:['Gasto na hora','Ex. 3,50 café','Adicionar','Salvo em Gastos com a data de hoje.','Informe o valor e o nome. Ex. 3,50 café ou 24,90 mercado.','Gasto registrado','Não foi possível salvar. Tente novamente.']
 };
 window.aryParseQuickExpense193=value=>{
  const text=String(value||'').trim();
@@ -48,12 +48,20 @@ window.aryParseQuickExpense193=value=>{
  if(!name||name.length>120||!Number.isFinite(valueNumber)||valueNumber<=0)return null;
  return {name,amount:valueNumber};
 };
+window.aryFormatHomeExpense196=()=>{
+ const input=document.getElementById('homeExpense193'),item=window.aryParseQuickExpense193(input?.value);
+ if(!item){toast(quickWords[lang()][4]);input?.focus();return false}
+ input.value=new Intl.NumberFormat(s.locale||'es-US',{minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:false}).format(item.amount)+' '+item.name;
+ input.focus();input.setSelectionRange(input.value.length,input.value.length);return true;
+};
 function homeQuick(){
  if(!profile||!s?.onboarded||screen!=='home'||document.getElementById('homeQuickExpense193'))return;
  const anchor=document.querySelector('#app .searchLaunch72,#app .homeDaily81,#app .homeTruth29');
  if(!anchor)return;
- const x=quickWords[lang()],card=document.createElement('section');card.className='card full';card.id='homeQuickExpense193';card.setAttribute('data-ary-copy','');
- card.innerHTML=`<label for="homeExpense193">⚡ ${x[0]} (${esc(s.currency||'USD')})</label><form><input id="homeExpense193" maxlength="150" autocomplete="off" placeholder="${x[1]}" aria-describedby="homeExpenseHelp193"><button type="submit" class="btn primary">${x[2]} →</button></form><small id="homeExpenseHelp193">${x[3]}</small>`;
+ const examples=window.aryExpenseExamples196(),x=quickWords[lang()],card=document.createElement('section');card.className='card full';card.id='homeQuickExpense193';card.setAttribute('data-ary-copy','');
+ card.innerHTML=`<label for="homeExpense193">⚡ ${x[0]} (${esc(s.currency||'USD')})</label><form><input id="homeExpense193" maxlength="150" autocomplete="off" placeholder="${examples[0]}" aria-describedby="homeExpenseHelp193"><button type="submit" class="btn primary">${x[2]} →</button></form><div class="quickOptions196"><button type="button" id="quickDecimal196" class="btn" aria-label="${lang()==='en'?'Format with two decimal places':lang()==='pt'?'Formatar com duas casas decimais':'Dar formato con dos decimales'}">${lang()==='en'?'Decimals':lang()==='pt'?'Decimais':'Decimales'}</button><span>${lang()==='en'?'Examples':lang()==='pt'?'Exemplos':'Ejemplos'}</span></div><div class="quickExamples196">${examples.map(example=>`<button type="button" class="btn quickExample196">${esc(example)}</button>`).join('')}</div><small id="homeExpenseHelp193">${x[3]}</small>`;
+ card.querySelector('#quickDecimal196').onclick=()=>window.aryFormatHomeExpense196();
+ card.querySelectorAll('.quickExample196').forEach((button,index)=>{button.onclick=()=>{const input=card.querySelector('#homeExpense193');input.value=examples[index];input.focus()}});
  card.querySelector('form').onsubmit=event=>{event.preventDefault();window.arySaveHomeExpense193()};
  anchor.before(card);
 }
