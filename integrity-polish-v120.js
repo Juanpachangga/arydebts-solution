@@ -32,7 +32,7 @@ window.toggleTheme=function(){
 };
 
 window.finishOnboarding=function(){
- if(!saveChange(next=>{next.onboarded=true;delete next.onboardingStep;next.guide94={active:false,completed:true};}))return false;
+ if(!saveChange(next=>{next.onboarded=true;delete next.onboardingStep;if(!s.onboarded)next.guide94={active:true,completed:false,homeOnly194:true};}))return false;
  if(typeof go==='function')go('home');return true;
 };
 

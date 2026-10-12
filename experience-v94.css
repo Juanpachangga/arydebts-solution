@@ -37,3 +37,6 @@ body #modal .formHeading58{position:relative;justify-content:center;padding:0 44
 /* V182: later global/desktop rules must never collapse the contextual Back control. */
 body #app .sectionTools94{display:flex!important;visibility:visible!important;opacity:1!important}
 body #app .sectionTools94 .back{display:inline-flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+
+/* Home welcome has one solid action, with a comfortable touch target. */
+body #app .aryGuide94 .guidePrimary94{min-height:44px!important;padding:10px 18px!important;background:#76d6d2!important;color:#06202a!important;border:1px solid #76d6d2!important;opacity:1!important}

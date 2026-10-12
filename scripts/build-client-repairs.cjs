@@ -7,7 +7,9 @@ const loader=/\(\(\)=>\{\s*if\(document\.getElementById\('[^']+'\)\)return;\s*co
 while(queue.length){const file=queue.shift();if(seen.has(file))continue;seen.add(file);
  const raw=fs.readFileSync(path.join(root,file),'utf8').replace(/\r\n/g,'\n');
  const source=raw.replace(loader,block=>{const match=block.match(/script\.src='([^'?]+)(?:\?[^']*)?'/);if(!match)throw Error('Unknown loader: '+file);queue.push(match[1]);return ''});
- parts.push('// Source: '+file+'\n'+source+'\n');
+ // Keep following loaders to retain unrelated repairs, but omit retired tours.
+ const retired=(file.startsWith('guide-')&&!['guide-lifecycle-v128.js','guide-completion-v132.js','guide-interaction-safety-v180.js'].includes(file))||['guided-tour-v116.js','guided-safety-v117.js'].includes(file);
+ if(!retired)parts.push('// Source: '+file+'\n'+source+'\n');
 }
 fs.writeFileSync(path.join(root,'client-repairs.js'),parts.join('\n;\n'));
 console.log('Bundled '+seen.size+' ordered modules into one request.');
