@@ -33,11 +33,11 @@ const expenseSamples196={
 };
 const sampleCache196={};
 window.aryExpenseExamples196=()=>{
- const key=s.locale||'es-US';
+ const locale=s.locale||'es-US',key=locale+'|'+s.currency;
  if(!sampleCache196[key]){
   const pool=[...expenseSamples196[lang()]];
   for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
-  sampleCache196[key]=pool.slice(0,3).map(([amount,name])=>new Intl.NumberFormat(key.startsWith('es')?'es-CO':key,{minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:false}).format(amount)+' '+name);
+  sampleCache196[key]=pool.slice(0,3).map(([amount,name])=>new Intl.NumberFormat(locale.startsWith('es')?'es-CO':locale,{minimumFractionDigits:s.currency==='COP'?0:2,maximumFractionDigits:2,useGrouping:true}).format(s.currency==='COP'?Math.round(amount*1000):s.currency==='BRL'?Math.round(amount*5*100)/100:amount)+' '+name);
  }
  return [...sampleCache196[key]];
 };

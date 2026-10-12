@@ -719,8 +719,7 @@ async function check(engine, label, viewport) {
     const before68=await page.evaluate(()=>JSON.parse(JSON.stringify(s)));
     await page.evaluate(()=>{s.locale='es-US';s.currency='USD';s.income=1000;s.incomeFrequency='monthly';s.calendarEvents=[{id:6801,name:'holis',note:'holis',amount:111,kind:'income',date:localDate(),icon:'🟢'}];s.expenses=[{id:6802,name:'Renta',amount:1600,frequency:'monthly',cat:'Hormiga'},{id:6803,name:'Celulares',amount:300,frequency:'monthly',cat:'Variable'},{id:6804,name:'Energizantes',amount:8,frequency:'daily',cat:'Hormiga'}];s.debts=[{id:6805,name:'Tarjeta',balance:100,min:10,apr:0}];s.payments=[];delete s.dismissedAPR68;save();aryCalendarDate60(localDate())});
     await page.locator('[onclick="aryDeleteEvent36(6801)"]').click();
-    assert.ok(await page.locator('#modal').isVisible(),'Calendar X opens a visible in-app confirmation');
-    await page.locator('[onclick="aryDeleteConfirmed68(\'event\',6801)"]').click();
+    assert.ok(await page.locator('#modal').isHidden(),'Calendar X deletes without a blocking dialog');
     assert.equal(await page.evaluate(()=>s.calendarEvents.length),0,'Holis actually disappears');
     await page.reload();assert.equal(await page.evaluate(()=>s.calendarEvents.length),0);
     await navigate('ants');
@@ -906,7 +905,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(()=>{const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);const due=`${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;s.locale='es-US';s.currency='USD';s.debts=[{id:8201,name:'Pending card',balance:200,min:76,due}];s.payments=[{id:8202,debtId:8201,amount:30,date:due}];s.expenses=[{id:8203,name:'Gas recurrente',amount:60,cat:'Esencial',frequency:'monthly',date:localDate()}];s.calendarEvents=[];go('home')});
     const activityRecords82=await page.evaluate(()=>JSON.stringify([s.debts,s.payments,s.expenses]));
     assert.match(await page.locator('.upcoming70').first().innerText(),/Pending card/);
-    assert.ok((await page.locator('.upcoming70').first().innerText()).includes(await page.evaluate(()=>money(46))),'Partial minimum shows the outstanding amount');
+    assert.equal(await page.evaluate(()=>aryHomeActivity82().find(e=>e.name==='Pending card').amount),46,'Partial minimum remains correct for calculations');assert.doesNotMatch(await page.locator('.upcoming70').first().innerText(),/\$46/,'Upcoming card omits amounts');
     for(const [locale,label] of [['es-US','Vencido'],['en-US','Overdue'],['pt-BR','Vencido']]){await page.evaluate(locale=>{s.locale=locale;go('home')},locale);assert.ok((await page.locator('.upcoming70').first().innerText()).includes(label));}
     await page.locator('.upcoming70').filter({hasText:'Gas recurrente'}).click();
     assert.equal(await page.evaluate(()=>screen),'calendar');

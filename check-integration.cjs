@@ -226,7 +226,7 @@ const logic68=boot(true);logic68.run("s.expenses=[{id:1,name:'Renta',cat:'Hormig
 assert.deepEqual(JSON.parse(logic68.run('JSON.stringify(aryExpenseCuts68().map(e=>e.name))')),['Energizantes']);
 assert.equal(logic68.run('aryExpenseCuts68()[0].monthly'),8*365/12,'Linked spending does not duplicate recurring estimates');
 logic68.run("go('ants')");assert.match(logic68.nodes.app.innerHTML,/Energizantes/);assert.match(logic68.nodes.app.innerHTML,/recurringAnts68/);
-logic68.run("s.calendarEvents=[{id:'44',name:'holis',kind:'income',amount:111,date:localDate()}];aryDeleteEvent36(44)");assert.equal(logic68.run('s.calendarEvents.length'),1,'X opens an in-app confirmation');assert.match(logic68.nodes.modal.innerHTML,/aryDeleteConfirmed68/);
+logic68.run("s.calendarEvents=[{id:'44',name:'holis',kind:'income',amount:111,date:localDate()}];aryDeleteEvent36(44)");assert.equal(logic68.run('s.calendarEvents.length'),0,'X deletes the event directly');
 logic68.run("aryDeleteConfirmed68('event',44)");assert.equal(logic68.run('s.calendarEvents.length'),0);assert.equal(boot(logic68.data).run('s.calendarEvents.length'),0,'Deletion survives reload');
 console.log('PASS protected essentials, recurring ant visibility, non-duplicated adjustment estimates and in-app calendar deletion');
 
