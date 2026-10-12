@@ -42,7 +42,7 @@ window.expenseForm=function(){
  const hint=input?.nextElementSibling,frequency=document.getElementById('expenseFrequency63'),repeat=frequency?.nextElementSibling;
  if(repeat?.tagName==='SMALL'){repeat.classList.add('repeatHint197');repeat.textContent=lang()==='en'?'Repeats estimate monthly spending; they are not recorded payments.':lang()==='pt'?'Repetições estimam o gasto mensal; não são pagamentos registrados.':'Las repeticiones estiman tu gasto mensual; no son pagos registrados.'}
  const update=()=>{const recurring=frequency&&frequency.value!=='once';if(repeat?.tagName==='SMALL')repeat.hidden=!recurring;if(hint?.tagName==='SMALL')hint.textContent=recurring?(lang()==='en'?'Without an exact date, we reserve the monthly estimate.':lang()==='pt'?'Sem data exata, reservamos a estimativa mensal.':'Sin fecha exacta, reservamos el promedio mensual.'):(arguments[0]?(lang()==='en'?'Removing the date preserves its accounting month.':lang()==='pt'?'Remover a data preserva seu mês contábil.':'Quitar la fecha conserva su mes contable.'):tx().dateHint)};
- frequency?.addEventListener('change',update);update();return out;
+ frequency?.addEventListener?.('change',update);update();return out;
 };
 const quick=window.aryQuickExpense192;window.aryQuickExpense192=function(){const out=quick.apply(this,arguments),form=document.getElementById('quickExpense192');if(form&&!document.getElementById('edate')){const input=document.createElement('input');input.id='edate';input.type='date';form.querySelector('button').before(input);dateChoice(input,tx().date)}return out};
 window.arySaveHomeExpense193=()=>{
