@@ -286,6 +286,7 @@ window.saveSettings=function(){
 window.moveNav=function(index,direction){
  const i=Number(index),d=Number(direction),order=Array.isArray(s.navOrder)?s.navOrder:[],j=i+d;
  if(!Number.isInteger(i)||!Number.isInteger(d)||i<0||i>=order.length||j<0||j>=order.length)return false;
+ if(order[i]==='more'||order[j]==='more')return false;
  if(!saveChange(next=>{const items=Array.isArray(next.navOrder)?[...next.navOrder]:[];[items[i],items[j]]=[items[j],items[i]];next.navOrder=items;}))return false;
  if(typeof render==='function')render();
  if(typeof customizeHome==='function')customizeHome();
@@ -340,7 +341,7 @@ function validateState(raw){
  next.debts=Array.isArray(next.debts)?next.debts:[];next.expenses=Array.isArray(next.expenses)?next.expenses:[];next.payments=Array.isArray(next.payments)?next.payments:[];next.calendarEvents=Array.isArray(next.calendarEvents)?next.calendarEvents:[];next.goals=Array.isArray(next.goals)?next.goals:[];
  if(!allowedCurrencies.has(String(next.currency||'')))next.currency='USD';
  if(!allowedLocales.has(String(next.locale||'')))next.locale='es-US';
- next.navOrder=[...new Set((Array.isArray(next.navOrder)?next.navOrder:[]).filter(x=>allowedNav.has(String(x))))];for(const x of ['home','debts','expenses','plan','investments','more'])if(!next.navOrder.includes(x))next.navOrder.push(x);
+ next.navOrder=[...new Set((Array.isArray(next.navOrder)?next.navOrder:[]).filter(x=>allowedNav.has(String(x))))];for(const x of ['home','debts','expenses','plan','investments','more'])if(!next.navOrder.includes(x))next.navOrder.push(x);next.navOrder=next.navOrder.filter(x=>x!=='more').concat('more');
  uniqueIds(next.debts);uniqueIds(next.expenses);uniqueIds(next.payments);uniqueIds(next.calendarEvents);uniqueIds(next.goals);
  for(const d of next.debts){if(!finite(d.balance)||Number(d.balance)<0||d.minimum!=null&&(!finite(d.minimum)||Number(d.minimum)<0)||d.apr!=null&&(!finite(d.apr)||Number(d.apr)<0))throw new Error('invalid');if(d.due&& !validDate(d.due))d.due=''}
  for(const e of next.expenses){if(!finite(e.amount)||Number(e.amount)<0)throw new Error('invalid');if(e.date&&!validDate(e.date))throw new Error('date');}

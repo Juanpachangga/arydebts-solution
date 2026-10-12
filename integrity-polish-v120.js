@@ -54,6 +54,7 @@ window.saveSettings=function(){
 window.moveNav=function(index,direction){
  const i=Number(index),d=Number(direction),order=Array.isArray(s.navOrder)?s.navOrder:[],j=i+d;
  if(!Number.isInteger(i)||!Number.isInteger(d)||i<0||i>=order.length||j<0||j>=order.length)return false;
+ if(order[i]==='more'||order[j]==='more')return false;
  if(!saveChange(next=>{const items=Array.isArray(next.navOrder)?[...next.navOrder]:[];[items[i],items[j]]=[items[j],items[i]];next.navOrder=items;}))return false;
  if(typeof render==='function')render();
  if(typeof customizeHome==='function')customizeHome();

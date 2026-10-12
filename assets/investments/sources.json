@@ -1,0 +1,55 @@
+{
+  "retrieved": "2026-10-12",
+  "note": "Unmodified official website identity assets. Used only to identify issuers; no affiliation is implied.",
+  "companies": {
+    "MSFT": {
+      "url": "https://learn.microsoft.com/en-us/entra/identity-platform/media/howto-add-branding-in-apps/ms-symbollockup_mssymbol_19.svg",
+      "path": "assets/investments/MSFT.svg"
+    },
+    "GOOGL": {
+      "url": "https://www.google.com/favicon.ico",
+      "path": "assets/investments/GOOGL.ico",
+      "bytes": 5430
+    },
+    "META": {
+      "url": "https://s21.q4cdn.com/399680738/files/favicon.ico",
+      "path": "assets/investments/META.ico",
+      "source_page": "https://investor.atmeta.com/"
+    },
+    "KO": {
+      "url": "https://static-p58902-e658605.adobeaemcloud.com/4a89418eec97fb8fb83784de3a2b32a5983dd96a4a48372a81acc61807ee8cb7/resources/favicons/apple-touch-icon.png",
+      "path": "assets/investments/KO.png",
+      "bytes": 1472
+    },
+    "NFLX": {
+      "url": "https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2023.ico",
+      "path": "assets/investments/NFLX.ico",
+      "bytes": 9854
+    },
+    "SPOT": {
+      "url": "https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png",
+      "path": "assets/investments/SPOT.png",
+      "bytes": 1129
+    },
+    "AAPL": {
+      "url": "https://www.apple.com/favicon.ico",
+      "path": "assets/investments/AAPL.ico",
+      "bytes": 22382
+    },
+    "AMZN": {
+      "url": "https://www.amazon.com/favicon.ico",
+      "path": "assets/investments/AMZN.ico",
+      "bytes": 15086
+    },
+    "WMT": {
+      "url": "https://www.walmart.com/favicon.ico",
+      "path": "assets/investments/WMT.ico",
+      "bytes": 15086
+    },
+    "MCD": {
+      "url": "https://www.mcdonalds.com/content/dam/sites/usa/nfl/icons/favicon.ico",
+      "path": "assets/investments/MCD.ico",
+      "bytes": 15406
+    }
+  }
+}
