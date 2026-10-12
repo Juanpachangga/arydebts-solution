@@ -525,8 +525,9 @@ async function check(engine, label, viewport) {
     const homeScroll62=await page.evaluate(()=>scrollY);
     await page.locator('#nav [onclick="go(\'plan\')"]').click();
     assert.equal(await page.evaluate(()=>scrollY),0,'New route starts at the top');
-    assert.match(await page.locator('#app').innerText(),/Reserva de recordatorios pendientes/);
-    assert.ok((await page.locator('#app').innerText()).includes(await page.evaluate(()=>money(1670))),'Plan uses the same reserved margin');
+    assert.match(await page.locator('.planExplanation206').innerText(),/reservas pendientes/);
+    assert.equal(await page.locator('.planExplanation206 .row').count(),0,'Plan explanation has no repeated numeric rows');
+    assert.equal(await page.evaluate(()=>aryPersonalBudget61().margin),1670,'Short explanation preserves the reserved margin calculation');
     await page.locator('#app [onclick="back()"]').first().click();
     assert.equal(await page.evaluate(()=>screen),'home');
     assert.ok(Math.abs((await page.evaluate(()=>scrollY))-homeScroll62)<2,'Back restores home scroll');
