@@ -124,3 +124,9 @@ html body.signed64 #app #homeQuickPayment199{padding:16px!important;margin:16px 
 @media(max-width:380px){.paymentAmount199{grid-template-columns:minmax(0,1fr)}.paymentAmount199 label{grid-column:auto}.paymentAmount199 button{width:100%}}
 #homeQuickPayment199 form>label,.paymentAmount199>label,#quickPayment199 form>label{font-size:14px!important;line-height:1.4}
 #homeQuickPayment199 small,#quickPayment199 small{font-size:12px!important}
+/* The shared number hint is inserted asynchronously; it must not consume the amount/button columns. */
+.paymentAmount199>input{grid-column:1;grid-row:2}
+.paymentAmount199>button{grid-column:2;grid-row:2}
+.paymentAmount199>.numberHint63,.paymentAmount199>.details70{grid-column:1/-1;grid-row:3;min-width:0;max-width:100%}
+html body #modal #quickPayment199 .numberHint63{font-size:12px!important;line-height:1.4!important;margin:8px 0 0!important}
+@media(max-width:380px){.paymentAmount199>button{grid-column:1;grid-row:3}.paymentAmount199>.numberHint63,.paymentAmount199>.details70{grid-row:4}}
