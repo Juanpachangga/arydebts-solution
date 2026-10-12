@@ -307,7 +307,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(() => { s.locale='es-US'; go('home'); });
     await page.waitForFunction(()=>!document.documentElement.classList.contains('landing-bright-root'));
     const navigation = page.locator('#nav button');
-    assert.equal(await navigation.count(), 5);
+    assert.equal(await navigation.count(), 6);
     assert.equal(await page.locator('#nav button[aria-current="page"]').count(), 1);
     for (const button of await navigation.all()) {
       assert.ok((await button.boundingBox()).height >= 44, 'Navigation has comfortable touch targets');

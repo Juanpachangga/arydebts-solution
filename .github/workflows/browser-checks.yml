@@ -37,6 +37,10 @@ jobs:
         run: node check-state-guard-v104.cjs
       - name: Check local recovery and storage failures
         run: node check-backups-v92.cjs
+      - name: Check monthly lifecycle and investment service foundation
+        run: |
+          node check-monthly-model-v200.cjs
+          node server/check-investment-readiness-v200.mjs
       - name: Check financial analysis calculations
         run: node check-analysis-v93.cjs
       - name: Check instant amount formatting and syntax
@@ -136,7 +140,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v6
         with:
@@ -151,3 +155,5 @@ jobs:
       - run: node check-daily-use-v197.cjs
 
       - run: node check-quick-payment-v199.cjs
+
+      - run: node check-monthly-investments-v200.cjs

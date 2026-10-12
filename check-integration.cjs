@@ -209,7 +209,7 @@ console.log('PASS recurring budget, all periods, actual/reserve distinction, lin
 
 recurrence63.run("s.calendarEvents=[{id:99,name:'Reminder',frequency:'monthly',amount:60,date:'',kind:'reminder',completed:true,completedMonth63:localDate().slice(0,7)}]");assert.equal(recurrence63.run('aryPersonalBudget61().reserve'),0);recurrence63.run("s.calendarEvents[0].completedMonth63='2000-01'");assert.equal(recurrence63.run('aryPersonalBudget61().reserve'),60,'Recurring reserve restarts next month without inventing a payment');
 
-const navigation65=boot(true);navigation65.run("s.navOrder=['home','plan','home','unknown','more'];go('home')");assert.deepEqual(Array.from(navigation65.run('s.navOrder')),['home','plan','more','debts','expenses']);assert.match(navigation65.nodes.nav.innerHTML,/go\('expenses'\)/);assert.equal(boot(navigation65.data).run('s.navOrder.length'),5);console.log('PASS complete navigation repair preserves order, restores Expenses and survives reload');
+const navigation65=boot(true);navigation65.run("s.navOrder=['home','plan','home','unknown','more'];go('home')");assert.deepEqual(Array.from(navigation65.run('s.navOrder')),['home','plan','more','debts','expenses','investments']);assert.match(navigation65.nodes.nav.innerHTML,/go\('expenses'\)/);assert.equal(boot(navigation65.data).run('s.navOrder.length'),6);console.log('PASS complete navigation repair preserves order, restores Expenses and survives reload');
 const live67=boot(true);
 for(const locale of ['es-US','en-US','es-CO','es-ES','pt-BR']){
  const expected=new Intl.NumberFormat(locale,{maximumFractionDigits:0,useGrouping:true}).format(2000000),small=new Intl.NumberFormat(locale,{maximumFractionDigits:0,useGrouping:true}).format(2000);
@@ -257,124 +257,427 @@ console.log('PASS protected essentials, recurring ant visibility, non-duplicated
  console.log('PASS overdue priority, partial/fulfilled minimums, balance cap, valid dates, dated recurring expenses, linked records and unchanged finances');
 }
 
-{const b=boot(true);b.run("s.mode='immersive';render();s.mode='lite';go('expenses')");assert.equal(b.run('aryEffectiveMotion80()'),'lite','Navigation must not restore a stale motion preference');b.run("s.expenses=[{id:1,name:'Rent',amount:300,frequency:'monthly',date:''},{id:2,name:'Planned rent',sourceExpenseId:1,amount:300,frequency:'once',date:'2026-10-25'},{id:3,name:'Food',amount:50,frequency:'once',date:'2026-10-08'}];s.debts=[];s.payments=[];s.income=1000;s.incomeFrequency='monthly'");const z=b.run('aryBudgetSnapshot54(s,new Date(2026,9,9))');assert.equal(z.actualExpenses,50);assert.equal(z.recurringExpenses,300);assert.equal(z.availableAfterMinimums,650);b.run("s.expenses[1].date='2026-10-09'");const after=b.run('aryBudgetSnapshot54(s,new Date(2026,9,9))');assert.equal(after.actualExpenses,350);assert.equal(after.recurringExpenses,0);assert.equal(after.availableAfterMinimums,650);console.log('PASS future dated expenses stay out of actual cash flow and do not prematurely consume recurrent reserves');}
-
-// Real decimal payments close the debt, can be reversed, and agree across tabs.
-const cents108=boot(true);
-cents108.run("s.income=0.6;s.incomeFrequency='monthly';s.debts=[{id:108,name:'Decimal card',balance:0.3,min:0.3}];s.expenses=[{id:108,date:localDate(),name:'A',amount:0.1},{id:109,date:localDate(),name:'B',amount:0.2}];s.payments=[];s.calendarEvents=[]");
-assert.equal(cents108.run('aryRealData54.snapshot().expenses'),0.3);
-assert.equal(cents108.run('aryPersonalBudget61().margin'),0,'No invisible deficit in a balanced budget');
-assert.equal(cents108.run('aryApplyPayment54({debtId:108,amount:0.1}).ok'),true);
-assert.equal(cents108.run('s.debts[0].balance'),0.2);
-assert.equal(cents108.run('aryApplyPayment54({debtId:108,amount:0.2}).complete'),true);
-assert.equal(cents108.run('s.debts[0].balance'),0);
-assert.equal(cents108.run('aryRealDebtProgress54().paid'),0.3);
-assert.equal(cents108.run('aryRealData54.snapshot().debtPayments'),0.3);
-assert.equal(cents108.run("aryAnalysis93.spending(s,'month',localDate(),localDate()).spent"),0.6);
-cents108.run("aryDeleteConfirmed68('payment',s.payments[1].id)");
-assert.equal(cents108.run('s.debts[0].balance'),0.2);
-assert.equal(boot(cents108.data).run('s.debts[0].balance'),0.2);
-for(const frequency of ['daily','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual']){
- const source=boot(true);source.run(`s.income=120;s.incomeFrequency='${frequency}';save()`);
- const reloaded=boot(source.data);
- assert.equal(reloaded.run('s.incomeFrequency'),frequency,'Keep the saved income frequency after reload');
- reloaded.run("go('setupIncome')");assert.match(reloaded.nodes.app.innerHTML,new RegExp('value="'+frequency+'" selected'),'Setup must show the saved frequency');
- assert.equal(reloaded.run('aryRealData54.snapshot().income'),source.run('aryRealData54.snapshot().income'));
+{const b=boot(true);b.run("s.mode='immersive';render();s.mode='lite';go('expenses')");assert.equal(b.run('aryEffectiveMotion80()'),'lite','Navigation must not restore a stale motion preference');b.run("s.expenses=[{id:1,name:'Rent',amount:300,frequency:'monthly',date:''},{id:2,name:'Planned rent',sourceExpenseId:1,amount:300,frequency:'once',date:'2026-10-25'},{id:3,name:'Food',amount:50,frequency:'once',date:'2026-10-08'}];s…20374 tokens truncated…ilter:none!important;transition:none!important;box-shadow:0 12px 34px rgba(0,0,0,.34)!important;background:#172541!important;color:#f2f8ff!important}
+ html.aryGuideLite144 .ary125cloud p{color:#bdd0e8!important}
+ html.aryGuideLite144 .ary127section{background:#203858!important;color:#bfefff!important;box-shadow:none!important}
+ html.aryGuideLite144.ary-light .ary125cloud,html.aryGuideLite144 .ary-light .ary125cloud{background:linear-gradient(145deg,#fff,#f1f6ff)!important;color:#172641!important;border-color:#81cfdf!important;box-shadow:0 12px 30px rgba(39,62,103,.22)!important}
+ html.aryGuideLite144.ary-light .ary125cloud p,html.aryGuideLite144 .ary-light .ary125cloud p{color:#60738c!important}
+ html.aryGuideLite144.ary-light .ary127section,html.aryGuideLite144 .ary-light .ary127section{background:#e8f8ff!important;color:#235b74!important;border-color:#b9e7f1!important}
+ html.aryGuideLite144 .ary127countdown,html.aryGuideLite144 .ary130link,html.aryGuideLite144 .ary131transition{display:none!important}
+ html.aryGuideLite144 #aryGuideBlock127{touch-action:none!important}
+ html.aryGuideLite144 .ary140cancelTop{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+ html.aryGuideLite144 .ary125cloud .ary125actions{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+ html.aryGuideLite144 .aryGuide94{display:none!important}
+ html.aryGuideLite144 *{scroll-behavior:auto!important}
 }
-console.log('PASS decimal payments, full payoff, deletion, reload, balanced margin, cross-tab totals and all eight saved income frequencies');
-
-// Failed persistence must never acknowledge an unsaved payment or change its balances.
-const durable109=boot(true);
-durable109.run("s.debts=[{id:1,name:'Card',balance:0.3,min:0.1},{id:2,name:'Loan',balance:1,min:0.1}];s.payments=[];s.calendarEvents=[{id:7,name:'Reminder',date:localDate(),kind:'reminder'}];save()");
-const initial109=durable109.run('JSON.stringify(s)'),disk109=durable109.data['arydebts-v3'];
-const write109=durable109.context.localStorage.setItem;
-durable109.context.localStorage.setItem=()=>{throw Error('QuotaExceededError')};
-assert.equal(durable109.run('aryApplyPayment54({debtId:1,amount:0.1}).ok'),false);
-assert.equal(durable109.run('JSON.stringify(s)'),initial109);assert.equal(durable109.data['arydebts-v3'],disk109);
-durable109.context.localStorage.setItem=write109;
-assert.equal(durable109.run('aryApplyPayment54({debtId:1,amount:0.1}).ok'),true);
-const paid109=durable109.run('JSON.stringify(s)'),paidDisk109=durable109.data['arydebts-v3'],pid109=durable109.run('s.payments[0].id');
-for(const [key,value] of Object.entries({editPayDebt54:'2',editPayAmount54:'0.2',editPayDate54:durable109.run('localDate()'),editPayNote54:'Moved'}))durable109.nodes[key]={value};
-durable109.context.localStorage.setItem=()=>{throw Error('SecurityError')};
-durable109.run(`arySaveEditedPayment54(${pid109})`);
-assert.equal(durable109.run('JSON.stringify(s)'),paid109);
-for(const [kind,id]of [['payment',pid109],['debt',1],['event',7]]){
- durable109.run(`aryDeleteConfirmed68('${kind}',${id})`);
- assert.equal(durable109.run('JSON.stringify(s)'),paid109,kind+' failure preserves all records');
- assert.equal(durable109.data['arydebts-v3'],paidDisk109);
-}
-assert.match(durable109.nodes.toast.textContent,/No se pudo guardar/);
-durable109.context.localStorage.setItem=write109;
-durable109.run(`arySaveEditedPayment54(${pid109})`);
-assert.equal(durable109.run('s.debts[0].balance'),0.3);assert.equal(durable109.run('s.debts[1].balance'),0.8);
-assert.equal(boot(durable109.data).run('s.payments[0].debtId'),2);
-durable109.run(`aryDeleteConfirmed68('payment',${pid109})`);
-assert.equal(durable109.run('s.debts[1].balance'),1);assert.equal(durable109.run('s.payments.length'),0);
-durable109.run("aryDeleteConfirmed68('event',7)");assert.equal(durable109.run('s.calendarEvents.length'),0);
-durable109.run('aryApplyPayment54({debtId:1,amount:0.1})');durable109.run("aryDeleteConfirmed68('debt',1)");
-assert.equal(durable109.run('s.debts.length'),1);assert.equal(durable109.run('s.payments.length'),0);
-assert.equal(boot(durable109.data).run('s.debts.length'),1);
-console.log('PASS durable payment creation, reassignment, deletion and linked debt/event deletion; quota/security failures preserve memory and saved data; successful retries survive reload');
-
-const clarity110=boot(true);clarity110.run("s.debts=[{id:1,name:'Card',balance:2000,min:50}];s.payments=[]");
-const finances110=clarity110.run('JSON.stringify({debts:s.debts,payments:s.payments,income:s.income})');
-for(const [locale,tips,title]of [['es-US','Consejos','¿Cómo funciona tu progreso?'],['en-US','Tips','How does your progress work?'],['pt-BR','Dicas','Como funciona seu progresso?']]){
- clarity110.run(`s.locale='${locale}';go('home')`);
- assert.match(clarity110.nodes.app.innerHTML,/onclick="aryProgressAdvice110\(\)"/);
- assert.ok(clarity110.nodes.app.innerHTML.includes(tips));
- assert.match(clarity110.nodes.app.innerHTML,/<section[^>]+progressCard72/,'No nested interactive buttons in progress card');
- clarity110.run('aryProgressAdvice110()');assert.ok(clarity110.nodes.modal.innerHTML.includes(title));
- assert.match(clarity110.nodes.modal.innerHTML,/closeM\(\);aryPaymentForm54\(\)/);
- assert.equal(clarity110.run('JSON.stringify({debts:s.debts,payments:s.payments,income:s.income})'),finances110);
-}
-clarity110.run("s.locale='es-US';go('signup')");assert.match(clarity110.nodes.app.innerHTML,/Este espacio es para ti/);
-console.log('PASS localized progress advice, independent actions, signup wording and unchanged financial records');
-
-const direct111=boot(true);direct111.run("s.income=1000;s.incomeFrequency='monthly';s.expenses=[{id:1,name:'Renta',cat:'Hormiga',amount:900,date:localDate()},{id:2,name:'Café',cat:'Hormiga',amount:120,date:localDate()},{id:3,name:'Tomorrow',cat:'Hormiga',amount:999,date:'2099-10-10'},{id:4,name:'Video',cat:'Variable',amount:20,date:localDate()}];go('expenses')");
-assert.equal(direct111.run('aryAdjustment111().actual'),120);assert.equal(direct111.run('aryAdjustment111().share'),12);assert.equal(direct111.run('aryAdjustment111().top.name'),'Café');
-assert.match(direct111.nodes.app.innerHTML,/Tu ajuste prioritario/);assert.match(direct111.nodes.app.innerHTML,/12%/);assert.match(direct111.nodes.app.innerHTML,/Otros ajustes posibles/);
-assert.equal(direct111.run('aryExpenseCuts68()[0].potential'),24);
-for(const [dx,dy,result]of [[0,-100,0],[0,100,0],[-100,0,1],[100,0,-1],[5,-20,0],[100,100,0]])assert.equal(direct111.run(`aryIntroGesture111(${dx},${dy})`),result);
-console.log('PASS direct adjustment uses actual optional spending, excludes essentials/future records, selects biggest actionable cut and recognizes only horizontal cover swipes');
-
-const review112=boot(true);review112.run("s.expenses=[{id:1,name:'Café',cat:'Hormiga',amount:0.1,date:localDate()},{id:2,name:'Cafe',cat:'Hormiga',amount:0.2,date:localDate()},{id:3,name:'Invalid recurring',cat:'Hormiga',amount:1000,frequency:'daily',date:localDate().slice(0,7)+'-99'},{id:4,name:'Old coffee',cat:'Hormiga',amount:1000,date:'2000-01-01'}]");
-assert.equal(review112.run('aryExpenseCuts68().length'),1);assert.equal(review112.run('aryExpenseCuts68()[0].monthly'),0.3);assert.equal(review112.run('aryExpenseCuts68()[0].potential'),0.06);
-assert.deepEqual(JSON.parse(review112.run('JSON.stringify(aryExpenseCuts68()[0].ids)')),[1,2]);
-const beforeReview112=review112.run('JSON.stringify(s.expenses)');
-for(const locale of ['es-US','en-US','pt-BR']){review112.run(`s.locale='${locale}';aryReviewAdjustment112(1)`);assert.match(review112.nodes.modal.innerHTML,/adjustmentReview112/);assert.match(review112.nodes.modal.innerHTML,/aryEditAdjustmentRecord112\(0\)/);assert.match(review112.nodes.modal.innerHTML,/aryEditAdjustmentRecord112\(1\)/);assert.doesNotMatch(review112.nodes.modal.innerHTML,/Invalid recurring|Old coffee/)}
-assert.equal(review112.run('JSON.stringify(s.expenses)'),beforeReview112,'Review does not edit financial records');
-console.log('PASS grouped optional expense review, exact decimal totals, source IDs, valid dates, translations and unchanged financial records');
-// Complete recurring expense records survive reload; failed writes preserve drafts and links.
-{
- const b=boot(true);b.run("s.expenses=[{id:113,name:'Rent',amount:100,cat:'Esencial',date:'',frequency:'monthly'}];save();expenseForm()");
- for(const [id,value] of Object.entries({n:' Rent paid ',b:'25.50',c:'Esencial',edate:b.run('localDate()'),expenseFrequency63:'once'}))b.nodes[id]={value};
- b.run('window._expenseSource63=113');
- const state=b.run('JSON.stringify(s)'),disk=b.data['arydebts-v3'],writer=b.context.localStorage.setItem;let writes=0;
- b.context.localStorage.setItem=()=>{throw Error('QuotaExceededError')};
- assert.equal(b.run('saveExpense(null)'),false);assert.equal(b.run('JSON.stringify(s)'),state);assert.equal(b.data['arydebts-v3'],disk);assert.equal(b.nodes.modal.classList.contains('hidden'),false);assert.equal(b.nodes.n.value,' Rent paid ');assert.equal(b.run('window._expenseSource63'),113);assert.match(b.nodes.toast.textContent,/No se pudo guardar/);
- b.context.localStorage.setItem=(key,value)=>{if(key==='arydebts-v3')writes++;writer(key,value)};
- assert.equal(b.run('saveExpense(null)'),true);assert.equal(writes,1);assert.equal(b.run('window._expenseSource63'),null);
- const reload=boot(b.data);assert.equal(reload.run('s.expenses[1].sourceExpenseId'),113);assert.equal(reload.run('s.expenses[1].frequency'),'once');assert.equal(reload.run('s.expenses[1].amount'),25.5);
- const paidId=b.run('s.expenses[1].id');b.nodes.b.value='30';b.nodes.expenseFrequency63.value='monthly';b.run('expenseForm('+paidId+')');
- const editState=b.run('JSON.stringify(s)'),editDisk=b.data['arydebts-v3'];b.context.localStorage.setItem=()=>{throw Error('SecurityError')};assert.equal(b.run('saveExpense('+paidId+')'),false);assert.equal(b.run('JSON.stringify(s)'),editState);assert.equal(b.data['arydebts-v3'],editDisk);
- assert.equal(b.run('deleteExpense(113)'),false);assert.equal(b.run('JSON.stringify(s)'),editState);assert.equal(b.data['arydebts-v3'],editDisk);
- b.context.localStorage.setItem=writer;assert.equal(b.run('deleteExpense(113)'),true);assert.equal(b.run('s.expenses.length'),1);assert.equal(b.run('s.expenses[0].sourceExpenseId'),undefined);assert.equal(boot(b.data).run('s.expenses[0].sourceExpenseId'),undefined);
- assert.equal(b.run('saveExpense('+paidId+')'),true);assert.equal(boot(b.data).run('s.expenses[0].frequency'),'monthly');
- b.run('Date.now=()=>113');b.nodes.expenseFrequency63.value='once';assert.equal(b.run('saveExpense(null)'),true);assert.equal(b.run('saveExpense(null)'),true);assert.equal(b.run('new Set(s.expenses.map(e=>String(e.id))).size'),3);
- console.log('PASS atomic recurring expense creation/edit/delete, reload, failed storage draft preservation and unique IDs');
-}
-{
- const b=boot(true);b.run('debtForm()');
- for(const [id,value] of Object.entries({n:'Card',b:'100.25',m:'10.50',a:'20',due:'',note:'Keep note',debtFrequency63:'weekly'}))b.nodes[id]={value};
- const before=b.run('JSON.stringify(s)'),disk=b.data['arydebts-v3'],writer=b.context.localStorage.setItem;let count=0;
- b.context.localStorage.setItem=()=>{throw Error('QuotaExceededError')};assert.equal(b.run('saveDebt(null)'),false);assert.equal(b.run('JSON.stringify(s)'),before);assert.equal(b.data['arydebts-v3'],disk);assert.equal(b.nodes.modal.classList.contains('hidden'),false);assert.equal(b.nodes.b.value,'100.25');
- b.context.localStorage.setItem=(k,v)=>{if(k==='arydebts-v3')count++;writer(k,v)};assert.equal(b.run('saveDebt(null)'),true);assert.equal(count,1);const id=b.run('s.debts[0].id');const reload=boot(b.data);assert.equal(reload.run('s.debts[0].paymentFrequency'),'weekly');assert.equal(reload.run('s.debts[0].balance'),100.25);assert.equal(reload.run('s.debts[0].min'),10.5);assert.equal(reload.run('s.debts[0].note'),'Keep note');
- b.nodes.b.value='90.05';b.nodes.debtFrequency63.value='monthly';b.run('debtForm('+id+')');b.context.localStorage.setItem=()=>{throw Error('SecurityError')};const editedBefore=b.run('JSON.stringify(s)');assert.equal(b.run('saveDebt('+id+')'),false);assert.equal(b.run('JSON.stringify(s)'),editedBefore);b.context.localStorage.setItem=writer;assert.equal(b.run('saveDebt('+id+')'),true);assert.equal(boot(b.data).run('s.debts[0].balance'),90.05);assert.equal(boot(b.data).run('s.debts[0].paymentFrequency'),'monthly');
- const invalidBefore=b.run('JSON.stringify(s)'),invalidDisk=b.data['arydebts-v3'];for(const value of ['NaN','Infinity','-Infinity'])assert.equal(b.run('aryCommitFinancial109(next=>{next.debts[0].balance='+value+'})'),false);assert.equal(b.run('JSON.stringify(s)'),invalidBefore);assert.equal(b.data['arydebts-v3'],invalidDisk);
- b.run("s.debts=[{id:1,name:'Card',balance:800}];s.payments=[{id:1,debtId:1,amount:200,date:localDate()}];go('home')");assert.equal(b.run('aryRealDebtProgress54().pct'),20);assert.match(b.nodes.app.innerHTML,/progressCloud114/);assert.match(b.nodes.app.innerHTML,/Muestra qué parte de tus deudas has pagado/);b.run('aryProgressAdvice110()');assert.match(b.nodes.modal.innerHTML,/200.*800.*20%/);const state=b.run('JSON.stringify(s)');b.run('aryTogglePrivacy72()');assert.equal(b.run('JSON.stringify(s)'),state);assert.match(b.nodes.app.innerHTML,/••••/);
- for(const [locale,copy] of [['es-US','¿Para qué sirve este círculo?'],['en-US','What is this ring for?'],['pt-BR','Para que serve este círculo?']]){b.run("s.locale='"+locale+"';go('home')");assert.ok(b.nodes.app.innerHTML.includes(copy));}
- b.run("s.locale='es-US';s.payments=[];go('home')");assert.match(b.nodes.app.innerHTML,/Aún no registraste pagos/);b.run("s.debts=[];go('home')");assert.match(b.nodes.app.innerHTML,/Agrega tus deudas/);
- console.log('PASS complete debt save/retry/reload, invalid number rejection, visible progress cloud, 20% example, empty states and privacy');
+`;
+ document.head.appendChild(st);
 }
 
-{const b=boot(true);b.run("s.income=100;s.incomeFrequency='monthly';s.expenses=[{id:1,name:'Rent',cat:'Esencial',amount:150,date:localDate()}];s.debts=[{id:1,balance:100,min:10}]");assert.match(b.run('aryProgressTip114()'),/faltante/);b.run('s.income=0');assert.match(b.run('aryProgressTip114()'),/Añade tus ingresos/);b.run("s.income=1000;s.expenses=[{id:1,name:'Cafe',cat:'Hormiga',amount:150,date:localDate()}]");assert.match(b.run('aryProgressTip114()'),/hormiga opcionales/);b.run('s.expenses=[]');assert.match(b.run('aryProgressTip114()'),/pagos mínimos/);b.run('s.debts=[];s.payments=[]');assert.match(b.run('aryProgressTip114()'),/registra el saldo/);b.run('s.payments=[{id:1,amount:100}]');assert.match(b.run('aryProgressTip114()'),/colchón/);console.log('PASS actionable progress tips match missing inputs, deficit, optional ant spending, minimums, empty and paid-off states');}
+function guideActive(){try{return !!window.aryFullGuideStatus125?.()?.active}catch{return false}}
+function syncLite(){
+ const root=document.documentElement;
+ if(MOBILE()&&guideActive())root.classList.add('aryGuideLite144');
+ else root.classList.remove('aryGuideLite144');
+}
+
+function progressCopy(){
+ const l=s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
+ return l==='en'?'Your progress':l==='pt'?'Seu progresso':'Tu avance';
+}
+function polishProgress(){
+ if(typeof screen!=='string'||screen!=='progress')return;
+ const heading=document.querySelector('#app .progressHeading110>b');
+ if(heading)heading.textContent=progressCopy();
+ const tips=document.querySelector('#app .progressTips110');
+ if(tips&&tips.dataset.ary144!=='1'){
+   tips.dataset.ary144='1';
+   tips.classList.remove('ary144hide');
+   const token=progressVisit;
+   clearTimeout(progressTimer);
+   progressTimer=setTimeout(()=>{if(token===progressVisit&&typeof screen==='string'&&screen==='progress')document.querySelector('#app .progressTips110')?.classList.add('ary144hide')},3000);
+ }
+}
+function onScreenChange(){
+ const current=typeof screen==='string'?screen:'';
+ if(current!==lastScreen){
+   if(current==='progress'){progressVisit++;clearTimeout(progressTimer)}
+   else clearTimeout(progressTimer);
+   lastScreen=current;
+ }
+ syncLite();
+ requestAnimationFrame(polishProgress);
+}
+
+function hook(name){
+ const fn=window[name];if(typeof fn!=='function'||fn._ary144)return;
+ const wrapped=function(){const out=fn.apply(this,arguments);requestAnimationFrame(onScreenChange);return out};
+ wrapped._ary144=true;window[name]=wrapped;
+}
+ensureStyle();
+hook('render');hook('go');
+for(const ev of ['resize','orientationchange'])window.addEventListener(ev,()=>requestAnimationFrame(syncLite),{passive:true});
+const guideStart=window.aryStartFullGuide125;
+if(typeof guideStart==='function'&&!guideStart._ary144){const w=function(){const out=guideStart.apply(this,arguments);requestAnimationFrame(syncLite);return out};w._ary144=true;window.aryStartFullGuide125=w}
+const guideFinish=window.aryFullGuideFinish125;
+if(typeof guideFinish==='function'&&!guideFinish._ary144){const w=function(){const out=guideFinish.apply(this,arguments);requestAnimationFrame(syncLite);return out};w._ary144=true;window.aryFullGuideFinish125=w}
+if(typeof screen==='string'&&screen==='progress')progressVisit++;
+onScreenChange();
+window.aryMobilePerformance144={mobile:MOBILE,sync:()=>{syncLite();polishProgress()}};
+})();
+
+// V147 — adaptive performance profile for the whole application.
+
+
+
+;
+// Source: performance-stability-v147.js
+(()=>{
+'use strict';
+const STYLE='aryPerformanceStabilityStyle147';
+const root=document.documentElement;
+const mqCoarse=window.matchMedia?.('(pointer:coarse)');
+const mqSmall=window.matchMedia?.('(max-width:820px)');
+const mqReduced=window.matchMedia?.('(prefers-reduced-motion:reduce)');
+
+function profile(){
+ const cores=Number(navigator.hardwareConcurrency)||8;
+ const memory=Number(navigator.deviceMemory)||8;
+ const mobile=!!(mqCoarse?.matches||mqSmall?.matches||/iPhone|iPad|iPod|Android/i.test(navigator.userAgent||''));
+ const reduced=!!mqReduced?.matches;
+ const constrained=reduced||memory<=4||cores<=4||(mobile&&cores<=6);
+ return {mobile,reduced,constrained,cores,memory};
+}
+function ensureStyle(){
+ if(document.getElementById(STYLE))return;
+ const st=document.createElement('style');st.id=STYLE;st.textContent=`
+html.aryPerfBalanced147 .ary125shade,html.aryPerfBalanced147 .ary125cloud{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html.aryPerfLite147 .waves65::before,html.aryPerfLite147 .waves65::after,html.aryPerfLite147 .signoutWave65::before,
+html.aryPerfLite147 .seasonBackdrop71 *,html.aryPerfLite147 .aurora{animation:none!important}
+html.aryPerfLite147 .seasonArt71{filter:none!important}
+html.aryPerfLite147 #app .card,html.aryPerfLite147 #nav,html.aryPerfLite147 #modal .sheet{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html.aryPerfLite147 #app *,html.aryPerfLite147 #nav *,html.aryPerfLite147 #modal *{scroll-behavior:auto!important}
+html.aryPerfLite147 .ary125focus{animation:none!important;box-shadow:0 0 0 3px rgba(98,221,255,.16)!important}
+html.aryPerfPaused147 *{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){html *{scroll-behavior:auto!important}}
+`;
+ document.head.appendChild(st);
+}
+function apply(){
+ ensureStyle();
+ const p=profile();
+ root.classList.toggle('aryPerfBalanced147',p.mobile);
+ root.classList.toggle('aryPerfLite147',p.constrained);
+ root.classList.toggle('aryPerfPaused147',document.visibilityState==='hidden');
+ root.dataset.aryPerf147=p.constrained?'lite':p.mobile?'balanced':'full';
+ return p;
+}
+function idle(fn){
+ if('requestIdleCallback'in window)return requestIdleCallback(fn,{timeout:1200});
+ return setTimeout(fn,160);
+}
+let raf=0;
+function schedule(){cancelAnimationFrame(raf);raf=requestAnimationFrame(apply)}
+for(const m of [mqCoarse,mqSmall,mqReduced])m?.addEventListener?.('change',schedule);
+window.addEventListener('resize',schedule,{passive:true});
+document.addEventListener('visibilitychange',()=>{apply();if(document.visibilityState==='visible')idle(()=>window.aryMobilePerformance144?.sync?.())});
+window.addEventListener('pageshow',schedule,{passive:true});
+apply();
+window.aryPerformance147={profile,apply};
+})();
+
+// V148 — while the guide is active on mobile, use an ultra-light rendering path.
+
+
+
+;
+// Source: performance-paint-v151.js
+(()=>{
+'use strict';
+const STYLE='aryPerformancePaintStyle151';
+const root=document.documentElement;
+const mobile=()=>window.matchMedia?.('(max-width:820px),(pointer:coarse)')?.matches||/iPhone|iPad|iPod|Android/i.test(navigator.userAgent||'');
+const guideActive=()=>{try{return !!window.aryFullGuideStatus125?.()?.active||!!document.querySelector('.ary126node.ary125cloud')}catch{return false}};
+function ensureStyle(){
+ if(document.getElementById(STYLE))return;
+ const st=document.createElement('style');st.id=STYLE;st.textContent=`
+@media(max-width:820px),(pointer:coarse){
+ html.aryPerfLite147:not(.aryPaintGuide151) #app .card{box-shadow:none!important}
+ html.aryPerfLite147:not(.aryPaintGuide151) #app .tap45,
+ html.aryPerfLite147:not(.aryPaintGuide151) #app .btn{transition:none!important}
+}
+/* Click reliability: hidden modals must never receive taps, even if another stylesheet changes display. */
+#modal.hidden{pointer-events:none!important}
+#modal:not(.hidden){pointer-events:auto}
+`;
+ document.head.appendChild(st);
+}
+function sync(){
+ ensureStyle();
+ const p=window.aryPerformance147?.profile?.();
+ const use=mobile()||!!p?.constrained;
+ root.classList.toggle('aryPaint151',use);
+ root.classList.toggle('aryPaintGuide151',guideActive());
+}
+function wrap(name){const fn=window[name];if(typeof fn!=='function'||fn._ary151)return;const w=function(){const out=fn.apply(this,arguments);requestAnimationFrame(sync);return out};w._ary151=true;window[name]=w}
+for(const name of ['render','go','aryStartFullGuide125','aryFullGuideNext125','aryFullGuideBack125','aryFullGuideFinish125'])wrap(name);
+for(const ev of ['resize','orientationchange','pageshow'])window.addEventListener(ev,()=>requestAnimationFrame(sync),{passive:true});
+document.addEventListener('visibilitychange',sync);
+sync();
+window.aryPerformancePaint151={sync,interactivePaintSafe:true};
+})();
+
+// V154 — keep Home debt progress aligned with the real payment ledger.
+
+
+// V155 — validate real calendar dates and keep calendar writes atomic.
+
+
+// V184 — reject invalid routes and load the stale-guide transition repair fresh.
+
+
+
+;
+// Source: home-progress-integrity-v154.js
+(()=>{
+'use strict';
+const STYLE='aryHomeProgressStyle166';
+const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
+const COPY={
+ es:{title:'Tu progreso hacia la libertad financiera',start:'Deuda inicial reconstruida',remaining:'Saldo restante',paid:'Has pagado',empty:'Registra una deuda o un pago para empezar a mover este progreso.',open:'Ver progreso ›'},
+ en:{title:'Your progress toward financial freedom',start:'Reconstructed starting debt',remaining:'Remaining balance',paid:'You have paid',empty:'Add a debt or payment to start moving this progress.',open:'View progress ›'},
+ pt:{title:'Seu progresso rumo à liberdade financeira',start:'Dívida inicial reconstruída',remaining:'Saldo restante',paid:'Você pagou',empty:'Adicione uma dívida ou pagamento para começar a mover este progresso.',open:'Ver progresso ›'}
+};
+const tx=()=>COPY[lang()];
+function ensureStyle(){
+ if(document.getElementById(STYLE))return;
+ const st=document.createElement('style');st.id=STYLE;st.textContent=`
+.homeTruth29 .ring{flex:0 0 91px;background:conic-gradient(#12dfff 0 var(--p1,0deg),#684dff var(--p1,0deg) var(--p2,0deg),#ff31b5 var(--p2,0deg) var(--p3,0deg),#ffc233 var(--p3,0deg) var(--p4,0deg),rgba(120,139,170,.20) var(--p4,0deg) 360deg)!important;box-shadow:0 0 20px rgba(38,201,255,.28)!important}
+.homeTruth29 .ring:after{background:#0a1b3b!important}
+.ary-light .homeTruth29 .ring:after{background:#f8fbff!important}
+.homeTruth29 .ring b{color:inherit!important;-webkit-text-fill-color:currentColor!important}
+`;
+ document.head.appendChild(st);
+}
+function real(){
+ try{
+  if(typeof window.aryRealDebtProgress54==='function')return window.aryRealDebtProgress54();
+ }catch{}
+ const current=(s.debts||[]).reduce((sum,d)=>sum+(Number(d.balance)||0),0);
+ const paid=(s.payments||[]).reduce((sum,p)=>sum+(Number(p.amount)||0),0);
+ const start=current+paid;
+ return{current,paid,start,pct:start>0?Math.max(0,Math.min(100,Math.round(paid/start*100))):0};
+}
+window.aryHomeProgress72=function(){
+ ensureStyle();
+ const x=tx(),r=real();
+ const current=Number(r?.current)||0,paid=Number(r?.paid)||0,start=Number(r?.start)||current+paid;
+ const rawPct=Number(r?.pct),pct=Number.isFinite(rawPct)?Math.max(0,Math.min(100,Math.round(rawPct))):(start>0?Math.max(0,Math.min(100,Math.round(paid/start*100))):0);
+ const p1=(pct*3.6*.28).toFixed(2),p2=(pct*3.6*.52).toFixed(2),p3=(pct*3.6*.75).toFixed(2),p4=(pct*3.6).toFixed(2);
+ const hidden=typeof window.aryHidden72==='function'&&aryHidden72();
+ const hasDebt=(s.debts||[]).length>0;
+ const dest=hasDebt?'progress':'debts';
+ return `<button type="button" class="card full heroCard homeTruth29 homeTap51" onclick="go('${dest}')"><b>${x.title}</b><div class="progressBox"><div class="ring" style="--p1:${p1}deg;--p2:${p2}deg;--p3:${p3}deg;--p4:${p4}deg"><b>${hidden?'••••':pct+'%'}</b></div><div><span class="muted">${x.remaining}</span><div class="kpi">${money(current)}</div><span class="muted">${x.paid}</span><div class="kpi good">${money(paid)}</div></div></div>${start>0?`<small class="muted">${x.start}: ${money(start)}</small>`:`<p class="muted">${x.empty}</p>`}<small>${x.open}</small></button>`;
+};
+try{localStorage.removeItem('ary-home-baseline-v29')}catch{}
+ensureStyle();
+if(typeof screen!=='undefined'&&screen==='home'&&typeof window.render==='function')requestAnimationFrame(()=>window.render());
+window.aryHomeProgressIntegrity154={real};
+})();
+
+
+;
+// Source: calendar-integrity-v155.js
+(()=>{
+'use strict';
+const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
+const C={
+ es:{invalidDate:'Escribe una fecha válida.',invalidEvent:'Revisa el nombre, la fecha y el monto del movimiento.',saveError:'No se pudo guardar. Tus datos siguen como antes.',deleteConfirm:'¿Eliminar este movimiento del calendario?',paymentLedger:'Los pagos de deuda se editan desde Tu progreso para mantener el saldo y el historial sincronizados.'},
+ en:{invalidDate:'Enter a valid date.',invalidEvent:'Check the event name, date and amount.',saveError:'Could not save. Your data remains unchanged.',deleteConfirm:'Delete this calendar event?',paymentLedger:'Debt payments are edited from Your progress so the balance and history stay synchronized.'},
+ pt:{invalidDate:'Digite uma data válida.',invalidEvent:'Revise o nome, a data e o valor do movimento.',saveError:'Não foi possível salvar. Seus dados continuam como antes.',deleteConfirm:'Excluir este movimento do calendário?',paymentLedger:'Pagamentos de dívida são editados em Seu progresso para manter saldo e histórico sincronizados.'}
+};
+const t=()=>C[lang()];
+const commit=change=>typeof window.aryCommitFinancial109==='function'&&window.aryCommitFinancial109(change);
+const parseAmount=value=>typeof parseNum==='function'?parseNum(value):Number(value);
+function validDate(value){
+ const v=String(value||'');
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(v))return false;
+ const [y,m,d]=v.split('-').map(Number),date=new Date(y,m-1,d);
+ return date.getFullYear()===y&&date.getMonth()===m-1&&date.getDate()===d;
+}
+window.aryValidCalendarDate155=validDate;
+const nextId=()=>typeof window.aryUniqueId120==='function'?aryUniqueId120(s.debts||[],s.expenses||[],s.payments||[],s.calendarEvents||[]):Date.now();
+
+const previousCalendarDate=window.aryCalendarDate60;
+window.aryCalendarDate60=function(value){
+ const date=String(value||'');
+ if(!validDate(date))return false;
+ return typeof previousCalendarDate==='function'?previousCalendarDate.call(this,date):false;
+};
+
+window.arySaveDue35=function(value){
+ const date=String(value||'');
+ if(!validDate(date)){if(typeof toast==='function')toast(t().invalidDate);return false;}
+ const id=Number(document.getElementById('calDebt35')?.value);
+ if(!Number.isFinite(id)||(s.debts||[]).every(d=>Number(d.id)!==id))return false;
+ if(!commit(next=>{const debt=(next.debts||[]).find(d=>Number(d.id)===id);if(!debt)throw new Error('missing_debt');debt.due=date;})){
+   if(typeof toast==='function')toast(t().saveError);return false;
+ }
+ if(typeof closeM==='function')closeM();
+ if(typeof render==='function')render();
+ return true;
+};
+
+const previousSaveEvent=window.arySaveEvent36;
+window.arySaveEvent36=function(id){
+ const kind=String(document.getElementById('cevType36')?.value||'reminder');
+ if(kind==='payment')return typeof previousSaveEvent==='function'?previousSaveEvent.apply(this,arguments):false;
+ const date=String(document.getElementById('cevDate36')?.value||'');
+ const name=String(document.getElementById('cevName36')?.value||'').trim();
+ const raw=String(document.getElementById('cevAmount36')?.value||'').trim();
+ const amount=raw===''?0:parseAmount(raw);
+ const note=String(document.getElementById('cevNote36')?.value||'').trim();
+ const frequency=String(document.getElementById('eventFrequency63')?.value||'once');
+ const recurring=frequency!=='once';
+ if(!name||(!recurring&&!validDate(date))||(date&&!validDate(date))||!Number.isFinite(amount)||amount<0){if(typeof toast==='function')toast(t().invalidEvent);return false;}
+ const editing=id!==null&&id!==undefined;
+ const eventId=editing?id:nextId();
+ const icon=kind==='income'?'🟢':'🔔';
+ if(editing&&!(s.calendarEvents||[]).some(e=>String(e.id)===String(id)))return false;
+ if(!commit(next=>{
+   if(!Array.isArray(next.calendarEvents))next.calendarEvents=[];
+   let event=editing?next.calendarEvents.find(e=>String(e.id)===String(id)):null;
+   if(!event){event={id:eventId};next.calendarEvents.push(event);}
+   Object.assign(event,{date:date||'',name,amount,kind,note,icon,frequency});
+ })){if(typeof toast==='function')toast(t().saveError);return false;}
+ if(typeof closeM==='function')closeM();
+ if(date&&typeof window.aryCalendarDate60==='function')window.aryCalendarDate60(date);
+ else if(typeof render==='function')render();
+ return true;
+};
+window.arySaveEvent36._aryPrevious155=previousSaveEvent;
+
+window.aryDeleteEvent36=function(id){
+ const event=(s.calendarEvents||[]).find(e=>String(e.id)===String(id));
+ if(!event)return false;
+ if(event.kind==='payment'){if(typeof toast==='function')toast(t().paymentLedger);return false;}
+ if(typeof window.aryAskDelete68==='function'){aryAskDelete68('event',id);return true;}
+ if(!confirm(t().deleteConfirm))return false;
+ if(!commit(next=>{next.calendarEvents=(next.calendarEvents||[]).filter(e=>String(e.id)!==String(id));})){
+   if(typeof toast==='function')toast(t().saveError);return false;
+ }
+ if(typeof render==='function')render();
+ return true;
+};
+window.aryCalendarIntegrity155={validDate};
+})();
+
+
+;
+// Source: navigation-integrity-v163.js
+(()=>{
+'use strict';
+const oldGo=window.go;
+const oldBack=window.back;
+const copy=()=>s?.locale==='en-US'?'That section is not available.':s?.locale==='pt-BR'?'Essa seção não está disponível.':'Esa sección no está disponible.';
+const valid=name=>typeof screens==='object'&&screens!==null&&Object.prototype.hasOwnProperty.call(screens,String(name||''));
+
+if(typeof oldGo==='function'&&!oldGo._ary163){
+ const guardedGo=function(name){
+  const target=String(name||'');
+  if(!valid(target)){
+   if(typeof toast==='function')toast(copy());
+   return false;
+  }
+  return oldGo.call(this,target);
+ };
+ guardedGo._ary163=true;
+ guardedGo._aryPrevious163=oldGo;
+ window.go=guardedGo;
+}
+
+if(typeof oldBack==='function'&&!oldBack._ary163){
+ const guardedBack=function(){
+  try{
+   if(Array.isArray(appNavigation55)){
+    while(appNavigation55.length&&!valid(appNavigation55[appNavigation55.length-1]))appNavigation55.pop();
+   }
+  }catch{}
+  return oldBack.apply(this,arguments);
+ };
+ guardedBack._ary163=true;
+ guardedBack._aryPrevious163=oldBack;
+ window.back=guardedBack;
+}
+
+window.aryNavigationIntegrity163={valid};
+})();
+
+// V184 — automatic first-use guidance yields to interaction and clears stale step visuals.
+
+
+
+;
+// Source: guide-interaction-safety-v180.js
+(()=>{
+'use strict';
+let userAuto=false,internalToggle=false;
+const status=()=>{try{return window.aryFullGuideStatus125?.()||null}catch{return null}};
+const rawToggle=window.aryFullGuideToggleAuto125;
+
+function pauseAuto(){
+ const st=status();
+ if(!st?.active||!st.automatic||typeof rawToggle!=='function')return false;
+ internalToggle=true;
+ try{rawToggle()}finally{internalToggle=false}
+ userAuto=false;
+ return true;
+}
+
+if(typeof rawToggle==='function'&&!rawToggle._ary180){
+ const wrapped=function(){
+  const out=rawToggle.apply(this,arguments);
+  if(!internalToggle)userAuto=!!status()?.automatic;
+  return out;
+ };
+ wrapped._ary180=true;
+ wrapped._ary180raw=rawToggle;
+ window.aryFullGuideToggleAuto125=wrapped;
+}
+
+// V125 clears old visuals before routing; no second wrapper may remove its new card.
+function guideControl(target){return target?.closest?.('.ary125cloud,.ary140cancelTop,.ary139confirm')}
+function userInteraction(event){
+ const st=status();
+ if(!st?.active||!st.automatic||guideControl(event?.target))return;
+ // Only genuine interaction with the application pauses automatic progression.
+ // Guide rendering, route painting and programmatic scrolling must never pause it.
+ pauseAuto();
+}
+
+for(const ev of ['pointerdown','touchstart','input']){
+ document.addEventListener(ev,userInteraction,{capture:true,passive:ev!=='input'});
+}
+window.addEventListener('wheel',userInteraction,{capture:true,passive:true});
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden&&status()?.active&&status()?.automatic)pauseAuto();
+});
+
+// WebKit can coalesce rapid fill/input work around modal enhancement. Keep the
+// live debt/expense icon tied directly to the current field value as a fallback.
+document.addEventListener('input',event=>{
+ const input=event.target;
+ if(input?.id!=='n'||!document.getElementById('recordIcon96')||typeof window.aryPreviewIcon96!=='function')return;
+ const debt=!!document.querySelector('#modal:not(.hidden) button[onclick*="saveDebt"]');
+ window.aryPreviewIcon96(input,debt?'deuda':undefined);
+},{capture:true});
+
+// V125 owns guide start, route changes, rendering and automatic scheduling.
+// This layer only pauses for genuine application interaction and clears a stale
+// visual between step changes; it never changes guide index, route or completion.
+window.aryGuideInteractionSafety180={
+ status:()=>({...status(),userAuto}),
+ pause:()=>pauseAuto()
+};
+})();
+

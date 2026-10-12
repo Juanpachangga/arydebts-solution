@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {createInvestmentReadiness200} from './investment-readiness-v200.mjs';
+const origin='https://juanpachangga.github.io',req=(method='GET',query='')=>new Request('https://api.example.test/investments/status'+query,{method,headers:{Origin:origin}});
+assert.equal((await createInvestmentReadiness200()(req())).status,503);
+assert.equal((await createInvestmentReadiness200()(req('POST'))).status,405);
+assert.equal((await createInvestmentReadiness200()(new Request('https://api.example.test',{headers:{Origin:'https://evil.example'}}))).status,403);
+let ids=[];const options={verifySession:async()=>({id:'user-A'}),consumeQuota:async()=>true,readOwnedBrokerAccount:async id=>{ids.push(id);return{userId:id,status:'approved'}}};
+const handler=createInvestmentReadiness200(options);
+assert.equal((await handler(req('GET','?userId=user-B'))).status,400);assert.deepEqual(ids,[]);
+const out=await(await handler(req())).json();assert.equal(out.canTrade,false);assert.equal(out.canWithdraw,false);assert.deepEqual(ids,['user-A']);assert.equal('balance' in out,false);
+assert.equal((await createInvestmentReadiness200({...options,readOwnedBrokerAccount:async()=>({userId:'user-B'})})(req())).status,403);
+assert.equal((await createInvestmentReadiness200({...options,verifySession:async()=>null})(req())).status,401);
+assert.equal((await createInvestmentReadiness200({...options,consumeQuota:async()=>false})(req())).status,429);
+assert.equal((await createInvestmentReadiness200({...options,readOwnedBrokerAccount:async()=>{throw Error('private credentials')}})(req())).status,503);
+console.log('PASS investment foundation: verified identity, ownership, no client account override, quota/outage and no trading/withdrawal capability');
