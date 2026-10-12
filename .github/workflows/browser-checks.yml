@@ -162,4 +162,4 @@ jobs:
       - run: node check-investment-workspace-v201.cjs
       - run: node check-debt-entry-alert-v205.cjs
       - run: node check-compact-credit-v206.cjs
-          node check-sync-layout-v207.cjs
+      - run: node check-sync-layout-v207.cjs
