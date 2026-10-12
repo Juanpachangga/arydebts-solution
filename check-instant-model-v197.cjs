@@ -13,5 +13,5 @@ assert.equal(m.format(big+' mercado','es-US'),'1.234.567.890.123.456.789.012.345
 assert.equal(m.parse(big+' mercado','es-US').amountText197,big);
 assert.equal(m.parse(big+' mercado','es-US').approximate197,true);
 assert.equal(m.parse('café 1.000','es-US').amount,1000);
-for(const raw of ['0 café','-5 café','25','12,3,4 café'])assert.equal(m.parse(raw,'es-US'),null,raw);
+for(const raw of ['0 café','-5 café','25','12,3,4 café','1,,000.50 café','1.000,2.5 café','1.234.56 café',"1'23'456 café"])assert.equal(m.parse(raw,'es-US'),null,raw);
 console.log('PASS V197 exact grouping, decimal paste, suffix, validation and large amount text');

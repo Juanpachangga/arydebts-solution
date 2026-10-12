@@ -10,7 +10,9 @@ function number(raw,locale='es-US',pasted=true){
   else if(!text.includes(decimal)&&text.includes(group)&&!/^[1-9]\d{0,2}(?:[.,]\d{3})+$/.test(text))sep=group;
  }
  if(text.split(sep).length>2)return null;
- const at=text.indexOf(sep),whole=(at<0?text:text.slice(0,at)).replace(/[.,'’]/g,''),fraction=at<0?'':text.slice(at+1).replace(/[.,'’]/g,'');
+ const at=text.indexOf(sep),integerText=at<0?text:text.slice(0,at),fractionText=at<0?'':text.slice(at+1);
+ if(pasted&&(!/^\d+$/.test(integerText)&&!/^\d{1,3}([.,'’])\d{3}(?:\1\d{3})*$/.test(integerText)||!/^[0-9]*$/.test(fractionText)))return null;
+ const whole=integerText.replace(/[.,'’]/g,''),fraction=fractionText.replace(/[.,'’]/g,'');
  if(!/^\d+$/.test(whole)||!/^\d*$/.test(fraction))return null;
  const digits=BigInt(whole).toString(),canonical=(negative?'-':'')+digits+(at<0?'':'.'+fraction),formatted=(negative?'-':'')+digits.replace(/\B(?=(\d{3})+(?!\d))/g,group)+(at<0?'':decimal+fraction);
  return{canonical,formatted,value:Number(canonical),approximate:Math.abs(Number(canonical))>Number.MAX_SAFE_INTEGER/100};
