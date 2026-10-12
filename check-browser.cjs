@@ -559,11 +559,11 @@ async function check(engine, label, viewport) {
     await page.evaluate(()=>{s.locale='es-CO';s.currency='COP';s.income=1000;s.incomeFrequency='monthly';s.expenses=[];s.debts=[];s.calendarEvents=[];s.payments=[];save()});
     await navigate('expenses');
     await page.locator('[onclick="expenseForm()"]').click();
-    assert.equal(await page.locator('#expenseFrequency63 option').count(),9);
+    assert.equal(await page.locator('#expenseFrequency63 option').count(),12);
     await page.locator('#n').fill('Gas mensual');
     await page.locator('#b').fill('200');
     await page.locator('#expenseFrequency63').selectOption('monthly');
-    await page.locator('#edate').fill('');
+    assert.equal(await page.locator('#dateEnabled-edate').isChecked(),false);
     await page.screenshot({path:path.join(root,'browser-results',`${label}-frequency-v63.png`),fullPage:false});
     await page.locator('[onclick="saveExpense(null)"]').click();
     assert.equal(await page.evaluate(()=>s.expenses[0].frequency),'monthly');

@@ -802,7 +802,7 @@ window.aryFastNavigation137={active:true,captureGuard:false};
 // Source: expense-recurrence-integrity-v138.js
 (()=>{
 'use strict';
-const frequencies=['daily','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual'];
+const frequencies=['daily','every_2_days','every_3_days','every_4_days','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual'];
 const lang=()=>s?.locale==='en-US'?'en':s?.locale==='pt-BR'?'pt':'es';
 const C={
  es:{bad:'Completa nombre y monto válido.',badRecurrence:'Revisa la frecuencia y la fecha del gasto.',saveError:'No se pudo guardar. Tus datos siguen como antes.'},
@@ -821,7 +821,7 @@ window.saveExpense=function(id){
  const raw=String(document.getElementById('b')?.value??'').trim();
  const value=amount(raw);
  const cat=String(document.getElementById('c')?.value||'Variable');
- if(!name||raw===''||!Number.isFinite(value)||value<0){if(typeof toast==='function')toast(t().bad);return false;}
+ if(!name||raw===''||!Number.isFinite(value)||value<=0){if(typeof toast==='function')toast(t().bad);return false;}
 
  const editing=id!==null&&id!==undefined&&id!=='';
  const existing=editing?(s.expenses||[]).find(x=>String(x.id)===String(id)):null;
@@ -841,9 +841,9 @@ window.saveExpense=function(id){
  }else{
    date=frequency==='once'?today():'';
  }
- if(!validDate(date)){if(typeof toast==='function')toast(t().badRecurrence);return false;}
- if(frequency==='once'&&!date&&!editing)date=today();
- if(frequency==='once'&&!date&&editing&&existing?.date)date=existing.date;
+ if((document.getElementById('dateEnabled-edate')?.checked&&!date)||!validDate(date)){if(typeof toast==='function')toast(t().badRecurrence);return false;}
+ // A manually selected expense date is optional.
+
 
  const sourceExpenseId=sourcePending!=null&&sourcePending!==''?sourcePending:existing?.sourceExpenseId;
  const icon=typeof iconFor==='function'?iconFor(name,cat):existing?.icon;
@@ -855,20 +855,21 @@ window.saveExpense=function(id){
      if(!item)return;
      item.name=name;item.amount=value;item.cat=cat;
      if(icon)item.icon=icon;
-     if(frequencyField)item.frequency=frequency;
+     if(frequencyField){item.frequency=frequency;if(frequency!=='once')delete item.sourceExpenseId;}
      else if(item.frequency==null)item.frequency='once';
-     if(dateField)item.date=date;
-     else if(item.date==null&&frequency==='once')item.date=today();
-     if(sourceExpenseId!=null&&sourceExpenseId!=='')item.sourceExpenseId=sourceExpenseId;
+     if(dateField){if(!date&&existing?.date)item.accountedDate197=existing.date;item.date=date;}
+     else if(item.date==null)item.date='';
+     if(frequency==='once'&&sourceExpenseId!=null&&sourceExpenseId!=='')item.sourceExpenseId=sourceExpenseId;
    }else{
      const item={
        id:uniqueId(next.expenses,next.debts,next.payments,next.calendarEvents),
        name,amount:value,cat,
-       date:frequency==='once'?(date||today()):date,
+       date,
+       recordedAt197:today(),
        frequency
      };
      if(icon)item.icon=icon;
-     if(sourceExpenseId!=null&&sourceExpenseId!=='')item.sourceExpenseId=sourceExpenseId;
+     if(frequency==='once'&&sourceExpenseId!=null&&sourceExpenseId!=='')item.sourceExpenseId=sourceExpenseId;
      next.expenses.push(item);
    }
  })){

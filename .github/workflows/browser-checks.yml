@@ -39,6 +39,11 @@ jobs:
         run: node check-backups-v92.cjs
       - name: Check financial analysis calculations
         run: node check-analysis-v93.cjs
+      - name: Check instant amount formatting and syntax
+        run: |
+          node --check daily-use-v197.js
+          node --check personal-layout-v192.js
+          node check-instant-model-v197.cjs
       - name: Check first-use guide and visit rotation
         run: node check-experience-v94.cjs
       - name: Check application integration
@@ -142,3 +147,5 @@ jobs:
       - run: npm install --no-save --package-lock=false playwright@1.62.1
       - run: node check-personal-layout-v192.cjs
       - run: node check-onboarding-guide-v193.cjs
+
+      - run: node check-daily-use-v197.cjs

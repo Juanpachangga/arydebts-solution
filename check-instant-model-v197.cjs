@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict'),m=require('./instant-model-v197.js');
+assert.equal(m.format('1000 café','es-US'),'1.000 café');
+assert.equal(m.format('1000000 mercado','es-US'),'1.000.000 mercado');
+assert.equal(m.format('12.50 café','es-US',true),'12,50 café');
+assert.equal(m.format('1.234,56 café','es-US',true),'1.234,56 café');
+assert.equal(m.format('1.0000 café','es-US',false),'10.000 café');
+assert.equal(m.parse('1.000 café','es-US').amount,1000);
+assert.equal(m.parse('1,000 coffee','en-US').amount,1000);
+assert.equal(m.parse('12,50 café','es-US').amount,12.5);
+assert.equal(m.format('0.125 café','es-US',true),'0,125 café');
+const big='1234567890123456789012345678901234';
+assert.equal(m.format(big+' mercado','es-US'),'1.234.567.890.123.456.789.012.345.678.901.234 mercado');
+assert.equal(m.parse(big+' mercado','es-US').amountText197,big);
+assert.equal(m.parse(big+' mercado','es-US').approximate197,true);
+assert.equal(m.parse('café 1.000','es-US').amount,1000);
+for(const raw of ['0 café','-5 café','25','12,3,4 café'])assert.equal(m.parse(raw,'es-US'),null,raw);
+console.log('PASS V197 exact grouping, decimal paste, suffix, validation and large amount text');
