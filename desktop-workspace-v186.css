@@ -105,3 +105,22 @@ html body.signed64 #app .dateChoice197,html body #modal .dateChoice197{justify-c
 html body.signed64 #app .dateChoice197 input[type="checkbox"],html body #modal .dateChoice197 input[type="checkbox"]{appearance:auto!important;-webkit-appearance:checkbox!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;flex:0 0 18px!important;margin:0!important;align-self:center!important}
 #app>.layoutRoot197{width:100%!important;max-width:none!important}
 #app .grid>.searchLaunch72,#app .grid>#homeQuickExpense193{grid-column:1/-1!important;width:100%!important}
+
+/* V199: date controls must include their own padding inside the card width. */
+html body #app input[type="date"],html body #modal input[type="date"]{display:block!important;box-sizing:border-box!important;width:100%!important;max-width:100%!important;min-width:0!important;flex:0 1 auto!important;min-height:52px!important;height:52px!important;padding:10px 12px!important;margin:8px 0!important;text-align:left!important;font-size:16px!important;line-height:normal!important;-webkit-appearance:none;appearance:none}
+html body #app input[type="date"][hidden],html body #modal input[type="date"][hidden]{display:none!important}
+html body input[type="date"]::-webkit-date-and-time-value{text-align:left;min-width:0;margin:0;line-height:normal}
+html body input[type="date"]::-webkit-datetime-edit{min-width:0;padding:0}
+html body input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto;padding:0 0 0 8px}
+html body.signed64 #app #homeQuickPayment199{padding:16px!important;margin:16px 0!important;min-width:0}
+#homeQuickPayment199 h3,#quickPayment199 h3{margin:0 0 8px;font-size:18px}
+#homeQuickPayment199 form,#quickPayment199 form{margin-top:12px;min-width:0}
+#homeQuickPayment199 small,#quickPayment199 small{display:block;margin-top:6px;line-height:1.4}
+.paymentAmount199{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;margin-top:12px}
+.paymentAmount199 label{grid-column:1/-1;margin:0}
+.paymentAmount199 input{min-width:0!important;max-width:100%;margin:0!important;box-sizing:border-box}
+.paymentAmount199 button{margin:0!important;min-height:48px;white-space:normal}
+#homeQuickPayment199 select,#quickPayment199 select{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+@media(max-width:380px){.paymentAmount199{grid-template-columns:minmax(0,1fr)}.paymentAmount199 label{grid-column:auto}.paymentAmount199 button{width:100%}}
+#homeQuickPayment199 form>label,.paymentAmount199>label,#quickPayment199 form>label{font-size:14px!important;line-height:1.4}
+#homeQuickPayment199 small,#quickPayment199 small{font-size:12px!important}
