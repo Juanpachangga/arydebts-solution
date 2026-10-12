@@ -40,6 +40,7 @@ jobs:
       - name: Check monthly lifecycle and investment service foundation
         run: |
           node check-monthly-model-v200.cjs
+          node check-investment-history-v201.cjs
           node server/check-investment-readiness-v200.mjs
       - name: Check financial analysis calculations
         run: node check-analysis-v93.cjs
@@ -157,3 +158,4 @@ jobs:
       - run: node check-quick-payment-v199.cjs
 
       - run: node check-monthly-investments-v200.cjs
+      - run: node check-investment-workspace-v201.cjs
