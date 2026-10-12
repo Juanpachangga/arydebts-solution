@@ -526,7 +526,7 @@ window.deleteExpense=function(id){
  const exists=(s.expenses||[]).some(x=>String(x.id)===String(id));
  if(!exists)return false;
  const onboarding=typeof screen==='string'&&screen==='setupExpenses';
- if(!onboarding&&!confirm(t().deleteExpense))return false;
+
  if(!commit(next=>{next.expenses=(next.expenses||[]).filter(x=>String(x.id)!==String(id));})){
   if(typeof toast==='function')toast(t().saveError);
   return false;
