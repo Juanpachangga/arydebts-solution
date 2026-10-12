@@ -54,10 +54,10 @@ jobs:
       - name: Install browser test dependency
         if: ${{ !cancelled() }}
         run: npm install --no-save --package-lock=false playwright@1.62.1
-      - name: Exercise new registration and Home welcome
+      - name: Exercise new registration and contextual page hints
         if: ${{ !cancelled() }}
         run: node check-guide-unified-v177.cjs
-      - name: Exercise Home welcome geometry and themes
+      - name: Exercise contextual page hint geometry and themes
         if: ${{ !cancelled() }}
         run: node check-guide-layout-v185.cjs
       - name: Exercise desktop workspace, progress circle and simple first step

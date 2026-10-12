@@ -42,6 +42,7 @@ async function run(engine,label){
   // Old completion/repair keys must never replay the removed cross-page tour.
   await page.evaluate(()=>{
    const id=window.aryGuideLifecycle128?.currentUser?.();
+   s.guide94={version:195,active:false,completed:true,seen:['home','expenses','debts','plan','more']};save();
    localStorage.setItem('arydebts-guide-v125','done');
    if(id){localStorage.setItem('arydebts-guide-user-v128:'+id,'done');localStorage.removeItem('arydebts-guide-repair-v166:'+id)}
   });
