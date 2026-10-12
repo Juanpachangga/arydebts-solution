@@ -1,0 +1,6 @@
+#debtEntryNotice205{margin:8px 0 12px;padding:7px 10px;border-radius:10px;background:#fff1f2;border:1px solid #e8a4ac;color:#9f1831;font-size:13px;line-height:1.4;font-weight:700;width:fit-content;max-width:100%;box-sizing:border-box}
+.debtRecords186>.debtEntryPulse205{outline:2px solid #c73851;outline-offset:-2px;animation:debtEntryPulse205 1.5s ease-in-out 2}
+@keyframes debtEntryPulse205{0%,100%{background-color:rgba(195,38,68,.07)}50%{background-color:rgba(195,38,68,.2)}}
+html[data-ary-theme=dark] #debtEntryNotice205{background:#381a2b;border-color:#a84e64;color:#ffd1d9}
+.debtEntryLite205 .debtEntryPulse205{animation:none}
+@media(prefers-reduced-motion:reduce){.debtEntryPulse205{animation:none!important}}
