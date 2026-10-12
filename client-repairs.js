@@ -264,7 +264,7 @@ window.toggleTheme=function(){
 };
 
 window.finishOnboarding=function(){
- if(!saveChange(next=>{next.onboarded=true;delete next.onboardingStep;if(!s.onboarded)next.guide94={active:true,completed:false,homeOnly194:true};}))return false;
+ if(!saveChange(next=>{next.onboarded=true;delete next.onboardingStep;if(!s.onboarded)next.guide94=window.aryExperience94.beginGuide();}))return false;
  if(typeof go==='function')go('home');return true;
 };
 
@@ -576,7 +576,7 @@ if(!document.getElementById(STYLE_ID)){
 
 ;
 // Source: full-guide-v125.js
-// Compatibility for saved shortcuts. ARY now lives only in the Home card.
+// Compatibility for saved shortcuts. ARY uses independent page cards with no automatic navigation.
 (()=>{
 'use strict';
 window.aryGuideUnified125=false;

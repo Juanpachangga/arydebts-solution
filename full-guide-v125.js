@@ -1,4 +1,4 @@
-// Compatibility for saved shortcuts. ARY now lives only in the Home card.
+// Compatibility for saved shortcuts. ARY uses independent page cards with no automatic navigation.
 (()=>{
 'use strict';
 window.aryGuideUnified125=false;

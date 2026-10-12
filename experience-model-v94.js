@@ -8,5 +8,24 @@ function begin(){return{active:true,seen:[]}}
 function present(g,route){const state=clean(g);if(!state.active||!routes.includes(route)||state.seen.includes(route))return{show:false,state};return{show:true,state:{active:true,seen:[...state.seen,route]}}}
 function dismiss(g){const state=clean(g);return{...state,active:state.active&&state.seen.length<routes.length}}
 function end(g){return{...clean(g),active:false}}
-return{routes,nextQuote,begin,present,dismiss,end};
+// Page hints are acknowledged individually; visiting a page does not dismiss it.
+const guideRoutes=['home','expenses','debts','plan','more'];
+function beginGuide(){return{version:195,active:true,completed:false,seen:[]}}
+function normalizeGuide(g){
+ const seen=[...new Set((Array.isArray(g?.seen)?g.seen:[]).filter(x=>guideRoutes.includes(x)))];
+ const completed=seen.length===guideRoutes.length;
+ return{version:195,active:!completed,completed,seen};
+}
+function migrateGuide(g){
+ if(g?.version===195)return normalizeGuide(g);
+ const seen=Array.isArray(g?.seen)?[...g.seen]:[];
+ if(g?.homeOnly194&&g.completed===true)seen.push('home');
+ return normalizeGuide({seen});
+}
+function dismissGuide(g,route){
+ const state=normalizeGuide(g);
+ if(!guideRoutes.includes(route)||!state.active)return state;
+ return normalizeGuide({...state,seen:[...state.seen,route]});
+}
+return{routes,nextQuote,begin,present,dismiss,end,guideRoutes,beginGuide,normalizeGuide,migrateGuide,dismissGuide};
 });

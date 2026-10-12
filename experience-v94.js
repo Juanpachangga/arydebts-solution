@@ -25,23 +25,34 @@ const beforeHead=window.head;
 window.head=(title,sub='')=>{let html=beforeHead(title,sub),back=html.match(/<button\b[^>]*class="[^"]*\bback\b[^"]*"[^>]*>[\s\S]*?<\/button>/)?.[0];if(back){html=html.replace(back,'');back=back.replace('‹ Volver','‹ '+tx().back);html=html.replace('<div class="hello',`<div class="sectionTools94">${back}</div><div class="hello`)}html=html.replace('class="hello','class="hello sectionHeader94');html=html.replace(/(<span class="muted">[\s\S]*?<\/span>)(<h1>[\s\S]*?<\/h1>)/,'$2$1');if(screen!=='home'&&window.aryBackdropSeason71?.()==='halloween'){const svg=`<span class="sectionDetail94" aria-hidden="true"><svg viewBox="0 0 44 44" focusable="false">${motif[screen]||motif.analysis}</svg></span>`;html=html.replace('</h1>',`</h1>${svg}`)}return html};
 const link=(route,icon,label)=>`<button type="button" class="btn moreLink94" onclick="go('${route}')"><span aria-hidden="true">${icon}</span><span>${label}</span><span aria-hidden="true">›</span></button>`;
 screens.more=()=>{const x=tx();return head(x.more)+`<div class="more94" data-ary-copy><button type="button" class="card analysisFirst94" onclick="go('analysis')"><span class="analysisIcon94" aria-hidden="true">▥</span><span><b>${x.analysis}</b><small>${x.analysisHint}</small></span><span aria-hidden="true">↗</span></button><section class="moreSection94"><h2>${x.tools}</h2><div class="moreGrid94">${[['calendar','◷',x.calendar],['goals','◎',x.goals],['progress','↗',x.progress],['buy','🛍',x.buy],['assistant','✦',x.assistant]].map(a=>link(...a)).join('')}</div></section><button type="button" class="btn guideLaunch94" onclick="aryStartGuide94()"><span class="guideLaunchIcon94" aria-hidden="true">✦</span><span><b>${x.guide}</b><small>${x.guideHint}</small></span><span aria-hidden="true">›</span></button><details class="moreDetails94"><summary>${x.account}</summary><div class="moreGrid94">${link('profile','◉',x.profile)+link('appearance','◐',x.appearance)+link('notifications','♧',x.notifications)}<button class="btn moreLink94" onclick="aryV18Settings()">⚙️ ${x.preferences}</button><button class="btn moreLink94 logout58" onclick="logout()">${x.logout}</button></div></details><details class="moreDetails94"><summary>${x.community}</summary><div class="moreGrid94">${[['announcements','✧',x.announcements],['events','◉',x.events],['support','♡',x.support],['feedback','☏',x.feedback]].map(a=>link(...a)).join('')}</div></details></div>`};
-const welcomeCopy={
- es:['Soy Ary. Bienvenido a tu nuevo comienzo.','Inicio resume tu dinero. En Gastos registras lo que usas, en Deudas tus pagos y en Plan tu próximo paso.'],
- en:["I'm Ary. Welcome to your new beginning.",'Home summarizes your money. Record spending in Expenses, payments in Debts, and your next step in Plan.'],
- pt:['Sou Ary. Bem-vindo ao seu novo começo.','Início resume seu dinheiro. Registre seus gastos em Gastos, pagamentos em Dívidas e seu próximo passo em Plano.']
+const guideCopy={
+ es:{home:['Soy Ary. Este es tu Inicio.','Revisa cuánto te queda y registra gastos rápidos, como $50 gasolina.'],expenses:['Tus gastos, claros.','Agrega lo que gastas. Aquí puedes revisar, editar y ordenar tus registros.'],debts:['Cada pago cuenta.','Revisa cuánto debes y registra un pago cuando lo hayas realizado.'],plan:['Tu próximo paso.','Consulta tu dinero disponible y la prioridad sugerida para avanzar.'],more:['Tus herramientas están aquí.','Abre tus metas, calendario y análisis. También puedes ajustar el estilo de la app.']},
+ en:{home:["I'm Ary. This is Home.",'See what you have left and record quick expenses, like $50 gas.'],expenses:['Your spending, clearly.','Add what you spend. Review, edit and organize your records here.'],debts:['Every payment counts.','Review what you owe and record a payment after making it.'],plan:['Your next step.','Check your available money and suggested priority.'],more:['Your tools are here.','Open goals, calendar and analysis. You can also adjust the app style.']},
+ pt:{home:['Sou Ary. Este é seu Início.','Veja quanto sobra e registre gastos rápidos, como $50 gasolina.'],expenses:['Seus gastos, claros.','Adicione seus gastos. Confira, edite e organize seus registros aqui.'],debts:['Cada pagamento conta.','Veja quanto deve e registre um pagamento depois de realizá-lo.'],plan:['Seu próximo passo.','Confira o dinheiro disponível e a prioridade sugerida.'],more:['Suas ferramentas estão aqui.','Abra metas, calendário e análise. Você também pode ajustar o estilo do app.']}
 };
-function persistGuide(state){
- if(typeof window.aryCommitFinancial109==='function')return window.aryCommitFinancial109(next=>{next.guide94=state});
- // The atomic store is required: do not hide a card when saving failed.
- return false;
-}
-function guideMarkup(){const x=tx(),[title,description]=welcomeCopy[lang()];return `<aside class="aryGuide94" aria-label="${x.aria}" data-ary-copy><div class="aryRobot94">${robot}<small>ARY</small></div><div class="aryGuideCopy94"><b>${title}</b><p>${description}</p><div class="aryGuideActions94"><button type="button" class="btn guidePrimary94" onclick="aryDismissGuide94()">${x.gotIt}</button></div></div></aside>`}
+function persistGuide(state){return typeof window.aryCommitFinancial109==='function'&&window.aryCommitFinancial109(next=>{next.guide94=state})}
+function currentGuide(){return model.migrateGuide(s.guide94)}
+function guideMarkup(route){const x=tx(),[title,description]=guideCopy[lang()][route];return `<aside class="aryGuide94" data-guide-route="${route}" aria-label="${x.aria}" data-ary-copy><div class="aryRobot94">${robot}<small>ARY</small></div><div class="aryGuideCopy94"><b>${title}</b><p>${description}</p><div class="aryGuideActions94"><button type="button" class="btn guidePrimary94" onclick="aryDismissGuide94('${route}')">${x.gotIt}</button></div></div></aside>`}
 function paintQuote(){if(!model.routes.includes(screen)||screen==='home')return;const subtitle=document.querySelector('#app .sectionHeader94>.muted');if(subtitle){if(subtitle.hidden)subtitle.hidden=false;const quote=aryVisitQuote94();if(subtitle.textContent!==quote)subtitle.textContent=quote}}
-function enhance(){paintQuote();const header=document.querySelector('#app .sectionHeader94');if(!header)return;header.dataset.section94=screen;header.dataset.season94=window.aryBackdropSeason71?.()||'everyday';if(screen!=='home'||!profile||!s.onboarded||!s.guide94?.homeOnly194||s.guide94.active!==true)return;if(!document.querySelector('.aryGuide94'))header.insertAdjacentHTML('afterend',guideMarkup())}
+function enhance(){
+ paintQuote();const header=document.querySelector('#app .sectionHeader94');if(!header)return;header.dataset.section94=screen;header.dataset.season94=window.aryBackdropSeason71?.()||'everyday';
+ if(!profile||!s.onboarded||!model.guideRoutes.includes(screen))return;
+ const guide=currentGuide();
+ // Migrate the former Home-only acknowledgement without losing it. Persist once,
+ // and let the user acknowledge the remaining pages in any order.
+ if(s.guide94?.version!==195)persistGuide(guide);
+ if(!guide.active||guide.seen.includes(screen))return;
+ if(!document.querySelector('.aryGuide94'))header.insertAdjacentHTML('afterend',guideMarkup(screen));
+}
 const renderBefore=window.render;window.render=()=>{const result=renderBefore();enhance();return result};
-window.aryDismissGuide94=()=>{if(!persistGuide({active:false,completed:true,homeOnly194:true}))return false;render();return true};
+window.aryDismissGuide94=(route=screen)=>{
+ if(!profile||!s.onboarded||route!==screen||!model.guideRoutes.includes(route))return false;
+ const guide=currentGuide();if(!guide.active||guide.seen.includes(route))return false;
+ if(!persistGuide(model.dismissGuide(guide,route))){window.toast?.(window.aryStorageError109?.()||'No se pudo guardar. Inténtalo de nuevo.');return false}
+ render();return true;
+};
 window.aryEndGuide94=window.aryDismissGuide94;
-window.aryStartGuide94=()=>{if(!profile||!s.onboarded)return false;if(!persistGuide({active:true,completed:false,homeOnly194:true}))return false;go('home');return true};
+window.aryStartGuide94=()=>{if(!profile||!s.onboarded)return false;if(!persistGuide(model.beginGuide()))return false;go('home');return true};
 window.aryGuideAction94=()=>window.aryDismissGuide94();
 for(const name of ['aryNextQuote72','aryFavoriteQuote72']){const before=window[name];if(before)window[name]=function(){const result=before.apply(this,arguments);paintQuote();return result}}
 let away=false;
