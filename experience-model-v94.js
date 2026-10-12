@@ -9,15 +9,15 @@ function present(g,route){const state=clean(g);if(!state.active||!routes.include
 function dismiss(g){const state=clean(g);return{...state,active:state.active&&state.seen.length<routes.length}}
 function end(g){return{...clean(g),active:false}}
 // Page hints are acknowledged individually; visiting a page does not dismiss it.
-const guideRoutes=['home','expenses','debts','plan','more'];
-function beginGuide(){return{version:195,active:true,completed:false,seen:[]}}
+const guideRoutes=['home','expenses','debts','more'];
+function beginGuide(){return{version:196,active:true,completed:false,seen:[]}}
 function normalizeGuide(g){
  const seen=[...new Set((Array.isArray(g?.seen)?g.seen:[]).filter(x=>guideRoutes.includes(x)))];
  const completed=seen.length===guideRoutes.length;
- return{version:195,active:!completed,completed,seen};
+ return{version:196,active:!completed,completed,seen};
 }
 function migrateGuide(g){
- if(g?.version===195)return normalizeGuide(g);
+ if(g?.version===196)return normalizeGuide(g);
  const seen=Array.isArray(g?.seen)?[...g.seen]:[];
  if(g?.homeOnly194&&g.completed===true)seen.push('home');
  return normalizeGuide({seen});
@@ -27,5 +27,6 @@ function dismissGuide(g,route){
  if(!guideRoutes.includes(route)||!state.active)return state;
  return normalizeGuide({...state,seen:[...state.seen,route]});
 }
-return{routes,nextQuote,begin,present,dismiss,end,guideRoutes,beginGuide,normalizeGuide,migrateGuide,dismissGuide};
+function nextGuide(g){const state=normalizeGuide(g);return guideRoutes.find(route=>!state.seen.includes(route))||null}
+return{routes,nextQuote,begin,present,dismiss,end,guideRoutes,beginGuide,normalizeGuide,migrateGuide,dismissGuide,nextGuide};
 });
