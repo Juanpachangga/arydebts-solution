@@ -42,6 +42,7 @@ jobs:
           node check-monthly-model-v200.cjs
           node check-investment-history-v201.cjs
           node server/check-investment-readiness-v200.mjs
+          node server/check-credit-score-v206.mjs
       - name: Check financial analysis calculations
         run: node check-analysis-v93.cjs
       - name: Check instant amount formatting and syntax
@@ -160,3 +161,4 @@ jobs:
       - run: node check-monthly-investments-v200.cjs
       - run: node check-investment-workspace-v201.cjs
       - run: node check-debt-entry-alert-v205.cjs
+      - run: node check-compact-credit-v206.cjs

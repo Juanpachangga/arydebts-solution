@@ -1,23 +1,23 @@
 (()=>{
 'use strict';
-const text=()=>s.locale==='en-US'?'Overdue payment pending.':s.locale==='pt-BR'?'Pagamento vencido pendente.':'Pago vencido pendiente.';
-let previous='',owner='',deadline=0,timer=0;
-const pending=()=>{const today=localDate();return (window.aryHomeActivity82?.(new Date(),Infinity)||[]).filter(item=>item.source==='debt'&&item.date<today)};
-function clear(){document.getElementById('debtEntryNotice205')?.remove();document.querySelectorAll('.debtEntryPulse205').forEach(row=>row.classList.remove('debtEntryPulse205'))}
+const lang=()=>s.locale==='en-US'?'en':s.locale==='pt-BR'?'pt':'es';
+const words={es:{title:'🚨 Atención inmediata',seen:'Entendido',error:'No se pudo guardar el aviso. Inténtalo otra vez.'},en:{title:'🚨 Needs attention',seen:'Understood',error:'Could not save the alert. Try again.'},pt:{title:'🚨 Atenção imediata',seen:'Entendido',error:'Não foi possível salvar o aviso. Tente novamente.'}};
+const owner=()=>window.aryGuideLifecycle128?.currentUser?.()||'';
+const key=()=>owner()?'ary-debt-alert-v206:'+owner():null;
+const read=()=>{try{const value=JSON.parse(localStorage.getItem(key())||'[]');return Array.isArray(value)?value.filter(x=>typeof x==='string'):[]}catch{return []}};
+const identity=item=>JSON.stringify([String(item.id),item.date]);
+const pending=()=>{const today=localDate(),seen=new Set(read());return (window.aryHomeActivity82?.(new Date(),Infinity)||[]).filter(item=>item.source==='debt'&&item.date<today&&!seen.has(identity(item)))};
+function clear(){document.querySelector('#app .debtAlert33')?.remove();document.querySelectorAll('.debtEntryPulse205').forEach(row=>row.classList.remove('debtEntryPulse205'))}
 function paint(){
- clearTimeout(timer);
- const currentOwner=window.aryGuideLifecycle128?.currentUser?.()||'';
- if(owner!==currentOwner){owner=currentOwner;previous='';deadline=0}
- if(!profile||!s.onboarded||screen!=='debts'){previous=screen;deadline=0;clear();return}
- const debts=pending(),entering=previous!=='debts';previous='debts';
- if(entering)deadline=debts.length?Date.now()+3000:0;
- clear();if(!debts.length||Date.now()>=deadline)return;
- const notice=document.createElement('p');notice.id='debtEntryNotice205';notice.className='debtEntryNotice205';notice.setAttribute('role','status');notice.textContent=text();
- const header=document.querySelector('#app .sectionHeader94');if(header)header.after(notice);else document.getElementById('app')?.prepend(notice);
+ clear();if(!profile||!s.onboarded||screen!=='debts')return;
+ const debts=pending();if(!debts.length)return;
+ const x=words[lang()],card=document.createElement('section');card.className='card full debtAlert33 debtAttention206';card.dataset.layout197='debt:attention';card.setAttribute('role','status');card.setAttribute('data-ary-copy','');
+ card.innerHTML=`<div class="debtAttentionHead206"><b>${x.title}</b><button type="button" class="btn" onclick="aryDismissDebtAlert206()">${x.seen}</button></div><div class="debtAttentionNames206">${debts.map(item=>`<span data-ary-user translate="no">${esc(item.name)}</span>`).join('')}</div>`;
+ const anchor=document.querySelector('#app .debtPulse33');if(anchor)anchor.after(card);else document.getElementById('app')?.prepend(card);
  for(const item of debts){const button=[...document.querySelectorAll('.debtRecords186 button')].find(b=>b.getAttribute('onclick')===`aryDebtPayment54(${item.id})`);button?.closest('.row')?.classList.add('debtEntryPulse205')}
- const lite=(window.aryEffectiveMotion80?.()||s.mode)==='lite';document.getElementById('app')?.classList.toggle('debtEntryLite205',lite);
- timer=setTimeout(clear,Math.max(0,deadline-Date.now()));
+ window.aryLayoutApply197?.();const lite=(window.aryEffectiveMotion80?.()||s.mode)==='lite';document.getElementById('app')?.classList.toggle('debtEntryLite205',lite);
 }
+window.aryDismissDebtAlert206=()=>{if(!profile||!s.onboarded||screen!=='debts'||!key())return false;try{localStorage.setItem(key(),JSON.stringify([...new Set([...read(),...pending().map(identity)])].slice(-500)))}catch{toast(words[lang()].error);return false}paint();return true};
 const renderBefore=window.render;window.render=function(){const result=renderBefore.apply(this,arguments);paint();return result};
 window.addEventListener('DOMContentLoaded',paint);paint();
 })();
