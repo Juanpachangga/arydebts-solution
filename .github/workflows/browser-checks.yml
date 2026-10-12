@@ -149,3 +149,5 @@ jobs:
       - run: node check-onboarding-guide-v193.cjs
 
       - run: node check-daily-use-v197.cjs
+
+      - run: node check-quick-payment-v199.cjs
