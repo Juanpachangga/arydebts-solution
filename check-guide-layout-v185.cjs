@@ -1,49 +1,14 @@
 const assert=require('node:assert/strict'),http=require('node:http'),fs=require('node:fs/promises'),path=require('node:path');
-const {chromium,webkit}=require('playwright');
-const root=__dirname;
-const server=http.createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+new URL(req.url,'http://localhost').pathname.replace(/^\/$/,'/index.html'));if(!file.startsWith(root+path.sep))return res.writeHead(403).end();res.setHeader('Content-Type',file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.html')?'text/html':'application/octet-stream');res.end(await fs.readFile(file))}catch{res.writeHead(404).end()}});
-(async()=>{let browser;try{
- await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
- for(const [name,engine] of [['chromium',chromium],['webkit',webkit]].filter(([n])=>!process.env.ARY_TEST_ENGINE||process.env.ARY_TEST_ENGINE===n)){
-  for(const viewport of [{width:320,height:568},{width:390,height:844},{width:1280,height:800}])for(const theme of ['light','dark'])for(const empty of [false,true]){
-   browser=await engine.launch();
-   const page=await browser.newPage({viewport}),errors=[];page.on('pageerror',e=>errors.push(e.message));
-   await page.goto('http://127.0.0.1:'+server.address().port);
-   await page.waitForFunction(()=>!!window.aryGuideInteractionSafety180);
-   await page.evaluate(({theme,empty})=>{
-    profile={name:'Test',email:'layout@example.test'};s.name='Test';s.locale='es-US';s.theme=theme;s.onboarded=true;s.income=2500;s.incomeFrequency='monthly';
-    s.debts=[{id:1,name:'Carro',balance:250,min:50,apr:12}];s.expenses=[{id:2,name:'Mercado',amount:80,cat:'Esencial',date:localDate()}];
-    if(empty){s.debts=[];s.expenses=[]}localStorage.setItem('ary-theme-v46',theme);render();aryStartFullGuide125();
-   },{theme,empty});
-   for(let index=0;index<4;index++){
-    if(index)await page.evaluate(()=>aryFullGuideNext125());
-    await page.waitForFunction(i=>aryFullGuideStatus125().index===i&&document.querySelectorAll('.ary125cloud').length===1,index);
-    await page.waitForTimeout(180);
-    const state=await page.evaluate(()=>{
-     const card=document.querySelector('.ary125cloud'),focus=document.querySelector('.ary125focus'),nav=document.querySelector('#nav');
-     const rect=n=>{if(!n)return null;const r=n.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height}};
-     const primary=card.querySelector('.primary'),bg=getComputedStyle(card).backgroundColor,foreground=getComputedStyle(card).color;
-     return {card:rect(card),focus:rect(focus),nav:rect(nav),bg,foreground,scrollHeight:card.scrollHeight,clientHeight:card.clientHeight,primary:rect(primary),cancel:rect(card.querySelector('.ary140cancelTop')),text:card.querySelector('p')?.textContent,robot:card.querySelector('.aryGuideCompanion')?.getAttribute('aria-label'),shade:getComputedStyle(document.querySelector('.ary125shade')).backgroundColor,automatic:aryFullGuideStatus125().automatic,extras:document.querySelectorAll('.ary126node,.aryGuide94').length};
-    });
-    const label=`${name} ${viewport.width} ${theme} empty=${empty} step ${index}`;
-    assert.equal(state.shade,'rgba(2, 6, 18, 0.86)',label+': darker backdrop');assert.equal(state.automatic,false,label+': manual reading pace');assert.equal(state.extras,0,label+': one guide');
-    assert.ok(state.card.left>=7&&state.card.right<=viewport.width-7,label+': horizontal bounds');
-    assert.ok(state.card.top>=7&&state.card.bottom<=viewport.height-7,label+': vertical bounds');
-    assert.ok(state.primary.top>=state.card.top&&state.primary.bottom<=state.card.bottom+1,label+': readable primary action');
-    assert.ok(state.primary.height>=44,label+': touch target');assert.ok(state.scrollHeight<=state.clientHeight+1,label+': no clipped text');
-    assert.notEqual(state.bg,state.foreground,label+': theme contrast');
-    if(index<4){assert.ok(state.cancel?.height>=44,label+': accessible cancel action '+JSON.stringify(state.cancel));assert.match(state.robot,/ARY.*🤖/,label+': companion');assert.ok(state.text.length<130,label+': concise explanation')}
-    if(index===2)assert.equal(await page.locator('.debtExpenses66').isVisible(),false,'Expense guide excludes debt panels');
-    if(state.focus){const a=state.card,b=state.focus;assert.ok(a.bottom<=b.top||a.top>=b.bottom||a.right<=b.left||a.left>=b.right,label+': card never covers its spotlight');if(state.nav?.height)assert.ok(b.bottom<=state.nav.top||b.top>=state.nav.bottom||b.right<=state.nav.left||b.left>=state.nav.right,label+': spotlight excludes navigation')}
-    if(!empty&&viewport.width===390&&[0,2,3].includes(index)){await fs.mkdir('browser-results',{recursive:true});await page.screenshot({path:`browser-results/guide-${theme}-${index}-${name}.png`})}
-   }
-   await page.evaluate(()=>aryFullGuideNext125());await page.waitForFunction(()=>!aryFullGuideStatus125().active);
-   await page.evaluate(()=>{aryStartFullGuide125();go('expenses')});
-   await page.waitForTimeout(250);assert.equal(await page.evaluate(()=>aryFullGuideStatus125().active),false,'Choosing another tab closes the previous guide');
-   assert.equal(await page.locator('.ary125cloud,.ary125focus,.ary125shade').count(),0,'No stale overlays after user navigation');
-   assert.deepEqual(errors,[],name+': no page errors');await browser.close();browser=null;
-   console.log(`PASS ${name} ${viewport.width} ${theme}: all 4 steps, ARY, concise copy, no clipping/overlap, manual pace and clean navigation`);
-  }
- }
- }finally{await browser?.close();server.close()}
-})().catch(e=>{console.error(e);process.exitCode=1});
+const {chromium,webkit}=require('playwright'),root=__dirname;
+const server=http.createServer(async(req,res)=>{try{const f=path.resolve(root,'.'+new URL(req.url,'http://localhost').pathname.replace(/^\/$/,'/index.html'));if(!f.startsWith(root+path.sep))return res.writeHead(403).end();res.setHeader('Content-Type',f.endsWith('.js')?'text/javascript':f.endsWith('.css')?'text/css':f.endsWith('.html')?'text/html':'application/octet-stream');res.end(await fs.readFile(f))}catch{res.writeHead(404).end()}});
+(async()=>{let browser;try{await new Promise(r=>server.listen(0,'127.0.0.1',r));for(const [name,engine] of [['chromium',chromium],['webkit',webkit]].filter(([n])=>!process.env.ARY_TEST_ENGINE||n===process.env.ARY_TEST_ENGINE)){
+ browser=await engine.launch();for(const viewport of [{width:320,height:568},{width:390,height:844},{width:1280,height:800}])for(const theme of ['light','dark']){
+ const page=await browser.newPage({viewport}),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>!!window.arySaveHomeExpense193);
+ await page.evaluate(theme=>{profile={name:'Cliente',email:'home194@example.test'};s.name='Cliente';s.onboarded=true;s.expenses=[];s.debts=[];arySetTheme46(theme);aryStartGuide94()},theme);
+ await page.waitForSelector('.aryGuide94');const card=page.locator('.aryGuide94');assert.equal(await card.count(),1);assert.equal(await card.locator('button').count(),1);assert.equal(await card.locator('svg').count(),1);
+ const geometry=await card.evaluate(n=>{const r=n.getBoundingClientRect(),b=n.querySelector('button').getBoundingClientRect();return{left:r.left,right:r.right,height:r.height,button:b.height,position:getComputedStyle(n).position,scroll:n.scrollWidth,width:n.clientWidth}});
+ assert.ok(geometry.left>=0&&geometry.right<=viewport.width+1);assert.ok(geometry.scroll<=geometry.width+1);assert.ok(geometry.button>=44);assert.notEqual(geometry.position,'fixed');assert.equal(await page.locator('.ary125cloud,.ary125shade,.ary125focus,.ary139confirm').count(),0);
+ await page.evaluate(()=>go('expenses'));assert.equal(await card.count(),0,'No welcome on Expenses');await page.waitForTimeout(350);assert.equal(await page.evaluate(()=>screen),'expenses','No delayed automatic navigation');await page.evaluate(()=>go('home'));assert.equal(await card.count(),1,'Pending Home welcome remains available');
+ await page.evaluate(()=>{window.originalCommit194=aryCommitFinancial109;aryCommitFinancial109=()=>false});await card.locator('button').click();assert.equal(await card.count(),1,'Failed save preserves welcome');await page.evaluate(()=>aryCommitFinancial109=window.originalCommit194);await card.locator('button').click();assert.equal(await card.count(),0);assert.equal(await page.evaluate(()=>screen),'home');
+ await fs.mkdir(path.join(root,'browser-results'),{recursive:true});await page.evaluate(()=>aryStartGuide94());await page.screenshot({path:path.join(root,`browser-results/home-guide194-${name}-${viewport.width}-${theme}.png`)});assert.deepEqual(errors,[]);console.log(`PASS Home welcome ${name} ${viewport.width} ${theme}: one card, normal flow, solid touch button, no overlays or route jumps, failed save retained`);await page.close();}
+ await browser.close();browser=null;}}finally{await browser?.close();server.close()}})().catch(e=>{console.error(e);process.exitCode=1});
