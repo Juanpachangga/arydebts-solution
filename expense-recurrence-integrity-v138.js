@@ -51,7 +51,7 @@ window.saveExpense=function(id){
    if(editing){
      const item=next.expenses.find(x=>String(x.id)===String(id));
      if(!item)return;
-     item.name=name;item.amount=value;item.cat=cat;
+     item.name=name;if(item.amount!==value){delete item.amountText197;delete item.approximate197;}item.amount=value;item.cat=cat;
      if(icon)item.icon=icon;
      if(frequencyField){item.frequency=frequency;if(frequency!=='once')delete item.sourceExpenseId;}
      else if(item.frequency==null)item.frequency='once';

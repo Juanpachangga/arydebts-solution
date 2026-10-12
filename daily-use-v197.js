@@ -12,10 +12,12 @@ const currencyOptions=()=>codes.map(code=>`<option value="${code}" ${code===s.cu
 window.arySetCurrency70=code=>{
  if(!codes.includes(code))return false;
  const input=document.getElementById('homeExpense193'),draft=input?.value,date=document.getElementById('quickDate197')?.value,enabled=document.getElementById('dateEnabled-quickDate197')?.checked;
- if(!window.aryCommitFinancial109?.(next=>next.currency=code)){toast(tx().error);return false}
+ if(!window.aryCommitFinancial109?.(next=>next.currency=code)){document.querySelectorAll('select[onchange*="arySetCurrency70"],#quickCurrency197').forEach(select=>select.value=s.currency);toast(tx().error);return false}
  render();const nextInput=document.getElementById('homeExpense193');if(nextInput&&draft!==undefined)nextInput.value=draft;
- const nextDate=document.getElementById('quickDate197'),check=document.getElementById('dateEnabled-quickDate197');if(nextDate&&check){check.checked=!!enabled;nextDate.value=date||'';nextDate.hidden=!enabled;nextDate.disabled=!enabled}return true;
+ const nextDate=document.getElementById('quickDate197'),check=document.getElementById('dateEnabled-quickDate197');if(nextDate&&check){check.checked=!!enabled;nextDate.value=date||'';nextDate.hidden=!enabled;nextDate.disabled=!enabled}
+ document.querySelectorAll('#modal .amountPresets button').forEach(button=>{const match=button.getAttribute('onclick')?.match(/^presetAmount\((\d+(?:\.\d+)?)\)$/);if(match)button.textContent='+'+money(Number(match[1]))});return true;
 };
+const debtForm198=window.debtForm;window.debtForm=function(){const out=debtForm198.apply(this,arguments),select=document.getElementById('debtCurrency70');if(select&&typeof select.after==='function'){const hint=document.createElement('small');hint.className='muted';hint.textContent=tx().currencyHint;select.after(hint)}return out};
 window.aryParseQuickExpense193=value=>aryInstant197.parse(value,s.locale);
 function formatInput(input,pasted=false){
  if(!input)return;
@@ -50,13 +52,15 @@ window.arySaveHomeExpense193=()=>{
  if(!form||form.dataset.saving==='1'||screen!=='home'||!profile||!s.onboarded)return false;
  const item=aryInstant197.parse(input?.value,s.locale);if(!item){toast(tx().invalid);input?.focus();return false}
  const enabled=document.getElementById('dateEnabled-quickDate197')?.checked,date=enabled?document.getElementById('quickDate197')?.value:'';
- if(enabled&&(!date||!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date)))){toast(tx().date);return false}
+ if(enabled&&(!date||!window.aryValidDate63?.(date))){toast(tx().date);return false}
  form.dataset.saving='1';
  const saved=window.aryCommitFinancial109?.(next=>{next.expenses=Array.isArray(next.expenses)?next.expenses:[];next.expenses.push({...item,id:window.aryUniqueId120(next.expenses,next.debts,next.payments,next.calendarEvents),cat:'Variable',date,recordedAt197:today(),frequency:'once',icon:iconFor(item.name,'Variable')})});
- if(!saved){delete form.dataset.saving;toast(tx().error);return false}input.value='';render();toast(tx().saved);return true;
+ if(!saved){delete form.dataset.saving;toast(tx().error);return false}input.value='';const check=document.getElementById('dateEnabled-quickDate197'),dateInput=document.getElementById('quickDate197');if(check)check.checked=false;if(dateInput)dateInput.value='';render();toast(tx().saved);return true;
 };
 function home(){
  const card=document.getElementById('homeQuickExpense193');if(!card)return;
+ card.dataset.draftOwner198=window.aryGuideLifecycle128?.currentUser?.()||'';
+ card.dataset.draftLocale198=s.locale||'es-US';
  if(!document.getElementById('quickCurrency197')){
   const box=document.createElement('div');box.className='quickCurrency197';box.innerHTML=`<label for="quickCurrency197">${tx().currency}</label><select id="quickCurrency197">${currencyOptions()}</select><small>${tx().currencyHint}</small>`;card.querySelector('form').after(box);
   box.querySelector('select').onchange=e=>{if(!window.arySetCurrency70(e.target.value))e.target.value=s.currency};
@@ -94,6 +98,23 @@ document.addEventListener('click',e=>{if(e.isTrusted&&!e.defaultPrevented&&e.tar
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&audio?.state==='running')audio.suspend().catch(()=>{})});
 function refresh(){if(!profile||!s.onboarded)return;if(screen==='home')home();window.aryLayoutApply197?.()}
 for(const name of ['aryNextQuote72','aryFavoriteQuote72']){const fn=window[name];if(fn)window[name]=function(){const out=fn.apply(this,arguments);window.aryLayoutApply197?.();return out}}
-const renderBase=window.render;window.render=function(){const out=renderBase.apply(this,arguments);refresh();return out};
+function captureDraft198(){
+ const card=document.getElementById('homeQuickExpense193'),owner=window.aryGuideLifecycle128?.currentUser?.();
+ if(screen!=='home'||!profile||!owner||card?.dataset.draftOwner198!==owner)return null;
+ const input=document.getElementById('homeExpense193');if(!input)return null;
+ return{owner,locale:card.dataset.draftLocale198,value:input.value,start:input.selectionStart,end:input.selectionEnd,focused:document.activeElement===input,activeId:card.contains(document.activeElement)?document.activeElement.id:'',date:document.getElementById('quickDate197')?.value||'',enabled:!!document.getElementById('dateEnabled-quickDate197')?.checked};
+}
+const renderBase=window.render;window.render=function(){
+ const draft=captureDraft198(),out=renderBase.apply(this,arguments);refresh();
+ if(draft&&screen==='home'&&draft.owner===window.aryGuideLifecycle128?.currentUser?.()){
+  const input=document.getElementById('homeExpense193'),date=document.getElementById('quickDate197'),check=document.getElementById('dateEnabled-quickDate197');
+  if(input){
+   let value=draft.value;if(draft.locale!==s.locale){const parts=aryInstant197.split(value),number=parts&&aryInstant197.number(parts.raw,draft.locale,true);if(number){const localized=number.canonical.replace('.',aryInstant197.punctuation(s.locale).decimal);value=parts.before+aryInstant197.number(localized,s.locale,false).formatted+parts.after}}
+   input.value=value;input.setSelectionRange(Math.min(draft.start,value.length),Math.min(draft.end,value.length));formatInput(input,false);if(draft.focused)input.focus({preventScroll:true});
+  }
+  if(date&&check){check.checked=draft.enabled;date.value=draft.date;date.hidden=!draft.enabled;date.disabled=!draft.enabled}
+  const focused=document.getElementById(draft.activeId);if(focused&&!focused.disabled&&document.getElementById('homeQuickExpense193')?.contains(focused))focused.focus({preventScroll:true});
+ }return out;
+};
 window.aryDailyUse197={refresh,formatInput,holdMilliseconds:1800};refresh();
 })();
