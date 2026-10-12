@@ -307,7 +307,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(() => { s.locale='es-US'; go('home'); });
     await page.waitForFunction(()=>!document.documentElement.classList.contains('landing-bright-root'));
     const navigation = page.locator('#nav button');
-    assert.equal(await navigation.count(), 5);
+    assert.equal(await navigation.count(), 6);
     assert.equal(await page.locator('#nav button[aria-current="page"]').count(), 1);
     for (const button of await navigation.all()) {
       assert.ok((await button.boundingBox()).height >= 44, 'Navigation has comfortable touch targets');
@@ -337,7 +337,7 @@ async function check(engine, label, viewport) {
       await page.waitForFunction(expected => getComputedStyle(document.body).color === expected, theme==='light'?'rgb(17, 24, 39)':'rgb(244, 248, 255)');
       assert.equal(await page.locator('body').evaluate(el => getComputedStyle(el).color), theme==='light'?'rgb(17, 24, 39)':'rgb(244, 248, 255)', 'Theme sets readable foreground');
       const navColors85=await page.locator('#nav button').evaluateAll(buttons=>buttons.map(button=>{const color=getComputedStyle(button).color;return {active:button.classList.contains('active'),color,label:getComputedStyle(button.querySelector('span')).color,icon:getComputedStyle(button.querySelector('i')).color}}));
-      assert.equal(navColors85.length,5);
+      assert.equal(navColors85.length,6);
       for(const item of navColors85){
         assert.equal(item.color,theme==='light'?(item.active?'rgb(22, 78, 140)':'rgb(48, 65, 95)'):(item.active?'rgb(130, 232, 255)':'rgb(201, 216, 237)'),'Navigation keeps its theme foreground');
         assert.equal(item.label,item.color,'Navigation labels inherit readable foreground');
@@ -644,8 +644,8 @@ async function check(engine, label, viewport) {
     }
     const orderBefore65=await page.evaluate(()=>[...s.navOrder]);
     await page.evaluate(()=>{s.navOrder=['home','plan','home','unknown','more'];save()});
-    assert.equal(await page.locator('#nav button').count(),5,'Repair incomplete or duplicate saved navigation');
-    for(const route of ['home','debts','expenses','plan','more']){
+    assert.equal(await page.locator('#nav button').count(),6,'Repair incomplete or duplicate saved navigation');
+    for(const route of ['home','debts','expenses','plan','investments','more']){
       const button=page.locator(`#nav [onclick="go('${route}')"]`),box=await button.boundingBox();
       assert.ok(box.x>=0&&box.x+box.width<=viewport.width+1&&box.y>=0&&box.y+box.height<=viewport.height,'Every tab is fully visible');
       await button.click();assert.equal(await page.evaluate(()=>screen),route,`Tab opens ${route}`);
@@ -930,7 +930,7 @@ async function check(engine, label, viewport) {
       const audit80=[];
       for(const width of [320,390,430,768]){
         await page.setViewportSize({width,height:844});
-        for(const locale of ['es-US','en-US','pt-BR'])for(const route of ['home','debts','expenses','plan','more']){
+        for(const locale of ['es-US','en-US','pt-BR'])for(const route of ['home','debts','expenses','plan','investments','more']){
           await page.evaluate(({locale,route})=>{s.locale=locale;go(route)}, {locale,route});
           const result=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,nav:[...document.querySelectorAll('#nav button')].map(b=>({width:b.getBoundingClientRect().width,height:b.getBoundingClientRect().height}))}));
           assert.ok(result.overflow<=1,`No horizontal overflow: ${width}, ${locale}, ${route}`);
@@ -939,7 +939,7 @@ async function check(engine, label, viewport) {
             assert.equal(cards.length,2);
             for(const card of cards){assert.ok(card.width>=card.gridWidth*(width<=600?.95:.45),'Summary cards use available space');assert.ok(card.kpiScroll<=card.kpiWidth+1,'Amounts fit without clipping')}
           }
-          assert.equal(result.nav.length,5);
+          assert.equal(result.nav.length,6);
           for(const target of result.nav)assert.ok(target.width>=44&&target.height>=44,'Bottom navigation has usable touch targets');
           audit80.push({width,locale,route,...result});
         }

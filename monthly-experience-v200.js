@@ -1,0 +1,16 @@
+(()=>{
+'use strict';
+let selected=null,current=localDate().slice(0,7),checking=false,failedFor='',lastOwner='';
+const lang=()=>s.locale==='en-US'?'en':s.locale==='pt-BR'?'pt':'es';
+const copy={es:{month:'Mes de gastos',current:'Mes actual',history:'Historial mensual',note:'El día 1 comienza un mes nuevo. Tus gastos anteriores siguen disponibles aquí; los hormiga recurrentes no se copian al siguiente mes.',failed:'No se pudo preparar el mes. Tus gastos siguen guardados.'},en:{month:'Expense month',current:'Current month',history:'Monthly history',note:'A new month starts on the 1st. Earlier expenses stay here; recurring small expenses are not copied into the next month.',failed:'Could not prepare the month. Your expenses remain saved.'},pt:{month:'Mês de gastos',current:'Mês atual',history:'Histórico mensal',note:'Um novo mês começa no dia 1. Gastos anteriores ficam aqui; pequenos gastos recorrentes não são copiados para o próximo mês.',failed:'Não foi possível preparar o mês. Seus gastos continuam salvos.'}};
+const t=()=>copy[lang()];
+function prepare(){if(checking||!profile||!s.onboarded)return;const user=window.aryGuideLifecycle128?.currentUser?.()||'';if(user!==lastOwner){lastOwner=user;selected=null;failedFor=''}const month=localDate().slice(0,7);if(month!==current){current=month;selected=null}const stamped=aryMonth200.stamp(s.expenses,current);if(JSON.stringify(stamped)===JSON.stringify(s.expenses||[]))return;checking=true;try{if(!aryCommitFinancial109(next=>next.expenses=stamped)&&failedFor!==current){failedFor=current;toast(t().failed)}}finally{checking=false}}
+window.aryAntActiveMonth200=(e,month=current)=>aryMonth200.antActive(e,month);
+window.aryExpenseList200=list=>aryMonth200.visible(list,selected||current,current);
+window.arySetExpenseMonth200=month=>{if(!aryMonth200.valid(month))return false;selected=month;render();return true};
+function controls(){if(screen!=='expenses'||!profile||!s.onboarded)return;const app=document.getElementById('app');if(!app||typeof app.prepend!=='function')return;const x=t(),month=selected||current,box=document.createElement('section');box.className='card full monthControls200';box.id='expenseMonthControls200';box.innerHTML=`<label for="expenseMonth200">${x.month}</label><select id="expenseMonth200">${aryMonth200.periods(s.expenses,current).map(m=>`<option value="${m}" ${m===month?'selected':''}>${new Intl.DateTimeFormat(s.locale,{month:'long',year:'numeric'}).format(new Date(m+'-02T12:00:00'))}${m===current?' · '+x.current:''}</option>`).join('')}</select><small>${x.note}</small>`;box.querySelector('select').onchange=e=>arySetExpenseMonth200(e.target.value);const anchor=app.querySelector('.tabs,.antEntry55');if(anchor)anchor.before(box);else app.prepend(box)}
+const before=window.render;window.render=function(){prepare();const out=before.apply(this,arguments);controls();window.aryLayoutApply197?.();return out};
+window.aryMonthlyRefresh200=()=>{const month=localDate().slice(0,7);if(month!==current){current=month;selected=null;render()}};
+window.addEventListener('focus',window.aryMonthlyRefresh200);document.addEventListener('visibilitychange',()=>{if(!document.hidden)aryMonthlyRefresh200()});setInterval(()=>{if(!document.hidden)aryMonthlyRefresh200()},60000);
+prepare();
+})();
