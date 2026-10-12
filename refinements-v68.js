@@ -5,7 +5,7 @@ const normalize=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
 window.aryProtectedExpense68=e=>e.cat==='Esencial'||/renta|rent\b|alquiler|aluguel|mortgage|hipoteca|vivienda|housing|celular|phone|movil|internet|datos|data plan|electric|luz\b|agua|water|gas\b|mercado|grocer|supermerc|panal|diaper|fralda|medic|salud|health|seguro|insurance|transporte|transport|gasolina|fuel|carro|car payment|escuela|school|creche|guarderia/.test(normalize(e.name));
 window.aryExpenseCuts68=()=>{
  const today=localDate(),month=today.slice(0,7),eligible=e=>!aryProtectedExpense68(e)&&['Hormiga','Variable'].includes(e.cat),amount=e=>{const n=Number(e.amount);return Number.isFinite(n)&&n>0?n:0},planned=(s.expenses||[]).filter(e=>eligible(e)&&aryRecurring63(e)&&(!e.date||(aryValidDate63(e.date)&&e.date.slice(0,7)<=month))),rows=planned.map(e=>({id:e.id,ids:[e.id],name:e.name,recurring:true,monthly:aryMonthly63(amount(e),e.frequency)}));
- for(const e of s.expenses||[])if(eligible(e)&&!aryRecurring63(e)&&aryValidDate63(e.date)&&e.date.slice(0,7)===month&&e.date<=today){
+ for(const e of (s.expenses||[]).map(e=>({...e,date:e.date||e.accountedDate197||e.recordedAt197||''})))if(eligible(e)&&!aryRecurring63(e)&&aryValidDate63(e.date)&&e.date.slice(0,7)===month&&e.date<=today){
   const parent=e.sourceExpenseId==null?null:rows.find(p=>String(p.id)===String(e.sourceExpenseId));
   if(parent){parent.recorded=aryMoney108.add(parent.recorded||0,amount(e));parent.monthly=Math.max(parent.monthly,parent.recorded)}
   else{const same=rows.find(p=>normalize(p.name)===normalize(e.name)&&!p.recurring);if(same){same.monthly=aryMoney108.add(same.monthly,amount(e));same.ids.push(e.id)}else rows.push({id:e.id,ids:[e.id],name:e.name,monthly:amount(e)})}
@@ -23,7 +23,7 @@ window.aryReviewAdjustment112=id=>{
  modal(`<section class="adjustmentReview112"><h2>${x.title}</h2><p data-ary-user translate="no">${esc(group.name)}</p><p class="muted">${x.hint}</p><div class="reviewTotal112"><span>${x.recorded}</span><b>${money(total)}</b></div><div class="list">${records.map((e,index)=>row(iconFor(e.name,e.cat),e.name,window.aryActivityDate82?aryActivityDate82(e.date):e.date,money(e.amount),`<button type="button" class="btn tiny" onclick="aryEditAdjustmentRecord112(${index})">${tx().edit}</button>`)).join('')}</div><button type="button" class="btn widebtn" onclick="closeM()">${x.close}</button></section>`);
 };
 window.aryAdjustment111=()=>{
- const list=aryExpenseCuts68(),top=list[0],today=localDate(),month=today.slice(0,7),optional=e=>e.cat==='Hormiga'&&!aryProtectedExpense68(e),actual=(s.expenses||[]).filter(e=>optional(e)&&!aryRecurring63(e)&&aryValidDate63(e.date)&&e.date.slice(0,7)===month&&e.date<=today).reduce((n,e)=>aryMoney108.add(n,Math.max(0,Number(e.amount)||0)),0),income=aryRealData54.snapshot().income;
+ const list=aryExpenseCuts68(),top=list[0],today=localDate(),month=today.slice(0,7),optional=e=>e.cat==='Hormiga'&&!aryProtectedExpense68(e),actual=(s.expenses||[]).map(e=>({...e,date:e.date||e.accountedDate197||e.recordedAt197||''})).filter(e=>optional(e)&&!aryRecurring63(e)&&aryValidDate63(e.date)&&e.date.slice(0,7)===month&&e.date<=today).reduce((n,e)=>aryMoney108.add(n,Math.max(0,Number(e.amount)||0)),0),income=aryRealData54.snapshot().income;
  return {list,top,actual,share:income>0?Math.round(actual/income*100):null};
 };
 const adjustmentCopy111={

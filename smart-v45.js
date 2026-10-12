@@ -22,7 +22,7 @@ pt:{title:'Posso comprar isto?',sub:'Veja como afetaria sua estimativa mensal an
 const purchaseText=()=>purchaseCopy[s.locale==='en-US'?'en':s.locale==='pt-BR'?'pt':'es'];
 function assessPurchase(price){
 if(!Number.isFinite(price)||price<=0)return{status:'INVALID',price,before:null,after:null};
-const r=snapshot(),undated=(s.expenses||[]).filter(e=>!e.date).length,due=nextDue();
+const r=snapshot(),undated=(s.expenses||[]).filter(e=>!(window.aryRecurring63&&aryRecurring63(e))&&!(e.date||e.accountedDate197||e.recordedAt197)).length,due=nextDue();
 if(!(Number(s.income)>0))return{status:'MISSING_INCOME',price,before:null,after:null,undated,due};
 const before=window.aryPersonalBudget61?aryPersonalBudget61().margin:Number(r.availableAfterMinimums),rawAfter=before-price,after=Math.abs(rawAfter)<1e-8?0:rawAfter;
 if(!Number.isFinite(before))return{status:'INCOMPLETE',price,before:null,after:null,undated,due};
