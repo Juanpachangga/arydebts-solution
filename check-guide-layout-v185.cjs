@@ -6,7 +6,7 @@ const server=http.createServer(async(req,res)=>{try{const f=path.resolve(root,'.
  const page=await browser.newPage({viewport}),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>!!window.arySaveHomeExpense193);
  await page.evaluate(theme=>{profile={name:'Cliente',email:'home194@example.test'};s.name='Cliente';s.onboarded=true;s.expenses=[];s.debts=[];arySetTheme46(theme);aryStartGuide94()},theme);
  const card=page.locator('.aryGuide94');
- for(const route of ['home','expenses','debts','more']){
+ for(const route of ['home','expenses','plan','debts','investments','more']){
   await page.evaluate(route=>go(route),route);await page.waitForSelector('.aryGuide94');assert.equal(await card.count(),1);assert.equal(await card.getAttribute('data-guide-route'),route);assert.equal(await card.locator('button').count(),1);assert.equal(await card.locator('svg').count(),1);
   const geometry=await card.evaluate(n=>{const r=n.getBoundingClientRect(),b=n.querySelector('button').getBoundingClientRect();return{left:r.left,right:r.right,button:b.height,position:getComputedStyle(n).position,scroll:n.scrollWidth,width:n.clientWidth}});
   assert.ok(geometry.left>=0&&geometry.right<=viewport.width+1,route+': fits viewport');assert.ok(geometry.scroll<=geometry.width+1,route+': text fits');assert.ok(geometry.button>=44);assert.notEqual(geometry.position,'fixed');assert.equal(await page.locator('.ary125cloud,.ary125shade,.ary125focus,.ary139confirm').count(),0);
