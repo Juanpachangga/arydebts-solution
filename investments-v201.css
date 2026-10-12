@@ -32,3 +32,5 @@ html[data-ary-theme="dark"] .investmentInfo202{color:#96ddeb!important}.investme
 
 .preferenceTheme203{border-top:1px solid #c5d5e8;margin-top:14px;padding-top:14px}.preferenceTheme203 p{margin:6px 0 12px}.themeChoices203{display:grid;grid-template-columns:1fr 1fr;gap:10px}.themeChoices203 .btn{min-height:44px;margin:0}.themeChoices203 .selected203{background:#dceafc!important;border-color:#78add9!important;color:#164e8c!important}.guideProgress203{display:block!important;margin-bottom:6px;font-size:12px!important;font-weight:700;letter-spacing:.08em}
 html[data-ary-theme=dark] .preferenceTheme203{border-color:#345172}html[data-ary-theme=dark] .themeChoices203 .selected203{background:#173953!important;border-color:#4597b1!important;color:#82e8ff!important}
+
+.investmentHistory201 [hidden]{display:none!important}
