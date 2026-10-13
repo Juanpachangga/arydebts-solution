@@ -158,8 +158,8 @@ jobs:
         with:
           node-version: '24'
       - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: node check-experience-tiers-v215.cjs
       - run: node check-personal-layout-v192.cjs
-      - run: node check-onboarding-guide-v193.cjs
 
       - run: node check-daily-use-v197.cjs
 
@@ -174,5 +174,4 @@ jobs:
       - run: node check-desktop-feedback-v209.cjs
       - run: node check-compact-workspace-v210.cjs
       - run: node check-currency-reference-v212.cjs
-      - run: node check-experience-plans-v214.cjs
 
