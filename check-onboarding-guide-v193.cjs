@@ -1,3 +1,4 @@
+const {expandQuick210}=require('./test-compact-fixture-v210.cjs');
 const assert=require('node:assert/strict'),http=require('node:http'),fs=require('node:fs/promises'),path=require('node:path');
 const {chromium,webkit}=require('playwright'),root=__dirname;
 const server=http.createServer(async(req,res)=>{try{const f=path.resolve(root,'.'+new URL(req.url,'http://localhost').pathname.replace(/^\/$/,'/index.html'));if(!f.startsWith(root+path.sep))return res.writeHead(403).end();res.setHeader('Content-Type',f.endsWith('.js')?'text/javascript':f.endsWith('.css')?'text/css':f.endsWith('.html')?'text/html':'application/octet-stream');res.end(await fs.readFile(f))}catch{res.writeHead(404).end()}});
@@ -30,7 +31,7 @@ const server=http.createServer(async(req,res)=>{try{const f=path.resolve(root,'.
  for(const value of ['$0 gasolina','-50 gasolina','gasolina','50']){await page.locator('#homeExpense193').fill(value);await page.locator('#homeExpense193').press('Enter');assert.equal(await page.evaluate(()=>s.expenses.length),2)}
  await page.evaluate(()=>{window.commit193=aryCommitFinancial109;window.aryCommitFinancial109=()=>false});await page.locator('#homeExpense193').fill('25 café');await page.locator('#homeExpense193').press('Enter');assert.equal(await page.locator('#homeExpense193').inputValue(),'25 café','Failed save retains draft');await page.evaluate(()=>window.aryCommitFinancial109=window.commit193);await page.locator('#homeExpense193').press('Enter');assert.equal(await page.evaluate(()=>s.expenses.length),3);
  // Formatting and examples never submit; both decimal separators preserve cents.
- assert.equal(await page.locator('.quickExample196').count(),3);await page.locator('.quickExample196').first().click();assert.equal(await page.evaluate(()=>s.expenses.length),3);assert.ok(await page.locator('#homeExpense193').inputValue());
+ assert.equal(await page.locator('.quickExample196').count(),3);await expandQuick210(page);await page.locator('.quickExample196').first().click();assert.equal(await page.evaluate(()=>s.expenses.length),3);assert.ok(await page.locator('#homeExpense193').inputValue());
  for(const [locale,raw,formatted] of [['es-US','12.50 café','12,50 café'],['es-CO','18.75 farmacia','18,75 farmacia'],['pt-BR','4,25 pão','4,25 pão']]){
   await page.evaluate(locale=>setLocale(locale),locale);await page.locator('#homeExpense193').fill(raw);assert.equal(await page.locator('#homeExpense193').inputValue(),formatted);assert.equal(await page.evaluate(()=>s.expenses.length),3,'Formatting does not save');
  }

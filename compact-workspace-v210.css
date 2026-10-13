@@ -1,0 +1,19 @@
+#app #homeQuickExpense193{padding:14px!important;display:grid;gap:8px!important;min-width:0}
+#app #homeQuickExpense193>label{margin:0!important;font-size:calc(15px * var(--ui-scale72,1))!important;line-height:1.4}
+#app #homeQuickExpense193>form{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:8px!important;margin:0!important}
+#app #homeQuickExpense193>form input{min-width:0;width:100%;min-height:44px!important;padding:10px 12px!important;margin:0!important;font-size:calc(16px * var(--ui-scale72,1))!important;box-sizing:border-box}
+#app #homeQuickExpense193>form button{min-height:44px!important;margin:0!important;padding:10px 14px!important;font-size:calc(14px * var(--ui-scale72,1))!important;white-space:nowrap}
+#app #homeQuickExpense193 .quickOptions210{margin:0!important;padding:0!important;min-width:0}
+#app #homeQuickExpense193 .quickOptions210>summary{cursor:pointer;font-size:calc(14px * var(--ui-scale72,1));line-height:1.4;min-height:44px;display:list-item;list-style-position:inside;align-content:center;color:inherit;border-radius:10px}
+#app #homeQuickExpense193 .quickOptions210[open]>summary{margin-bottom:6px}
+#app #homeQuickExpense193 .quickOptions210 .quickCurrency197{margin:0 0 8px!important;gap:8px!important}
+#app #homeQuickExpense193 .quickOptions210 small{font-size:calc(13px * var(--ui-scale72,1))!important;line-height:1.4;display:block;margin:6px 0 0!important}
+#app #homeQuickExpense193 .quickOptions210 .dateChoice197{margin:8px 0!important;min-height:44px}
+#app #homeQuickExpense193 .quickOptions210 select{min-height:44px!important;padding:8px 12px!important}
+#app #homeQuickExpense193 .quickOptions210 .quickExamples196{gap:6px;margin:8px 0!important}
+#modal .preferences210 .preferenceHeader210{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+#modal .preferenceHeader210 h2{margin:0;min-width:0}
+#modal .preferenceHeader210 .preferenceClose210{width:auto!important;flex:0 0 auto;min-height:44px!important;margin:0!important;padding:8px 12px!important;font-size:calc(14px * var(--ui-scale72,1))!important}
+#modal .preferences210>.btn{margin:8px 0 0!important;min-height:44px!important}
+#modal .preferences210>.signoutWave65{margin-top:18px!important}
+@media(min-width:1000px){#app #homeQuickExpense193{padding:16px!important}#app #homeQuickExpense193>form{grid-template-columns:minmax(0,1fr) auto}}
