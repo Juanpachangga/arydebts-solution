@@ -327,7 +327,7 @@ async function check(engine, label, viewport) {
     assert.ok(separateBoxes(lastCard,navigationBox), 'Navigation leaves the final card accessible');
     await page.evaluate(() => window.scrollTo(0, 0));
     for (const theme of ['light','dark']) {
-      await page.evaluate(theme => { localStorage.setItem('ary-theme-v46', theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
+      await page.evaluate(theme => { arySetTheme46(theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
       assert.equal(await page.locator('html').getAttribute('data-ary-theme'), theme);
       // Wait for theme transitions, so screenshots show the finished theme.
       await page.evaluate(async () => {
