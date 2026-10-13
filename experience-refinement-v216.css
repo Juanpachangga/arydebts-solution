@@ -44,3 +44,5 @@ html:root body .aryRespond216 .aryRobot94{animation:aryThanks216 .3s ease-in-out
 @media(max-width:440px){.learningCalc216 form{grid-template-columns:1fr}}
 
 html:root body #app #signupPremium215 label>input{padding:0!important;min-height:22px!important;appearance:auto!important;flex:none!important}
+
+@media(min-width:1000px){body.signed64 .previewBanner216{margin-left:calc(var(--pc-edge186) + var(--pc-rail186) + var(--pc-gap186));margin-right:var(--pc-edge186);max-width:none}}
