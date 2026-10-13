@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 const KEY='arydebts-v3',BACKUP_KEY='arydebts-recovery-v92';
-const allowedCurrencies=new Set(['USD','COP','EUR','MXN','BRL','CAD','GBP','JPY']);
+const allowedCurrencies=new Set(typeof currencies==='function'?currencies():['USD','COP','EUR','MXN','BRL','CAD','GBP','JPY']);try{for(const code of Intl.supportedValuesOf('currency'))allowedCurrencies.add(code)}catch{}
 const allowedLocales=new Set(['es-US','en-US','pt-BR']);
 const allowedNav=new Set(['home','expenses','plan','debts','investments','more']);
 const validDate=value=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(String(value||'')))return false;const [y,m,d]=String(value).split('-').map(Number),date=new Date(Date.UTC(y,m-1,d));return date.getUTCFullYear()===y&&date.getUTCMonth()===m-1&&date.getUTCDate()===d};
@@ -13,7 +13,7 @@ function validateState(raw){
  if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new Error('invalid');
  const next=typeof aryNormalizeState104==='function'?aryNormalizeState104(raw):structuredClone(raw);
  next.debts=Array.isArray(next.debts)?next.debts:[];next.expenses=Array.isArray(next.expenses)?next.expenses:[];next.payments=Array.isArray(next.payments)?next.payments:[];next.calendarEvents=Array.isArray(next.calendarEvents)?next.calendarEvents:[];next.goals=Array.isArray(next.goals)?next.goals:[];
- if(!allowedCurrencies.has(String(next.currency||'')))next.currency='USD';
+ if(!allowedCurrencies.has(String(next.currency||'')))throw new Error('invalid_currency');
  if(!allowedLocales.has(String(next.locale||'')))next.locale='es-US';
  next.navOrder=[...new Set((Array.isArray(next.navOrder)?next.navOrder:[]).filter(x=>allowedNav.has(String(x))))];for(const x of ['home','expenses','plan','debts','investments','more'])if(!next.navOrder.includes(x))next.navOrder.push(x);next.navOrder=next.navOrder.filter(x=>x!=='more').concat('more');
  uniqueIds(next.debts);uniqueIds(next.expenses);uniqueIds(next.payments);uniqueIds(next.calendarEvents);uniqueIds(next.goals);
