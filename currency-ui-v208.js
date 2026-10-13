@@ -20,6 +20,7 @@ function updateDraft(values,from,to,table){for(const saved of values){const el=d
 function apply(target,table,extra,after,originalOwner,from,values){
  if(owner()!==originalOwner||s.currency!==from)return false;
  values=draft();
+ try{for(const value of values)if(Number.isFinite(value.amount)&&value.value.trim())model.convert(value.amount,from,target,table)}catch{return false}
  const required=model.needed(s,target);if(required.some(c=>!table[c])&&model.records(s).some(r=>r.fields.some(f=>Number(r.item[f])!==0&&r.item[f]!=null)))return false;
  const saved=aryCommitFinancial109(next=>{const converted=model.transform(next,target,table);Object.assign(next,converted);const dates=required.map(c=>table[c]?.date).filter(Boolean).sort();next.fxRate208={source:'Frankfurter',date:dates[0]||today(),from,to:target};if(extra)extra(next)});
  if(!saved)return false;
@@ -28,8 +29,9 @@ function apply(target,table,extra,after,originalOwner,from,values){
 window.aryCurrencyUpdate208=function(target,extra,after){
  if(busy||!model.code(target)||!currencies().includes(target))return false;
  if(target===s.currency){if(!extra)return true;const ok=aryCommitFinancial109(extra);if(ok){render();after?.()}else toast(t().failed);return ok;}
- const originalOwner=owner(),from=s.currency,values=draft(),codes=model.needed(s,target),hasMoney=model.records(s).some(r=>r.fields.some(f=>r.item[f]!=null&&Number(r.item[f])!==0));
- const cached=hasMoney?readCache(codes):{};
+ const originalOwner=owner(),from=s.currency,values=draft(),codes=[...new Set([...model.needed(s,target),from])],hasMoney=model.records(s).some(r=>r.fields.some(f=>r.item[f]!=null&&Number(r.item[f])!==0));
+ const needsRates=hasMoney||values.some(value=>Number.isFinite(value.amount)&&value.amount!==0);
+ const cached=needsRates?readCache(codes):{};
  if(cached){const ok=apply(target,cached,extra,after,originalOwner,from,values);resetControls();if(!ok)toast(t().failed);return ok;}
  busy=true;resetControls();
  return load(codes).then(table=>{const ok=apply(target,table,extra,after,originalOwner,from,values);if(!ok&&owner()===originalOwner)toast(t().failed);return ok}).catch(()=>{if(owner()===originalOwner)toast(t().failed);return false}).finally(()=>{busy=false;resetControls()});

@@ -21,3 +21,5 @@ Pruebas:
 Fuentes oficiales:
 - https://frankfurter.dev/
 - https://api.frankfurter.dev/v2/openapi.json
+
+Los borradores monetarios también requieren la tasa de su moneda actual, aunque todavía no haya registros guardados. Se valida su conversión antes de guardar el cambio de moneda; una tasa ausente o un desbordamiento conserva tanto el libro como el borrador.
