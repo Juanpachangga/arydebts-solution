@@ -216,7 +216,7 @@ async function check(engine, label, viewport) {
     assert.equal(await page.evaluate(() => s.expenses.length+s.debts.length), 0);
     await page.evaluate(() => {
       profile = { name:'Browser Test', email:'browser@example.com', localDemo:true };
-      Object.assign(s, { name:'Browser Test', onboarded:true, income:1000, incomeFrequency:'monthly', mode:'lite', locale:'es-US', currency:'USD', goal:'security', goals:['security'], debts:[], expenses:[], payments:[] });
+      Object.assign(s, { name:'Browser Test', onboarded:true, income:1000, incomeFrequency:'monthly', mode:'lite', experience214:'complete', locale:'es-US', currency:'USD', goal:'security', goals:['security'], debts:[], expenses:[], payments:[] });
       localStorage.setItem('arydebts-profile', JSON.stringify(profile));
       save(); go('home');
     });
