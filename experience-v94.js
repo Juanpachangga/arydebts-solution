@@ -71,9 +71,10 @@ window.aryDismissGuide94=(route=screen)=>{
 window.aryEndGuide94=window.aryDismissGuide94;
 window.aryStartGuide94=()=>{if(!profile||!s.onboarded)return false;if(!persistGuide(model.beginGuide()))return false;go('home');return true};
 window.aryGuideAction94=()=>window.aryDismissGuide94();
-window.addEventListener('DOMContentLoaded',()=>{const guide=currentGuide();if(profile&&s.onboarded&&guide.active&&guide.seen.length&&screen==='home'){const next=model.nextGuide(guide);if(next&&screens[next])go(next)}});
+window.addEventListener('DOMContentLoaded',()=>{const guide=currentGuide();if(profile&&s.onboarded&&window.aryExperience214?.()!=='simple'&&guide.active&&guide.seen.length&&screen==='home'){const next=model.nextGuide(guide);if(next&&screens[next])go(next)}});
 for(const name of ['aryNextQuote72','aryFavoriteQuote72']){const before=window[name];if(before)window[name]=function(){const result=before.apply(this,arguments);paintQuote();return result}}
 let away=false;
 document.addEventListener('visibilitychange',()=>{if(document.hidden){away=true;return}if(away){away=false;rotate();paintQuote()}});
 render();
 })();
+

@@ -1,0 +1,9 @@
+(async()=>{
+'use strict';if(window.aryReview216?.active!==true)return;
+const notice=()=>toast(s.locale==='en-US'?'Sample preview: no charges or real operations.':s.locale==='pt-BR'?'Exemplo: sem cobranças ou operações reais.':'Vista de ejemplo: no hay cobros ni operaciones reales.');
+window.aryPremiumService214={ready:true,readStatus:async()=>({owner:aryGuideLifecycle128.currentUser(),plan:'premium',status:'active',amount:999,currency:'USD',interval:'month',validUntil:new Date(Date.now()+86400000*30).toISOString(),prices:{USD:999}}),checkout:async()=>{notice();throw Error('preview')},manage:async()=>{notice();throw Error('preview')},report:async()=> 'Tipo,Concepto,Importe,Moneda\nEjemplo,Ingreso mensual ficticio,3200,USD\nEjemplo,Vivienda ficticia,800,USD\n'};
+window.aryPremiumCheckout214=notice;
+window.aryCreditService206={ready:true,readOwnReport:async()=>({status:'ready',report:{score:742,model:'VantageScore 4.0',provider:'EJEMPLO FICTICIO · SAMPLE ONLY',asOf:new Date(Date.now()-60000).toISOString(),factors:[{type:'positive',code:'DEMO',descriptions:{es:'Dato ficticio para revisar el diseño, no es un reporte crediticio real.',en:'Fictional data to review the design, not a real credit report.',pt:'Dado fictício para revisar o design, não é um relatório real.'}}]}})};
+const banner=document.createElement('aside');banner.id='premiumPreview216';banner.className='previewBanner216';banner.setAttribute('data-ary-copy','');banner.innerHTML='<b>Premium · datos de ejemplo</b><span>Los cambios se quedan en esta pestaña. Al recargar se reinician. Sin cobros.</span><a href="index.html">Volver a mi aplicación</a><button type="button" class="btn" onclick="location.reload()">Reiniciar ejemplo</button>';document.body.prepend(banner);
+await aryRefreshPremium214();go('home');
+})();
