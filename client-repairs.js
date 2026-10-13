@@ -115,7 +115,6 @@ window.setIncome=function(){
 
 
 
-
 ;
 // Source: recurrence-safety-v118.js
 (()=>{
@@ -149,7 +148,6 @@ window.aryReminderState118=id=>{
  return e?{completed:!!e.completed,completedMonth63:e.completedMonth63||'',recurring:typeof window.aryRecurring63==='function'&&window.aryRecurring63(e)}:null;
 };
 })();
-
 
 
 ;
@@ -229,7 +227,6 @@ let scrollFrame=0;
 const refreshGuideFocus=()=>{if(!document.getElementById('aryGuide116'))return;cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(()=>{const focused=document.querySelector('.aryGuideFocus117');if(focused&&typeof focused.getBoundingClientRect==='function'){const r=focused.getBoundingClientRect();const top=92,bottom=window.innerHeight-190;if(r.top<top||r.bottom>bottom){try{focused.scrollIntoView({behavior:'smooth',block:'center',inline:'nearest'})}catch(e){}}}})};
 window.addEventListener('scroll',refreshGuideFocus,{passive:true});
 })();
-
 
 
 ;
@@ -327,7 +324,6 @@ window.aryIntegrity120=function(){
 })();
 
 
-
 ;
 // Source: recovery-integrity-v121.js
 (()=>{
@@ -396,7 +392,6 @@ if(typeof original==='function')window.aryRecovery92=function(){
 };
 })();
 
-
 ;
 // Source: record-integrity-v122.js
 (()=>{
@@ -448,7 +443,6 @@ window.addPayment=function(){
 const originalSaveDebt=window.saveDebt;
 if(typeof originalSaveDebt==='function')window.aryLegacySaveDebt122=originalSaveDebt;
 })();
-
 
 
 ;
@@ -517,7 +511,6 @@ window.arySaveEvent36._aryPrevious123=previousSaveEvent;
 })();
 
 
-
 ;
 // Source: cross-delete-mobile-v124.js
 (()=>{
@@ -584,7 +577,6 @@ if(!document.getElementById(STYLE_ID)){
 })();
 
 
-
 ;
 // Source: full-guide-v125.js
 // Compatibility for saved shortcuts. ARY uses independent page cards with no automatic navigation.
@@ -598,7 +590,6 @@ window.aryFullGuideBack125=()=>false;
 window.aryFullGuideToggleAuto125=()=>false;
 window.aryFullGuideStatus125=()=>({active:false,index:0,automatic:false,completed:s?.guide94?.completed===true,steps:0,unified:false});
 })();
-
 
 
 ;
@@ -624,7 +615,6 @@ window.aryGuideLifecycle128={
 })();
 
 
-
 ;
 // Source: guide-completion-v132.js
 (()=>{
@@ -634,7 +624,6 @@ window.aryGuideHome132=()=>{window.aryFullGuideFinish125?.();window.go?.('home')
 })();
 
 // V133 — keep daily use fast with one-tap global quick actions after onboarding.
-
 
 
 
@@ -701,7 +690,6 @@ document.addEventListener('click',e=>{if(e.target?.closest?.('.ary125skip'))setT
 window.addEventListener('keydown',e=>{if(e.key!=='Escape'||guideActive())return;const m=document.getElementById('modal');if(m&&!m.classList.contains('hidden')&&typeof closeM==='function'){e.preventDefault();closeM()}});
 ensureStyle();watchModal();syncFab();
 })();
-
 
 
 
@@ -773,7 +761,6 @@ ensureStyle();requestAnimationFrame(enhance);
 
 
 
-
 ;
 // Source: fast-navigation-v137.js
 (()=>{
@@ -811,7 +798,6 @@ window.aryFastNavigation137={active:true,captureGuard:false};
 })();
 
 // V138 — preserve recurrence/date/source metadata in late atomic expense saves.
-
 
 
 
@@ -906,7 +892,6 @@ window.aryExpenseRecurrenceIntegrity138={active:true};
 
 
 
-
 ;
 // Source: mobile-performance-v144.js
 (()=>{
@@ -997,7 +982,6 @@ window.aryMobilePerformance144={mobile:MOBILE,sync:()=>{syncLite();polishProgres
 
 
 
-
 ;
 // Source: performance-stability-v147.js
 (()=>{
@@ -1058,7 +1042,6 @@ window.aryPerformance147={profile,apply};
 
 
 
-
 ;
 // Source: performance-paint-v151.js
 (()=>{
@@ -1103,7 +1086,6 @@ window.aryPerformancePaint151={sync,interactivePaintSafe:true};
 
 
 // V184 — reject invalid routes and load the stale-guide transition repair fresh.
-
 
 
 
@@ -1154,7 +1136,6 @@ ensureStyle();
 if(typeof screen!=='undefined'&&screen==='home'&&typeof window.render==='function')requestAnimationFrame(()=>window.render());
 window.aryHomeProgressIntegrity154={real};
 })();
-
 
 
 ;
@@ -1242,7 +1223,6 @@ window.aryDeleteEvent36=function(id){
 };
 window.aryCalendarIntegrity155={validDate};
 })();
-
 
 
 ;
@@ -1355,5 +1335,4 @@ window.aryGuideInteractionSafety180={
  pause:()=>pauseAuto()
 };
 })();
-
 
