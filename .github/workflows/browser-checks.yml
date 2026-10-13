@@ -169,3 +169,4 @@ jobs:
       - run: node check-currency-browser-v208.cjs
       - run: node check-desktop-feedback-v209.cjs
       - run: node check-compact-workspace-v210.cjs
+      - run: node check-currency-reference-v212.cjs

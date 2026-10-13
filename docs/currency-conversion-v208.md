@@ -23,3 +23,5 @@ Fuentes oficiales:
 - https://api.frankfurter.dev/v2/openapi.json
 
 Los borradores monetarios también requieren la tasa de su moneda actual, aunque todavía no haya registros guardados. Se valida su conversión antes de guardar el cambio de moneda; una tasa ausente o un desbordamiento conserva tanto el libro como el borrador.
+
+El selector de moneda queda visible en Inicio. La cotización de referencia se consulta cada 15 minutos mientras Inicio esté visible, al volver a la página y con el botón de actualización. La fecha mostrada es la de publicación del proveedor, que ofrece tasas diarias. Comparar cotizaciones no modifica los registros ni el borrador; las conversiones posteriores utilizan una caché validada de hasta 15 minutos. Si una consulta falla, se conserva la última cotización válida y se indica que no pudo actualizarse.
