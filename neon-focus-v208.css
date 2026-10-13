@@ -1,0 +1,12 @@
+#modal .preferenceTheme203:has(#soundChoice207){display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-block:18px}
+#modal #soundChoice207{margin:0!important;min-width:140px;text-align:center}
+#app :is(#homeQuickExpense193,.homeMargin81,.homeTruth29,.planHero34,.investmentSummary200){border:1.5px solid #2d9eff!important;box-shadow:0 0 12px #2d9eff24!important}
+#app .homeTruth29{border-color:#9978f0!important;box-shadow:0 0 12px #9978f025!important}
+#app .planHero34{border-color:#28b7a5!important;box-shadow:0 0 12px #28b7a522!important}
+#app :is(#homeQuickExpense193,.homeMargin81,.homeTruth29,.planHero34,.investmentSummary200){outline:none}
+@media(prefers-reduced-motion:reduce){#app :is(#homeQuickExpense193,.homeMargin81,.homeTruth29,.planHero34,.investmentSummary200){transition:none!important}}
+
+#modal .expenseUnit208{display:grid;grid-template-columns:minmax(0,1fr) minmax(80px,120px);gap:12px;align-items:center;margin:10px 0 14px}
+#modal .expenseUnit208>label{margin:0;font-size:.9rem}
+#modal .expenseUnit208>select{margin:0;min-width:0}
+@media(max-width:600px){#modal .preferenceTheme203:has(#soundChoice207){justify-content:center}#modal .preferenceTheme203:has(#soundChoice207)>b{width:100%;text-align:center}}

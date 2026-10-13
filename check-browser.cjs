@@ -28,7 +28,7 @@ async function check(engine, label, viewport) {
   const navigate = route => page.evaluate(route => go(route), route);
   try {
     const origin = `http://127.0.0.1:${server.address().port}`;
-    await page.goto(origin, { waitUntil:'load' });
+    await require('./test-fx-fixture-v208.cjs').install(page);await page.goto(origin, { waitUntil:'load' });
     assert.match(await page.locator('#app').innerText(), /ARYDEBTS/i, 'Fresh startup renders');
     assert.equal(await page.evaluate(() => s.income), 0, 'Fresh startup has no invented income');
     const mobileCover97=viewport.width<=900;

@@ -50,6 +50,9 @@ jobs:
           node --check daily-use-v197.js
           node --check personal-layout-v192.js
           node check-instant-model-v197.cjs
+          node check-currency-model-v208.cjs
+      - name: Check public daily FX rates and browser CORS
+        run: node server/check-fx-provider-v208.mjs
       - name: Check first-use guide and visit rotation
         run: node check-experience-v94.cjs
       - name: Check application integration
@@ -163,3 +166,4 @@ jobs:
       - run: node check-debt-entry-alert-v205.cjs
       - run: node check-compact-credit-v206.cjs
       - run: node check-sync-layout-v207.cjs
+      - run: node check-currency-browser-v208.cjs

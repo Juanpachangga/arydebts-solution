@@ -48,6 +48,7 @@ window.saveIncomeSetup=function(){
  const raw=String(document.getElementById('oi')?.value??'').trim(),amount=Number(raw);
  const frequency=validFrequency(document.getElementById('of')?.value),currency=String(document.getElementById('oc')?.value||s.currency||'USD');
  if(raw===''||!Number.isFinite(amount)||amount<0){if(typeof toast==='function')toast(t().invalidIncome);return false;}
+ if(window.aryCurrencyUpdate208&&currency!==s.currency)return aryCurrencyUpdate208(currency,next=>{next.income=amount;next.incomeFrequency=frequency},()=>go('setupGoal'));
  if(!commit(next=>{next.income=amount;next.incomeFrequency=frequency;next.currency=currency;})){if(typeof toast==='function')toast(t().saveError);return false;}
  if(typeof go==='function')go('setupGoal');
  return true;

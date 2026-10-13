@@ -44,6 +44,7 @@ window.saveSettings=function(){
  const locale=String(document.getElementById('loc')?.value||s.locale||'es-US');
  const currency=String(document.getElementById('cur')?.value||s.currency||'USD');
  if(!locales.includes(locale)||!validCurrency(currency)){if(typeof toast==='function')toast(t().invalidSettings);return false;}
+ if(window.aryCurrencyUpdate208&&currency!==s.currency)return aryCurrencyUpdate208(currency,next=>{next.greeting=greeting;next.locale=locale},()=>{try{localStorage.setItem('ary-lang',landingLang(locale))}catch{}closeM();render()});
  if(!saveChange(next=>{next.greeting=greeting;next.locale=locale;next.currency=currency;}))return false;
  try{localStorage.setItem('ary-lang',landingLang(locale))}catch{}
  if(typeof closeM==='function')closeM();
