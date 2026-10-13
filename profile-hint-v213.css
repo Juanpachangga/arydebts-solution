@@ -1,0 +1,5 @@
+#profileHint213{position:fixed;z-index:75;box-sizing:border-box;width:min(300px,calc(100vw - 16px));padding:12px 52px 12px 14px;border:1px solid #37caff;border-radius:18px;background:#07182f;color:#f2f7ff;box-shadow:0 0 16px #25bfff45;line-height:1.4;font-size:calc(14px * var(--ary-font-scale,1));overflow-wrap:anywhere}
+#profileHint213 b,#profileHint213 small{display:block}#profileHint213 small{margin-top:3px;color:#b4cce2}
+#profileHint213 button{font:inherit;cursor:pointer;color:inherit;background:transparent;border:0;min-height:44px}#profileHint213 .profileOpen213{padding:5px 0;text-align:left;font-weight:700}#profileHint213 .profileClose213{position:absolute;top:5px;right:5px;width:44px;font-size:24px}
+body.ary-light #profileHint213{background:#fff;color:#17233b;box-shadow:0 0 16px #25bfff30}body.ary-light #profileHint213 small{color:#52677f}
+#nav .profileTarget213{outline:2px solid #35cfff;outline-offset:2px;box-shadow:0 0 12px #35cfff65}
