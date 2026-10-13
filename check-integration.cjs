@@ -332,6 +332,7 @@ console.log('PASS localized progress advice, independent actions, signup wording
 
 const direct111=boot(true);direct111.run("s.income=1000;s.incomeFrequency='monthly';s.expenses=[{id:1,name:'Renta',cat:'Hormiga',amount:900,date:localDate()},{id:2,name:'Café',cat:'Hormiga',amount:120,date:localDate()},{id:3,name:'Tomorrow',cat:'Hormiga',amount:999,date:'2099-10-10'},{id:4,name:'Video',cat:'Variable',amount:20,date:localDate()}];go('expenses')");
 assert.equal(direct111.run('aryAdjustment111().actual'),120);assert.equal(direct111.run('aryAdjustment111().share'),12);assert.equal(direct111.run('aryAdjustment111().top.name'),'Café');
+assert.doesNotMatch(direct111.nodes.app.innerHTML,/expenseCuts68/,'Priority adjustment is absent from Expenses');direct111.run("go('plan')");
 assert.match(direct111.nodes.app.innerHTML,/Tu ajuste prioritario/);assert.match(direct111.nodes.app.innerHTML,/12%/);assert.match(direct111.nodes.app.innerHTML,/Otros ajustes posibles/);
 assert.equal(direct111.run('aryExpenseCuts68()[0].potential'),24);
 for(const [dx,dy,result]of [[0,-100,0],[0,100,0],[-100,0,1],[100,0,-1],[5,-20,0],[100,100,0]])assert.equal(direct111.run(`aryIntroGesture111(${dx},${dy})`),result);

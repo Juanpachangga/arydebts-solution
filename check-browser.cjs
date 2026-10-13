@@ -733,7 +733,7 @@ async function check(engine, label, viewport) {
     await page.locator('.aprNotice68').waitFor({state:'hidden',timeout:10000});
     await page.evaluate(()=>render());assert.equal(await page.locator('.aprNotice68').count(),0,'APR notice stays dismissed after render');
     const previousExpenses112=await page.evaluate(()=>JSON.stringify(s.expenses));
-    await page.evaluate(()=>{s.expenses=[{id:11201,name:'Café',cat:'Hormiga',amount:11,date:localDate()},{id:11202,name:'Cafe',cat:'Hormiga',amount:12,date:localDate()}];go('expenses')});
+    await page.evaluate(()=>{s.expenses=[{id:11201,name:'Café',cat:'Hormiga',amount:11,date:localDate()},{id:11202,name:'Cafe',cat:'Hormiga',amount:12,date:localDate()}];go('plan')});
     await page.locator('.adjustmentReview111').click();
     assert.equal(await page.locator('.adjustmentReview112 .row').count(),2,'Grouped recommendation reveals every source record');
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Grouped review fits the viewport');
