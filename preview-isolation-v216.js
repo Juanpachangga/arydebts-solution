@@ -17,6 +17,6 @@ try{
  const overlay=document.createElement('div');overlay.className='previewLoading216';overlay.textContent='Preparando Premium con datos de ejemplo…';document.body.append(overlay);document.body.classList.add('previewPending216');
  const scripts=JSON.parse(document.getElementById('aryPreviewScripts216').textContent);for(const src of scripts){await new Promise((resolve,reject)=>{const tag=document.createElement('script');tag.src=src;tag.async=false;tag.onload=resolve;tag.onerror=reject;document.body.append(tag)})}
  document.dispatchEvent(new Event('DOMContentLoaded',{bubbles:true}));
- overlay.remove();document.body.classList.remove('previewPending216');
+ overlay.remove();document.body.classList.remove('previewPending216');window.aryPreviewReady216=true;
 }catch{document.body.classList.remove('previewPending216');document.querySelector('.previewLoading216')?.remove();app.innerHTML='<section class="card"><h1>La vista de ejemplo no pudo iniciar</h1><p>Vuelve a abrirla en otra pestaña.</p><a href="index.html">Volver a la aplicación</a></section>'}
 })();
