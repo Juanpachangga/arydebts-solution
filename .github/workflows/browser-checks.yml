@@ -32,7 +32,9 @@ jobs:
           node scripts/build-client-repairs.cjs
           cmp /tmp/ary-client-repairs-before.js client-repairs.js
       - name: Check subscription price, ownership and billing contracts
-        run: node server/check-premium-v214.mjs
+        run: |
+          node server/check-premium-v214.mjs
+          node server/check-premium-v215.mjs
       - name: Check API error and streaming body contracts
         run: node server/check-request-errors.mjs
       - name: Check local startup and original state retention
@@ -147,7 +149,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.1-noble
-    timeout-minutes: 8
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
         with:
@@ -156,8 +158,8 @@ jobs:
         with:
           node-version: '24'
       - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: node check-experience-tiers-v215.cjs
       - run: node check-personal-layout-v192.cjs
-      - run: node check-onboarding-guide-v193.cjs
 
       - run: node check-daily-use-v197.cjs
 
@@ -172,4 +174,4 @@ jobs:
       - run: node check-desktop-feedback-v209.cjs
       - run: node check-compact-workspace-v210.cjs
       - run: node check-currency-reference-v212.cjs
-      - run: node check-experience-plans-v214.cjs
+

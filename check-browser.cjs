@@ -124,7 +124,7 @@ async function check(engine, label, viewport) {
     assert.doesNotMatch(await page.locator('#app').innerText(), /Contraseña|Correo electrónico|Crear mi espacio/);
     assert.match(await page.locator('.accountStatus83').innerText(),/Modo local/);
     assert.equal(await page.locator('[onclick="localAuth(\'signup\')"]').innerText(),'Continuar no modo local');
-    await page.locator('#an').fill('Initial User');
+    await page.locator('[data-signup214][data-experience214="complete"]').click();await page.locator('#an').fill('Initial User');
     await page.locator('#ae').fill('initial@example.com');
     await page.locator('#ap').fill('synthetic-test-password');
     await page.locator('[onclick="localAuth(\'signup\')"]').click();
@@ -327,7 +327,7 @@ async function check(engine, label, viewport) {
     assert.ok(separateBoxes(lastCard,navigationBox), 'Navigation leaves the final card accessible');
     await page.evaluate(() => window.scrollTo(0, 0));
     for (const theme of ['light','dark']) {
-      await page.evaluate(theme => { localStorage.setItem('ary-theme-v46', theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
+      await page.evaluate(theme => { arySetTheme46(theme==='light'?'dark':'light'); aryToggleTheme40(); }, theme);
       assert.equal(await page.locator('html').getAttribute('data-ary-theme'), theme);
       // Wait for theme transitions, so screenshots show the finished theme.
       await page.evaluate(async () => {
@@ -971,3 +971,4 @@ async function check(engine, label, viewport) {
     if(failures.length)throw new AggregateError(failures,'Browser regression checks failed');
   } finally { server.close(); }
 })().catch(error => { console.error(error); process.exitCode=1; });
+
