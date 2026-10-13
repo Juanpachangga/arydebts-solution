@@ -8,7 +8,7 @@ const ready=()=>window.aryCreditService206?.ready===true&&typeof window.aryCredi
 function valid(value){return value&&Number.isInteger(value.score)&&value.score>=300&&value.score<=850&&['VantageScore 3.0','VantageScore 4.0','FICO Score 8','FICO Score 9'].includes(value.model)&&typeof value.provider==='string'&&value.provider.length>0&&value.provider.length<=80&&Number.isFinite(Date.parse(value.asOf))&&Date.parse(value.asOf)<=Date.now()&&Array.isArray(value.factors)&&value.factors.length<=20&&value.factors.every(f=>['positive','negative'].includes(f.type)&&typeof f.code==='string'&&f.code.length<=32&&['es','en','pt'].every(language=>typeof f.descriptions?.[language]==='string'&&f.descriptions[language].trim()&&f.descriptions[language].length<=500))}
 function sync(){const key=owner();if(key!==currentOwner){currentOwner=key;report=null;busy=false;controller?.abort();controller=null;generation++;lastRead=0}}
 function paint(){
- sync();const existing=document.getElementById('creditScore206');if(!profile||!s.onboarded||screen!=='expenses'||s.currency!=='USD'){existing?.remove();return}
+ sync();const existing=document.getElementById('creditScore206');if(!profile||!s.onboarded||!window.aryPremiumActive214?.()||screen!=='expenses'||s.currency!=='USD'){existing?.remove();return}
  const anchor=document.querySelector('#app .debtExpenses66');if(!anchor)return;
  const x=words[lang()],hidden=window.aryHidden72?.(),card=existing||document.createElement('section');card.id='creditScore206';card.dataset.layout197='expenses:credit-score';card.className='card full creditScore206';card.setAttribute('data-ary-copy','');card.setAttribute('aria-busy',String(busy));
  const date=report?new Intl.DateTimeFormat(s.locale||'es-US',{dateStyle:'medium'}).format(new Date(report.asOf)):'';
@@ -17,7 +17,7 @@ function paint(){
 }
 window.aryCreditInfo206=()=>{const x=words[lang()];modal(`<section data-ary-copy><h2>${x.title}</h2><p>${x.explain}</p><a class="btn widebtn" href="https://www.experian.com/credit/credit-report/" target="_blank" rel="noopener noreferrer">${x.external} ↗</a><button type="button" class="btn widebtn" onclick="closeM()">${x.close}</button></section>`)};
 window.aryRefreshCredit206=async()=>{
- sync();if(!profile||screen!=='expenses'||s.currency!=='USD'||!ready()||busy)return false;
+ sync();if(!profile||!window.aryPremiumActive214?.()||screen!=='expenses'||s.currency!=='USD'||!ready()||busy)return false;
  const requestedOwner=currentOwner,version=++generation;controller=new AbortController();const requestController=controller;let timeout;lastRead=Date.now();busy=true;paint();
  try{const response=await Promise.race([window.aryCreditService206.readOwnReport({signal:requestController.signal}),new Promise((_,reject)=>{timeout=setTimeout(()=>{requestController.abort();reject(Error('timeout'))},15000)})]);sync();if(version!==generation||requestedOwner!==currentOwner)return false;if(response?.status==='ready'&&valid(response.report)){report=response.report;return true}report=null;if(response?.status==='unavailable')toast(words[lang()].unavailable);return false}
  catch{if(version===generation&&requestedOwner===owner()){report=null;toast(words[lang()].unavailable)}return false}
@@ -26,3 +26,4 @@ window.aryRefreshCredit206=async()=>{
 const renderBefore=window.render;window.render=function(){const result=renderBefore.apply(this,arguments);paint();return result};
 window.addEventListener('ary-credit-updated',()=>{if(screen==='expenses')window.aryRefreshCredit206()});window.addEventListener('DOMContentLoaded',paint);paint();
 })();
+
