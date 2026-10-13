@@ -167,3 +167,4 @@ jobs:
       - run: node check-compact-credit-v206.cjs
       - run: node check-sync-layout-v207.cjs
       - run: node check-currency-browser-v208.cjs
+      - run: node check-desktop-feedback-v209.cjs
