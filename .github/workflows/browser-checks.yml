@@ -31,6 +31,11 @@ jobs:
           cp client-repairs.js /tmp/ary-client-repairs-before.js
           node scripts/build-client-repairs.cjs
           cmp /tmp/ary-client-repairs-before.js client-repairs.js
+      - name: Verify isolated Premium preview matches application
+        run: |
+          cp premium-preview.html /tmp/ary-preview-before.html
+          node scripts/build-premium-preview-v216.cjs
+          cmp /tmp/ary-preview-before.html premium-preview.html
       - name: Check subscription price, ownership and billing contracts
         run: |
           node server/check-premium-v214.mjs
@@ -45,6 +50,7 @@ jobs:
         run: |
           node check-monthly-model-v200.cjs
           node check-investment-history-v201.cjs
+          node check-investment-learning-v216.cjs
           node server/check-investment-readiness-v200.mjs
           node server/check-credit-score-v206.mjs
       - name: Check financial analysis calculations
@@ -159,6 +165,7 @@ jobs:
           node-version: '24'
       - run: npm install --no-save --package-lock=false playwright@1.62.1
       - run: node check-navigation-stability-v216.cjs
+      - run: node check-refinement-v216.cjs
       - run: node check-experience-tiers-v215.cjs
       - run: node check-personal-layout-v192.cjs
 
