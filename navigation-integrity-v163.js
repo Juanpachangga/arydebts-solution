@@ -23,7 +23,9 @@ if(typeof oldBack==='function'&&!oldBack._ary163){
  const guardedBack=function(){
   try{
    if(Array.isArray(appNavigation55)){
-    while(appNavigation55.length&&!valid(appNavigation55[appNavigation55.length-1]))appNavigation55.pop();
+    // Back may skip duplicate current routes before reading the next entry.
+    // Remove invalid entries at every depth, not only at the top.
+    for(let i=appNavigation55.length-1;i>=0;i--)if(!valid(appNavigation55[i]))appNavigation55.splice(i,1);
    }
   }catch{}
   return oldBack.apply(this,arguments);
@@ -45,3 +47,4 @@ window.aryNavigationIntegrity163={valid};
  script.async=false;
  document.body.appendChild(script);
 })();
+
