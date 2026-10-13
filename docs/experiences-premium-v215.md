@@ -26,3 +26,7 @@ Desplegar el servidor con sesión autenticada, RLS, cuota, catálogo y secretos;
 - `node check-integration.cjs`: integración de módulos y contratos existentes con DOM simulado.
 
 Las pruebas de interfaz de análisis, crédito e inversión completa usan fixtures de acceso Premium; las pruebas v215 verifican los bloqueos gratis y los permisos del servidor por separado. Las guías de registro completo eligen Completa explícitamente; Sencilla ahora termina directamente en Inicio. El nuevo test cubre las reglas actuales de acceso; no se eliminan pruebas históricas para ocultar esos cambios de contrato.
+
+## Ajustes 215.2
+
+Elegir la prueba desde Completa conserva un botón habilitado para continuar la configuración gratuita cuando los cobros todavía no están conectados. El aviso de renovación utiliza el precio mostrado, sin repetir USD cuando la moneda seleccionada es COP u otra. Un precio del catálogo del servidor se identifica como confirmado y no se presenta como una conversión orientativa.
