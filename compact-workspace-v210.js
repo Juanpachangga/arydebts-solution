@@ -2,7 +2,17 @@
 (()=>{
 'use strict';
 const opened=new Map(),owner=()=>window.aryGuideLifecycle128?.currentUser?.()||'',words=()=>s.locale==='en-US'?['Options','Hide options']:s.locale==='pt-BR'?['Opções','Ocultar opções']:['Opciones','Ocultar opciones'];
+function compactPayment(){
+ const card=document.getElementById('homeQuickPayment199'),form=card?.querySelector('form');if(!form||document.getElementById('paymentOptions211'))return;
+ const key='payment:'+form.dataset.owner199,focused=document.activeElement,details=document.createElement('details'),summary=document.createElement('summary');details.id='paymentOptions211';details.className='quickOptions210';details.open=opened.get(key)===true;summary.textContent=words()[details.open?1:0];details.append(summary);
+ const hint=card.querySelector(':scope>small');if(hint)details.append(hint);
+ for(const el of [...form.children])if(el.matches('.dateChoice197,input[type="date"],small'))details.append(el);
+ const history=card.querySelector('.paymentHistory199');if(history)details.append(history);form.append(details);
+ const title=card.querySelector('h3');if(title){const unit=document.createElement('span');unit.className='paymentCurrency211';unit.textContent=' ('+s.currency+')';title.append(unit)}
+ details.addEventListener('toggle',()=>{opened.set(key,details.open);summary.textContent=words()[details.open?1:0]});if(details.open&&focused&&details.contains(focused))focused.focus({preventScroll:true});
+}
 function compact(){
+ compactPayment();
  const card=document.getElementById('homeQuickExpense193');if(!card||document.getElementById('quickOptions210'))return;
  const focused=document.activeElement;
  const details=document.createElement('details');details.id='quickOptions210';details.className='quickOptions210';details.open=opened.get(owner())===true;
@@ -10,7 +20,7 @@ function compact(){
  for(const el of [...card.children])if(el.matches('.quickCurrency197,.dateChoice197,#quickDate197,.quickExamples196,#homeExpenseHelp193'))details.append(el);
  details.addEventListener('toggle',()=>{opened.set(card.dataset.draftOwner198||owner(),details.open);summary.textContent=words()[details.open?1:0]});card.append(details);if(details.open&&focused&&details.contains(focused))focused.focus({preventScroll:true});
 }
-const beforeRender=window.render;window.render=function(){const previous=document.getElementById('quickOptions210');if(previous)opened.set(document.getElementById('homeQuickExpense193')?.dataset.draftOwner198||owner(),previous.open);const result=beforeRender.apply(this,arguments);compact();return result};
+const beforeRender=window.render;window.render=function(){const previous=document.getElementById('quickOptions210');if(previous)opened.set(document.getElementById('homeQuickExpense193')?.dataset.draftOwner198||owner(),previous.open);const payment=document.getElementById('paymentOptions211');if(payment)opened.set('payment:'+document.querySelector('#homeQuickPayment199 form')?.dataset.owner199,payment.open);const result=beforeRender.apply(this,arguments);compact();return result};
 function orderSettings(){const before=window.aryV18Settings;if(typeof before!=='function')return;window.aryV18Settings=function(){const result=before.apply(this,arguments),sheet=document.querySelector('#modal .sheet');if(!sheet)return result;
  const title=sheet.querySelector(':scope>h2'),close=sheet.querySelector(':scope>button[onclick="closeM()"]'),signout=sheet.querySelector('.signoutWave65,[onclick="logout()"]');
  if(title&&close){const header=document.createElement('div');header.className='preferenceHeader210';title.before(header);header.append(title,close);close.classList.add('preferenceClose210')}
