@@ -32,7 +32,9 @@ jobs:
           node scripts/build-client-repairs.cjs
           cmp /tmp/ary-client-repairs-before.js client-repairs.js
       - name: Check subscription price, ownership and billing contracts
-        run: node server/check-premium-v214.mjs
+        run: |
+          node server/check-premium-v214.mjs
+          node server/check-premium-v215.mjs
       - name: Check API error and streaming body contracts
         run: node server/check-request-errors.mjs
       - name: Check local startup and original state retention
@@ -173,3 +175,4 @@ jobs:
       - run: node check-compact-workspace-v210.cjs
       - run: node check-currency-reference-v212.cjs
       - run: node check-experience-plans-v214.cjs
+

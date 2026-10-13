@@ -25,4 +25,4 @@ Desplegar el servidor con sesión autenticada, RLS, cuota, catálogo y secretos;
 - `node server/check-premium-v214.mjs`: protección de precio USD, propiedad, informes y redirecciones.
 - `node check-integration.cjs`: integración de módulos y contratos existentes con DOM simulado.
 
-Las pruebas visuales antiguas que asumían acceso gratuito a análisis, crédito o inversión completa deben migrar sus fixtures a una cuenta Premium. Las guías de registro completo deben elegir Completa explícitamente; Sencilla ahora termina directamente en Inicio. El nuevo test cubre las reglas actuales de acceso; no se eliminan pruebas históricas para ocultar esos cambios de contrato.
+Las pruebas de interfaz de análisis, crédito e inversión completa usan fixtures de acceso Premium; las pruebas v215 verifican los bloqueos gratis y los permisos del servidor por separado. Las guías de registro completo eligen Completa explícitamente; Sencilla ahora termina directamente en Inicio. El nuevo test cubre las reglas actuales de acceso; no se eliminan pruebas históricas para ocultar esos cambios de contrato.
