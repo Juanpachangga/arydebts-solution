@@ -88,6 +88,8 @@ const server = http.createServer(async (req, res) => {
       assert.equal(await page.evaluate(() => screen), 'more', 'Old Complete history cannot reopen Plan in Simple');
       await page.evaluate(() => back());
       assert.equal(await page.evaluate(() => screen), 'home', 'Back skips an invalid historical route');
+      await page.evaluate(() => { go('expenses'); appNavigation55.length = 0; appNavigation55.push('home', 'not-a-route', 'expenses'); back(); });
+      assert.equal(await page.evaluate(() => screen), 'home', 'Back skips an invalid route below a duplicate current route');
       await page.evaluate(() => debtForm());
       await page.locator('#n').fill('Unfinished debt');
       await page.evaluate(() => back());

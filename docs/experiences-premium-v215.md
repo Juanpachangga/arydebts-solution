@@ -36,3 +36,5 @@ Elegir la prueba desde Completa conserva un botón habilitado para continuar la 
 Tocar una pestaña ya seleccionada conserva el desplazamiento y no vuelve a crear los campos. Una comprobación de suscripción sin cambio de permisos conserva el borrador y el foco; vencimiento o activación siguen actualizando las pantallas protegidas. Cancelar el registro restaura el tema y movimiento anteriores. Una cuenta Premium conserva el botón para terminar su configuración. El importe del comparador se reinicia al cambiar de cuenta o moneda para evitar reutilizar escenarios ajenos o valores con otra unidad.
 
 `check-navigation-stability-v216.cjs` prueba estos recorridos en Chromium y WebKit, además de historial inválido, rutas de Completa al volver desde Sencilla, cierre de modales con Atrás y conservación de los registros financieros.
+
+Atrás elimina rutas inválidas en todo el historial, incluso debajo de una entrada repetida de la pantalla actual; conserva el cierre previo de modales y el historial de rutas válidas. Se reconstruyó el bundle de reparaciones desde sus módulos fuente.
