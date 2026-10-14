@@ -70,3 +70,12 @@ html:root body[data-experience221="premium"]{background-size:cover,auto,auto,aut
 html:root body[data-experience221="premium"] :is(.seasonBackdrop71,.palette68,.waves65,.aurora){opacity:.08!important}
 html:root body[data-experience221="premium"] #app .hello{box-shadow:0 8px 28px #a78a4812!important}
 html:root body.highContrast72[data-experience221="simple"] .seasonBackdrop71,html:root body.highContrast72[data-experience221="premium"] :is(.seasonBackdrop71,.palette68,.waves65,.aurora){opacity:.025!important}
+
+/* Keep each special date visible over the tier's own atmosphere. */
+html:root body[data-experience221="simple"][data-season71]:not([data-season71="everyday"]) .seasonBackdrop71{opacity:.8!important}
+html:root body[data-experience221="simple"][data-season71]:not([data-season71="everyday"]) .seasonArt71{opacity:.28!important}
+html:root body[data-experience221="premium"][data-season71]:not([data-season71="everyday"]) .seasonBackdrop71{opacity:.75!important}
+html:root body[data-experience221="premium"][data-season71]:not([data-season71="everyday"]) .seasonGlow71{opacity:.35!important}
+html:root body[data-experience221="premium"][data-season71]:not([data-season71="everyday"]) .seasonMist71{opacity:.25!important}
+html:root body[data-experience221="premium"][data-season71]:not([data-season71="everyday"]) .seasonArt71{opacity:.35!important}
+html:root body.highContrast72[data-experience221]:is([data-experience221="simple"],[data-experience221="premium"]) .seasonBackdrop71{opacity:.025!important}
