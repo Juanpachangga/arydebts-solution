@@ -475,10 +475,12 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('.interest61').count(),1,'Repeated sports expenses offer a purchase analysis with positive margin');
     assert.equal(await page.locator('.homeMetric51[onclick="go(\'plan\')"] .kpi').innerText(),await page.evaluate(()=>money(1670)),'Home margin includes pending calendar reserve');
     assert.equal(await page.locator('.homeSetup54').count(),0,'Completed onboarding removes the setup banner');
-    const dailyOrder81=await page.locator('.homeDaily81').evaluate(el=>Array.from(el.children).map(x=>x.className));
+    const dailyOrder81=await page.locator('.homeDaily81').evaluate(el=>Array.from(el.children).map(x=>x.id||x.className));
     assert.match(dailyOrder81[0],/homeMargin81/);
-    assert.match(dailyOrder81[1],/homeActions81/);
-    assert.match(dailyOrder81[2],/homeUpcoming81/);
+    assert.equal(dailyOrder81[1],'homeQuickExpense193');
+    assert.equal(dailyOrder81[2],'homeClarity225');
+    assert.match(dailyOrder81[3],/homeActions81/);
+    assert.match(dailyOrder81[4],/homeUpcoming81/);
     assert.ok(await page.locator('.hello>.muted').isHidden(),'Home does not duplicate its motivational phrase');
     assert.equal(await page.locator('.homeSupport81').getAttribute('open'),null,'Extra guidance starts collapsed');
     const beforeDaily81=await page.evaluate(()=>JSON.stringify([s.income,s.expenses,s.debts,s.payments]));
