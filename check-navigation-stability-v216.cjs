@@ -75,7 +75,10 @@ const server = http.createServer(async (req, res) => {
       assert.equal(await page.getByRole('button', { name: 'Continuar configuración', exact: true }).isEnabled(), true, 'A paid account can finish its setup');
       await page.getByRole('button', { name: 'Continuar configuración', exact: true }).click();
       assert.equal(await page.evaluate(() => screen), 'intro');
-      await page.evaluate(() => { s.onboarded = true; arySetExperience214('simple'); go('expenses'); window.scrollTo(0, 600); });
+      assert.equal(await page.evaluate(() => arySetExperience214('simple')), false, 'Premium cannot switch to a restricted free workspace');
+      await page.evaluate(async () => { auditSubscription216.validUntil = '2000-01-01'; await aryRefreshPremium214(); s.onboarded = true; arySetExperience214('simple'); go('expenses'); window.scrollTo(0, 600); });
+      assert.equal(await page.locator('.simpleRecords215').count(), 1, 'Free Simple navigation runs against the actual Simple workspace');
+      assert.equal(await page.locator('#nav button').count(), 4);
       await page.waitForFunction(() => scrollY >= 590);
       await page.evaluate(() => { window.expenseNode216 = document.querySelector('.simpleRecords215'); });
       await page.locator('#nav button[aria-current="page"]').click();
