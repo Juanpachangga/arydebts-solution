@@ -55,8 +55,9 @@ const data={state:{debts:[],expenses:[],payments:[],calendarEvents:[],income:100
   auth.signInWithPassword=async()=>response;await assert.rejects(()=>service.login({email:'a@example.test',password:'legacy'}),{code:'service_error'});
   auth.resetPasswordForEmail=async()=>response;await assert.rejects(()=>service.recover('a@example.test'),{code:'service_error'});
  }
- for(const data of [null,{}, {session:undefined},{session:'invalid'}]){auth.signUp=async()=>({data});await assert.rejects(()=>service.signup({name:'A',email:'a@example.test',password:'long-password'}),{code:'service_error'});}
- for(const data of [null,{}, {session:null},{session:'invalid'}]){auth.signInWithPassword=async()=>({data});await assert.rejects(()=>service.login({email:'a@example.test',password:'legacy'}),{code:'service_error'});}
+ for(const data of [null,[],{}, {session:undefined},{session:'invalid'},{session:[]}]){auth.signUp=async()=>({data});await assert.rejects(()=>service.signup({name:'A',email:'a@example.test',password:'long-password'}),{code:'service_error'});}
+ for(const data of [null,[],{}, {session:null},{session:'invalid'},{session:[]}]){auth.signInWithPassword=async()=>({data});await assert.rejects(()=>service.login({email:'a@example.test',password:'legacy'}),{code:'service_error'});}
+ for(const data of [null,undefined,[]]){auth.resetPasswordForEmail=async()=>({data});await assert.rejects(()=>service.recover('a@example.test'),{code:'service_error'});}
  for(const response of [undefined,null,{},[]]){auth.signOut=async()=>response;await assert.rejects(()=>service.logout(),{code:'service_error'});}
  auth.signOut=async()=>({error:null});assert.deepEqual(await service.logout(),{signedOut:true},'The official SDK signOut response has no data field');
  Object.assign(auth,{signUp:originals.signup,signInWithPassword:originals.login,resetPasswordForEmail:originals.recover,signOut:originals.logout});

@@ -27,8 +27,8 @@ function create(client,{redirectTo,providers=[],projectUrl}={}){
  async function verified(){const d=check(await client.auth.getUser()),u=d?.user;if(!u||!uuid.test(u.id)||!u.email_confirmed_at||u.is_anonymous===true)throw failure('verified_account_required');return u}
  const current=async id=>{const u=await verified();if(u.id!==id)throw failure('account_changed');return u};
  return Object.freeze({
-  async signup({name,email:address,password:secret,captchaToken}){name=String(name||'').trim();if(!name||name.length>120)throw failure('invalid_name');const d=check(await client.auth.signUp({email:email(address),password:password(secret),options:{emailRedirectTo:redirect,data:{name},...captcha(captchaToken)}}));if(!d||typeof d!=='object'||!Object.hasOwn(d,'session')||(d.session!==null&&typeof d.session!=='object'))throw failure('service_error');return {confirmationRequired:!d.session};},
-  async login({email:address,password:secret,captchaToken}){if(typeof secret!=='string'||!secret)throw failure('invalid_password');const d=check(await client.auth.signInWithPassword({email:email(address),password:secret,...(captchaToken===undefined||captchaToken===null||captchaToken===''?{}:{options:captcha(captchaToken)})}));if(!d?.session||typeof d.session!=='object')throw failure('service_error');const u=await verified();return {id:u.id,email:u.email,name:String(u.user_metadata?.name||'')};},
+  async signup({name,email:address,password:secret,captchaToken}){name=String(name||'').trim();if(!name||name.length>120)throw failure('invalid_name');const d=check(await client.auth.signUp({email:email(address),password:password(secret),options:{emailRedirectTo:redirect,data:{name},...captcha(captchaToken)}}));if(!d||typeof d!=='object'||Array.isArray(d)||!Object.hasOwn(d,'session')||(d.session!==null&&(typeof d.session!=='object'||Array.isArray(d.session))))throw failure('service_error');return {confirmationRequired:!d.session};},
+  async login({email:address,password:secret,captchaToken}){if(typeof secret!=='string'||!secret)throw failure('invalid_password');const d=check(await client.auth.signInWithPassword({email:email(address),password:secret,...(captchaToken===undefined||captchaToken===null||captchaToken===''?{}:{options:captcha(captchaToken)})}));if(!d?.session||typeof d.session!=='object'||Array.isArray(d.session))throw failure('service_error');const u=await verified();return {id:u.id,email:u.email,name:String(u.user_metadata?.name||'')};},
   async social(provider){
    if(!supported.includes(provider))throw failure('unsupported_provider');
    if(!enabled.has(provider))throw failure('provider_not_enabled');
@@ -39,7 +39,7 @@ function create(client,{redirectTo,providers=[],projectUrl}={}){
    return {url:url.href};
   },
   async finishOAuth(code){if(typeof code!=='string'||!code.trim()||code.length>2048)throw failure('invalid_auth_code');check(await client.auth.exchangeCodeForSession(code));const u=await verified();return {id:u.id,email:u.email,name:String(u.user_metadata?.name||'')};},
-  async recover(address,{captchaToken}={}){check(await client.auth.resetPasswordForEmail(email(address),{redirectTo:redirect,...captcha(captchaToken)}));return {requested:true};},
+  async recover(address,{captchaToken}={}){const d=check(await client.auth.resetPasswordForEmail(email(address),{redirectTo:redirect,...captcha(captchaToken)}));if(!d||typeof d!=='object'||Array.isArray(d))throw failure('service_error');return {requested:true};},
   async changePassword(secret){await verified();check(await client.auth.updateUser({password:password(secret)}));return {updated:true};},
   async logout(){check(await client.auth.signOut({scope:'local'}),true);return {signedOut:true};},
   async identity(){const u=await verified();return {id:u.id,email:u.email,name:String(u.user_metadata?.name||'')};},
