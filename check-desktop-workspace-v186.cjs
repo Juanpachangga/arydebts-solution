@@ -12,7 +12,7 @@ const rect=async(page,selector)=>page.locator(selector).first().boundingBox();
    await page.setViewportSize(viewport);await page.evaluate(theme=>{s.theme=theme;arySetUI72('size',1);go('home')},theme);const pc=viewport.width>=1000,label=`${name} ${viewport.width} ${theme}`;
    assert.equal(await page.locator('.top .headerActions64').count(),1,label+': reminder buttons preserve header structure');const nav=await rect(page,'#nav'),app=await rect(page,'#app'),ring=await rect(page,'.homeTruth29 .ring');assert.ok(Math.abs(ring.width-ring.height)<.5,label+': progress is perfectly circular');assert.equal(ring.width,pc?132:112,label+': larger progress circle');
    if(pc){assert.ok(nav.x+nav.width+16<=app.x,label+': navigation beside content');assert.ok(nav.y>=0&&nav.y+nav.height<=viewport.height,label+': navigation fits');assert.ok(app.width>=Math.min(1480,viewport.width*.66)&&app.width<=1500,label+': workspace uses width without overlong reading lines');
-    const margin=await rect(page,'.homeMargin81'),actions=await rect(page,'.homeActions81');assert.ok(Math.abs(margin.y-actions.y)<2,label+': home actions beside monthly margin');
+    const margin=await rect(page,'.homeMargin81'),actions=await rect(page,'.homeActions81');assert.ok(margin.width>app.width*.95,label+': template margin spans workspace');assert.ok(actions.y>=margin.y+margin.height,label+': actions follow the margin and clarity cards');
     if(viewport.width>=1200){const upcoming=await rect(page,'.homeUpcoming81'),income=await rect(page,'.homeDaily81>.third');assert.ok(Math.abs(upcoming.y-income.y)<2,label+': upcoming events and summaries share a row')}
    }else assert.ok(nav.y>viewport.height/2,label+': mobile retains bottom navigation');
    for(const route of ['home','progress','debts','expenses','calendar','analysis','assistant','more']){
@@ -38,3 +38,4 @@ const rect=async(page,selector)=>page.locator(selector).first().boundingBox();
  }
  }finally{await browser?.close();server.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});
+
