@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160" fill="none">
+  <defs>
+    <linearGradient id="gold" x1="180" y1="0" x2="3500" y2="2100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d8bd80" stop-opacity=".32"/><stop offset=".5" stop-color="#eee3cc" stop-opacity=".08"/><stop offset="1" stop-color="#b99856" stop-opacity=".22"/>
+    </linearGradient>
+    <linearGradient id="pearl" x1="3300" y1="100" x2="600" y2="1900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b8d3df" stop-opacity=".23"/><stop offset="1" stop-color="#d7c7a4" stop-opacity=".05"/>
+    </linearGradient>
+  </defs>
+  <path d="M-400 100C500 780 500 1360 1700 1560S3100 1400 4240 2100" stroke="url(#gold)" stroke-width="2"/>
+  <path d="M-450 240C540 800 600 1430 1750 1640S3160 1550 4280 2240" stroke="url(#gold)" stroke-width="1.5"/>
+  <path d="M-280 390C620 950 750 1450 1870 1730S3200 1650 4200 2360" stroke="url(#gold)" stroke-width="1"/>
+  <path d="M4000-400C2800 300 3350 900 2400 1140S1000 1400-160 1900" stroke="url(#pearl)" stroke-width="2"/>
+  <path d="M4120-300C2900 410 3400 1000 2470 1230S1100 1490-100 2030" stroke="url(#pearl)" stroke-width="1"/>
+</svg>

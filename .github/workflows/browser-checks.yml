@@ -164,6 +164,7 @@ jobs:
         with:
           node-version: '24'
       - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: node check-atmosphere-v221.cjs
       - run: node check-premium-workspace-v219.cjs
       - run: node check-reliability-v218.cjs
       - run: node check-welcome-plans-v217.cjs

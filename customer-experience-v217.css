@@ -56,3 +56,17 @@ html:root body #app .premiumPlanActions220 p{margin:0;line-height:1.6}
 .planCards214.premiumOnly219{max-width:960px;margin:0 auto;width:100%}
 
 body.premiumPage220 #aryQuickFab133{display:none!important}.premiumServiceNote220{text-align:center}
+
+/* Resolution-independent atmosphere: Simple stays still, Premium uses pearl and champagne. */
+html:root body[data-experience221="simple"].ary-light{background-color:#f6f8fc!important;background-image:radial-gradient(ellipse at 8% 10%,#cfebe980,transparent 58%),radial-gradient(ellipse at 96% 70%,#e5ddf780,transparent 62%),linear-gradient(160deg,#f7fafc,#eff7f6)!important}
+html:root body[data-experience221="simple"].ary-dark{background-image:radial-gradient(ellipse at 10% 5%,#31565345,transparent 58%),radial-gradient(ellipse at 95% 75%,#51406c35,transparent 62%)!important}
+html:root body[data-experience221="simple"] .seasonBackdrop71{display:block!important;opacity:.28!important}
+html:root body[data-experience221="simple"] .seasonMotifs71{display:block!important}
+html:root body[data-experience221="simple"] .seasonBackdrop71 *{animation:none!important;transition:none!important}
+html:root body[data-experience221="simple"] .seasonArt71{opacity:.2!important;filter:none!important}
+html:root body[data-experience221="premium"].ary-light{background-color:#faf9f5!important;background-image:url('assets/premium-atmosphere-v221.svg'),radial-gradient(ellipse at 0% 8%,#e6d5a95c,transparent 58%),radial-gradient(ellipse at 100% 72%,#dceaf06b,transparent 58%),linear-gradient(150deg,#fffefa,#f7fafc 55%,#faf7ef)!important}
+html:root body[data-experience221="premium"].ary-dark{background-image:url('assets/premium-atmosphere-v221.svg'),radial-gradient(ellipse at 0% 8%,#96764524,transparent 58%),radial-gradient(ellipse at 100% 72%,#46657824,transparent 58%),linear-gradient(150deg,#191b28,#20202c 55%,#252128)!important}
+html:root body[data-experience221="premium"]{background-size:cover,auto,auto,auto!important;background-position:center top!important;background-repeat:no-repeat!important}
+html:root body[data-experience221="premium"] :is(.seasonBackdrop71,.palette68,.waves65,.aurora){opacity:.08!important}
+html:root body[data-experience221="premium"] #app .hello{box-shadow:0 8px 28px #a78a4812!important}
+html:root body.highContrast72[data-experience221="simple"] .seasonBackdrop71,html:root body.highContrast72[data-experience221="premium"] :is(.seasonBackdrop71,.palette68,.waves65,.aurora){opacity:.025!important}

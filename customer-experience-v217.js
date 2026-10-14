@@ -54,7 +54,7 @@ function premiumIcons(){
   button.classList.add('premiumTool217');button.append(icon,label);
  });
 }
-function paint(){motivation();profileAccess();housePlan();discovery();plans();premiumIcons();document.querySelectorAll('button[onclick="logout()"],button.logout58,button.signoutWave65').forEach(b=>b.classList.add('logoutAction217'));document.querySelectorAll('.tierBenefits215,.premiumChoice214 ul').forEach(list=>{if(!list.querySelector('.learningBenefit217')){const li=document.createElement('li');li.className='learningBenefit217';li.textContent=tx().newBenefit;list.append(li)}})}
+function paint(){const tier=profile&&s.onboarded&&!['welcome','signup','login'].includes(screen)?(paid()?'premium':simple()?'simple':'complete'):'';if(tier)document.body.dataset.experience221=tier;else delete document.body.dataset.experience221;motivation();profileAccess();housePlan();discovery();plans();premiumIcons();document.querySelectorAll('button[onclick="logout()"],button.logout58,button.signoutWave65').forEach(b=>b.classList.add('logoutAction217'));document.querySelectorAll('.tierBenefits215,.premiumChoice214 ul').forEach(list=>{if(!list.querySelector('.learningBenefit217')){const li=document.createElement('li');li.className='learningBenefit217';li.textContent=tx().newBenefit;list.append(li)}})}
 const before=window.render;window.render=function(){const out=before.apply(this,arguments);paint();return out};
 // Settings dialogs create their own logout button without rendering the page.
 const settings=window.aryV18Settings;window.aryV18Settings=function(){const out=settings.apply(this,arguments);document.querySelectorAll('#modal button[onclick="logout()"],#modal .signoutWave65').forEach(b=>b.classList.add('logoutAction217'));return out};
