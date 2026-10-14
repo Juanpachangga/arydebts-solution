@@ -14,7 +14,7 @@ function paint(){
  if(!visible){
   if(s.profileHint213!=='pending'||!key)return;
   // Persist the acknowledgement before display: reloading never repeats it.
-  if(!aryCommitFinancial109(next=>{next.profileHint213='seen'}))return;
+  if(!aryCommitFinancial109(next=>{next.profileHint213='seen';if(!next.premiumWelcome217)next.premiumWelcome217={owner:key,status:'pending'}}))return;
   visible=true;timer=setTimeout(clear,10000);
  }
  const target=document.querySelector('#nav button[onclick="go(\'more\')"]');if(!target)return;

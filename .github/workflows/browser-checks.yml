@@ -164,6 +164,7 @@ jobs:
         with:
           node-version: '24'
       - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: node check-welcome-plans-v217.cjs
       - run: node check-customer-experience-v217.cjs
       - run: node check-navigation-stability-v216.cjs
       - run: node check-refinement-v216.cjs
