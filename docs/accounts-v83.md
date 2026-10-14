@@ -63,3 +63,7 @@ Referencias: https://supabase.com/docs/guides/auth/social-login ; https://supaba
 `recover(email, {captchaToken})` envía el token al SDK igual que registro e inicio de sesión. Los tokens inválidos se rechazan antes de llamar al proveedor. No guardar ni reutilizar tokens: cada formulario obtiene uno nuevo del widget configurado en Supabase. La protección real depende de habilitar CAPTCHA en el proyecto; no se activa automáticamente desde este adaptador.
 
 El payload financiero también rechaza credenciales con variantes camelCase, como `accessToken` y `refreshToken`, incluso dentro de objetos anidados. Las pruebas son simuladas; la web sigue en modo local hasta completar la integración y probar el proyecto real.
+
+## Respuestas inválidas del proveedor
+
+El adaptador rechaza respuestas ausentes o mal formadas en lugar de informar registro, acceso o recuperación exitosos. El registro exige la estructura de sesión del SDK y el inicio de sesión exige una sesión además de verificar la identidad en el servidor. El cierre de sesión admite la respuesta oficial `{error:null}` sin un campo `data`. Estas validaciones no conectan por sí solas un proyecto de Supabase.

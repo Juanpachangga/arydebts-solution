@@ -48,6 +48,19 @@ const data={state:{debts:[],expenses:[],payments:[],calendarEvents:[],income:100
  const reset=auth.resetPasswordForEmail;auth.resetPasswordForEmail=async()=>({error:{message:'Internal provider detail'}});
  await assert.rejects(()=>service.recover('a@example.test',{captchaToken:'token'}),{code:'service_error'});auth.resetPasswordForEmail=reset;
 
+ // Missing provider responses must never be presented as successful operations.
+ const originals={signup:auth.signUp,login:auth.signInWithPassword,recover:auth.resetPasswordForEmail,logout:auth.signOut};
+ for(const response of [undefined,null,{},[],{error:null}]){
+  auth.signUp=async()=>response;await assert.rejects(()=>service.signup({name:'A',email:'a@example.test',password:'long-password'}),{code:'service_error'});
+  auth.signInWithPassword=async()=>response;await assert.rejects(()=>service.login({email:'a@example.test',password:'legacy'}),{code:'service_error'});
+  auth.resetPasswordForEmail=async()=>response;await assert.rejects(()=>service.recover('a@example.test'),{code:'service_error'});
+ }
+ for(const data of [null,{}, {session:undefined},{session:'invalid'}]){auth.signUp=async()=>({data});await assert.rejects(()=>service.signup({name:'A',email:'a@example.test',password:'long-password'}),{code:'service_error'});}
+ for(const data of [null,{}, {session:null},{session:'invalid'}]){auth.signInWithPassword=async()=>({data});await assert.rejects(()=>service.login({email:'a@example.test',password:'legacy'}),{code:'service_error'});}
+ for(const response of [undefined,null,{},[]]){auth.signOut=async()=>response;await assert.rejects(()=>service.logout(),{code:'service_error'});}
+ auth.signOut=async()=>({error:null});assert.deepEqual(await service.logout(),{signedOut:true},'The official SDK signOut response has no data field');
+ Object.assign(auth,{signUp:originals.signup,signInWithPassword:originals.login,resetPasswordForEmail:originals.recover,signOut:originals.logout});
+
  auth.signInWithOAuth=async args=>{calls.push(['oauth',args]);return {data:{url:'https://project.supabase.co/auth/v1/authorize?provider='+args.provider}}};
  auth.exchangeCodeForSession=async code=>({data:{session:{}}});
  const social=api.create({auth,from},{redirectTo:'https://example.test/auth-callback',projectUrl:'https://project.supabase.co',providers:['google','apple','facebook','discord']});
