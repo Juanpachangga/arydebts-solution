@@ -44,7 +44,17 @@ function plans(){
  const logout=container.querySelector(':scope>[onclick="logout()"]');logout?logout.before(card):container.append(card);
 }
 window.aryPlanGoal217=(index,button)=>{if(screen!=='more'||simple()||!Number.isInteger(index)||index<0||index>2)return false;const card=document.getElementById('premiumTools215');if(!card)return false;card.querySelectorAll('.planIdea217').forEach((node,i)=>node.hidden=i!==index);card.querySelectorAll('.premiumGoals217 button').forEach((node,i)=>{node.setAttribute('aria-pressed',String(i===index));node.classList.toggle('selected217',i===index)});return true};
-function paint(){motivation();profileAccess();housePlan();discovery();plans();document.querySelectorAll('button[onclick="logout()"],button.logout58,button.signoutWave65').forEach(b=>b.classList.add('logoutAction217'));document.querySelectorAll('.tierBenefits215,.premiumChoice214 ul').forEach(list=>{if(!list.querySelector('.learningBenefit217')){const li=document.createElement('li');li.className='learningBenefit217';li.textContent=tx().newBenefit;list.append(li)}})}
+function premiumIcons(){
+ const paths={compare:'M4 7h15m-4-4 4 4-4 4M20 17H5m4-4-4 4 4 4',analysis:'M4 20V4m0 16h16M8 16v-4m5 4V8m5 8V5',benefits:'m12 3 2.8 5.7 6.3.9-4.5 4.4 1.1 6.2-5.7-3-5.7 3 1.1-6.2L2.9 9.6l6.3-.9Z',learn:'M3 5c3-1 6-1 9 1 3-2 6-2 9-1v14c-3-1-6-1-9 1-3-2-6-2-9-1Zm9 1v14',sample:'m9 6 9 6-9 6ZM3 4v16'};
+ document.querySelectorAll('#premiumTools215 .tierActions215 button,#premiumTools215 .premiumActions217 :is(button,a),#premiumLink214,.simpleMore215 button[onclick="go(\'premium214\')"]').forEach(button=>{
+  if(button.querySelector('.premiumIcon217'))return;
+  const action=button.getAttribute('onclick')||'',type=action.includes('strategy215')?'compare':action.includes('analysis')?'analysis':action.includes('investingGuide216')?'learn':button.tagName==='A'?'sample':'benefits';
+  const label=document.createElement('span');label.className='premiumLabel217';while(button.firstChild)label.append(button.firstChild);
+  const icon=document.createElement('span');icon.className='premiumIcon217 icon-'+type;icon.setAttribute('aria-hidden','true');icon.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="${paths[type]}"/></svg>`;
+  button.classList.add('premiumTool217');button.append(icon,label);
+ });
+}
+function paint(){motivation();profileAccess();housePlan();discovery();plans();premiumIcons();document.querySelectorAll('button[onclick="logout()"],button.logout58,button.signoutWave65').forEach(b=>b.classList.add('logoutAction217'));document.querySelectorAll('.tierBenefits215,.premiumChoice214 ul').forEach(list=>{if(!list.querySelector('.learningBenefit217')){const li=document.createElement('li');li.className='learningBenefit217';li.textContent=tx().newBenefit;list.append(li)}})}
 const before=window.render;window.render=function(){const out=before.apply(this,arguments);paint();return out};
 // Settings dialogs create their own logout button without rendering the page.
 const settings=window.aryV18Settings;window.aryV18Settings=function(){const out=settings.apply(this,arguments);document.querySelectorAll('#modal button[onclick="logout()"],#modal .signoutWave65').forEach(b=>b.classList.add('logoutAction217'));return out};
