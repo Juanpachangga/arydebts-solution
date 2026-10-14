@@ -36,3 +36,10 @@ html:root body #modal .preferenceHeader210 .preferenceClose210{margin:0!importan
 html:root body #app #premiumTools215:not(.combinedPlans217) .tierActions215{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px!important;margin:16px 0 0!important}
 html:root body #app #premiumTools215:not(.combinedPlans217) .tierActions215 button{width:100%!important;min-width:0}
 @media(max-width:650px){html:root body #app #premiumTools215:not(.combinedPlans217) .tierActions215{grid-template-columns:minmax(0,1fr)}}
+
+/* Premium identity in both free discovery and the subscribed workspace. */
+html:root body #app :is(.premiumChoice214,#signupPremium215,.premiumDiscovery217,.combinedPlans217,#premiumTools215,#investmentPremium214,.tierLocked215,.premiumLink214,.premiumTool217),html:root body #modal .premiumLink214{border:2px solid #b88624!important;box-shadow:0 3px 16px #b8862418!important}
+html:root body.ary-dark #app :is(.premiumChoice214,#signupPremium215,.premiumDiscovery217,.combinedPlans217,#premiumTools215,#investmentPremium214,.tierLocked215,.premiumLink214,.premiumTool217),html:root body.ary-dark #modal .premiumLink214{border-color:#e2b84f!important}
+html:root body #app .premiumGoals217 .btn{border-color:#b88624!important}html:root body #app .premiumGoals217 .selected217{box-shadow:inset 0 0 0 1px #b88624!important}
+.premiumBadge219{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 16px;border:2px solid #b88624;border-radius:14px;color:#73500a;background:#fff8e5;font-weight:800;line-height:1.4;text-align:center}
+.ary-dark .premiumBadge219{border-color:#e2b84f;color:#ffe2a1;background:#382c15}.planCards214.premiumOnly219{grid-template-columns:minmax(0,1fr)}
