@@ -14,5 +14,5 @@ function mark(input){if(!input)return;clear(input);input.setAttribute('aria-inva
 window.aryScenarioNumber218=raw=>{let text=String(raw??'').trim();if(text.startsWith('+'))text=text.slice(1);if(/^-?[.,]\d+$/.test(text))text=text.replace(/^(-?)/,(_,sign)=>sign+'0');if(/^-?\d+(?:[.,]\d+)?e[+-]?\d+$/i.test(text))return Number(text.replace(',','.'));const locale=['es-CO','es-ES','pt-BR'].includes(s.locale)?'es-CO':'en-US';return window.aryInstant197?.number(text,locale,true)?.value??NaN};
 window.aryValidateScenario218=specs=>{let first=null,failed=false;const values={};for(const spec of specs){const input=document.getElementById(spec.id),value=aryScenarioNumber218(input?.value);if(!input||!Number.isFinite(value)||value<spec.min||value>spec.max||spec.valid&&!spec.valid(value)){mark(input);failed=true;first ||= input;values[spec.id]=NaN}else{clear(input);values[spec.id]=value}}if(failed){first?.focus({preventScroll:false});return null}return values};
 document.addEventListener('input',event=>{if(event.target.matches?.('[data-number-kind="scenario"]'))clear(event.target)});
-window.aryReliability218=true;render();
+window.aryReliability218=true;
 })();
