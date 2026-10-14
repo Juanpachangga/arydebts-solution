@@ -18,7 +18,8 @@ function updateDraft(values,from,to,table){for(const saved of values){const el=d
  const unit=document.getElementById('expenseUnit208');if(unit?.value===from)unit.value=to;
  document.querySelectorAll('#modal .amountPresets button').forEach(button=>{const match=button.getAttribute('onclick')?.match(/^presetAmount\((\d+(?:\.\d+)?)\)$/);if(match)button.textContent='+'+money(Number(match[1]))});
 }
-function apply(target,table,extra,after,originalOwner,from,values){
+function apply(target,table,extra,after,originalOwner,from,values,scope,validate){
+ if(scope&&!window.aryAsyncScope218?.current(scope)||validate&&!validate())return false;
  if(owner()!==originalOwner||s.currency!==from)return false;
  values=draft();
  try{for(const value of values)if(Number.isFinite(value.amount)&&value.value.trim())model.convert(value.amount,from,target,table)}catch{return false}
@@ -27,20 +28,20 @@ function apply(target,table,extra,after,originalOwner,from,values){
  if(!saved)return false;
  render();updateDraft(values,from,target,table);after?.();return true;
 }
-window.aryCurrencyUpdate208=function(target,extra,after){
+window.aryCurrencyUpdate208=function(target,extra,after,validate){
  if(busy||!model.code(target)||!currencies().includes(target))return false;
  if(target===s.currency){if(!extra)return true;const ok=aryCommitFinancial109(extra);if(ok){render();after?.()}else toast(t().failed);return ok;}
- const originalOwner=owner(),from=s.currency,values=draft(),codes=[...new Set([...model.needed(s,target),from])],hasMoney=model.records(s).some(r=>r.fields.some(f=>r.item[f]!=null&&Number(r.item[f])!==0));
+ const scope=window.aryAsyncScope218?.capture(),originalOwner=owner(),from=s.currency,values=draft(),codes=[...new Set([...model.needed(s,target),from])],hasMoney=model.records(s).some(r=>r.fields.some(f=>r.item[f]!=null&&Number(r.item[f])!==0));
  const needsRates=hasMoney||values.some(value=>Number.isFinite(value.amount)&&value.amount!==0);
  const cached=needsRates?readCache(codes):{};
- if(cached){const ok=apply(target,cached,extra,after,originalOwner,from,values);resetControls();if(!ok)toast(t().failed);return ok;}
+ if(cached){const ok=apply(target,cached,extra,after,originalOwner,from,values,scope,validate);resetControls();if(!ok)toast(t().failed);return ok;}
  busy=true;resetControls();
- return load(codes).then(table=>{const ok=apply(target,table,extra,after,originalOwner,from,values);if(!ok&&owner()===originalOwner)toast(t().failed);return ok}).catch(()=>{if(owner()===originalOwner)toast(t().failed);return false}).finally(()=>{busy=false;resetControls()});
+ return load(codes).then(table=>{const ok=apply(target,table,extra,after,originalOwner,from,values,scope,validate);if(!ok&&owner()===originalOwner)toast(t().failed);return ok}).catch(()=>{if(owner()===originalOwner)toast(t().failed);return false}).finally(()=>{busy=false;resetControls()});
 };
 window.arySetCurrency70=target=>aryCurrencyUpdate208(target);
 const renderBase=window.render;window.render=function(){const out=renderBase.apply(this,arguments);resetControls();return out};
 // Setup uses the same transaction when a returning user changes currency.
-window.arySaveIncome54=function(){const input=document.getElementById('oi'),raw=input?.value||'',amount=parseNum(raw),frequency=document.getElementById('of')?.value||'monthly',currency=document.getElementById('oc')?.value||s.currency;if(!raw.trim()||!Number.isFinite(amount)||amount<0||!['daily','every_2_days','every_3_days','every_4_days','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual'].includes(frequency)){toast(t().failed);return false}return aryCurrencyUpdate208(currency,next=>{next.income=amount;next.incomeFrequency=frequency},()=>go('setupExpenses'));};
+window.arySaveIncome54=function(){const input=document.getElementById('oi'),raw=input?.value||'',amount=parseNum(raw),frequency=document.getElementById('of')?.value||'monthly',currency=document.getElementById('oc')?.value||s.currency;if(!raw.trim()||!Number.isFinite(amount)||amount<0||!['daily','every_2_days','every_3_days','every_4_days','weekly','biweekly','twice_monthly','monthly','quarterly','semiannual','annual'].includes(frequency)){toast(t().failed);return false}return aryCurrencyUpdate208(currency,next=>{next.income=amount;next.incomeFrequency=frequency},()=>go('setupExpenses'),()=>document.getElementById('oi')===input&&input.value===raw&&(document.getElementById('of')?.value||'monthly')===frequency&&(document.getElementById('oc')?.value||s.currency)===currency);};
 // A record-level unit selector also lets users correct legacy entries whose units were not stored.
 const expenseFormBase=window.expenseForm;
 window.expenseForm=function(){const out=expenseFormBase.apply(this,arguments),input=document.getElementById('b');if(!input||typeof input.after!=='function'||document.getElementById('expenseUnit208'))return out;const box=document.createElement('div');box.className='expenseUnit208';const label=document.createElement('label');label.htmlFor='expenseUnit208';label.textContent=({es:'Moneda del importe',en:'Amount currency',pt:'Moeda do valor'})[lang()];const select=document.createElement('select');select.id='expenseUnit208';for(const code of currencies()){const option=document.createElement('option');option.value=code;option.textContent=code;option.selected=code===s.currency;select.appendChild(option)}box.append(label,select);input.after(box);return out;};
@@ -67,3 +68,4 @@ window.saveExpense=function(id){
 window.aryFXReference212={intervalMs:900000,needed:target=>model.needed(s,target),get:async(codes,force=false)=>{codes=[...new Set(codes)];if(codes.some(c=>!model.code(c)))throw Error('invalid_currency');const table=!force&&readCache(codes);if(table){let checkedAt;try{checkedAt=JSON.parse(localStorage.getItem(cacheKey)).checkedAt}catch{}return {table,checkedAt:checkedAt||Date.now()}}return {table:await load(codes),checkedAt:Date.now()}}};
 status();
 })();
+

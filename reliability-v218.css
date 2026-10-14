@@ -1,0 +1,5 @@
+html:root body :is(#app,#modal) input[aria-invalid="true"]{border-color:#b42338!important;box-shadow:0 0 0 2px #b4233820!important}
+html:root body :is(#app,#modal) .fieldError218{display:block!important;color:#a51d31!important;font-size:13px!important;line-height:1.5!important;margin:6px 0 12px!important;overflow-wrap:anywhere}
+html:root body.ary-dark :is(#app,#modal) .fieldError218{color:#ffabb8!important}
+html:root body #app .strategyPending218{padding:14px;border:1px solid #087e8860;border-radius:14px;line-height:1.55;background:#087e8810}
+html:root body #app .strategyGrid215[hidden],html:root body #app .strategyPending218[hidden]{display:none!important}
