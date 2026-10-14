@@ -12,7 +12,7 @@ function persist(t){
  return true;
 }
 window.aryApplyTheme46=()=>apply(current());
-window.arySetTheme46=t=>{if(t!=='light'&&t!=='dark')return;if(!persist(t))return false;apply(t);if(typeof render==='function')render();requestAnimationFrame(()=>{apply(t);})};
+window.arySetTheme46=t=>{if(t!=='light'&&t!=='dark')return;if(!persist(t))return false;apply(t);if(typeof render==='function')render();requestAnimationFrame(()=>{apply(current());})};
 window.aryToggleTheme40=()=>window.arySetTheme46(current()==='light'?'dark':'light');window.toggleTheme=window.aryToggleTheme40;
 addEventListener('DOMContentLoaded',()=>apply(current()));apply(current());
 })();
