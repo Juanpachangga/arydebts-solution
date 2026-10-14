@@ -1,7 +1,7 @@
 // One brief profile signpost after a new customer completes setup.
 (()=>{
 'use strict';
-const words={es:['Aquí está tu perfil','Más → Mi perfil','Ver mi perfil','Cerrar'],en:['Here is your profile','More → My profile','View my profile','Close'],pt:['Aqui está seu perfil','Mais → Meu perfil','Ver meu perfil','Fechar']};
+const words={es:['Aquí está tu perfil','Presiona ARYDEBTS arriba o entra a Más → Mi perfil','Ver mi perfil','Cerrar'],en:['Here is your profile','Press ARYDEBTS at the top or go to More → My profile','View my profile','Close'],pt:['Aqui está seu perfil','Pressione ARYDEBTS no topo ou entre em Mais → Meu perfil','Ver meu perfil','Fechar']};
 let current='',visible=false,timer;
 const owner=()=>window.aryGuideLifecycle128?.currentUser?.()||'';
 function clear(){visible=false;clearTimeout(timer);document.getElementById('profileHint213')?.remove();document.querySelector('.profileTarget213')?.classList.remove('profileTarget213')}
@@ -25,3 +25,4 @@ function paint(){
 const before=window.render;window.render=function(){const result=before.apply(this,arguments);paint();return result};
 addEventListener('resize',position);addEventListener('scroll',position,{passive:true});document.addEventListener('visibilitychange',()=>{if(document.hidden)clear();else paint()});paint();
 })();
+
