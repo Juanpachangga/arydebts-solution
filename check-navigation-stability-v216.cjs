@@ -83,7 +83,7 @@ const server = http.createServer(async (req, res) => {
       await page.evaluate(() => { window.expenseNode216 = document.querySelector('.simpleRecords215'); });
       await page.locator('#nav button[aria-current="page"]').click();
       await page.waitForTimeout(100);
-      assert.ok(await page.evaluate(() => scrollY >= 590), 'Tapping the selected tab does not jump to the top');
+      assert.ok(await page.evaluate(() => scrollY <= 1), 'Tapping the selected tab returns to the top');
       assert.equal(await page.evaluate(() => expenseNode216 === document.querySelector('.simpleRecords215')), true);
       await page.locator('#nav button[onclick="go(\'debts\')"]').click();
       await page.waitForFunction(() => screen === 'debts' && scrollY <= 1);
