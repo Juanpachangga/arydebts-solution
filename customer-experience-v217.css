@@ -79,3 +79,12 @@ html:root body[data-experience221="premium"][data-season71]:not([data-season71="
 html:root body[data-experience221="premium"][data-season71]:not([data-season71="everyday"]) .seasonMist71{opacity:.25!important}
 html:root body[data-experience221="premium"][data-season71]:not([data-season71="everyday"]) .seasonArt71{opacity:.35!important}
 html:root body.highContrast72[data-experience221]:is([data-experience221="simple"],[data-experience221="premium"]) .seasonBackdrop71{opacity:.025!important}
+
+/* Compact Simple cards, retaining comfortable, separate tap targets. */
+html:root body.tierSimple215 #app .simpleMotivation217{grid-template-columns:minmax(0,1fr) 44px;gap:4px 12px;margin:10px 0!important;padding:12px 14px!important;text-align:left;border-radius:14px}
+html:root body.tierSimple215 #app .simpleMotivation217 small{grid-column:1;font-size:12px!important;line-height:1.4!important}
+html:root body.tierSimple215 #app .simpleMotivation217 p{grid-column:1;font-size:14px!important;line-height:1.45!important;text-align:left!important;margin:0!important}
+html:root body.tierSimple215 #app .simpleMotivation217 .btn{grid-column:2;grid-row:1/span 2;align-self:center;justify-self:center;width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;font-size:20px!important;display:grid;place-items:center}
+html:root body.tierSimple215 #app :is(.simpleActions215,.simpleMore215,.experienceChoices214) .btn{font-size:14px!important;line-height:1.4!important;padding:10px 12px!important;min-height:44px!important}
+html:root body.tierSimple215 #app .experienceBar214{gap:8px;margin:8px 0 10px}
+html:root body.tierSimple215 #app .experienceBar214>b{font-size:14px!important}
