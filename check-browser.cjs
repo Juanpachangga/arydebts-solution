@@ -613,8 +613,8 @@ async function check(engine, label, viewport) {
     await page.evaluate(()=>{s.locale='es-CO';s.currency='COP';s.mode='immersive';save()});
     await navigate('ants');
     const {pig63,hero63}=await page.evaluate(()=>{const box=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return{x:r.x,width:r.width}};return{pig63:box('.pigMascot63'),hero63:box('.antHero25')}});
-    assert.ok(pig63.width>=200,'Full-body pig is larger');
-    assert.ok(Math.abs((pig63.x+pig63.width/2)-(hero63.x+hero63.width/2))<3,'Pig is centered in its card');
+    assert.ok(pig63.width>0&&pig63.width<=76,'Small-expense mascot keeps the compact size');
+    assert.ok(pig63.x>=hero63.x&&pig63.x+pig63.width<=hero63.x+hero63.width,'Compact mascot remains within its card');
     assert.notEqual(await page.locator('.pigBody63').evaluate(el=>getComputedStyle(el).animationName),'none');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-pig-v63.png`),fullPage:true});
     await page.evaluate(()=>{s.mode='lite';save()});

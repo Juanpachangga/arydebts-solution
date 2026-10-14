@@ -37,6 +37,7 @@ const company=()=>companies.find(c=>c.symbol===selected)||companies[0];
 const tvURL=c=>'https://www.tradingview.com/symbols/'+c.exchange+'-'+c.symbol+'/';
 window.aryFollowInvestment200=symbol=>{if(!companies.some(c=>c.symbol===symbol)||!watchKey())return false;const list=watched();try{localStorage.setItem(watchKey(),JSON.stringify(list.includes(symbol)?list.filter(x=>x!==symbol):[...list,symbol]))}catch{toast(copy[lang()].error);return false}paintCompanies();return true};
 window.aryInvestmentTourAcknowledged203=()=>{try{if(guideKey())localStorage.setItem(guideKey(),'done')}catch{}};
+window.aryInvestmentView227=()=>tab;
 window.aryInvestmentTab201=value=>{if(!['portfolio','market'].includes(value))return false;tab=value;render();return true};
 window.aryInvestmentGuide201=done=>{if(!guideKey())return false;try{localStorage.setItem(guideKey(),done?'done':'open')}catch{toast(copy[lang()].error);return false}render();return true};
 window.aryInvestmentSymbol201=symbol=>{if(!companies.some(c=>c.symbol===symbol))return false;selected=symbol;tab='market';render();document.getElementById('investmentMarket201')?.scrollIntoView({behavior:'auto',block:'start'});return true};
@@ -63,3 +64,4 @@ screens.investments=()=>{sync();const x=copy[lang()];return head(x.title,x.sub)+
 function navLabel(){const button=document.querySelector('#nav button[onclick="go(\'investments\')"]');if(button){button.setAttribute('aria-label',copy[lang()].title);const label=button.querySelector('span');if(label)label.textContent=copy[lang()].nav}document.getElementById('nav')?.classList.add('investmentNav200')}
 const before=window.render;window.render=function(){const out=before.apply(this,arguments);navLabel();return out};navLabel();
 })();
+
