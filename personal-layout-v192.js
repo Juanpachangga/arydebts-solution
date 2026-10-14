@@ -72,7 +72,7 @@ window.aryFormatHomeExpense196=()=>{
 };
 function homeQuick(){
  if(!profile||!s?.onboarded||screen!=='home'||document.getElementById('homeQuickExpense193'))return;
- const anchor=document.querySelector('#app .searchLaunch72,#app .homeDaily81,#app .homeTruth29');
+ const anchor=document.querySelector('#app .searchLaunch72,#app .homeDaily81,#app .homeTruth29,#app .simpleShell215');
  if(!anchor)return;
  const examples=window.aryExpenseExamples196(),x=quickWords[lang()],card=document.createElement('section');card.className='card full';card.id='homeQuickExpense193';card.setAttribute('data-ary-copy','');
  card.innerHTML=`<label for="homeExpense193">⚡ ${x[0]} (${esc(s.currency||'USD')})</label><form><input id="homeExpense193" maxlength="150" autocomplete="off" placeholder="${examples[0]}" aria-describedby="homeExpenseHelp193"><button type="submit" class="btn primary">${x[2]} →</button></form><div class="quickExamples196">${examples.map(example=>`<button type="button" class="btn quickExample196">${esc(example)}</button>`).join('')}</div><small id="homeExpenseHelp193">${x[3]}</small>`;
@@ -96,3 +96,4 @@ window.arySaveHomeExpense193=()=>{
 homeQuick();
 const st=document.createElement('style');st.textContent=`[data-move192]{-webkit-touch-callout:none}.arranging192 [data-move192]{outline:2px dashed #258e99;outline-offset:-3px;user-select:none}.moving192{opacity:.65!important;outline:3px solid #258e99!important}#arrangeBar192{position:fixed;top:max(8px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:8px;align-items:center;padding:10px;border-radius:16px;background:#172541;color:white;box-shadow:0 4px 20px #0005;width:max-content;max-width:calc(100vw - 16px);box-sizing:border-box}#arrangeBar192 button{min-height:44px;background:#087f86;color:white;border:0;border-radius:10px;padding:8px}#arrangeBar192 b{font-size:13px}`;document.head.appendChild(st);apply();
 })();
+
