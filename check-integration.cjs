@@ -3,7 +3,7 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 // This DOM-stub suite tests source modules; real-browser suites exercise the full bundle.
 function boot(existing=false,startHash){
  const nodes={},data={};
- const element=()=>{const classes=new Set();return{children:[],innerHTML:'',textContent:'',style:{setProperty(){}},dataset:{},classList:{add:name=>classes.add(name),remove:name=>classes.delete(name),contains:name=>classes.has(name),toggle:(name,on)=>on===false?classes.delete(name):classes.add(name)},querySelectorAll:()=>[],querySelector:()=>null,setAttribute(){},addEventListener(){},appendChild(){},remove(){}}};
+ const element=()=>{const classes=new Set();return{children:[],innerHTML:'',textContent:'',style:{setProperty(){}},dataset:{},classList:{add:name=>classes.add(name),remove:name=>classes.delete(name),contains:name=>classes.has(name),toggle:(name,on)=>on===false?classes.delete(name):classes.add(name)},querySelectorAll:()=>[],querySelector:()=>null,setAttribute(){},addEventListener(){},append(...children){this.children.push(...children)},appendChild(child){this.append(child);return child},remove(){}}};
  for(const id of ['app','nav','modal','toast'])nodes[id]=element();
  const document={head:element(),body:element(),documentElement:element(),getElementById:id=>nodes[id]||null,querySelector:sel=>sel.startsWith('#')?nodes[sel.slice(1)]||null:null,querySelectorAll:()=>[],createTreeWalker:()=>({nextNode:()=>null}),createElement:element,addEventListener(){}};
  if(existing&&typeof existing==='object')Object.assign(data,existing);
@@ -379,3 +379,4 @@ console.log('PASS grouped optional expense review, exact decimal totals, source 
 }
 
 {const b=boot(true);b.run("s.income=100;s.incomeFrequency='monthly';s.expenses=[{id:1,name:'Rent',cat:'Esencial',amount:150,date:localDate()}];s.debts=[{id:1,balance:100,min:10}]");assert.match(b.run('aryProgressTip114()'),/faltante/);b.run('s.income=0');assert.match(b.run('aryProgressTip114()'),/Añade tus ingresos/);b.run("s.income=1000;s.expenses=[{id:1,name:'Cafe',cat:'Hormiga',amount:150,date:localDate()}]");assert.match(b.run('aryProgressTip114()'),/hormiga opcionales/);b.run('s.expenses=[]');assert.match(b.run('aryProgressTip114()'),/pagos mínimos/);b.run('s.debts=[];s.payments=[]');assert.match(b.run('aryProgressTip114()'),/registra el saldo/);b.run('s.payments=[{id:1,amount:100}]');assert.match(b.run('aryProgressTip114()'),/colchón/);console.log('PASS actionable progress tips match missing inputs, deficit, optional ant spending, minimums, empty and paid-off states');}
+
