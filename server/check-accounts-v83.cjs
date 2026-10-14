@@ -29,6 +29,25 @@ const data={state:{debts:[],expenses:[],payments:[],calendarEvents:[],income:100
  assert.throws(()=>api.create({auth,from},{redirectTo:'http://example.test'}),{code:'invalid_redirect'});
  await service.recover('a@example.test');await service.changePassword('new-long-password');await service.logout();
 
+ // CAPTCHA must be forwarded on every protected Auth form, including recovery.
+ await service.signup({name:'A',email:'a@example.test',password:'long-password',captchaToken:'signup-token'});
+ assert.equal(calls.at(-1)[1].options.captchaToken,'signup-token');
+ await service.login({email:'a@example.test',password:'legacy',captchaToken:'login-token'});
+ assert.equal(calls.at(-1)[1].options.captchaToken,'login-token');
+ await service.recover('  a@example.test  ',{captchaToken:'recovery-token'});
+ assert.deepEqual(calls.at(-1),['recover',['a@example.test',{redirectTo:'https://example.test/auth-callback',captchaToken:'recovery-token'}]]);
+ await service.recover('a@example.test');assert.equal('captchaToken' in calls.at(-1)[1][1],false);
+ const count=calls.length;
+ for(const token of [{},'   ','x'.repeat(4097)]){
+  await assert.rejects(()=>service.signup({name:'A',email:'a@example.test',password:'long-password',captchaToken:token}),{code:'invalid_captcha'});
+  await assert.rejects(()=>service.login({email:'a@example.test',password:'legacy',captchaToken:token}),{code:'invalid_captcha'});
+  await assert.rejects(()=>service.recover('a@example.test',{captchaToken:token}),{code:'invalid_captcha'});
+ }
+ assert.equal(calls.length,count,'Invalid CAPTCHA input never calls the provider');
+ for(const key of ['accessToken','refreshToken','serviceRole','secretKey','access-token'])assert.throws(()=>api.validatePayload({...data,profile:{nested:{[key]:'sensitive'}}}),{code:'sensitive_data'});
+ const reset=auth.resetPasswordForEmail;auth.resetPasswordForEmail=async()=>({error:{message:'Internal provider detail'}});
+ await assert.rejects(()=>service.recover('a@example.test',{captchaToken:'token'}),{code:'service_error'});auth.resetPasswordForEmail=reset;
+
  auth.signInWithOAuth=async args=>{calls.push(['oauth',args]);return {data:{url:'https://project.supabase.co/auth/v1/authorize?provider='+args.provider}}};
  auth.exchangeCodeForSession=async code=>({data:{session:{}}});
  const social=api.create({auth,from},{redirectTo:'https://example.test/auth-callback',projectUrl:'https://project.supabase.co',providers:['google','apple','facebook','discord']});
@@ -43,3 +62,4 @@ const data={state:{debts:[],expenses:[],payments:[],calendarEvents:[],income:100
  auth.getUser=async()=>({error:{message:'Sensitive internal error'}});await assert.rejects(()=>service.identity(),{code:'service_error'});
  console.log('PASS account adapter contracts: validation, email confirmation, verified identity, account changes, optimistic conflicts, payload limits, password recovery, OAuth providers, account picker, callback exchange, redirect validation and generic errors (simulated SDK).');
 })().catch(e=>{console.error(e);process.exitCode=1});
+

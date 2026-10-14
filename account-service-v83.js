@@ -5,6 +5,7 @@ const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const failure=code=>Object.assign(new Error(code),{code});
 const email=v=>{const e=String(v||'').trim();if(e.length>254||!/^\S+@\S+\.\S+$/.test(e))throw failure('invalid_email');return e};
 const password=v=>{if(typeof v!=='string'||v.length<12||v.length>128)throw failure('invalid_password');return v};
+const captcha=v=>{if(v===undefined||v===null||v==='')return {};if(typeof v!=='string'||!v.trim()||v.length>4096)throw failure('invalid_captcha');return {captchaToken:v}};
 function payload(value){
  if(!value||typeof value!=='object'||Array.isArray(value))throw failure('invalid_data');
  let json;try{json=JSON.stringify(value)}catch(e){throw failure('invalid_data')}
@@ -13,7 +14,7 @@ function payload(value){
  if(!data.state||typeof data.state!=='object'||Array.isArray(data.state)||!data.profile||typeof data.profile!=='object'||Array.isArray(data.profile))throw failure('invalid_data');
  for(const name of ['debts','expenses','payments','calendarEvents'])if(!Array.isArray(data.state[name]))throw failure('invalid_data');
  // Never store authentication material in financial records.
- const deny=(v,depth=0)=>{if(depth>30)throw failure('invalid_data');if(v&&typeof v==='object')for(const [key,item]of Object.entries(v)){if(/^(password|access_token|refresh_token|service_role|secret_key|__proto__|constructor|prototype)$/i.test(key))throw failure('sensitive_data');deny(item,depth+1)}};
+ const deny=(v,depth=0)=>{if(depth>30)throw failure('invalid_data');if(v&&typeof v==='object')for(const [key,item]of Object.entries(v)){if(/^(password|access[_-]?token|refresh[_-]?token|service[_-]?role|secret[_-]?key|__proto__|constructor|prototype)$/i.test(key))throw failure('sensitive_data');deny(item,depth+1)}};
  deny(data);return data;
 }
 function create(client,{redirectTo,providers=[],projectUrl}={}){
@@ -26,8 +27,8 @@ function create(client,{redirectTo,providers=[],projectUrl}={}){
  async function verified(){const d=check(await client.auth.getUser()),u=d?.user;if(!u||!uuid.test(u.id)||!u.email_confirmed_at||u.is_anonymous===true)throw failure('verified_account_required');return u}
  const current=async id=>{const u=await verified();if(u.id!==id)throw failure('account_changed');return u};
  return Object.freeze({
-  async signup({name,email:address,password:secret,captchaToken}){name=String(name||'').trim();if(!name||name.length>120)throw failure('invalid_name');const d=check(await client.auth.signUp({email:email(address),password:password(secret),options:{emailRedirectTo:redirect,data:{name},...(captchaToken?{captchaToken:String(captchaToken)}:{})}}));return {confirmationRequired:!d?.session};},
-  async login({email:address,password:secret,captchaToken}){if(typeof secret!=='string'||!secret)throw failure('invalid_password');check(await client.auth.signInWithPassword({email:email(address),password:secret,...(captchaToken?{options:{captchaToken:String(captchaToken)}}:{})}));const u=await verified();return {id:u.id,email:u.email,name:String(u.user_metadata?.name||'')};},
+  async signup({name,email:address,password:secret,captchaToken}){name=String(name||'').trim();if(!name||name.length>120)throw failure('invalid_name');const d=check(await client.auth.signUp({email:email(address),password:password(secret),options:{emailRedirectTo:redirect,data:{name},...captcha(captchaToken)}}));return {confirmationRequired:!d?.session};},
+  async login({email:address,password:secret,captchaToken}){if(typeof secret!=='string'||!secret)throw failure('invalid_password');check(await client.auth.signInWithPassword({email:email(address),password:secret,...(captchaToken===undefined||captchaToken===null||captchaToken===''?{}:{options:captcha(captchaToken)})}));const u=await verified();return {id:u.id,email:u.email,name:String(u.user_metadata?.name||'')};},
   async social(provider){
    if(!supported.includes(provider))throw failure('unsupported_provider');
    if(!enabled.has(provider))throw failure('provider_not_enabled');
@@ -38,7 +39,7 @@ function create(client,{redirectTo,providers=[],projectUrl}={}){
    return {url:url.href};
   },
   async finishOAuth(code){if(typeof code!=='string'||!code.trim()||code.length>2048)throw failure('invalid_auth_code');check(await client.auth.exchangeCodeForSession(code));const u=await verified();return {id:u.id,email:u.email,name:String(u.user_metadata?.name||'')};},
-  async recover(address){check(await client.auth.resetPasswordForEmail(email(address),{redirectTo:redirect}));return {requested:true};},
+  async recover(address,{captchaToken}={}){check(await client.auth.resetPasswordForEmail(email(address),{redirectTo:redirect,...captcha(captchaToken)}));return {requested:true};},
   async changePassword(secret){await verified();check(await client.auth.updateUser({password:password(secret)}));return {updated:true};},
   async logout(){check(await client.auth.signOut({scope:'local'}));return {signedOut:true};},
   async identity(){const u=await verified();return {id:u.id,email:u.email,name:String(u.user_metadata?.name||'')};},
@@ -61,3 +62,4 @@ function create(client,{redirectTo,providers=[],projectUrl}={}){
 }
 return Object.freeze({create,validatePayload:payload});
 });
+

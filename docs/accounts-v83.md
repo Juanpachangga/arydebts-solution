@@ -56,3 +56,10 @@ Esto todavía requiere la integración del SDK en la página y del callback con 
 Las credenciales secretas de proveedores se configuran directamente en el panel seguro de Supabase; no en GitHub ni en mensajes del chat. El callback del proveedor es `https://<project-ref>.supabase.co/auth/v1/callback`; la URL de vuelta a Arydebts se configura por separado en Supabase. No enlazar las cuentas existentes únicamente por un correo escrito localmente: usar los flujos de identidad verificados del proveedor.
 
 Referencias: https://supabase.com/docs/guides/auth/social-login ; https://supabase.com/docs/reference/javascript/auth-signinwithoauth ; https://developers.facebook.com/documentation/instagram-platform/instagram-api-with-instagram-login
+
+
+## Corrección previa a la activación: CAPTCHA de recuperación
+
+`recover(email, {captchaToken})` envía el token al SDK igual que registro e inicio de sesión. Los tokens inválidos se rechazan antes de llamar al proveedor. No guardar ni reutilizar tokens: cada formulario obtiene uno nuevo del widget configurado en Supabase. La protección real depende de habilitar CAPTCHA en el proyecto; no se activa automáticamente desde este adaptador.
+
+El payload financiero también rechaza credenciales con variantes camelCase, como `accessToken` y `refreshToken`, incluso dentro de objetos anidados. Las pruebas son simuladas; la web sigue en modo local hasta completar la integración y probar el proyecto real.
