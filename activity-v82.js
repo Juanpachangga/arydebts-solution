@@ -28,7 +28,7 @@ window.aryHomeActivity82=(now=new Date(),limit=4)=>{
   out.push({source:'debt',id:d.id,date:d.due,name:d.name,amount:Math.min(positive(d.balance),Math.max(0,minimum-paid)),icon:iconFor(d.name,'deuda')});
  }
  for(const e of s.calendarEvents||[]){
-  if(!valid(e.date)||e.kind==='payment')continue;
+  if(!valid(e.date)||e.kind==='payment'||e.kind==='task')continue;
   if(e.kind==='reminder'&&(window.aryReminderPending63?!aryReminderPending63(e):e.completed))continue;
   if(e.kind!=='reminder'&&e.date<today)continue;
   out.push({source:'event',id:e.id,date:e.date,name:e.name,amount:positive(e.amount),icon:e.icon||'📌'});
@@ -48,3 +48,4 @@ window.aryActivityDate82=date=>{const x=copy(),today=key(new Date()),label=forma
 window.aryCalendarExpenses82=date=>(s.expenses||[]).filter(e=>window.aryRecurring63&&aryRecurring63(e)&&valid(e.date)&&e.date===date).map(e=>({type:'expense',id:e.id,name:e.name,amount:positive(e.amount),icon:iconFor(e.name,e.cat),note:copy().reserve+' · '+aryFrequencyLabel63(e.frequency)}));
 render();
 })();
+
