@@ -47,7 +47,7 @@ function paint(){
   const source=document.createElement('small');source.textContent=x.external+new URL(p.url).hostname+' · '+x.country[p.country];
   const details=document.createElement('details'),summary=document.createElement('summary'),list=document.createElement('ol');summary.textContent=x.steps;
   for(const text of x[kind]){const li=document.createElement('li');li.textContent=text;list.append(li)}
-  details.append(summary,list);box.append(a,source,details);card.append(box);
+  details.append(summary,list);box.append(a,source,details);(card.querySelector('.investmentBody238')||card).append(box);
  });
  const host=document.querySelector('.learningCards216');if(host&&!document.getElementById('providerNote235')){const note=document.createElement('p');note.id='providerNote235';note.className='marketDisclaimer216';note.setAttribute('data-ary-copy','');note.textContent=x.note;host.after(note)}
 }
