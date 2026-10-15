@@ -617,7 +617,7 @@ async function check(engine, label, viewport) {
     assert.ok(pig63.x>=hero63.x&&pig63.x+pig63.width<=hero63.x+hero63.width,'Compact mascot remains within its card');
     assert.notEqual(await page.locator('.pigBody63').evaluate(el=>getComputedStyle(el).animationName),'none');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-pig-v63.png`),fullPage:true});
-    await page.evaluate(()=>{s.mode='lite';save()});
+    await page.evaluate(()=>{s.mode='lite';save();render()});
     assert.equal(await page.locator('.pigBody63').evaluate(el=>getComputedStyle(el).animationName),'none','Lite pauses pig');
     await page.evaluate(state=>{Object.assign(s,state);save()},beforeRecurring63);
     await navigate('home');
@@ -661,7 +661,7 @@ async function check(engine, label, viewport) {
     assert.equal(await page.locator('.signoutWave65').evaluate(el=>getComputedStyle(el,'::before').animationName),await page.evaluate(()=>aryPerformance147.profile().constrained?'none':'signoutRipple65'));
     await page.screenshot({path:path.join(root,'browser-results',`${label}-preferences-v65.png`),fullPage:false});
     await page.locator('#modal [onclick="closeM()"]').click();
-    await page.evaluate(()=>{s.mode='lite';save()});
+    await page.evaluate(()=>{s.mode='lite';save();render()});
     await page.locator('.settings64').click();
     assert.equal(await page.locator('.signoutWave65').evaluate(el=>getComputedStyle(el,'::before').animationName),'none');
     if(viewport.width>=1000)assert.equal(await page.locator('.waves65').evaluate(el=>getComputedStyle(el,'::before').animationName),'none');
@@ -685,7 +685,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(()=>{arySetTheme46('light');save()});
     assert.equal(await page.locator('html').getAttribute('data-ary-theme'),'light');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-season-light-v71.png`),fullPage:false});
-    await page.evaluate(()=>{s.mode='lite';save()});
+    await page.evaluate(()=>{s.mode='lite';save();render()});
     assert.equal(await page.locator('.seasonGlow71').evaluate(el=>getComputedStyle(el).animationName),'none');
     await page.evaluate(previous=>{Object.assign(s,previous);arySetTheme46(previous.theme);save()},seasonState71);
     const state70=await page.evaluate(()=>JSON.parse(JSON.stringify(s)));
@@ -762,7 +762,7 @@ async function check(engine, label, viewport) {
     await page.evaluate(()=>{s.mode='immersive';save()});
     assert.equal(await page.locator('.palette68 span').first().evaluate(el=>getComputedStyle(el).animationName),'paletteCycle68');
     await page.screenshot({path:path.join(root,'browser-results',`${label}-colors-v68.png`),fullPage:false});
-    await page.evaluate(()=>{s.mode='lite';save()});assert.equal(await page.locator('.palette68 span').first().evaluate(el=>getComputedStyle(el).animationName),'none');
+    await page.evaluate(()=>{s.mode='lite';save();render()});assert.equal(await page.locator('.palette68 span').first().evaluate(el=>getComputedStyle(el).animationName),'none');
     await page.evaluate(previous=>{Object.assign(s,previous);save();go('home')},before68);
     const localeBefore67=await page.evaluate(()=>s.locale);
     for(const locale67 of ['es-US','en-US','es-CO','es-ES','pt-BR']){
