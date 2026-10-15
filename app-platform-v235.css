@@ -65,3 +65,14 @@ html body .installEntry235>span{display:block;min-width:0;line-height:1.4}
 html body #modal .installBrand235 img{display:block;flex:0 0 72px;object-fit:contain;margin:0!important}
 html body #modal .installBrand235>div{min-width:0}
 html body #modal .installBrand235 p{margin:6px 0 0}
+/* A gold frame marks the investment learning entry, with readable light/dark palettes. */
+html:root body #app .card.learningEntry216:not(.progressCard72):not(.notice){position:relative;border:2px solid #bd8c2e!important;border-radius:22px!important;background:radial-gradient(ellipse at 100% 0%,#e9bf5c30,transparent 65%),linear-gradient(135deg,#fffdf5,#fbf3df)!important;box-shadow:inset 0 0 0 3px #fff9e8,0 6px 24px #8b641314!important}
+html:root body #app .card.learningEntry216:not(.progressCard72):not(.notice) h2{color:#79500b!important;line-height:1.4;margin-top:0}
+html:root body #app .card.learningEntry216:not(.progressCard72):not(.notice) h2:after{content:'';display:block;width:88px;max-width:45%;height:3px;border-radius:3px;margin-top:12px;background:linear-gradient(90deg,#9a6617,#e7c769,#b78022)}
+html:root body #app .card.learningEntry216:not(.progressCard72):not(.notice) p{color:#4f432e!important;line-height:1.65}
+html:root body #app .card.learningEntry216:not(.progressCard72):not(.notice) .btn.primary{background:linear-gradient(115deg,#e6b44b,#f9e6a3 50%,#dba638)!important;color:#382506!important;border:1px solid #9a6b1e!important;box-shadow:inset 0 1px 0 #fff8d9,0 3px 10px #9a6b1e20!important;font-weight:750;min-height:48px;white-space:normal;text-align:center;max-width:100%;line-height:1.45}
+html:root body #app .card.learningEntry216:not(.progressCard72):not(.notice) .btn.primary:focus-visible{outline:3px solid #79500b!important;outline-offset:4px}
+html:root body.ary-dark #app .card.learningEntry216:not(.progressCard72):not(.notice){border-color:#d3a544!important;background:radial-gradient(ellipse at 100% 0%,#d9a83e22,transparent 65%),linear-gradient(135deg,#242232,#282518)!important;box-shadow:inset 0 0 0 3px #b68c2420,0 6px 24px #0002!important}
+html:root body.ary-dark #app .card.learningEntry216:not(.progressCard72):not(.notice) h2{color:#f3d58b!important}
+html:root body.ary-dark #app .card.learningEntry216:not(.progressCard72):not(.notice) p{color:#eee2c9!important}
+html:root body.ary-dark #app .card.learningEntry216:not(.progressCard72):not(.notice) .btn.primary:focus-visible{outline-color:#f3d58b!important}
