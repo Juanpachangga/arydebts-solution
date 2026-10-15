@@ -1,0 +1,19 @@
+/* A single, gold-accented subscription destination at every viewport size. */
+#app:has(>#planCards214)>.hello{display:none!important}
+.plansHero231{display:flex;align-items:center;gap:18px;padding:24px;margin:6px 0 18px;border:1px solid #b99242!important;border-radius:24px;background:linear-gradient(125deg,rgba(209,170,79,.16),rgba(255,255,255,.04));box-shadow:0 8px 24px #70551c0b;min-width:0}
+.plansEmblem231{display:grid;place-items:center;flex:0 0 56px;height:56px;border:1px solid #c49c49;border-radius:18px;color:#b58a2f;background:linear-gradient(145deg,#faedc6,#d6b26022);font-size:30px}
+.plansHero231 h1{font-family:inherit!important;font-size:clamp(1.25rem,2.5vw,1.8rem)!important;line-height:1.2;margin:6px 0!important;overflow-wrap:anywhere}
+.plansHero231 small{font-size:.68rem;letter-spacing:.13em;font-weight:800;color:#ab822c}.plansHero231 p{font-size:.9rem;line-height:1.5;margin:0;opacity:.85}
+#planCards214{grid-template-columns:minmax(0,1fr)!important;max-width:840px;margin-inline:auto;width:100%;box-sizing:border-box}
+.quoteHeading231{display:flex!important;align-items:center;justify-content:space-between;gap:12px;width:100%;grid-column:1/-1;box-sizing:border-box}.quoteHeading231 small{margin:0!important;font-size:.8rem!important;text-align:left;font-weight:700}
+#app .quoteHeading231 .quoteClose231{display:grid!important;place-items:center;flex:0 0 44px;width:44px!important;height:44px!important;min-height:44px!important;padding:0!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important;position:static!important}
+.quoteClose231 span{display:grid;place-items:center;width:28px;height:28px;border:1px solid #8b96aa65;border-radius:50%;font-size:20px;line-height:1;color:inherit}.quoteClose231:hover span{background:#b9954020}.quoteClose231:focus-visible{outline:2px solid #bc943a;outline-offset:2px}
+#app .simpleMotivation217 .quoteHeading231{grid-column:1/-1}body.quotesHidden231 #app :is(.simpleMotivation217,.homeCoach29,.selfMessage72){display:none!important}
+@media(max-width:480px){.plansHero231{padding:18px 14px;gap:12px;border-radius:20px}.plansEmblem231{flex-basis:42px;height:42px;border-radius:14px;font-size:25px}.plansHero231 p{font-size:.82rem}}
+html:root body.quotesHidden231 #app :is(.simpleMotivation217,.homeCoach29,.selfMessage72){display:none!important}
+html:root body.tierSimple215 #app .simpleMotivation217>.btn{grid-row:2!important}
+
+html:root body.tierSimple215 #app .simpleMotivation217 p{grid-column:1/-1!important}
+html:root body.tierSimple215 #app .simpleMotivation217 .quoteHeading231{gap:8px}
+html:root body.tierSimple215 #app .simpleMotivation217 .quoteHeading231 small{flex:1;min-width:0}
+html:root body.tierSimple215 #app .simpleMotivation217 .quoteHeading231 .btn{flex:0 0 44px;grid-row:auto!important}

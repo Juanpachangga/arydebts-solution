@@ -1,6 +1,7 @@
 // Separate sample workspace: never read or mutate the user's persistent storage.
 (async()=>{
 'use strict';
+if(!['127.0.0.1','localhost','[::1]'].includes(location.hostname))return;
 const app=document.getElementById('app');
 try{
  class SampleStorage{#data=new Map();get length(){return this.#data.size}key(i){return [...this.#data.keys()][i]??null}getItem(k){return this.#data.get(String(k))??null}setItem(k,v){this.#data.set(String(k),String(v))}removeItem(k){this.#data.delete(String(k))}clear(){this.#data.clear()}}
