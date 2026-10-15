@@ -8,3 +8,4 @@ html:root body.workspaceAnts227 #app .card>b{font-size:14px!important;line-heigh
 
 html:root body #app .clarityHeading228{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:8px}html:root body #app .clarityHeading228 h2{margin:0!important;min-width:0;flex:1}html:root body #app .taskDone227{background:#8398b50b;border-style:dashed}html:root body #app .investmentMonthly228 .kpi{font-size:clamp(24px,3vw,32px)!important;overflow-wrap:anywhere}.investmentMonthly228 small{display:block;line-height:1.5;font-size:12px;margin-top:8px}
 html:root body #app #homeQuickPayment199{padding:12px!important;gap:6px!important}@media(min-width:1000px){html:root body #app #homeQuickPayment199{padding:16px!important}}
+html:root body #app #homeQuickPayment199 .paymentAmount199>input{grid-column:1;grid-row:1}html:root body #app #homeQuickPayment199 .paymentAmount199>button{grid-column:2;grid-row:1}
