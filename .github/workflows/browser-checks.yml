@@ -175,6 +175,7 @@ jobs:
       - run: node check-home-clarity-model-v225.cjs
       - run: node check-home-clarity-v225.cjs
       - run: node check-atmosphere-v221.cjs
+      - run: node check-platform-v235.cjs
       - run: node check-premium-workspace-v219.cjs
       - run: node check-reliability-v218.cjs
       - run: node check-welcome-plans-v217.cjs

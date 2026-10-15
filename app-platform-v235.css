@@ -1,0 +1,54 @@
+/* Immersion is a visual preference across every feature tier, including low-power devices. */
+html:root body.mode-immersive[data-experience221] .seasonBackdrop71{display:block!important;opacity:.8!important}
+html:root body.mode-immersive[data-experience221] .seasonMotifs71{display:block!important}
+html:root body.mode-immersive[data-experience221] .seasonArt71{display:block!important;opacity:.32!important;filter:none!important;animation:aryFloat235 18s ease-in-out infinite!important;will-change:transform}
+html:root body.mode-immersive[data-experience221] .art71-1{animation-duration:23s!important;animation-delay:-6s!important}
+html:root body.mode-immersive[data-experience221] .art71-2{animation-duration:26s!important;animation-delay:-12s!important}
+html:root body.mode-immersive[data-experience221] .art71-3{animation-duration:21s!important;animation-delay:-16s!important}
+html:root body.mode-immersive[data-experience221] .seasonGlow71{animation:seasonAurora71 26s ease-in-out infinite!important}
+html:root body.mode-immersive[data-experience221] .seasonMist71{animation:seasonAurora71 33s ease-in-out infinite reverse!important}
+@keyframes aryFloat235{0%,100%{transform:translate3d(-7px,18px,0) rotate(-8deg)}50%{transform:translate3d(14px,-30px,0) rotate(8deg)}}
+html:root body.mode-lite[data-experience221] .seasonBackdrop71 *{animation:none!important;will-change:auto!important}
+html:root.aryPerfPaused147 body[data-experience221] .seasonBackdrop71 *,html:root body.seasonPaused71[data-experience221] .seasonBackdrop71 *{animation-play-state:paused!important}
+html:root body.highContrast72[data-experience221] .seasonBackdrop71{opacity:.025!important}
+@media(prefers-reduced-motion:reduce){
+ html:root body.mode-immersive[data-experience221] .seasonBackdrop71 *{animation:none!important;will-change:auto!important}
+}
+/* Content remains readable at desktop widths, zoom, and native Safari control sizes. */
+html body #app .learningCards216{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:16px;align-items:start}
+html body #app .learningCards216>article{margin:0!important;min-width:0;overflow-wrap:anywhere}
+html body #app .learningPath235{border-top:1px solid #8a9cb84a;margin-top:16px;padding-top:16px}
+html body #app .learningPath235 .btn{display:flex;align-items:center;justify-content:center;min-height:48px;width:100%;padding:12px;text-align:center;white-space:normal;text-decoration:none;line-height:1.4}
+.learningPath235>small{display:block;font-size:12px;line-height:1.5;margin:6px 0 12px;opacity:.8}
+.learningPath235 summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700;font-size:14px}
+.learningPath235 ol{padding-left:22px;line-height:1.65;font-size:14px;margin:8px 0}
+html body #app .installEntry235{display:flex;align-items:center;justify-content:center;gap:10px;white-space:normal;min-height:48px}
+.installEntry235 img{width:30px;height:30px;object-fit:contain}
+html body #modal .installGuide235{width:min(100%,560px);margin:0 auto;min-width:0}
+.installBrand235{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.installBrand235 img{width:72px;height:72px;border-radius:18px}
+.installBrand235 h2{margin:0!important;line-height:1.3}
+.installGuide235 p,.installGuide235 li{font-size:15px;line-height:1.65;overflow-wrap:anywhere}
+.installGuide235 ol{padding-left:24px}
+.installGuide235 details{margin:14px 0;padding-top:10px;border-top:1px solid #8a9cb84a}
+.installGuide235 summary{padding:10px 0;cursor:pointer;min-height:44px;font-weight:700}
+.installGuide235 .btn{white-space:normal;min-height:48px}
+@media(min-width:1000px){
+ html body.signed64 #app .marketPreview216{max-width:1280px;margin:0 auto;width:100%;min-width:0}
+ html body.signed64 #app .simpleShell215{max-width:1080px;width:100%}
+ html body.signed64 #app .simpleMore215{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body.signed64 #app .learningCalc216 form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;align-items:end}
+ html body.signed64 #app .learningCalc216 form>.btn{grid-column:1/-1}
+}
+html body #app :is(.learningCards216,.marketPreview216,.simpleShell215)>*,html body #modal .sheet{min-width:0;box-sizing:border-box}
+@media(max-width:999px){body[data-experience221][data-season71="halloween"]{background-attachment:scroll!important}}
+@supports not (min-height:100dvh){html body.signed64 #app{min-height:100vh}html body.signed64 #nav{max-height:calc(100vh - 48px)}html body #modal .sheet{max-height:calc(100vh - 32px)}}
+@media(min-width:1000px){
+ html:root body.tierSimple215.signed64 #app{max-width:none!important;width:calc(100% - 2 * var(--pc-edge186) - var(--pc-rail186) - var(--pc-gap186))!important;margin:0 var(--pc-edge186) 0 calc(var(--pc-edge186) + var(--pc-rail186) + var(--pc-gap186))!important;padding:24px 0 48px!important}
+ html:root body.tierSimple215.signed64 #nav{inset:24px auto auto var(--pc-edge186)!important;transform:none!important;width:var(--pc-rail186)!important;max-width:none!important;max-height:calc(100dvh - 48px)!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;gap:8px!important;padding:16px 12px!important;overflow-y:auto!important;border-radius:20px!important}
+ html:root body.tierSimple215.signed64 #nav::before{display:block!important;content:'ARYDEBTS';padding:14px 6px 24px;font:800 21px/1.3 system-ui}
+ html:root body.tierSimple215.signed64 #nav button{flex-direction:row!important;justify-content:flex-start!important;text-align:left!important;gap:12px!important;min-height:56px!important;padding:12px!important}
+ html:root body.tierSimple215.signed64 #nav button i{width:32px!important;flex:none}
+ html:root body.tierSimple215.signed64 #nav button span{width:auto!important;text-align:left!important;font-size:calc(15px * var(--ui-scale72,1))!important}
+ html:root body.tierSimple215 #app .simpleShell215{max-width:1080px}
+}

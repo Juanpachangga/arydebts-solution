@@ -1,1 +1,32 @@
-{"name":"Arydebts","short_name":"Arydebts","start_url":"./","display":"standalone","background_color":"#090817","theme_color":"#090817","description":"Plan financiero para recuperar el control de tus deudas."}
+{
+  "name": "Arydebts",
+  "short_name": "Arydebts",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fc",
+  "theme_color": "#17233b",
+  "description": "Plan financiero para recuperar el control de tus deudas.",
+  "id": "./",
+  "scope": "./",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "assets/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/app-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
