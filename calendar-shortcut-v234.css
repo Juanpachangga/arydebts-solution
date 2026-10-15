@@ -51,3 +51,6 @@ html:root body.ary-dark #app .todayCalendar234 small{color:#b8c9df!important}
  html:root body #app #homeExperience214>.todayCalendar234{gap:6px;padding:7px 8px!important}
  html:root body #app #homeExperience214>.premiumBadge219{padding:7px;font-size:12px}
 }
+/* Readable Home label without competing with the page heading. */
+html:root body #app #homeExperience214>b{font-size:14px!important;font-weight:750!important;line-height:1.45!important;color:#263b56!important;letter-spacing:0}
+html:root body.ary-dark #app #homeExperience214>b{color:#e2ebf7!important}

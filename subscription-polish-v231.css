@@ -17,3 +17,8 @@ html:root body.tierSimple215 #app .simpleMotivation217 p{grid-column:1/-1!import
 html:root body.tierSimple215 #app .simpleMotivation217 .quoteHeading231{gap:8px}
 html:root body.tierSimple215 #app .simpleMotivation217 .quoteHeading231 small{flex:1;min-width:0}
 html:root body.tierSimple215 #app .simpleMotivation217 .quoteHeading231 .btn{flex:0 0 44px;grid-row:auto!important}
+/* Secondary headings stay readable on both pastel and dark surfaces. */
+html:root body #app :is(.simpleMotivation217,.homeCoach29,.selfMessage72) .quoteHeading231>small{
+ font:750 14px/1.45 system-ui!important;color:#263b56!important;opacity:1!important;letter-spacing:0!important
+}
+html:root body.ary-dark #app :is(.simpleMotivation217,.homeCoach29,.selfMessage72) .quoteHeading231>small{color:#e2ebf7!important}
