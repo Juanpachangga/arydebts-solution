@@ -1,0 +1,12 @@
+// Account-owned quote visibility; no financial fields or subscription rights are changed.
+(()=>{'use strict';
+const owner=()=>window.aryGuideLifecycle128?.currentUser?.()||'',words=()=>({es:['Frases para ti','Cerrar frases','Mostrar frases motivacionales'],en:['A thought for you','Close motivational messages','Show motivational messages'],pt:['Frases para você','Fechar frases','Mostrar frases motivacionais']}[s.locale==='en-US'?'en':s.locale==='pt-BR'?'pt':'es']);
+const selector='.simpleMotivation217,.homeCoach29,.selfMessage72',hidden=()=>!!owner()&&s.quoteVisibility231?.owner===owner()&&s.quoteVisibility231.hidden===true;
+window.aryQuoteVisibility231=value=>{if(!profile||!owner()||typeof value!=='boolean')return false;if(!aryCommitFinancial109(next=>next.quoteVisibility231={owner:owner(),hidden:value})){toast(aryStorageError109());return false}paint();if(value)document.querySelector('.hello .back,.brandProfile70,#nav button')?.focus();else document.querySelector('.quoteClose231')?.focus();return true};
+function paint(){document.body.classList.toggle('quotesHidden231',hidden());document.querySelectorAll(selector).forEach(card=>{if(card.querySelector('.quoteHeading231'))return;const row=document.createElement('div');row.className='quoteHeading231';const title=document.createElement('small');title.textContent='✦ '+words()[0];const close=document.createElement('button');close.type='button';close.className='btn quoteClose231';close.setAttribute('aria-label',words()[1]);close.title=words()[1];close.innerHTML='<span aria-hidden="true">×</span>';close.onclick=()=>aryQuoteVisibility231(true);row.append(title,close);card.prepend(row);if(card.classList.contains('simpleMotivation217'))card.querySelector(':scope>small')?.remove()});
+ const sheet=document.querySelector('#modal .sheet');if(sheet&&hidden()&&!sheet.querySelector('.restoreQuotes231')){const button=document.createElement('button');button.type='button';button.className='btn widebtn restoreQuotes231';button.textContent='✦ '+words()[2];button.onclick=()=>{if(aryQuoteVisibility231(false))button.remove()};sheet.append(button)}
+}
+const renderBefore=window.render;window.render=function(){const result=renderBefore.apply(this,arguments);paint();return result};
+for(const name of ['aryNextQuote72','aryFavoriteQuote72','aryV18Settings']){const before=window[name];if(typeof before==='function')window[name]=function(){const result=before.apply(this,arguments);paint();return result}}
+paint();window.arySubscriptionPolish231=true;
+})();

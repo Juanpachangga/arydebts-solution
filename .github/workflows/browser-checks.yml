@@ -165,6 +165,7 @@ jobs:
           node-version: '24'
       - run: npm install --no-save --package-lock=false playwright@1.62.1
       - run: node check-quick-payment-v199.cjs
+      - run: node check-subscription-polish-v231.cjs
       - run: node check-workspace-v227.cjs
       - run: node check-home-clarity-model-v225.cjs
       - run: node check-home-clarity-v225.cjs
