@@ -7,6 +7,7 @@ export function validatePushPreferences90(raw){
  const timezone=typeof raw.timezone==='string'?raw.timezone:'';if(!timezone||timezone.length>100)throw Error('invalid_timezone');
  try{new Intl.DateTimeFormat('en',{timeZone:timezone}).format()}catch{throw Error('invalid_timezone')}
  for(const key of ['payments','ants','morning'])if(typeof raw[key]!=='boolean')throw Error('invalid_preferences');
+ if(raw.tasks!==undefined&&typeof raw.tasks!=='boolean')throw Error('invalid_preferences');
  const p=rules.preferences(raw);
  if(raw.morningTime!==p.morningTime)throw Error('invalid_time');
  return {...p,dismissed:[],enabled:raw.enabled,timezone};
@@ -16,7 +17,7 @@ export function pushActivity90(state,today){
  state=state&&typeof state==='object'?state:{};
  const debts=list(state.debts),expenses=list(state.expenses),events=list(state.calendarEvents),payments=list(state.payments),out=[];
  for(const d of debts){if(!valid(d.due)||positive(d.balance)<=0)continue;const paid=payments.filter(p=>String(p.debtId)===String(d.id)&&valid(p.date)&&p.date.slice(0,7)===d.due.slice(0,7)&&p.date<=today).reduce((v,p)=>v+positive(p.amount),0);if(positive(d.min)>0&&paid>=positive(d.min))continue;out.push({source:'debt',id:d.id,date:d.due,name:d.name})}
- for(const e of events){if(!valid(e.date)||e.kind==='payment')continue;if(e.kind==='reminder'&&e.completed&&(!recurring(e)||e.completedMonth63===today.slice(0,7)))continue;if(e.kind!=='reminder'&&e.date<today)continue;out.push({source:'event',id:e.id,date:e.date,name:e.name})}
+ for(const e of events){if(!valid(e.date)||e.kind==='payment'||e.kind==='task')continue;if(e.kind==='reminder'&&e.completed&&(!recurring(e)||e.completedMonth63===today.slice(0,7)))continue;if(e.kind!=='reminder'&&e.date<today)continue;out.push({source:'event',id:e.id,date:e.date,name:e.name})}
  for(const e of expenses){if(!recurring(e)||!valid(e.date))continue;const recorded=expenses.filter(p=>!recurring(p)&&String(p.sourceExpenseId)===String(e.id)&&valid(p.date)&&p.date>=e.date&&p.date<=today).reduce((v,p)=>v+positive(p.amount),0);if(positive(e.amount)>0&&recorded>=positive(e.amount))continue;out.push({source:'expense',id:e.id,date:e.date,name:e.name})}
  return out;
 }
@@ -26,11 +27,13 @@ export function planPush90(state,prefs,now=new Date()){
  const clock=localClock90(now,p.timezone),today=rules.key(clock),hour=clock.getHours();
  // Quiet hours for financial alerts: 08:00–21:00 in the saved timezone.
  const financial=hour>=8&&hour<21;
- const items=rules.evaluate({now:clock,prefs:{...p,payments:p.payments&&financial,ants:p.ants&&financial},activity:pushActivity90(state,today),expenses:list(state.expenses),income:positive(state.income)*(factors[state.incomeFrequency]??1),recurring,protectedExpense});
+ const items=rules.evaluate({now:clock,prefs:{...p,payments:p.payments&&financial,ants:p.ants&&financial},activity:pushActivity90(state,today),tasks:list(state.calendarEvents),expenses:list(state.expenses),income:positive(state.income)*(factors[state.incomeFrequency]??1),recurring,protectedExpense});
  const locale=state.locale==='en-US'?'en':state.locale==='pt-BR'?'pt':'es',out=[];
  const add=(kind,route,item)=>out.push({key:`${['ants','progress'].includes(kind)?'spending':kind}:${today}`,payload:{id:`${['ants','progress'].includes(kind)?'spending':kind}:${today}`,type:kind,route,locale,...(item?.date?{date:item.date}:{})},expiresAt:new Date(now.getTime()+10*60000).toISOString()});
  const bills=items.filter(x=>['today','tomorrow','overdue'].includes(x.type));if(bills.length)add('payments','calendar',bills.length===1?bills[0]:null);
+ for(const task of items.filter(x=>x.type==='taskToday')){const id=`task:${task.taskId}:${task.date}:${task.time}`;out.push({key:id,payload:{id,type:'tasks',route:'calendar',locale,date:task.date},expiresAt:new Date(now.getTime()+10*60000).toISOString()})}
  if(items.some(x=>x.type==='progress'))add('progress','ants');else if(items.some(x=>x.type==='ants'))add('ants','ants');
  if(items.some(x=>x.type==='morning'))add('morning','home');
  return out;
 }
+

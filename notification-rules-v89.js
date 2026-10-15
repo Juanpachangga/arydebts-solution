@@ -1,11 +1,12 @@
-(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.aryNotificationRules89=api})(typeof globalThis!=='undefined'?globalThis:this,()=>{
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./task-reminders-v233.js'):root.aryTaskReminders233);if(typeof module==='object'&&module.exports)module.exports=api;else root.aryNotificationRules89=api})(typeof globalThis!=='undefined'?globalThis:this,(taskRules)=>{
 const key=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const day=k=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(String(k||'')))return null;const[y,m,d]=k.split('-').map(Number),v=new Date(y,m-1,d);return key(v)===k?Date.UTC(y,m-1,d)/86400000:null};
-const defaults={payments:true,ants:true,morning:true,morningTime:'08:00',dismissed:[]};
-function preferences(raw={}){return {...defaults,...Object.fromEntries(['payments','ants','morning'].map(k=>[k,typeof raw[k]==='boolean'?raw[k]:true])),morningTime:/^([01]\d|2[0-3]):[0-5]\d$/.test(raw.morningTime)?raw.morningTime:'08:00',dismissed:Array.isArray(raw.dismissed)?raw.dismissed.filter(x=>typeof x==='string').slice(-200):[]}}
-function evaluate({now=new Date(),prefs={},activity=[],expenses=[],income=0,recurring=()=>false,protectedExpense=()=>false}){
+const defaults={payments:true,tasks:true,ants:true,morning:true,morningTime:'08:00',dismissed:[]};
+function preferences(raw={}){return {...defaults,...Object.fromEntries(['payments','tasks','ants','morning'].map(k=>[k,typeof raw[k]==='boolean'?raw[k]:true])),morningTime:/^([01]\d|2[0-3]):[0-5]\d$/.test(raw.morningTime)?raw.morningTime:'08:00',dismissed:Array.isArray(raw.dismissed)?raw.dismissed.filter(x=>typeof x==='string').slice(-200):[]}}
+function evaluate({now=new Date(),prefs={},activity=[],tasks=[],expenses=[],income=0,recurring=()=>false,protectedExpense=()=>false}){
  const p=preferences(prefs),today=key(now),n=day(today),out=[];
  if(p.payments)for(const a of activity){const d=day(a.date);if(d===null||d<n-30||d>n+1)continue;out.push({id:`due:${a.source}:${a.id}:${a.date}:${today}`,type:d<n?'overdue':d===n?'today':'tomorrow',name:a.name,date:a.date,route:'calendar',icon:a.icon||'📅'})}
+ if(p.tasks)out.push(...(taskRules?.items(tasks,now)||[]));
  const actual=expenses.filter(e=>e.cat==='Hormiga'&&!recurring(e)&&!protectedExpense(e)&&day(e.date)!==null&&day(e.date)<=n&&Number.isFinite(Number(e.amount))&&Number(e.amount)>0);
  const total=actual.filter(e=>e.date.slice(0,7)===today.slice(0,7)).reduce((sum,e)=>sum+Number(e.amount),0);
  if(p.ants&&income>0&&total/income>=.05)out.push({id:`ants:${today}`,type:'ants',route:'ants',icon:total/income>=.2?'😵‍💫':'🫣',amount:total,percent:Math.round(total/income*100)});
@@ -18,3 +19,4 @@ function evaluate({now=new Date(),prefs={},activity=[],expenses=[],income=0,recu
 }
 return {key,day,preferences,evaluate};
 });
+

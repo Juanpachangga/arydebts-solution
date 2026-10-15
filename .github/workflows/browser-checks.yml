@@ -69,6 +69,7 @@ jobs:
         run: |
           node check-integration.cjs
           node check-recovery-v232.cjs
+          node check-task-reminders-v233.cjs
       - name: Check real account adapter contracts
         run: node server/check-accounts-v83.cjs
       - name: Check assistant backend adapter with simulated transport
@@ -167,6 +168,7 @@ jobs:
           node-version: '24'
       - run: npm install --no-save --package-lock=false playwright@1.62.1
       - run: node check-quick-payment-v199.cjs
+      - run: node check-task-reminders-browser-v233.cjs
       - run: node check-recovery-browser-v232.cjs
       - run: node check-subscription-polish-v231.cjs
       - run: node check-workspace-v227.cjs
