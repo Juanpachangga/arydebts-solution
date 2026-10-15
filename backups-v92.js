@@ -14,21 +14,24 @@
     if(JSON.stringify(history).length>524288){warn('backup');return false}
     try{write(HISTORY,JSON.stringify(history));return true}catch{warn('backup');return false}
   }
-  return Object.freeze({read,capture,write(k,v){if(k===KEY){const before=storage.getItem(KEY);if(before!==v)capture(before)}try{write(k,v)}catch(e){if(k===KEY)warn('save');throw e}},restore(index,selectedRaw,liveState){
-    const copies=read(),item=selectedRaw===undefined?copies[index]:copies.find(copy=>copy.raw===selectedRaw);
-    if(!item)throw new Error('invalid_backup');
-    const raw=JSON.stringify(prepareRestore(JSON.parse(item.raw)));
+  function replace(raw,liveState,extra=[]){
     if(!valid(raw))throw new Error('invalid_backup');
-    const before=storage.getItem(KEY);
-    const live=liveState===undefined?null:JSON.stringify(liveState);
+    const before=storage.getItem(KEY),live=liveState===undefined?null:JSON.stringify(liveState);
     if(live!==null&&!valid(live))throw new Error('invalid_live_state');
     const retain=[];
     if(live!==null&&live!==raw)retain.push(live);
     if(valid(before)&&before!==raw)retain.push(before);
-    if(raw!==item.raw)retain.push(item.raw);
+    retain.push(...extra.filter(value=>valid(value)&&value!==raw));
     if(retain.length&&!retainForRestore(retain))throw new Error('backup_retention_failed');
     try{write(KEY,raw)}catch(e){warn('save');throw e}
     return JSON.parse(raw);
+  }
+  return Object.freeze({read,capture,write(k,v){if(k===KEY){const before=storage.getItem(KEY);if(before!==v)capture(before)}try{write(k,v)}catch(e){if(k===KEY)warn('save');throw e}},restore(index,selectedRaw,liveState){
+    const copies=read(),item=selectedRaw===undefined?copies[index]:copies.find(copy=>copy.raw===selectedRaw);
+    if(!item)throw new Error('invalid_backup');
+    const raw=JSON.stringify(prepareRestore(JSON.parse(item.raw)));
+    return replace(raw,liveState,raw!==item.raw?[item.raw]:[]);
+  },replace(raw,liveState){return replace(raw,liveState)
   },export(liveState){
     const hasLive=liveState!==undefined;
     let current;try{current=storage.getItem(KEY)}catch(e){if(!hasLive)throw e;current=null}
@@ -48,3 +51,4 @@ if(typeof window!=='undefined'&&window.aryBackups92){
   window.addEventListener('DOMContentLoaded',()=>{const before=window.aryV18Settings;if(typeof before==='function')window.aryV18Settings=()=>{before();const sheet=document.querySelector('#modal .sheet');if(!sheet)return;const b=document.createElement('button');b.type='button';b.className='btn widebtn';b.dataset.preference210='backup';b.textContent='💾 Copias de mis datos';b.onclick=window.aryRecovery92;sheet.append(b)}});
  })();
 }
+

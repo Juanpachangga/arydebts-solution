@@ -1,8 +1,7 @@
 (()=>{
 'use strict';
-const KEY='arydebts-v3',BACKUP_KEY='arydebts-recovery-v92';
 const allowedCurrencies=new Set(typeof currencies==='function'?currencies():['USD','COP','EUR','MXN','BRL','CAD','GBP','JPY']);try{for(const code of Intl.supportedValuesOf('currency'))allowedCurrencies.add(code)}catch{}
-const allowedLocales=new Set(['es-US','en-US','pt-BR']);
+const allowedLocales=new Set(['es-US','en-US','pt-BR','es-CO','es-ES']);
 const allowedNav=new Set(['home','expenses','plan','debts','investments','more']);
 const validDate=value=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(String(value||'')))return false;const [y,m,d]=String(value).split('-').map(Number),date=new Date(Date.UTC(y,m-1,d));return date.getUTCFullYear()===y&&date.getUTCMonth()===m-1&&date.getUTCDate()===d};
 const finite=value=>Number.isFinite(Number(value));
@@ -20,36 +19,30 @@ function validateState(raw){
  for(const d of next.debts){if(!finite(d.balance)||Number(d.balance)<0||d.minimum!=null&&(!finite(d.minimum)||Number(d.minimum)<0)||d.apr!=null&&(!finite(d.apr)||Number(d.apr)<0))throw new Error('invalid');if(d.due&& !validDate(d.due))d.due=''}
  for(const e of next.expenses){if(!finite(e.amount)||Number(e.amount)<0)throw new Error('invalid');if(e.date&&!validDate(e.date))throw new Error('date');}
  const debtIds=new Set(next.debts.map(d=>String(d.id)));for(const p of next.payments){if(!finite(p.amount)||Number(p.amount)<=0||!validDate(p.date)||!debtIds.has(String(p.debtId)))throw new Error('invalid')}
- for(const e of next.calendarEvents){if(!validDate(e.date))throw new Error('date')}
+ for(const e of next.calendarEvents){if(e.kind==='task'&&(e.date==null||e.date===''))continue;if(!validDate(e.date))throw new Error('date')}
  return next;
 }
-function retainCurrentBeforeImport(encoded){
- const current=localStorage.getItem(KEY);if(!current||current===encoded)return true;
- try{
-  const before=localStorage.getItem(BACKUP_KEY),history=before?JSON.parse(before):[];
-  const list=Array.isArray(history)?history:[];
-  if(!list.some(entry=>entry?.state===current))list.unshift({savedAt:new Date().toISOString(),reason:'before-import',state:current});
-  localStorage.setItem(BACKUP_KEY,JSON.stringify(list.slice(0,12)));
-  const verify=JSON.parse(localStorage.getItem(BACKUP_KEY)||'[]');
-  if(!Array.isArray(verify)||!verify.some(entry=>entry?.state===current))throw new Error('retain');
-  return true;
- }catch{throw new Error('retain')}
-}
-function message(error){return error?.message==='retain'?t().save:t().invalid}
+function message(error){return ['retain','backup_retention_failed','invalid_live_state','save_failed'].includes(error?.message)?t().save:t().invalid}
+let importVersion232=0;
 window.aryImportBackup121=async function(file){
+ const version=++importVersion232,scope=window.aryAsyncScope218?.capture(),owner=window.aryGuideLifecycle128?.currentUser?.()||'',route=screen;
+ let initial;try{initial=JSON.stringify(s)}catch{return false}
+ const current=()=>version===importVersion232&&route===screen&&owner===(window.aryGuideLifecycle128?.currentUser?.()||'')&&(!scope||window.aryAsyncScope218.current(scope))&&initial===JSON.stringify(s);
  try{
-  if(!file||file.size>8*1024*1024)throw new Error('invalid');
-  const parsed=JSON.parse(await file.text()),candidate=validateState(rawStateFromFile(parsed));
-  if(!confirm(t().confirm))return false;
-  const encoded=JSON.stringify(candidate);
-  retainCurrentBeforeImport(encoded);
-  localStorage.setItem(KEY,encoded);
-  s=candidate;
+  if(!file||!Number.isFinite(file.size)||file.size<0||file.size>8*1024*1024||typeof file.text!=='function')throw new Error('invalid');
+  const text=await file.text();
+  if(!current())return false;
+  if(typeof text!=='string'||text.length>8*1024*1024)throw new Error('invalid');
+  const parsed=JSON.parse(text),candidate=validateState(rawStateFromFile(parsed));
+  if(!current()||!confirm(t().confirm)||!current())return false;
+  let restored;
+  try{restored=aryBackups92.create(localStorage).replace(JSON.stringify(candidate),s)}catch{throw new Error('save_failed')}
+  s=restored;
   if(typeof closeM==='function')closeM();
   if(typeof render==='function')render();
   if(typeof toast==='function')toast(t().done);
   return true;
- }catch(error){if(typeof toast==='function')toast(message(error));return false}
+ }catch(error){if(current()&&typeof toast==='function')toast(message(error));return false}
 };
 const original=window.aryRecovery92;
 if(typeof original==='function')window.aryRecovery92=function(){
