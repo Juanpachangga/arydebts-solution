@@ -76,3 +76,30 @@ html:root body.ary-dark #app .card.learningEntry216:not(.progressCard72):not(.no
 html:root body.ary-dark #app .card.learningEntry216:not(.progressCard72):not(.notice) h2{color:#f3d58b!important}
 html:root body.ary-dark #app .card.learningEntry216:not(.progressCard72):not(.notice) p{color:#eee2c9!important}
 html:root body.ary-dark #app .card.learningEntry216:not(.progressCard72):not(.notice) .btn.primary:focus-visible{outline-color:#f3d58b!important}
+/* Gold continues throughout Learn to invest, isolated from other app sections. */
+html body #app .learningGold241,html body #app .learningHeading241{--learn-gold:#79500b;--learn-line:#bd8c2e;--learn-text:#403824;--learn-muted:#61543a;--learn-surface:#fffdf5;--learn-soft:#fbf3df;--learn-inset:#fff9e8;--learn-field:#fffef9;--learn-tint:#e9bf5c22;color:var(--learn-text)}
+html body.ary-dark #app .learningGold241,html body.ary-dark #app .learningHeading241{--learn-gold:#f3d58b;--learn-line:#c79b42;--learn-text:#f0e9d9;--learn-muted:#d9cbaa;--learn-surface:#242232;--learn-soft:#282518;--learn-inset:#b68c2420;--learn-field:#211f23;--learn-tint:#d9a83e16}
+html:root body #app .learningGold241 .card:not(.progressCard72):not(.notice),html:root body #app .card.learningGold241:not(.progressCard72):not(.notice),html:root body #app .hello.learningHeading241{border:1px solid var(--learn-line)!important;background:radial-gradient(ellipse at 100% 0%,var(--learn-tint),transparent 65%),linear-gradient(135deg,var(--learn-surface),var(--learn-soft))!important;color:var(--learn-text)!important;box-shadow:inset 0 0 0 2px var(--learn-inset),0 4px 18px #8664160c!important}
+html:root body #app .learningGold241 :is(h1,h2,h3),html:root body #app .learningHeading241 :is(h1,h2,h3){color:var(--learn-gold)!important;-webkit-text-fill-color:currentColor!important}
+html:root body #app .learningGold241 :is(p,label,dt){color:var(--learn-text)!important}
+html:root body #app .learningGold241 :is(small,.simHint239,.marketDisclaimer216){color:var(--learn-muted)!important;opacity:1}
+html:root body #app .learningGold241 .countryGroup238{border:1px solid var(--learn-line);background:linear-gradient(120deg,var(--learn-surface),var(--learn-soft));box-shadow:inset 0 0 0 2px var(--learn-inset)}
+html:root body #app .learningGold241 .countryGroup238>summary{color:var(--learn-gold);min-height:64px}
+html:root body #app .learningGold241 .countryGroup238[open]>summary{border-bottom:1px solid var(--learn-line);margin-bottom:14px}
+html:root body #app .learningGold241 .investmentDetails238>summary,html:root body #app .learningGold241 .simMath239>summary{color:var(--learn-gold)}
+html:root body #app .learningGold241 :is(.investmentBody238,.learningPath235){border-top-color:var(--learn-line)}
+html:root body #app .learningGold241 .learningSource216{color:var(--learn-gold)!important;text-decoration:underline;text-underline-offset:3px}
+html:root body #app .learningGold241 :is(.simExample239,.learningResult216){border:1px solid var(--learn-line);background:var(--learn-tint);color:var(--learn-text);box-shadow:inset 0 0 0 2px var(--learn-inset)}
+html:root body #app .learningGold241 .learningResult216 dl>div:first-child{border-bottom-color:var(--learn-line)}
+html:root body #app .learningGold241 .learningResult216 dd{color:var(--learn-gold)}
+html:root body #app .learningGold241 :is(input:not([type=checkbox]),select){border:1px solid var(--learn-line)!important;background:var(--learn-field)!important;color:var(--learn-text)!important;box-shadow:inset 0 1px 3px #79500b0a!important}
+html:root body #app .learningGold241 select option{background:var(--learn-field);color:var(--learn-text)}
+html:root body #app .learningGold241 input[type=checkbox]{accent-color:var(--learn-gold)}
+html:root body #app .learningGold241 .btn{border-color:var(--learn-line)!important;background:var(--learn-surface)!important;color:var(--learn-gold)!important;white-space:normal}
+html:root body #app .learningGold241 .btn.primary{background:linear-gradient(115deg,#e6b44b,#f9e6a3 50%,#dba638)!important;color:#382506!important;border:1px solid #9a6b1e!important;box-shadow:inset 0 1px 0 #fff8d9,0 3px 10px #9a6b1e20!important;font-weight:750;min-height:48px}
+html:root body #app .learningGold241 :is(button,a,input,select,summary):focus-visible{outline:3px solid var(--learn-gold)!important;outline-offset:3px}
+html:root body #app .learningGold241 input[aria-invalid=true]{border-color:#b42338!important;outline:2px solid #b42338!important}
+html:root body #app .learningGold241 .learningCards216{align-items:stretch!important}
+html:root body #app .learningGold241 .countryGroup238{width:100%;box-sizing:border-box;min-width:0}
+html:root body #app .learningGold241 .countryGroup238>summary>span{color:var(--learn-gold)!important}
+html:root body #app .learningHeading241 .back{border-color:var(--learn-line)!important;background:var(--learn-field)!important;color:var(--learn-gold)!important}
