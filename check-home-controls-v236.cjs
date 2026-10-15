@@ -10,11 +10,11 @@ for(const width of [320,390,768,1024,1366,1920])for(const theme of ['light','dar
 await page.setViewportSize({width,height:900});await page.evaluate(({theme,locale})=>{s.locale=locale;arySetTheme46(theme);go('home');render()},{theme,locale});
 assert.equal(await page.locator('#homeExperience214 #todayCalendar234').count(),1);
 assert.equal(await page.locator('#homeExperience214 [data-experience214]').count(),tier==='premium'?0:2);
-const geometry=await page.locator('#homeExperience214').evaluate(panel=>{const p=panel.getBoundingClientRect(),date=panel.querySelector('#todayCalendar234').getBoundingClientRect(),choice=panel.querySelector('.experienceChoices214')?.getBoundingClientRect(),label=panel.querySelector(':scope>b,:scope>.premiumBadge219').getBoundingClientRect();return {left:p.left,right:p.right,width:p.width,dateLeft:date.left,dateRight:date.right,dateBottom:date.bottom,choiceTop:choice?.top,labelRight:label.right,labelBottom:label.bottom}});
+const geometry=await page.locator('#homeExperience214').evaluate(panel=>{const p=panel.getBoundingClientRect(),date=panel.querySelector('#todayCalendar234').getBoundingClientRect(),choice=panel.querySelector('.experienceChoices214')?.getBoundingClientRect(),label=panel.querySelector(':scope>b,:scope>.premiumBadge219').getBoundingClientRect();const parent=panel.parentElement.getBoundingClientRect();return {center:(p.left+p.right)/2,parentCenter:(parent.left+parent.right)/2,left:p.left,right:p.right,width:p.width,dateLeft:date.left,dateRight:date.right,dateBottom:date.bottom,choiceTop:choice?.top,labelRight:label.right,labelBottom:label.bottom}});
 assert.ok(geometry.dateLeft>=geometry.left&&geometry.dateRight<=geometry.right+1);
 assert.ok(geometry.labelRight<=geometry.dateLeft+1,'Label and calendar never overlap');
 if(tier!=='premium')assert.ok(geometry.choiceTop>=Math.max(geometry.labelBottom,geometry.dateBottom),'Choice is a balanced second row');
-assert.ok(geometry.width<=461,'Desktop controls stay together');
+assert.ok(geometry.width<=461,'Desktop controls stay together');if(tier==='premium')assert.ok(Math.abs(geometry.center-geometry.parentCenter)<2,'Premium status/date panel is centered');
 assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));
 }
 if(process.env.ARY_CAPTURE236)for(const width of [390,1366]){await page.setViewportSize({width,height:900});await page.evaluate(()=>{s.locale='es-US';arySetTheme46('light');render()});await page.screenshot({path:path.join(root,'..','home236-'+name+'-'+tier+'-'+width+'.png'),fullPage:false})}

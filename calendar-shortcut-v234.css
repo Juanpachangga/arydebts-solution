@@ -54,3 +54,7 @@ html:root body.ary-dark #app .todayCalendar234 small{color:#b8c9df!important}
 /* Readable Home label without competing with the page heading. */
 html:root body #app #homeExperience214>b{font-size:14px!important;font-weight:750!important;line-height:1.45!important;color:#263b56!important;letter-spacing:0}
 html:root body.ary-dark #app #homeExperience214>b{color:#e2ebf7!important}
+
+/* Center the Premium status/date panel within Home at every viewport. */
+html:root body #app #homeExperience214.homePremium236{margin:12px auto 18px!important;justify-self:center;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px!important}
+html:root body #app #homeExperience214.homePremium236>.premiumBadge219,html:root body #app #homeExperience214.homePremium236>.todayCalendar234{display:flex;align-items:center;justify-content:center;text-align:center;width:100%;box-sizing:border-box}
