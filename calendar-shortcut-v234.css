@@ -1,14 +1,53 @@
-
-html body #app #homeExperience214{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
-html body #app .todayCalendar234{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:8px 12px;border:1px solid #b8c8df;border-radius:13px;background:#fff;color:#172744;cursor:pointer;flex-shrink:0;box-shadow:0 3px 12px #1727440a}
-html body #app #homeExperience214>.todayCalendar234{margin-left:auto}
-html body #app .todayCalendar234>span:nth-child(2){display:flex;flex-direction:column;align-items:flex-start;gap:2px}
-html body #app .todayCalendar234 small{font-size:10px;line-height:1.2;opacity:.72}
-html body #app .todayCalendar234 time{font-size:12px;line-height:1.3;font-weight:750;white-space:nowrap}
-html body #app .todayCalendar234:focus-visible{outline:3px solid #7151d8;outline-offset:3px}
-html body #app .hello>.todayCalendar234{margin-top:10px}
-@media(max-width:400px){html body #app #homeExperience214>.todayCalendar234{margin-left:0}html body #app .todayCalendar234{padding:7px 10px}}
-
-html body.ary-dark #app .todayCalendar234{background:#15233b;color:#edf3ff;border-color:#63748f}
-
-html body #app .todayCalendar234 svg{display:block;width:20px;height:20px}
+/* A single Home control panel: view name, today's date, then a balanced segmented choice. */
+html:root body #app #homeExperience214{
+ display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px!important;
+ align-items:center!important;justify-content:initial!important;width:min(100%,460px);max-width:100%;
+ margin:12px 0 18px!important;padding:14px!important;border:1px solid #c7d5e5;border-radius:18px;
+ background:linear-gradient(135deg,#ffffffed,#f3f7fced);box-shadow:0 4px 16px #17314c08;box-sizing:border-box
+}
+html:root body #app #homeExperience214>b{
+ grid-column:1;grid-row:1;min-width:0;margin:0!important;font:650 13px/1.4 system-ui!important;
+ color:#54667f!important;letter-spacing:.01em
+}
+html:root body #app #homeExperience214 .experienceChoices214{
+ grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:4px;padding:4px;border:1px solid #c7d5e5;border-radius:12px;background:#eaf0f7;min-width:0
+}
+html:root body #app #homeExperience214 .experienceChoices214 .btn{
+ display:flex;align-items:center;justify-content:center;min-width:0;min-height:44px!important;
+ margin:0!important;padding:9px 10px!important;border:1px solid transparent!important;border-radius:9px!important;
+ background:transparent!important;color:#52627b!important;font:650 14px/1.35 system-ui!important;
+ box-shadow:none!important;text-align:center;white-space:normal!important
+}
+html:root body #app #homeExperience214 .experienceChoices214 .btn.on{
+ background:#fff!important;border-color:#b6c7dc!important;color:#172744!important;box-shadow:0 2px 6px #1836590c!important
+}
+html:root body #app #homeExperience214>.todayCalendar234{
+ grid-column:2;grid-row:1;margin:0!important;display:inline-flex;align-items:center;justify-content:center;
+ gap:9px;min-height:46px;padding:7px 10px!important;border:1px solid #c7d5e5;border-radius:12px;
+ background:#fff;color:#172744;cursor:pointer;min-width:0;box-shadow:none;box-sizing:border-box
+}
+html:root body #app .todayCalendar234>span:nth-child(2){display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+html:root body #app .todayCalendar234 small{font:500 10px/1.2 system-ui!important;color:#65758b!important}
+html:root body #app .todayCalendar234 time{font:750 12px/1.3 system-ui;white-space:nowrap}
+html:root body #app .todayCalendar234 svg{display:block;width:18px;height:18px}
+html:root body #app #homeExperience214.homePremium236{width:min(100%,380px)}
+html:root body #app #homeExperience214>.premiumBadge219{
+ grid-column:1;grid-row:1;min-width:0;min-height:46px;padding:7px 9px;font-size:13px;line-height:1.4;
+ border-width:1px;border-radius:12px
+}
+html:root body #app #homeExperience214 .btn:focus-visible{outline:3px solid #087f88!important;outline-offset:3px}
+html:root body.ary-dark #app #homeExperience214{
+ background:linear-gradient(135deg,#1e2b42ed,#192337ed);border-color:#53657f;box-shadow:none
+}
+html:root body.ary-dark #app #homeExperience214>b{color:#b5c6dd!important}
+html:root body.ary-dark #app #homeExperience214 .experienceChoices214{background:#101c2e;border-color:#53657f}
+html:root body.ary-dark #app #homeExperience214 .experienceChoices214 .btn{color:#b9c8db!important}
+html:root body.ary-dark #app #homeExperience214 .experienceChoices214 .btn.on{background:#30465f!important;color:#f1f6ff!important;border-color:#7895b4!important}
+html:root body.ary-dark #app #homeExperience214>.todayCalendar234{background:#15233b;color:#edf3ff;border-color:#63748f}
+html:root body.ary-dark #app .todayCalendar234 small{color:#b8c9df!important}
+@media(max-width:360px){
+ html:root body #app #homeExperience214{padding:11px!important;gap:10px!important}
+ html:root body #app #homeExperience214>.todayCalendar234{gap:6px;padding:7px 8px!important}
+ html:root body #app #homeExperience214>.premiumBadge219{padding:7px;font-size:12px}
+}

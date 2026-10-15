@@ -1,0 +1,32 @@
+const assert=require('node:assert/strict'),http=require('node:http'),fs=require('node:fs/promises'),path=require('node:path'),{chromium,webkit}=require('playwright');
+const root=__dirname,server=http.createServer(async(req,res)=>{try{const file=path.resolve(root,'.'+new URL(req.url,'http://localhost').pathname.replace(/^\/$/,'/index.html'));if(!file.startsWith(root+path.sep))return res.writeHead(403).end();res.setHeader('Content-Type',file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.html')?'text/html':file.endsWith('.png')?'image/png':'application/octet-stream');res.end(await fs.readFile(file))}catch{res.writeHead(404).end()}});
+(async()=>{let browser;try{await new Promise(r=>server.listen(0,'127.0.0.1',r));for(const[name,engine]of[['chromium',chromium],['webkit',webkit]].filter(([n])=>!process.env.ARY_TEST_ENGINE||n===process.env.ARY_TEST_ENGINE)){
+browser=await engine.launch(name==='chromium'&&process.env.ARY_BROWSER_PATH?{executablePath:process.env.ARY_BROWSER_PATH}:{});const page=await browser.newPage({timezoneId:'America/Chicago',viewport:{width:390,height:844}}),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.route('https://**/*',r=>r.abort());await page.goto('http://127.0.0.1:'+server.address().port);await page.waitForFunction(()=>window.aryPlatformReady235);
+await page.evaluate(()=>{profile={name:'Home test',email:'home236@example.test',localDemo:true};localStorage.setItem('arydebts-profile',JSON.stringify(profile));Object.assign(s,{onboarded:true,experience214:'complete',income:2000,expenses:[],debts:[],payments:[],calendarEvents:[],guide94:{version:203,active:false,completed:true,seen:['home','expenses','plan','debts','investments','more']}});window.status236={plan:'free',status:'inactive'};aryPremiumService214={ready:true,readStatus:async()=>({...status236,owner:aryGuideLifecycle128.currentUser(),amount:999,currency:'USD',interval:'month',validUntil:new Date(Date.now()+86400000*5).toISOString()})};save();go('home')});
+const records=await page.evaluate(()=>JSON.stringify([s.income,s.expenses,s.debts,s.payments]));
+for(const tier of ['simple','complete','premium']){
+await page.evaluate(async tier=>{status236={plan:tier==='premium'?'premium':'free',status:tier==='premium'?'active':'inactive'};await aryRefreshPremium214();if(tier!=='premium')arySetExperience214(tier);go('home')},tier);
+for(const width of [320,390,768,1024,1366,1920])for(const theme of ['light','dark'])for(const locale of ['es-US','en-US','pt-BR']){
+await page.setViewportSize({width,height:900});await page.evaluate(({theme,locale})=>{s.locale=locale;arySetTheme46(theme);go('home');render()},{theme,locale});
+assert.equal(await page.locator('#homeExperience214 #todayCalendar234').count(),1);
+assert.equal(await page.locator('#homeExperience214 [data-experience214]').count(),tier==='premium'?0:2);
+const geometry=await page.locator('#homeExperience214').evaluate(panel=>{const p=panel.getBoundingClientRect(),date=panel.querySelector('#todayCalendar234').getBoundingClientRect(),choice=panel.querySelector('.experienceChoices214')?.getBoundingClientRect(),label=panel.querySelector(':scope>b,:scope>.premiumBadge219').getBoundingClientRect();return {left:p.left,right:p.right,width:p.width,dateLeft:date.left,dateRight:date.right,dateBottom:date.bottom,choiceTop:choice?.top,labelRight:label.right,labelBottom:label.bottom}});
+assert.ok(geometry.dateLeft>=geometry.left&&geometry.dateRight<=geometry.right+1);
+assert.ok(geometry.labelRight<=geometry.dateLeft+1,'Label and calendar never overlap');
+if(tier!=='premium')assert.ok(geometry.choiceTop>=Math.max(geometry.labelBottom,geometry.dateBottom),'Choice is a balanced second row');
+assert.ok(geometry.width<=461,'Desktop controls stay together');
+assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));
+}
+if(process.env.ARY_CAPTURE236)for(const width of [390,1366]){await page.setViewportSize({width,height:900});await page.evaluate(()=>{s.locale='es-US';arySetTheme46('light');render()});await page.screenshot({path:path.join(root,'..','home236-'+name+'-'+tier+'-'+width+'.png'),fullPage:false})}
+for(const route of tier==='simple'?['expenses','debts','more','calendar','profile','notifications']:['expenses','plan','debts','investments','more','calendar','profile','notifications','premium214']){
+await page.evaluate(route=>go(route),route);assert.equal(await page.locator('#todayCalendar234').count(),0,'Calendar shortcut is absent from '+route);
+}
+await page.evaluate(()=>go('home'));const date=await page.locator('#todayCalendar234 time').getAttribute('datetime');await page.locator('#todayCalendar234').click();assert.equal(await page.evaluate(()=>screen),'calendar');assert.equal(await page.evaluate(()=>aryCalendarSelection227()),date);assert.equal(await page.locator('#todayCalendar234').count(),0);
+}
+await page.evaluate(async()=>{status236={plan:'free',status:'inactive'};await aryRefreshPremium214();arySetExperience214('simple');go('home')});
+await page.locator('#homeExperience214 [data-experience214="complete"]').click();assert.equal(await page.evaluate(()=>aryExperience214()),'complete');assert.equal(await page.locator('#homeExperience214 [data-experience214="complete"]').getAttribute('aria-pressed'),'true');
+await page.locator('#homeExperience214 [data-experience214="simple"]').click();assert.equal(await page.evaluate(()=>aryExperience214()),'simple');
+assert.equal(await page.evaluate(()=>JSON.stringify([s.income,s.expenses,s.debts,s.payments])),records);
+const review=await browser.newPage({viewport:{width:390,height:844}});review.on('pageerror',e=>errors.push(e.message));await review.route('https://**/*',r=>r.abort());await review.goto('http://127.0.0.1:'+server.address().port+'/review/creator-f413120183a47717019fe88e/index.html');await review.waitForFunction(()=>window.aryPreviewReady216);assert.equal(await review.locator('#todayCalendar234').count(),1);await review.evaluate(()=>go('premium214'));assert.equal(await review.locator('#todayCalendar234').count(),0);await review.close();
+assert.deepEqual(errors,[]);console.log('PASS '+name+': Home-only calendar, grouped selectors, no overlaps across three tiers/themes/languages and mobile-to-desktop widths, working view switches/date links, no ledger changes, creator preview.');await browser.close();browser=null;
+}}finally{await browser?.close();server.close()}})().catch(e=>{console.error(e);process.exitCode=1});
