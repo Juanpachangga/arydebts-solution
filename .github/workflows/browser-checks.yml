@@ -177,6 +177,7 @@ jobs:
       - run: node check-atmosphere-v221.cjs
       - run: node check-platform-v235.cjs
       - run: node check-home-controls-v236.cjs
+      - run: node check-update-safety-v237.cjs
       - run: node check-premium-workspace-v219.cjs
       - run: node check-reliability-v218.cjs
       - run: node check-welcome-plans-v217.cjs

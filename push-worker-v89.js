@@ -18,10 +18,10 @@ self.addEventListener('notificationclick',event=>{
 });
 
 // Installable web-app fallback. Network pages and account/API responses are never cached.
-const shellCache235='arydebts-install-v235';
+const shellCache235='arydebts-install-v237';
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(shellCache235);
- await cache.addAll(['./offline.html','./assets/app-icon-192.png']);
+ await cache.addAll(['./offline.html','./assets/app-icon-192.png?v=237']);
  await self.skipWaiting();
 })()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{

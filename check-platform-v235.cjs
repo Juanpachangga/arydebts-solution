@@ -43,7 +43,7 @@ for(const width of [320,1366]){await page.setViewportSize({width,height:900});as
 if(process.env.ARY_CAPTURE235){await page.setViewportSize({width:1366,height:900});await page.evaluate(()=>{s.locale='es-US';render()});await page.screenshot({path:path.join(root,'..','platform-'+name+'-investing.png'),fullPage:false})}
 await page.evaluate(()=>{go('more');window.nativePromptCalls235=0;const e=new Event('beforeinstallprompt',{cancelable:true});e.prompt=async()=>{nativePromptCalls235++};e.userChoice=Promise.resolve({outcome:'dismissed'});dispatchEvent(e);aryInstall235()});await page.locator('[onclick="aryPromptInstall235()"]').click();assert.equal(await page.evaluate(()=>nativePromptCalls235),1);await page.evaluate(()=>closeM());
 assert.equal(await page.evaluate(()=>JSON.stringify([s.income,s.expenses,s.debts,s.payments])),finances);
-const manifest=await (await page.request.get(base+'/manifest.webmanifest')).json();assert.equal(manifest.name,'Arydebts');assert.equal(manifest.display,'standalone');assert.equal(manifest.icons.length,3);
+const manifest=await (await page.request.get(base+'/manifest.webmanifest')).json();assert.equal(manifest.name,'Arydebts');assert.equal(manifest.display,'standalone');assert.equal(manifest.icons.length,2);
 for(const icon of manifest.icons){const img=await page.evaluate(async src=>{const i=new Image;i.src=src;await i.decode();return {w:i.naturalWidth,h:i.naturalHeight}},icon.src);assert.equal(img.w+'x'+img.h,icon.sizes)}
 if(name==='chromium'){
 await page.evaluate(()=>navigator.serviceWorker.ready);await page.reload();await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
