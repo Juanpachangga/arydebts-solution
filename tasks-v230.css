@@ -41,3 +41,27 @@ html:root body #app .taskStudio230 .taskScope230{font-size:11px!important;line-h
 body.taskCalendar230 #aryQuickFab133{display:none!important;pointer-events:none!important}
 
 .taskReminder233{border:1px solid #8f9fb54d;border-radius:16px;padding:14px;margin:14px 0;min-width:0}.taskReminder233 legend{font-size:.9rem;font-weight:700;padding:0 6px}.taskReminderChoice233{display:flex!important;align-items:center;gap:12px;min-height:44px}.taskReminder233 input[type=checkbox]{width:22px!important;height:22px!important;flex:0 0 22px;margin:0!important}.taskReminder233 small{display:block;font-size:.8rem;line-height:1.5;margin-top:10px}.taskReminderBadge233{white-space:nowrap}.taskRowActions227{flex-wrap:wrap}.taskCalendarExport233{white-space:normal!important}body[data-experience221="premium"] .taskReminder233{border-color:#bb9546}
+/* Each task keeps its chosen color across tiers; names accompany the color markers. */
+html:root body #app .taskStudio230 .taskRow227[data-task-color242]{border-left:4px solid var(--task-color242)!important}
+html:root body #app .taskStudio230 .taskColorBadge242{border:1px solid var(--task-color242);background:var(--task-surface)!important;color:var(--task-ink)!important}
+.taskColorBadge242 i{display:inline-block;width:9px;height:9px;flex:none;border-radius:50%;background:var(--task-color242)}
+html body #modal .taskColors242{min-width:0;border:1px solid #8494ab70;border-radius:14px;padding:14px;margin:18px 0}
+.taskColors242 legend{font-weight:750;padding:0 5px}.taskColors242 p{font-size:13px;line-height:1.6;margin:0 0 12px}
+.taskColorGrid242{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+html body #modal .taskColorOption242{position:relative;display:block;min-width:0;margin:0;cursor:pointer}
+html body #modal .taskColorOption242 input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+html body #modal .taskColorOption242>span{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;min-height:64px;border:2px solid #8494ab60;border-radius:12px;padding:8px 3px;font:600 12px/1.4 system-ui;background:#8494ab08;color:inherit;box-sizing:border-box;overflow-wrap:anywhere;text-align:center}
+.taskColorOption242 i{width:18px;height:18px;border-radius:50%;box-shadow:0 0 0 1px #fff9;flex:none}
+html body #modal .taskColorOption242 input:checked+span{border-color:currentColor;background:#8494ab20;box-shadow:inset 0 0 0 1px currentColor;font-weight:800}
+html body #modal .taskColorOption242 input:checked+span i:after{content:'✓';display:block;color:white;font:bold 13px/18px system-ui;text-align:center}
+html body #modal .taskColorOption242 input:focus-visible+span{outline:3px solid #087f88;outline-offset:3px}
+html body.ary-dark #modal .taskColorOption242 input:focus-visible+span{outline-color:#7de3db}
+html body #app .calDay35 .taskDayDots242{position:absolute;left:4px;bottom:4px;display:flex;gap:2px;align-items:center;line-height:1;pointer-events:none}
+html body #app .taskDayDots242>span{width:5px;height:5px;border-radius:50%;box-shadow:0 0 0 1px #ffffffb3}
+html body #app .taskDayDots242>b{font:800 8px/1 system-ui;color:inherit}
+@media(max-width:360px){.taskColorGrid242{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(forced-colors:active){html body #modal .taskColorOption242 input{position:static;opacity:1;width:20px;height:20px;margin:4px}.taskColorOption242 i,.taskColorBadge242 i{forced-color-adjust:none}}
+/* Put color dots above the day number, clear of the existing event-count badge. */
+html body #app .calDay35 .taskDayDots242{top:5px;bottom:auto;left:4px}
+html body #modal .taskColorOption242>span{font:600 12px/1.4 system-ui!important;word-break:normal;overflow-wrap:normal;hyphens:none}
+html body #modal .taskColorOption242 input:checked+span{font-weight:800!important}
