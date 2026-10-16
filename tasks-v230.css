@@ -65,3 +65,15 @@ html body #app .taskDayDots242>b{font:800 8px/1 system-ui;color:inherit}
 html body #app .calDay35 .taskDayDots242{top:5px;bottom:auto;left:4px}
 html body #modal .taskColorOption242>span{font:600 12px/1.4 system-ui!important;word-break:normal;overflow-wrap:normal;hyphens:none}
 html body #modal .taskColorOption242 input:checked+span{font-weight:800!important}
+/* Fill the entire day with its task colors, rather than using only small dots. */
+html:root body #app .calDay35.taskColoredDay243{background:var(--task-day-light243),#fff!important;border:1px solid var(--task-day-edge243)!important;color:#1c2c40!important;box-shadow:inset 0 1px 0 #ffffffb3!important}
+html:root body.ary-dark #app .calDay35.taskColoredDay243{background:var(--task-day-dark243),#12243a!important;color:#f7f8fc!important;box-shadow:inset 0 1px 0 #ffffff26!important}
+html:root body #app .calDay35.taskColoredDay243>b{color:inherit!important;font-weight:800}
+html:root body #app .calDay35.taskColoredDay243.today>b{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+html:root body #app .calDay35.taskColoredDay243.selected{outline:2px solid #344a66;outline-offset:1px}
+html:root body.ary-dark #app .calDay35.taskColoredDay243.selected{outline-color:#f3d58b}
+html:root body #app .calDay35.taskColoredDay243>i{background:#ffffffe6;color:#263449;border:1px solid var(--task-day-edge243);box-sizing:border-box}
+html:root body.ary-dark #app .calDay35.taskColoredDay243>i{background:#0e1b2de6;color:#f7f8fc;border-color:#ffffff66}
+/* Keep named colors available to assistive technology without duplicating the full-cell fill. */
+html body #app .calDay35.taskColoredDay243 .taskDayDots242{width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(forced-colors:active){html:root body #app .calDay35.taskColoredDay243{border:2px solid ButtonText!important}.taskColoredDay243.selected{outline:2px solid Highlight!important}}
